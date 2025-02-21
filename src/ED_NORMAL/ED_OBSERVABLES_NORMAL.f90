@@ -209,58 +209,62 @@ contains
     if(ed_verbose>2)write(Logfile,"(A)")&
          "DEBUG observables_normal: eval exciton OP Singlet, Triplet_Z"
 #endif
-    do istate=1,state_list%size
-       isector = es_return_sector(state_list,istate)
-       Ei      = es_return_energy(state_list,istate)
-       v_state  =  es_return_dvec(state_list,istate)
+    if (ed_total_ud) then
+      do istate=1,state_list%size
+         isector = es_return_sector(state_list,istate)
+         Ei      = es_return_energy(state_list,istate)
+         v_state  =  es_return_dvec(state_list,istate)
 #ifdef _DEBUG
-       if(ed_verbose>3)write(Logfile,"(A)")&
-            "DEBUG observables_normal: get contribution from state:"//str(istate)
+         if(ed_verbose>3)write(Logfile,"(A)")&
+              "DEBUG observables_normal: get contribution from state:"//str(istate)
 #endif
 
-       !
-       peso = 1.d0 ; if(finiteT)peso=exp(-beta*(Ei-Egs))
-       peso = peso/zeta_function
-       !
-       do iorb=1,Norb
-          do jorb=iorb+1,Norb
-             !
-             !\Theta_upup = <v|v>, |v> = (C_aup + C_bup)|>
-             jsector = getCsector(1,1,isector)
-             if(jsector/=0)then
-                vvinit =  apply_Cops(v_state,[1d0,1d0],[-1,-1],[iorb,jorb],[1,1],isector,jsector)
-                if(Mpimaster)then
-                   theta_upup(iorb,jorb) = theta_upup(iorb,jorb) + dot_product(vvinit,vvinit)*peso
-                endif
-                if(allocated(vvinit))deallocate(vvinit)
-             endif
-             !
-             !\Theta_dwdw = <v|v>, |v> = (C_adw + C_bdw)|>
-             jsector = getCsector(1,2,isector)
-             if(jsector/=0)then
-                vvinit =  apply_Cops(v_state,[1d0,1d0],[-1,-1],[iorb,jorb],[2,2],isector,jsector)
-                if(Mpimaster)then
-                   theta_dwdw(iorb,jorb) = theta_dwdw(iorb,jorb) + dot_product(vvinit,vvinit)*peso
-                endif
-                if(allocated(vvinit))deallocate(vvinit)
-             endif
-             !
-          enddo
-       enddo
-       !
-       if(allocated(v_state))deallocate(v_state)
-       !
-    enddo
-    !
-    do iorb=1,Norb
-       do jorb=iorb+1,Norb
-          exct_s0(iorb,jorb) = 0.5d0*(theta_upup(iorb,jorb) + theta_dwdw(iorb,jorb) - dens(iorb) - dens(jorb))
-          exct_tz(iorb,jorb) = 0.5d0*(theta_upup(iorb,jorb) - theta_dwdw(iorb,jorb) - magZ(iorb) - magZ(jorb))
-       enddo
-    enddo
+         !
+         peso = 1.d0 ; if(finiteT)peso=exp(-beta*(Ei-Egs))
+         peso = peso/zeta_function
+         !
+         do iorb=1,Norb
+            do jorb=iorb+1,Norb
+               !
+               !\Theta_upup = <v|v>, |v> = (C_aup + C_bup)|>
+               jsector = getCsector(1,1,isector)
+               if(jsector/=0)then
+                  vvinit =  apply_Cops(v_state,[1d0,1d0],[-1,-1],[iorb,jorb],[1,1],isector,jsector)
+                  if(Mpimaster)then
+                     theta_upup(iorb,jorb) = theta_upup(iorb,jorb) + dot_product(vvinit,vvinit)*peso
+                  endif
+                  if(allocated(vvinit))deallocate(vvinit)
+               endif
+               !
+               !\Theta_dwdw = <v|v>, |v> = (C_adw + C_bdw)|>
+               jsector = getCsector(1,2,isector)
+               if(jsector/=0)then
+                  vvinit =  apply_Cops(v_state,[1d0,1d0],[-1,-1],[iorb,jorb],[2,2],isector,jsector)
+                  if(Mpimaster)then
+                     theta_dwdw(iorb,jorb) = theta_dwdw(iorb,jorb) + dot_product(vvinit,vvinit)*peso
+                  endif
+                  if(allocated(vvinit))deallocate(vvinit)
+               endif
+               !
+            enddo
+         enddo
+         !
+         if(allocated(v_state))deallocate(v_state)
+         !
+      enddo
+      !
+      do iorb=1,Norb
+         do jorb=iorb+1,Norb
+            exct_s0(iorb,jorb) = 0.5d0*(theta_upup(iorb,jorb) + theta_dwdw(iorb,jorb) - dens(iorb) - dens(jorb))
+            exct_tz(iorb,jorb) = 0.5d0*(theta_upup(iorb,jorb) - theta_dwdw(iorb,jorb) - magZ(iorb) - magZ(jorb))
+         enddo
+      enddo
 #ifdef _DEBUG
-    if(ed_verbose>2)write(Logfile,"(A)")""
+      if(ed_verbose>2)write(Logfile,"(A)")""
 #endif
+  else
+    write(Logfile,"(A)")"Cannot calculate exciton operators with ed_total_ud=F"
+  endif
 
     !
     !SINGLE PARTICLE IMPURITY DENSITY MATRIX
