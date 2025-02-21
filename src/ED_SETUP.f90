@@ -601,16 +601,10 @@ contains
        read(unit,*)!read comment line
        status=0
        do while(status>=0)
-          read(unit,*,iostat=status) istate,adouble,adouble,sz,isector,anint
+          read(unit,*,iostat=status) istate,isector,sz
           list_sector(istate)=isector
           if(sz/=getsz(isector))stop "setup_pointers_superc error: sz!=getsz(isector)."
        enddo
-       ! status=0
-       ! do while(status>=0)
-       !    read(unit,*,iostat=status)istate,sz,isector
-       !    list_sector(istate)=isector
-       !    if(sz/=getsz(isector))stop "setup_pointers_superc error: sz!=getsz(isector)."
-       ! enddo
        close(unit)
        !
        lanc_nstates_total = list_len
