@@ -213,9 +213,11 @@ def check_convergence(self, func, threshold=None, N1=None, N2=None):
 
     # only the master does the calculation
     if rank == 0:
-        errvec = np.real(
-            np.sum(abs(func - self.oldfunc), axis=-1) / np.sum(abs(func), axis=-1)
-        )
+        # relative error, but only for nonzero components
+        denominator = np.sum(abs(func), axis=-1)
+        numerator = np.sum(abs(func - self.oldfunc), axis=-1)
+        valid = denominator != 0
+        errvec = np.real(numerator[valid] / denominator[valid])
         # first iteration
         if self.whichiter == 0:
             errvec = np.ones_like(errvec)
