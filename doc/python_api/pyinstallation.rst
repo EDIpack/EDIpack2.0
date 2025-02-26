@@ -1,7 +1,26 @@
 EDIpy2 Install
 ==============
 
-The `python` module `EDIpy2` requires:
+
+Anaconda
+------------
+
+We provide Linux and MacOS packages for the `Anaconda <https://www.anaconda.com/>`_ distribution. Packages are available for Python versions 3.10, 3.11 and 3.12.
+Once a command-line tool such as `conda <https://www.anaconda.com/>`_ or `mamba <https://mamba.readthedocs.io/en/latest/>`_ is installed, an environment using one of the available python version can be created, and then the EDIpack2.0 package can be installed:
+
+.. code-block:: shell
+
+   conda create -n edipack
+   conda activate edipack
+   conda install -c conda-forge -c edipack edipack2
+
+
+the python module `edipy2` can then be directly imported.
+
+Compile from source
+---------------------
+
+The python module `edipy2` requires:
 
 * `SciFortran <https://github.com/scifortran/SciFortran>`_
 

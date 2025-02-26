@@ -455,6 +455,7 @@ contains
     integer                                             :: L
     !
     axis_="m";if(present(axis))axis_=str(to_lower(axis))
+    type_='n';if(present(type))type_=trim(type)
     check= check_bath_dimension(bath_)
     if(.not.check)stop "delta_bath_mats_main_ error: wrong bath dimensions"
     call allocate_dmft_bath(dmft_bath_)
@@ -487,6 +488,7 @@ contains
     integer                                             :: L
     !
     axis_="m";if(present(axis))axis_=str(to_lower(axis))
+    type_='n';if(present(type))type_=trim(type)
     check= check_bath_dimension(bath_)
     if(.not.check)stop "delta_bath_mats_main_ error: wrong bath dimensions"
     call allocate_dmft_bath(dmft_bath_)
