@@ -441,7 +441,7 @@ contains
     integer                          :: isector,jsector,gsector,ksector,lsector
     integer                          :: unit,status,istate,ishift,isign
     logical                          :: IOfile
-    integer                          :: list_len
+    integer                          :: list_len,neigen_max
     integer,dimension(:),allocatable :: list_sector
     type(sector) :: sectorI,sectorJ,sectorK,sectorG,sectorL
     !
@@ -458,6 +458,10 @@ contains
        getDim(isector)  = DimUp*DimDw*DimPh
     enddo
     !
+    !
+    do isector=1,Nsectors
+       neigen_sector(isector) = min(getDim(isector),lanc_nstates_sector) !init every sector to required eigenstates
+    enddo
     !
     inquire(file="state_list"//reg(ed_file_suffix)//".restart",exist=IOfile)
     if(IOfile)then
@@ -477,14 +481,21 @@ contains
        enddo
        close(unit)
        !
-       lanc_nstates_total = list_len
+       !Get the max of the provided list of states
+       neigen_max = 1
        do isector=1,Nsectors
-          neigen_sector(isector) = max(1,count(list_sector==isector))
+          if(count(list_sector==isector)>neigen_max)neigen_max=count(list_sector==isector)
        enddo
-    else
+       !Set all sectors to be at least the maximum + a security buffer
+       neigen_sector = neigen_max + 2*lanc_nstates_step
+       !Set the list sector to their value in the list
        do isector=1,Nsectors
-          neigen_sector(isector) = min(getDim(isector),lanc_nstates_sector) !init every sector to required eigenstates
+          if(count(list_sector==isector)==0)cycle
+          neigen_sector(isector) = max(1,count(list_sector==isector) + 2*lanc_nstates_step)
        enddo
+       !Set the total number of required states in the list to at least the sum of all sectors + a buffer
+       lanc_nstates_total = sum(neigen_sector) + 4*lanc_nstates_step
+       !
     endif
     !
     twin_mask=.true.
@@ -576,7 +587,7 @@ contains
     logical                                           :: IOfile
     integer                                           :: anint
     real(8)                                           :: adouble
-    integer                                           :: list_len
+    integer                                           :: list_len,neigen_max
     integer,dimension(:),allocatable                  :: list_sector
 #ifdef _DEBUG
     write(Logfile,"(A)")"DEBUG setup_global_superc"
@@ -592,6 +603,13 @@ contains
     enddo
     !
     !
+    !For all the sectors assume to get +lanc_nstates_sector as from INPUT
+    do isector=1,Nsectors
+       neigen_sector(isector) = min(getdim(isector),lanc_nstates_sector)
+    enddo
+    !If state_list.restart exists then change the #states required to those sector
+    !appearing in the file while keeping intact the others. This ensures to try to enlarge
+    !the searched area for the spectrum rather than remaining in the provided list
     inquire(file="state_list"//reg(ed_file_suffix)//".restart",exist=IOfile)
     if(IOfile)then
        list_len=file_length("state_list"//reg(ed_file_suffix)//".restart")
@@ -607,15 +625,21 @@ contains
        enddo
        close(unit)
        !
-       lanc_nstates_total = list_len
+       neigen_max = 1
        do isector=1,Nsectors
-          neigen_sector(isector) = max(1,count(list_sector==isector))
+          if(count(list_sector==isector)>neigen_max)neigen_max=count(list_sector==isector)
        enddo
-    else
+       !
+       neigen_sector = neigen_max + 2*lanc_nstates_step
        do isector=1,Nsectors
-          neigen_sector(isector) = min(getdim(isector),lanc_nstates_sector)
+          if(count(list_sector==isector)==0)cycle
+          neigen_sector(isector) = max(1,count(list_sector==isector) + 2*lanc_nstates_step)
        enddo
+       !
+       lanc_nstates_total = sum(neigen_sector) + 4*lanc_nstates_step
+       !
     endif
+    !
     twin_mask=.true.
     if(ed_twin)then
        write(LOGfile,*)"USE WITH CAUTION: TWIN STATES IN SC CHANNEL!!"
@@ -692,7 +716,7 @@ contains
     integer                                           :: list_len
     integer,dimension(:),allocatable                  :: list_sector
     integer                                           :: maxtwoJz,twoJz
-    integer                                           :: dimJz,inJz,shift
+    integer                                           :: dimJz,inJz,shift,neigen_max
     integer                                           :: twoJz_add,twoJz_del,twoJz_trgt
 #ifdef _DEBUG
     write(Logfile,"(A)")"DEBUG setup_global_nonsu2"
@@ -743,35 +767,38 @@ contains
     endif
     !
     !
+    do isector=1,Nsectors
+       neigen_sector(isector) = min(getdim(isector),lanc_nstates_sector)   !init every sector to required eigenstates
+    enddo
+    !
     inquire(file="state_list"//reg(ed_file_suffix)//".restart",exist=IOfile)
     if(IOfile)then
        list_len=file_length("state_list"//reg(ed_file_suffix)//".restart")
        allocate(list_sector(list_len))
        !
        open(free_unit(unit),file="state_list"//reg(ed_file_suffix)//".restart",status="old")
-       ! status=0
-       ! do while(status>=0)
-       !    read(unit,*,iostat=status) istate,in,isector
-       !    list_sector(istate)=isector
-       !    if(in/=getn(isector))stop "setup_pointers_superc error: n!=getn(isector)."
-       ! enddo
        read(unit,*)!read comment line
        status=0
        do while(status>=0)
-          read(unit,*,iostat=status) istate,adouble,adouble,in,isector,anint
+          read(unit,*,iostat=status) istate,in,isector
           list_sector(istate)=isector
           if(in/=getn(isector))stop "setup_pointers_superc error: n!=getn(isector)."
        enddo
        close(unit)
        !
-       lanc_nstates_total = list_len
+       neigen_max = 1
        do isector=1,Nsectors
-          neigen_sector(isector) = max(1,count(list_sector==isector))
+          if(count(list_sector==isector)>neigen_max)neigen_max=count(list_sector==isector)
        enddo
-    else
+       !
+       neigen_sector = neigen_max + 2*lanc_nstates_step
        do isector=1,Nsectors
-          neigen_sector(isector) = min(getdim(isector),lanc_nstates_sector)   !init every sector to required eigenstates
+          if(count(list_sector==isector)==0)cycle
+          neigen_sector(isector) = max(1,count(list_sector==isector) + 2*lanc_nstates_step)
        enddo
+       !
+       lanc_nstates_total = sum(neigen_sector) + 4*lanc_nstates_step
+       !
     endif
     !
     twin_mask=.true.
