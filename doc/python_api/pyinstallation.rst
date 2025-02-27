@@ -5,7 +5,7 @@ EDIpy2 Install
 Anaconda
 ------------
 
-We provide Linux and MacOS packages for the `Anaconda <https://www.anaconda.com/>`_ distribution. Packages are available for Python versions 3.10, 3.11 and 3.12.
+We provide Linux and MacOS packages for the `Anaconda <https://www.anaconda.com/>`_ distribution. Packages are available for Python version 3.10 and later.
 Once a command-line tool such as `conda <https://www.anaconda.com/>`_ or `mamba <https://mamba.readthedocs.io/en/latest/>`_ is installed, an environment using one of the available python version can be created, and then the EDIpack2.0 package can be installed:
 
 .. code-block:: shell
