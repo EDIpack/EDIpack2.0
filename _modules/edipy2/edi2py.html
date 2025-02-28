@@ -1,0 +1,659 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>edipy2.edi2py &mdash; EDIpack2.0 2.0.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=60b53102" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=c2377ec0"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            EDIpack2.0
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Installation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../dependencies.html">Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../installation.html">Install</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#anaconda">Anaconda</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#compiling-from-source">Compiling from source</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../installation.html#building">Building</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../installation.html#installing">Installing</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../installation.html#uninstalling">Uninstalling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../installation.html#install-python-api">Install Python API</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Usage</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart/01_anderson.html">Solving a Single Impurity Anderson model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../quickstart/02_dmft.html">Solving Dynamical Mean-Field Theory with <cite>EDIpack2.0</cite></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples.html">Further examples</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/01_bhz.html">Interacting Bernevig-Hughes-Zhang model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/02_ahm.html">Attractive Hubbard model: a superconductive example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../examples/03_excBHZ.html">In-plane excitons in quantum spin Hall insulators</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">EDIpack2</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../edipack2.html">EDIpack2.0 Fortran Library</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#library-frontend">Library Frontend</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/edipackmodule.html">EDIpack2 Fortran Module</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#core-solver-routines">Core Solver Routines</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/main.html">Impurity Problem Solution Routines</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#general-environment">General Environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/general/01_ed_input_vars.html">Input Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/general/02_ed_vars_global.html">Global Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/general/03_ed_aux_funx.html">Auxiliary Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/general/04_ed_setup.html">Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#sparse-matrix">Sparse Matrix</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/classes/01_ed_sparse_matrix.html">Sparse Matrices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#eigenspace">EigenSpace</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/classes/02_ed_eigenspace.html">EigenSpace</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#sectors">Sectors</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/ed_sector.html">Quantum Numbers Sectors</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#bath">Bath</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/bath.html">Impurity Model Bath</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/bath.html#bath-auxiliary">Bath Auxiliary</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/bath.html#bath-dmft">Bath DMFT</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/bath.html#bath-functions">Bath Functions</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#hamiltonian">Hamiltonian</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/index_hamiltonian.html">Hamiltonian Setup</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_hamiltonian.html#normal-mode">Normal mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_hamiltonian.html#superconductive-mode">Superconductive mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_hamiltonian.html#non-su-2-mode">Non-SU(2) mode</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#exact-diagonalization">Exact Diagonalization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/index_diag.html">Impurity Diagonalization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/diag.html">Impurity diagonalization interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_diag.html#normal-mode">Normal mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_diag.html#superconductive-mode">Superconductive mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_diag.html#non-su-2-mode">Non-SU(2) mode</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#green-s-functions">Green’s Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/index_greensfunctions.html">Impurity Green’s functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/greensfunctions.html">Impurity response functions interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_greensfunctions.html#normal-mode">Normal mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_greensfunctions.html#superconductive-mode">Superconductive mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_greensfunctions.html#non-su-2-mode">Non-SU(2) mode</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#observables">Observables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/index_observables.html">Impurity observbales</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/observables.html">Impurity observables interface</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_observables.html#normal-mode">Normal mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_observables.html#superconductive-mode">Superconductive mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_observables.html#non-su-2-mode">Non-SU(2) mode</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#reduced-density-matrix">Reduced Density Matrix</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/index_rdm.html">Impurity Reduced Density Matrix</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/rdm.html">Impurity RDM</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_rdm.html#normal-mode">Normal mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_rdm.html#superconductive-mode">Superconductive mode</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../structure/index_rdm.html#non-su-2-mode">Non-SU(2) mode</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#input-output">Input/Output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/io/ed_io.html">Input / Output Functions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../edipack2.html#chi-2-fit"><span class="math notranslate nohighlight">\(\chi^2\)</span> Fit</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../structure/fit.html"><span class="math notranslate nohighlight">\(\chi^2\)</span> Fit</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">EDIpy2</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../edipy2.html">Python API for EDIpack2</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../python_api/pyinstallation.html">EDIpy2 Install</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/pyinstallation.html#anaconda">Anaconda</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/pyinstallation.html#compile-from-source">Compile from source</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../python_api/basicusage.html">Basic usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../python_api/globvars.html">Global variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.beta"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.beta</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Jh"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Jh</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.dmft_error"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.dmft_error</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.ed_total_ud"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.ed_total_ud</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.ed_twin"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.ed_twin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.eps"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.eps</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Jx"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Jx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Jp"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Jp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Lfloat"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Lfloat</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Lmats"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Lmats</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.LOGfile"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.LOGfile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Lpos"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Lpos</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Lreal"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Lreal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Ltau"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Ltau</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Nbath"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Nbath</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Nloop"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Nloop</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Norb"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Norb</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Nph"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Nph</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.nread"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.nread</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Nspin"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Nspin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Nsuccess"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Nsuccess</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.sb_field"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.sb_field</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Uloc"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Uloc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.Ust"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.Ust</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.wini"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.wini</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.wfin"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.wfin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.xmin"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.xmin</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.xmax"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.xmax</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/globvars.html#edipy2.global_env.xmu"><code class="docutils literal notranslate"><span class="pre">edipy2.global_env.xmu</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../../python_api/functions.html">Functions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/funcs/0_readinput.html">Input file manipulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/0_readinput.html#edipy2.global_env.read_input"><code class="docutils literal notranslate"><span class="pre">read_input()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/funcs/1_solver.html">Impurity Problem Initialization, Solution and Finalization</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/1_solver.html#edipy2.global_env.finalize_solver"><code class="docutils literal notranslate"><span class="pre">finalize_solver()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/1_solver.html#edipy2.global_env.init_solver"><code class="docutils literal notranslate"><span class="pre">init_solver()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/1_solver.html#edipy2.global_env.set_hloc"><code class="docutils literal notranslate"><span class="pre">set_hloc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/1_solver.html#edipy2.global_env.solve"><code class="docutils literal notranslate"><span class="pre">solve()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/funcs/2_bath.html">Bath Manipulation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/2_bath.html#edipy2.global_env.bath_inspect"><code class="docutils literal notranslate"><span class="pre">bath_inspect()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/2_bath.html#edipy2.global_env.break_symmetry_bath"><code class="docutils literal notranslate"><span class="pre">break_symmetry_bath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/2_bath.html#edipy2.global_env.chi2_fitgf"><code class="docutils literal notranslate"><span class="pre">chi2_fitgf()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/2_bath.html#edipy2.global_env.get_bath_dimension"><code class="docutils literal notranslate"><span class="pre">get_bath_dimension()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/2_bath.html#edipy2.global_env.orb_equality_bath"><code class="docutils literal notranslate"><span class="pre">orb_equality_bath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/2_bath.html#edipy2.global_env.orb_symmetrize_bath"><code class="docutils literal notranslate"><span class="pre">orb_symmetrize_bath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/2_bath.html#edipy2.global_env.ph_symmetrize_bath"><code class="docutils literal notranslate"><span class="pre">ph_symmetrize_bath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/2_bath.html#edipy2.global_env.save_array_as_bath"><code class="docutils literal notranslate"><span class="pre">save_array_as_bath()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/2_bath.html#edipy2.global_env.set_hgeneral"><code class="docutils literal notranslate"><span class="pre">set_hgeneral()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/2_bath.html#edipy2.global_env.set_hreplica"><code class="docutils literal notranslate"><span class="pre">set_hreplica()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/2_bath.html#edipy2.global_env.spin_symmetrize_bath"><code class="docutils literal notranslate"><span class="pre">spin_symmetrize_bath()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/funcs/3_inputoutput.html">Input / Output Functions</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/3_inputoutput.html#edipy2.global_env.get_dens"><code class="docutils literal notranslate"><span class="pre">get_dens()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/3_inputoutput.html#edipy2.global_env.get_docc"><code class="docutils literal notranslate"><span class="pre">get_docc()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/3_inputoutput.html#edipy2.global_env.get_eimp"><code class="docutils literal notranslate"><span class="pre">get_eimp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/3_inputoutput.html#edipy2.global_env.get_mag"><code class="docutils literal notranslate"><span class="pre">get_mag()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/3_inputoutput.html#edipy2.global_env.get_phi"><code class="docutils literal notranslate"><span class="pre">get_phi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/3_inputoutput.html#edipy2.global_env.get_gimp"><code class="docutils literal notranslate"><span class="pre">get_gimp()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/3_inputoutput.html#edipy2.global_env.get_sigma"><code class="docutils literal notranslate"><span class="pre">get_sigma()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/3_inputoutput.html#edipy2.global_env.get_g0and"><code class="docutils literal notranslate"><span class="pre">get_g0and()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/3_inputoutput.html#edipy2.global_env.get_delta"><code class="docutils literal notranslate"><span class="pre">get_delta()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/3_inputoutput.html#edipy2.global_env.get_chi"><code class="docutils literal notranslate"><span class="pre">get_chi()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../python_api/funcs/4_auxiliary.html">Auxiliary procedures</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/4_auxiliary.html#edipy2.global_env.check_convergence"><code class="docutils literal notranslate"><span class="pre">check_convergence()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/4_auxiliary.html#edipy2.global_env.get_bath_type"><code class="docutils literal notranslate"><span class="pre">get_bath_type()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/4_auxiliary.html#edipy2.global_env.get_ed_mode"><code class="docutils literal notranslate"><span class="pre">get_ed_mode()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../python_api/funcs/4_auxiliary.html#edipy2.global_env.search_variable"><code class="docutils literal notranslate"><span class="pre">search_variable()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Browse code</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../browsecode.html">Browse code</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_aux_funx.html">ED_AUX_FUNX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_bath.html">ED_BATH</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_bath_aux.html">ED_BATH_AUX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_bath_dim.html">ED_BATH_DIM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_bath_dmft.html">ED_BATH_DMFT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_bath_fit.html">ED_BATH_FIT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_bath_functions.html">ED_BATH_FUNCTIONS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_bath_replica.html">ED_BATH_REPLICA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_bath_user.html">ED_BATH_USER</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_chi_dens.html">ED_CHI_DENS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_chi_exct.html">ED_CHI_EXCT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_chi_functions.html">ED_CHI_FUNCTIONS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_chi_pair.html">ED_CHI_PAIR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_chi_spin.html">ED_CHI_SPIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_diag.html">ED_DIAG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_diag_nonsu2.html">ED_DIAG_NONSU2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_diag_normal.html">ED_DIAG_NORMAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_diag_superc.html">ED_DIAG_SUPERC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_eigenspace.html">ED_EIGENSPACE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_fit_common.html">ED_FIT_COMMON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_fit_general.html">ED_FIT_GENERAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_fit_hybrid.html">ED_FIT_HYBRID</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_fit_normal.html">ED_FIT_NORMAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_fit_replica.html">ED_FIT_REPLICA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_gf_nonsu2.html">ED_GF_NONSU2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_gf_normal.html">ED_GF_NORMAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_gf_superc.html">ED_GF_SUPERC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_gfmatrix.html">ED_GFMATRIX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_greens_functions.html">ED_GREENS_FUNCTIONS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian.html">ED_HAMILTONIAN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_nonsu2.html">ED_HAMILTONIAN_NONSU2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_nonsu2_common.html">ED_HAMILTONIAN_NONSU2_COMMON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_nonsu2_direct_hxv.html">ED_HAMILTONIAN_NONSU2_DIRECT_HxV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_nonsu2_stored_hxv.html">ED_HAMILTONIAN_NONSU2_STORED_HxV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_normal.html">ED_HAMILTONIAN_NORMAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_normal_common.html">ED_HAMILTONIAN_NORMAL_COMMON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_normal_direct_hxv.html">ED_HAMILTONIAN_NORMAL_DIRECT_HxV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_normal_stored_hxv.html">ED_HAMILTONIAN_NORMAL_STORED_HxV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_superc.html">ED_HAMILTONIAN_SUPERC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_superc_common.html">ED_HAMILTONIAN_SUPERC_COMMON</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_superc_direct_hxv.html">ED_HAMILTONIAN_SUPERC_DIRECT_HxV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_hamiltonian_superc_stored_hxv.html">ED_HAMILTONIAN_SUPERC_STORED_HxV</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_input_vars.html">ED_INPUT_VARS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_io.html">ED_IO</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_main.html">ED_MAIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_observables.html">ED_OBSERVABLES</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_observables_nonsu2.html">ED_OBSERVABLES_NONSU2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_observables_normal.html">ED_OBSERVABLES_NORMAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_observables_superc.html">ED_OBSERVABLES_SUPERC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_rdm.html">ED_RDM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_rdm_nonsu2.html">ED_RDM_NONSU2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_rdm_normal.html">ED_RDM_NORMAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_rdm_superc.html">ED_RDM_SUPERC</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_sector.html">ED_SECTOR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_setup.html">ED_SETUP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_sparse_map.html">ED_SPARSE_MAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_sparse_matrix.html">ED_SPARSE_MATRIX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_vars_global.html">ED_VARS_GLOBAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/ed_version.html">ED_VERSION</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/edi2py_bindings.html">EDI2PY_BINDINGS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../browsesource/module/edipack2.html">EDIPACK2</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">External Links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/edipack/EDIpack2.0">EDIpack2.0 on GitHub</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/SciFortran/SciFortran">SciFortran on GitHub</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">EDIpack2.0</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">edipy2.edi2py</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for edipy2.edi2py</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">ctypes</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">os</span><span class="o">,</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">types</span>
+
+<span class="c1">#################################</span>
+<span class="c1"># AUXILIARY FUNCTIONS</span>
+<span class="c1">#################################</span>
+
+
+<span class="c1"># dummy class, to be filled</span>
+<span class="k">class</span> <span class="nc">Link</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">library</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">library</span> <span class="o">=</span> <span class="n">library</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nineq</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dim_hloc</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Nsym</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># utils: colors and bold text</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PURPLE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[95m&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CYAN</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[96m&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DARKCYAN</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[36m&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BLUE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[94m&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">GREEN</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[92m&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">YELLOW</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[93m&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RED</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[91m&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BOLD</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[1m&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">UNDERLINE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[4m&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">COLOREND</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m&quot;</span>
+
+
+<span class="c1"># function that will add a variable to the dummy class, will be called in variable definition</span>
+<span class="k">def</span> <span class="nf">add_global_variable</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">dynamic_name</span><span class="p">,</span> <span class="n">target_object</span><span class="p">,</span> <span class="n">target_attribute</span><span class="p">):</span>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">getter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">attrib</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">target_object</span><span class="p">,</span> <span class="n">target_attribute</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>  <span class="c1"># this is for strings</span>
+                <span class="n">attrib</span> <span class="o">=</span> <span class="n">attrib</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">except</span><span class="p">:</span>  <span class="c1"># this is for arrays</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_object</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="n">target_object</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">target_object</span><span class="p">))]</span>
+        <span class="k">return</span> <span class="n">attrib</span>
+
+    <span class="nd">@getter</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">setter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_value</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>  <span class="c1"># this is for arrays</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">target_object</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">minlength</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">target_object</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_value</span><span class="p">))</span>
+                <span class="n">target_object</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">minlength</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_value</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">minlength</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">new_value</span> <span class="o">=</span> <span class="n">new_value</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="n">target_object</span><span class="p">,</span> <span class="n">target_attribute</span><span class="p">,</span> <span class="n">new_value</span><span class="p">)</span>
+
+    <span class="c1"># Dynamically add the property to the class</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">dynamic_name</span><span class="p">,</span> <span class="n">getter</span><span class="p">)</span>
+    <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="n">dynamic_name</span><span class="p">,</span> <span class="n">setter</span><span class="p">)</span>
+
+
+<span class="c1"># get bath type</span>
+<div class="viewcode-block" id="get_bath_type">
+<a class="viewcode-back" href="../../python_api/funcs/4_auxiliary.html#edipy2.global_env.get_bath_type">[docs]</a>
+<span class="k">def</span> <span class="nf">get_bath_type</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">     This function returns an integer number related to the value of  :f:var:`bath_type` in the input file</span>
+
+<span class="sd">      - :code:`1` for **normal** bath</span>
+<span class="sd">      - :code:`2` for **hybrid** bath</span>
+<span class="sd">      - :code:`3` for **replica** bath</span>
+<span class="sd">      - :code:`4` for **general** bath</span>
+
+<span class="sd">    :return: the integer index</span>
+<span class="sd">    :rtype: int</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">get_bath_type_wrap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">get_bath_type</span>
+    <span class="n">get_bath_type_wrap</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">get_bath_type_wrap</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_int</span>
+    <span class="k">return</span> <span class="n">get_bath_type_wrap</span><span class="p">()</span></div>
+
+
+
+<span class="c1"># get ed mode</span>
+<div class="viewcode-block" id="get_ed_mode">
+<a class="viewcode-back" href="../../python_api/funcs/4_auxiliary.html#edipy2.global_env.get_ed_mode">[docs]</a>
+<span class="k">def</span> <span class="nf">get_ed_mode</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">    This function returns an integer number related to the value of  :f:var:`ed_mode` in the input file</span>
+
+<span class="sd">     - :code:`1` for **normal** mode</span>
+<span class="sd">     - :code:`2` for **superc** mode</span>
+<span class="sd">     - :code:`3` for **nonsu2** mode</span>
+
+<span class="sd">    :return: the integer index</span>
+<span class="sd">    :rtype: int</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">get_ed_mode_wrap</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">library</span><span class="o">.</span><span class="n">get_ed_mode</span>
+    <span class="n">get_ed_mode_wrap</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">get_ed_mode_wrap</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> <span class="n">c_int</span>
+    <span class="k">return</span> <span class="n">get_ed_mode_wrap</span><span class="p">()</span></div>
+
+
+
+<span class="c1">######################################</span>
+<span class="c1"># Load shared library with C-bindings</span>
+<span class="c1">######################################</span>
+
+<span class="n">system</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span>
+<span class="n">libext</span> <span class="o">=</span> <span class="s2">&quot;.so&quot;</span>
+<span class="k">if</span> <span class="n">system</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>
+    <span class="n">libext</span> <span class="o">=</span> <span class="s2">&quot;.dylib&quot;</span>
+<span class="n">libpath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">realpath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">libpath</span><span class="p">)</span>
+<span class="n">libfile</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">libpath</span><span class="p">,</span> <span class="s2">&quot;libedi2py&quot;</span> <span class="o">+</span> <span class="n">libext</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">libedi2py</span> <span class="o">=</span> <span class="n">CDLL</span><span class="p">(</span><span class="n">libfile</span><span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="n">libedi2py</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="c1">####################################################################</span>
+<span class="c1"># Create the global_env class (this is what the python module sees)</span>
+<span class="c1">####################################################################</span>
+
+<span class="n">global_env</span> <span class="o">=</span> <span class="n">Link</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">)</span>
+
+<span class="c1">######################################</span>
+<span class="c1"># GLOBAL VARIABLES</span>
+<span class="c1">######################################</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Nbath&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Nbath&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Norb&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Norb&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Nspin&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Nspin&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Nloop&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Nloop&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Nph&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Nph&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span>
+        <span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Nsuccess&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Nsuccess&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span>
+    <span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Lmats&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Lmats&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Lreal&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Lreal&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Ltau&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Ltau&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Lfit&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Lfit&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Lpos&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Lpos&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span>
+        <span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;LOGfile&quot;</span><span class="p">,</span> <span class="n">c_int</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;LOGfile&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">add_global_variable</span><span class="p">(</span>
+        <span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Uloc&quot;</span><span class="p">,</span> <span class="n">ARRAY</span><span class="p">(</span><span class="n">c_double</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Uloc&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span>
+    <span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Ust&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Ust&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Jh&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Jh&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Jx&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Jx&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;Jp&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;Jp&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;xmu&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;xmu&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;beta&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span>
+        <span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;dmft_error&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;dmft_error&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span>
+    <span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;eps&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;eps&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;wini&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;wini&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;wfin&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;wfin&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;xmin&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;xmin&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span><span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;xmax&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;xmax&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span>
+        <span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;sb_field&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;sb_field&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span>
+    <span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span>
+        <span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;nread&quot;</span><span class="p">,</span> <span class="n">c_double</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;nread&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">add_global_variable</span><span class="p">(</span>
+        <span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;ed_total_ud&quot;</span><span class="p">,</span> <span class="n">c_bool</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;ed_total_ud&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span>
+    <span class="p">)</span>
+    <span class="n">add_global_variable</span><span class="p">(</span>
+        <span class="n">global_env</span><span class="p">,</span> <span class="s2">&quot;ed_twin&quot;</span><span class="p">,</span> <span class="n">c_bool</span><span class="o">.</span><span class="n">in_dll</span><span class="p">(</span><span class="n">libedi2py</span><span class="p">,</span> <span class="s2">&quot;ed_twin&quot;</span><span class="p">),</span> <span class="s2">&quot;value&quot;</span>
+    <span class="p">)</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Could not load edipy2 library. Is the python module correctly installed?&quot;</span><span class="p">)</span>
+
+
+<span class="c1">######################################</span>
+<span class="c1"># GLOBAL FUNCTIONS</span>
+<span class="c1">######################################</span>
+
+<span class="c1"># from here</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_bath_type</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">get_bath_type</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_ed_mode</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">get_ed_mode</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+
+<span class="c1"># read_input</span>
+<span class="kn">import</span> <span class="nn">func_read_input</span>
+
+<span class="n">global_env</span><span class="o">.</span><span class="n">read_input</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_read_input</span><span class="o">.</span><span class="n">read_input</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+
+<span class="c1"># aux_funx</span>
+<span class="kn">import</span> <span class="nn">func_aux_funx</span>
+
+<span class="n">global_env</span><span class="o">.</span><span class="n">set_hloc</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_aux_funx</span><span class="o">.</span><span class="n">set_hloc</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">search_variable</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_aux_funx</span><span class="o">.</span><span class="n">search_variable</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">check_convergence</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span>
+    <span class="n">func_aux_funx</span><span class="o">.</span><span class="n">check_convergence</span><span class="p">,</span> <span class="n">global_env</span>
+<span class="p">)</span>
+
+<span class="c1"># bath</span>
+<span class="kn">import</span> <span class="nn">func_bath</span>
+
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_bath_dimension</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span>
+    <span class="n">func_bath</span><span class="o">.</span><span class="n">get_bath_dimension</span><span class="p">,</span> <span class="n">global_env</span>
+<span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">set_hreplica</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_bath</span><span class="o">.</span><span class="n">set_hreplica</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">set_hgeneral</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_bath</span><span class="o">.</span><span class="n">set_hgeneral</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">break_symmetry_bath</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span>
+    <span class="n">func_bath</span><span class="o">.</span><span class="n">break_symmetry_bath</span><span class="p">,</span> <span class="n">global_env</span>
+<span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">spin_symmetrize_bath</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span>
+    <span class="n">func_bath</span><span class="o">.</span><span class="n">spin_symmetrize_bath</span><span class="p">,</span> <span class="n">global_env</span>
+<span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">orb_symmetrize_bath</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span>
+    <span class="n">func_bath</span><span class="o">.</span><span class="n">orb_symmetrize_bath</span><span class="p">,</span> <span class="n">global_env</span>
+<span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">orb_equality_bath</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_bath</span><span class="o">.</span><span class="n">orb_equality_bath</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">ph_symmetrize_bath</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span>
+    <span class="n">func_bath</span><span class="o">.</span><span class="n">ph_symmetrize_bath</span><span class="p">,</span> <span class="n">global_env</span>
+<span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">save_array_as_bath</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span>
+    <span class="n">func_bath</span><span class="o">.</span><span class="n">save_array_as_bath</span><span class="p">,</span> <span class="n">global_env</span>
+<span class="p">)</span>
+
+<span class="n">global_env</span><span class="o">.</span><span class="n">bath_inspect</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_bath</span><span class="o">.</span><span class="n">bath_inspect</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+
+
+<span class="c1"># main</span>
+<span class="kn">import</span> <span class="nn">func_main</span>
+
+<span class="n">global_env</span><span class="o">.</span><span class="n">init_solver</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_main</span><span class="o">.</span><span class="n">init_solver</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">solve</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_main</span><span class="o">.</span><span class="n">solve</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">finalize_solver</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_main</span><span class="o">.</span><span class="n">finalize_solver</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+
+<span class="c1"># io</span>
+<span class="kn">import</span> <span class="nn">func_io</span>
+
+<span class="n">global_env</span><span class="o">.</span><span class="n">build_sigma</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">build_sigma</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">build_gimp</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">build_gimp</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_sigma</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">get_sigma</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_gimp</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">get_gimp</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_g0and</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">get_g0and</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_delta</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">get_delta</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_dens</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">get_dens</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_mag</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">get_mag</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_docc</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">get_docc</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_phi</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">get_phi</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_eimp</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">get_eimp</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+<span class="n">global_env</span><span class="o">.</span><span class="n">get_chi</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_io</span><span class="o">.</span><span class="n">get_chi</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+
+<span class="c1"># bath_fit</span>
+<span class="kn">import</span> <span class="nn">func_bath_fit</span>
+
+<span class="n">global_env</span><span class="o">.</span><span class="n">chi2_fitgf</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">func_bath_fit</span><span class="o">.</span><span class="n">chi2_fitgf</span><span class="p">,</span> <span class="n">global_env</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Lorenzo Crippa and Adriano Amaricci.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
