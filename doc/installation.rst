@@ -8,9 +8,47 @@ EDIpack2.0 is available in the form of a static Fortran library
 Installation is available using CMake. In the current release the
 library enables standard Fortran API and Python API `EDIpy2`. 
 
+Anaconda
+======================
+
+We provide Linux and MacOS packages for the `Anaconda <https://www.anaconda.com/>`_ 
+distribution. To install the module, the virtual environment of choice should include
+python 3.10 or later.
+
+Once a command-line tool such as `conda <https://www.anaconda.com/>`_ or 
+`mamba <https://mamba.readthedocs.io/en/latest/>`_ is installed, an environment 
+using one of the available python version can be created, and then the EDIpack2.0 
+package can be installed:
+
+.. code-block:: shell
+
+   conda create -n edipack
+   conda activate edipack
+   conda install -c conda-forge -c edipack edipack2
+
+
+this installs a bundle of the `scifor` and `edipack2` libraries. In order to compile a
+fortran program linking the libraries, we provide  `.pc` files which are readable via 
+:code:`pkg-config`. If not present, the :code:`compilers` and :code:`pkg-config` conda
+packages need to be installed
+
+.. code-block:: shell
+
+   conda install compilers
+   conda install pkg-config
+   
+The inclusion and linking flag can then be obtained via 
+
+.. code-block:: shell
+
+   pkg-config --cflags edipack2 scifor
+   pkg-config --libs   edipack2 scifor
+
+Compiling from source
+======================
 
 Building
-======================
+---------
 
 We assume that `SciFortran` and `MPI` have been correctly installed
 and are available in the system. See related documentation. Note that
@@ -98,8 +136,8 @@ additional variables:
    :code:`BUILD_TYPE=AGGRESSIVE`  includes many deep level debug options which might not compile on some systems or breakdown compilation at linking step.  
 
 
-Install
-======================
+Installing
+------------
 
 System-wide installation is completed after the build step using either:
 
@@ -127,8 +165,8 @@ The library can be loaded using one of the following, automatically generated, f
 .. _pkg-config: https://github.com/freedesktop/pkg-config
 
 
-Uninstall
-===================
+Uninstalling
+--------------
 
 Although CMake does not officially provide uninstall procedures in the
 generated Make/Ninja files. Hence SciFortran supplies a homebrew
@@ -150,30 +188,8 @@ or
 
 Install Python API
 ======================
-The `edipy2` python module is installable from this folder via:
 
-.. code-block:: bash
-		
-    pip install .
+Installation instruction for the python API are detailed in 
+:ref:`installation instructions <edipy_install>`
 
 
-
-.. note::
-   On some systems such as Debian >= 11 and Mac Os,
-   and if a virtual environment is not in use, the flag
-   `--break-system-packages` has to be set. This creates no issue
-   since no distro is packaging this library.
-   
-
-To remove the module, run:
-
-.. code-block:: bash
-		
-   pip uninstall -y edipy2
-
-with same caveat for the `--break-system-packages` flag.
-
-
-.. tip::
-
-   See `EDIpy2` documentation for more details on installing the `python` API. 

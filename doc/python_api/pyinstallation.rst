@@ -1,3 +1,5 @@
+.. _edipy_install:
+
 EDIpy2 Install
 ==============
 
