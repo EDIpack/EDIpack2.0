@@ -12,128 +12,259 @@ MODULE ED_INPUT_VARS
 
   !input variables
   !=========================================================
-  integer(c_int), bind(c, name="Nbath")                              :: Nbath               !Number of bath sites (per orbital or not depending on bath_type)
-  integer(c_int), bind(c, name="Norb")                               :: Norb                !Number of impurity orbitals
-  integer(c_int), bind(c, name="Nspin")                              :: Nspin               !Number spin degeneracy (max 2)
-
-  integer(c_int), bind(c, name="Nloop")                              :: Nloop               !max dmft loop variables
-  integer(c_int), bind(c, name="Nph")                                :: Nph                 !max number of phonons allowed (cut off)
-  real(c_double),dimension(5),bind(c, name="Uloc")                   :: Uloc                !local interactions
-  real(c_double),bind(c, name="Ust")                                 :: Ust                 !intra-orbitals interactions
-  real(c_double),bind(c, name="Jh")                                  :: Jh                  !J_Hund: Hunds' coupling constant 
-  real(c_double),bind(c, name="Jx")                                  :: Jx                  !J_X: coupling constant for the spin-eXchange interaction term
-  real(c_double),bind(c, name="Jp")                                  :: Jp                  !J_P: coupling constant for the Pair-hopping interaction term 
-  real(c_double),bind(c, name="xmu")                                 :: xmu                 !chemical potential
-  real(c_double),bind(c, name="beta")                                :: beta                !inverse temperature
+  integer(c_int), bind(c, name="Nbath")                              :: Nbath               !Number of bath sites:
+                                                                                            ! |*| :f:var:`bath_type` = :code:`normal` : number of bath sites per orbital
+                                                                                            ! |*| :f:var:`bath_type` = :code:`hybrid` : total number of bath sites
+                                                                                            ! |*| :f:var:`bath_type` = :code:`replica/general` : number of replicas 
+                                                                                            ! :Default Nbath:`6`
+  integer(c_int), bind(c, name="Norb")                               :: Norb                !Number of impurity orbitals (max :code:`5` )
+                                                                                            ! :Default Norb:`1`
+  integer(c_int), bind(c, name="Nspin")                              :: Nspin               !If :code:`1`, assume :math:`H_{\downarrow}` =
+                                                                                            ! :math:`H_{\uparrow}` . If :code:`2` , the Hamiltonian
+                                                                                            ! needs to explicitly include spin-up and spin-down blocks
+                                                                                            ! :Default Nspin:`1`
+  integer(c_int), bind(c, name="Nloop")                              :: Nloop               !Maximum number of DMFT loops 
+                                                                                            ! :Default Nloop:`100`
+  integer(c_int), bind(c, name="Nph")                                :: Nph                 !Max number of phonons allowed (cut off)
+                                                                                            ! :Default Nph:`0`
+  real(c_double),dimension(5),bind(c, name="Uloc")                   :: Uloc                !Values of the local interaction per orbital (max :code:`5` )
+                                                                                            ! :Default Uloc:`[2d0, 0d0, 0d0, 0d0, 0d0]`
+  real(c_double),bind(c, name="Ust")                                 :: Ust                 !Value of the inter-orbital interaction term
+                                                                                            ! :Default Ust:`0d0`
+  real(c_double),bind(c, name="Jh")                                  :: Jh                  !Hund's coupling constant :Default Jh:`0.d0`
+  real(c_double),bind(c, name="Jx")                                  :: Jx                  !Coupling constant for the spin-eXchange interaction term :Default Jx:`0.d0`
+  real(c_double),bind(c, name="Jp")                                  :: Jp                  !Coupling constant for the Pair-hopping interaction term :Default Jp:`0.d0`
+  real(c_double),bind(c, name="xmu")                                 :: xmu                 !Chemical potential. If :f:var:`HFMODE` = :code:`T`, :f:var:`xmu` = :code:`0.d0` 
+                                                                                            !indicates half-filling condition.
+                                                                                            ! :Default xmu:`0d0`
+  real(c_double),bind(c, name="beta")                                :: beta                !Inverse temperature, at zero temperature it is used as a IR cut-off.
+                                                                                            ! :Default beta:`1000d0`
   !
   !
-  integer(c_int), bind(c, name="Nsuccess")                           :: Nsuccess            !Number of repeated success to fall below convergence threshold  
-  real(c_double),bind(c, name="dmft_error")                          :: dmft_error          !dmft convergence threshold
-  real(c_double),bind(c, name="eps")                                 :: eps                 !broadening
-  real(c_double),bind(c, name="wini")                                :: wini                !frequency range min
-  real(c_double),bind(c, name="wfin")                                :: wfin                !frequency range max
-  real(c_double),bind(c, name="xmin")                                :: xmin                !x-range for the local lattice probability distribution function (phonons)
-  real(c_double),bind(c, name="xmax")                                :: xmax                !x-range for the local lattice probability distribution function (phonons)
-  real(c_double),bind(c, name="sb_field")                            :: sb_field            !symmetry breaking field
-  real(c_double),bind(c, name="nread")                               :: nread               !fixed density. if 0.d0 fixed chemical potential calculation.
+  integer(c_int), bind(c, name="Nsuccess")                           :: Nsuccess            !Number of repeated success to fall below convergence threshold 
+                                                                                            ! :Default Nsuccess:`1`
+  real(c_double),bind(c, name="dmft_error")                          :: dmft_error          !Error threshold for DMFT convergence
+                                                                                            ! :Default dmft_error:`1d-5`
+  real(c_double),bind(c, name="eps")                                 :: eps                 !Broadening on the real frequency axis for Green's function and Susceptibility 
+                                                                                            !calculations. :Default eps:`1d-2`
+  real(c_double),bind(c, name="wini")                                :: wini                !Minimum value of the real frequency range
+                                                                                            ! :Default wini:`-5d0` 
+  real(c_double),bind(c, name="wfin")                                :: wfin                !Maximum value of the real frequency range
+                                                                                            ! :Default wfin:`5d0`
+  real(c_double),bind(c, name="xmin")                                :: xmin                !Minimum of the x-range for the local lattice 
+                                                                                            !probability distribution function (phonons)
+                                                                                            ! :Default xmin:`-3d0`
+  real(c_double),bind(c, name="xmax")                                :: xmax                !Maximum of the x-range for the local lattice 
+                                                                                            !probability distribution function (phonons)
+                                                                                            ! :Default xmax:`3d0`
+  real(c_double),bind(c, name="sb_field")                            :: sb_field            !Value of a symmetry breaking field for magnetic solutions
+                                                                                            ! :Default sb_field:`1d-1`  
+  real(c_double),bind(c, name="nread")                               :: nread               !Target occupation value for fixed-density calculations. If set to :code:`0.0` 
+                                                                                            !the calculation is assumed to be at fixed :f:var:`xmu`
+                                                                                            ! :Default nread:`0d0`
   !
   !these variable need an equivalent "internal" one because parse_input_variable is not capable of reading logical(c_bool)
-  logical(c_bool),bind(c, name="ed_total_ud")                        :: ed_total_ud         !flag to select which type of quantum numbers have to be considered: T (default) total Nup-Ndw, F orbital based Nup-Ndw
+  logical(c_bool),bind(c, name="ed_total_ud")                        :: ed_total_ud         !Flag to select which type of quantum numbers have to be considered (if :f:var:`ed_mode` = :code:`normal`)
+                                                                                            ! |*| :code:`T` : blocks have different total :math:`N_{\uparrow}` and :math:`N_{\downarrow}`
+                                                                                            ! |*| :code:`F` : blocks have different total :math:`N^{\alpha}_{\uparrow}` and :math:`N^{\alpha}_{\downarrow}`
+                                                                                            ! where :math:`\alpha` is the orbital index. Speeds up calculation in the case where orbitals are not hybridized
+                                                                                            ! :Default ed_total_ud:`T`
   logical                                                            :: ed_total_ud_
-  logical(c_bool),bind(c, name="ed_twin")                            :: ed_twin             !flag to reduce (T) or not (F,default) the number of visited sector using twin symmetry.
+  logical(c_bool),bind(c, name="ed_twin")                            :: ed_twin             !Flag to reduce ( :code:`T` ) or not (:code:`F` ) the number of visited sector using twin symmetry
+                                                                                            ! :Default ed_twin:`F`
   logical                                                            :: ed_twin_
   !
-  logical              :: HFmode              !flag for HF interaction form U(n-1/2)(n-1/2) VS Unn
-  real(8)              :: cutoff              !cutoff for spectral summation
+  logical              :: HFmode              !Flag to set the form of the Hubbard-Kanamori interaction
+                                              ! |*| :code:`T` : :math:`U(n_{\uparrow}-\frac{1}{2})(n_{\downarrow}-\frac{1}{2})`
+                                              ! |*| :code:`F` : :math:`Un_{\uparrow}n_{\downarrow}` 
+                                              ! :Default HFmode:`T`
+  real(8)              :: cutoff              !Spectrum cut-off, used to determine the number states to be retained
+                                              ! :Default cutoff:`1d-9`
   real(8)              :: gs_threshold        !Energy threshold for ground state degeneracy loop up
-  real(8)              :: deltasc             !breaking symmetry field
+                                              ! :Default gs_threshold:`1d-9`
+  real(8)              :: deltasc             !Value of the SC symmetry breaking term (only used if :f:var:`ed_mode` = :code:`superc` )
+                                              ! :Default deltasc:`2d-2`
   !
-  integer              :: ph_type             !shape of the e part of the e-ph interaction: 1=orbital occupation, 2=orbital hybridization
-  real(8)              :: A_ph                !phonon field coupled to displacement operator (constant)
-  complex(8),allocatable  :: g_ph(:,:)        !electron-phonon coupling constant all
-  real(8)              :: w0_ph               !phonon frequency (constant)
-  real(8),allocatable  :: g_ph_diag(:)        !electron-phonon coupling constant diagonal (density)
+  integer              :: ph_type                      !Shape of the e part of the e-ph interaction: 
+                                                       ! |*| :code:`1` = orbital occupation
+                                                       ! |*| :code:`2` = orbital hybridization
+                                                       ! :Default ph_type:`1`
+  real(8)              :: A_ph                         !Phonon forcing field coupled to displacement operator (constant)
+                                                       ! :Default A_ph:`0d0`
+  complex(8),allocatable,dimension(:,:)  :: g_ph       !Electron-phonon coupling constant all
+                                                       ! :Default g_ph:`zero`
+  real(8)                                :: w0_ph      !Phonon frequency
+                                                       ! :Default w0_ph:`0d0`
+  real(8),allocatable,dimension(:)       :: g_ph_diag  !Diagonal electron-phonon density coupling constant
+                                                       ! :Default g_ph_diag:`zero`
   !
-  real(8),allocatable  :: spin_field_x(:)        !magnetic field per orbital coupling to X-spin component
-  real(8),allocatable  :: spin_field_y(:)        !magnetic field per orbital coupling to Y-spin component
-  real(8),allocatable  :: spin_field_z(:)        !magnetic field per orbital coupling to Z-spin component
-  real(8),allocatable  :: pair_field(:)          !pair field per orbital coupling to s-wave order parameter component
-  real(8),dimension(4) :: exc_field           !external field coupling to exciton order parameter
+  real(8),allocatable,dimension(:)  :: spin_field_x       !Magnetic field per orbital coupling to X-spin component :Default spin_field_x:`zero`
+  real(8),allocatable,dimension(:)  :: spin_field_y       !Magnetic field per orbital coupling to Y-spin component :Default spin_field_y:`zero`
+  real(8),allocatable,dimension(:)  :: spin_field_z       !Magnetic field per orbital coupling to Z-spin component :Default spin_field_z:`zero`
+  real(8),allocatable,dimension(:)  :: pair_field         !Pair field per orbital coupling to s-wave order parameter component 
+                                                 ! which explicitly appears in the impurity Hamiltonian :Default pair_field:`zero`
+  real(8),dimension(4) :: exc_field              !External field coupling to exciton order parameter :Default exc_field:`zero`
   !
-  logical              :: rdm_flag              !evaluate impurity RDM
-  logical              :: chispin_flag        !evaluate spin susceptibility
-  logical              :: chidens_flag        !evaluate dens susceptibility
-  logical              :: chipair_flag        !evaluate pair susceptibility
-  logical              :: chiexct_flag        !evaluate excitonic susceptibility
+  logical              :: rdm_flag            !Flag to activate Reduced Density Matrix evaluation :Default rdm_flag:`T`
+  logical              :: chispin_flag        !Flag to activate spin susceptibility evaluation :Default chispin_flag:`F`
+  logical              :: chidens_flag        !Flag to activate charge susceptibility evaluation :Default chidens_flag:`F`
+  logical              :: chipair_flag        !Flag to activate pairing susceptibility evaluation :Default chipair_flag:`F`
+  logical              :: chiexct_flag        !Flag to activate excitonic susceptibility evaluation :Default chiexct_flag:`F`
   !
-  character(len=7)     :: ed_mode             !flag to set ed symmetry type: normal=normal (default), superc=superconductive, nonsu2=broken SU(2)
-  logical              :: ed_finite_temp      !flag to select finite temperature method. note that if T then lanc_nstates_total must be > 1 
-  logical              :: ed_sparse_H         !flag to select  storage of sparse matrix H (mem--, cpu++) if TRUE, or direct on-the-fly H*v product (mem++, cpu--
-  logical              :: ed_solve_offdiag_gf !flag to select the calculation of the off-diagonal impurity GF. this is T by default if bath_type/=normal 
-  logical              :: ed_print_Sigma      !flag to print impurity Self-energies
-  logical              :: ed_print_G          !flag to print impurity Green`s functions
-  logical              :: ed_print_G0         !flag to print impurity non-interacting Green`s functions
-  logical              :: ed_print_chispin    !flag to print impurity spin susceptibility
-  logical              :: ed_print_chidens    !flag to print impurity dens susceptibility
-  logical              :: ed_print_chipair    !flag to print impurity pair susceptibility
-  logical              :: ed_print_chiexct    !flag to print impurity exct susceptibility
-  logical              :: ed_all_G            !flag to evaluate all the components of the impurity Green`s functions irrespective of the symmetries
-  logical              :: ed_sectors          !flag to reduce sector scan for the spectrum to specific sectors +/- ed_sectors_shift
-  integer              :: ed_sectors_shift    !shift to the ed_sectors scan
-  integer              :: ed_verbose          !verbosity level: 0=almost nothing --> 5:all. Really: all
-  real(8)              :: ed_offset_bath      !half-bandwidth for the bath initialization: flat in -hwband:hwband
-  real(8)              :: ed_hw_bath          !half-bandwidth for the bath initialization: flat in -hwband:hwband
-  logical              :: ed_obs_all          !flag to print observables for every loop
+  character(len=7)     :: ed_mode             !Flag to set the ED mode 
+                                              ! |*| :code:`normal` : normal
+                                              ! |*| :code:`superc` : s-wave superconductive (singlet pairing)
+                                              ! |*| :code:`nonsu2` : broken SU(2) symmetry
+                                              ! :Default ed_mode:`normal`
+  logical              :: ed_finite_temp      !Flag to set whether the problem is at finite temperature.
+                                              ! If :code:`T` then :f:var:`lanc_nstates_total` must be greater than 1.
+                                              ! :Default ed_finite_temp:`F`
+  logical              :: ed_sparse_H         !Flag to select  storage of the Fock space Hamiltonian as a sparse matrix
+                                              ! |*| :code:`T` : H is stored. CPU intensive
+                                              ! |*| :code:`F` : on-the-fly H*v product is stored. Memory intensive
+                                              ! :Default ed_sparse_H:`T`
+  logical              :: ed_solve_offdiag_gf !Flag to select the calculation of the off-diagonal 
+                                              !impurity GF. Set to :code:`T` by default if :f:var:`bath_type` is not :code:`normal`
+                                              ! :Default ed_solve_offdiag_gf:`F`
+  logical              :: ed_print_Sigma      !Flag to print impurity Self-energies :Default ed_print_Sigma:`T`
+  logical              :: ed_print_G          !Flag to print impurity Green`s functions :Default ed_print_G:`T`
+  logical              :: ed_print_G0         !Flag to print impurity non-interacting Green`s functions :Default ed_print_G0:`T`
+  logical              :: ed_print_chispin    !Flag to print impurity spin susceptibility, if calculated :Default ed_print_chispin:`T`
+  logical              :: ed_print_chidens    !Flag to print impurity dens susceptibility, if calculated :Default ed_print_chidens:`T`
+  logical              :: ed_print_chipair    !Flag to print impurity pair susceptibility, if calculated :Default ed_print_chipair:`T`
+  logical              :: ed_print_chiexct    !Flag to print impurity exct susceptibility, if calculated :Default ed_print_chiexct:`T`
+  logical              :: ed_all_G            !Flag to evaluate all the components of the impurity Green`s functions irrespective of the symmetries
+                                              ! :Default ed_all_G:`F`
+  logical              :: ed_sectors          !Flag to reduce sector scan for the spectrum to specific sectors
+                                              ! :Default ed_sectors:`F`
+  integer              :: ed_sectors_shift    !Additional sectors to be evaluated if :f:var:`ed_sectors` is set. These are sectors 
+                                              !with all the quantum numbers varying of at most by :f:var:`ed_sectors_shift` around the
+                                              !sectors listed in :f:var:`ed_sectors`.
+                                              ! :Default ed_sectors_shift:`1`
+  integer              :: ed_verbose          !Verbosity level:
+                                              ! |*| :code:`0` : almost nothing 
+                                              ! |*| ...                       
+                                              ! |*| :code:`3` : most of the verbose output
+                                              ! |*| ...
+                                              ! |*| :code:`5` : everything. Really, everything
+                                              ! :Default ed_verbose:`3`
+  real(8)              :: ed_offset_bath      !Offset for the initialization of diagonal terms if :f:var:`bath_type` = :code:`replica, general` . 
+                                              !The replicas will be equally spaced in the range :code:`[-offset,offset]`
+                                              ! :Default ed_offset_bath:`1d-1`
+  real(8)              :: ed_hw_bath          !Half-bandwidth for bath level initialization if :f:var:`bath_type` = :code:`normal, hybrid` . 
+                                              !The levels will be equispaced in the range  :code:`[-hw,hw]`
+                                              ! :Default ed_hw_bath:`2d0`
+  logical              :: ed_obs_all          !Flag to print observables for every loop
+                                              ! :Default ed_obs_all:`T`
   !
-  character(len=12)    :: lanc_method         !select the lanczos method to be used in the determination of the spectrum. ARPACK (default), LANCZOS (T=0 only) 
-  real(8)              :: lanc_tolerance      !Tolerance for the Lanczos iterations as used in Arpack and plain lanczos. 
+  character(len=12)    :: lanc_method         !Flag to select the Lanczos method to be used in the 
+                                              !determination of the spectrum. 
+                                              ! |*| :code:`ARPACK` : uses the Arnoldi algorithm 
+                                              ! |*| :code:`LANCZOS`: uses an in-house Lanczos algorithm (limited to zero temperature)
+                                              ! :Default lanc_method:`ARPACK`
+  real(8)              :: lanc_tolerance      !Tolerance for the Lanczos iterations as used in Arpack and plain Lanczos
+                                              ! :Default lanc_tolerance:`1d-18`
   integer              :: lanc_niter          !Max number of Lanczos iterations
-  integer              :: lanc_ngfiter        !Max number of iteration in resolvant tri-diagonalization
-  integer              :: lanc_ncv_factor     !Set the size of the block used in Lanczos-Arpack by multiplying the required Neigen (Ncv=lanc_ncv_factor*Neigen+lanc_ncv_add)
-  integer              :: lanc_ncv_add        !Adds up to the size of the block to prevent it to become too small (Ncv=lanc_ncv_factor*Neigen+lanc_ncv_add)
+                                              ! :Default lanc_niter:`512`
+  integer              :: lanc_ngfiter        !Number of Lanczos iteration in GF determination. Number of moments.
+                                              ! :Default lanc_ngfiter:`200`
+  integer              :: lanc_ncv_factor     !Size of the block used in Lanczos-Arpack by multiplying the required :code:`Neigen` according to 
+                                              ! :math:`N_{cv}=\mathrm{lanc\_ncv\_factor} \cdot \mathrm{Neigen} + \mathrm{lanc\_ncv\_add}`
+                                              ! :Default lanc_ncv_factor:`10`
+  integer              :: lanc_ncv_add        !Offset to add to the size of the block to prevent it to become too small according to
+                                              ! :math:`N_{cv}=\mathrm{lanc\_ncv\_factor} \cdot \mathrm{Neigen} + \mathrm{lanc\_ncv\_add}`
+                                              ! :Default lanc_ncv_add:`0`
   integer              :: lanc_nstates_sector !Max number of required eigenvalues per sector
-  integer              :: lanc_nstates_total  !Max number of states hold in the finite T calculation
-  integer              :: lanc_nstates_step   !Number of states added at each step to determine the optimal spectrum size at finite T
-  integer              :: lanc_dim_threshold  !Min dimension threshold to use Lanczos determination of the spectrum rather than Lapack based exact diagonalization.
+                                              ! :Default lanc_nstates_sector:`2`
+  integer              :: lanc_nstates_total  !Max number of states contributing to the partition function for finite-temperature calculations.
+                                              !It must be set to :code:`1` for zero-temperature calculations, and to a greater value for 
+                                              !finite-temperature calculations.
+                                              ! :Default lanc_nstates_total:`1`
+  integer              :: lanc_nstates_step   !Number of states added at each step for finite-temperature calculations: if the latest state included in the
+                                              !partition function has a Boltzmann weight higher than :f:var:`cutoff`, :f:var:`lanc_nstates_total` will be increased 
+                                              !by this amount at the next DMFT iteration.
+                                              ! :Default lanc_nstates_step:`2`                                             
+  integer              :: lanc_dim_threshold  !Minimal sector dimension for Lanczos diagonalization. Smaller sectors will be solved with Exact Diagonalization 
+                                              !provided by Lapack
+                                              ! :Default lanc_dim_threshold:`1024`
   !
-  character(len=5)     :: cg_Scheme           !fit scheme: delta (default), weiss for G0
-  integer              :: cg_method           !fit routine type:0=CGnr (default), 1=minimize (old f77)
-  integer              :: cg_grad             !gradient evaluation: 0=analytic, 1=numeric
-  integer              :: cg_Niter            !Max number of iteration in the fit
-  real(8)              :: cg_Ftol             !Tolerance in the cg fit
-  integer              :: cg_stop             !fit stop condition:0-3, 0=C1.AND.C2, 1=C1, 2=C2 with C1= :math:`\vert F_{n-1} -F_{n} \vert < tol*(1+F_{n})`, C2= :math:`\vert\vert x_{n-1} -x_{n} \vert\vert <tol*(1+ \vert\vert x_{n} \vert\vert`).
-  integer              :: cg_Weight           !CGfit mode 0=1, 1=1/n , 2=1/w_n weight
-  integer              :: cg_pow              !fit power to generalize the distance as  :math:`\vert G0 - G0_{and} \vert ^{cg\_pow}`
-  character(len=12)    :: cg_norm             !frobenius/elemental (for now only in general bath)
-  logical              :: cg_minimize_ver     !flag to pick old (Krauth) or new (Lichtenstein) version of the minimize CG routine
-  real(8)              :: cg_minimize_hh      !unknown parameter used in the CG minimize procedure.  
+  character(len=5)     :: cg_Scheme           !Which quantity to use in the bath fitting routine:
+                                              ! |*| :code:`WEISS` : the lattice Weiss field Green's function :math:`\mathcal{G}_{0}(i\omega_{n})` is fitted
+                                              ! |*| :code:`DELTA` : the lattice Hybridization function :math:`\Delta(i\omega_{n})` is fitted
+                                              ! :Default cg_Scheme:`Weiss`
+  integer              :: cg_method           !Conjugate-gradient fitting routine to be used:
+                                              ! |*| :code:`0` : Numerical Recipes
+                                              ! |*| :code:`1` :minimize (FORTRAN77 code)
+                                              ! :Default cg_method:`0`
+  integer              :: cg_grad             !Flag to set the type of gradient evaluation (if :f:var:`cg_method` = :code:`0` ) 
+                                              ! |*| :code:`0` : analytic
+                                              ! |*| :code:`1` : numeric
+                                              ! :Default cg_grad:`0`
+  integer              :: cg_Niter            !Maximum number of iterations in the bath fitting procedure
+                                              ! :Default cg_Niter:`500`
+  real(8)              :: cg_Ftol             !Tolerance in the conjugate-gradient fitting procedure
+                                              ! :Default cg_Ftol:`1d-5`
+  integer              :: cg_stop             !Conjugate-gradient stopping condition
+                                              ! |*| :code:`0` : :code:`1 .and. 2`
+                                              ! |*| :code:`1` : :math:`\vert F_{n-1} -F_{n} \vert < \mathrm{tol} \cdot (1+F_{n})`
+                                              ! |*| :code:`2` : :math:`\vert\vert x_{n-1} -x_{n} \vert\vert <\mathrm{tol} \cdot (1+ \vert\vert x_{n} \vert\vert`)
+                                              ! :Default cg_stop:`0`
+  integer              :: cg_Weight           !Weight assigned to the imaginary frequency data points in the calculation of the :math:`\chi^{2}`
+                                              ! |*| :code:`0` : :math:`1`
+                                              ! |*| :code:`1` : :math:`\frac{1}{n}`
+                                              ! |*| :code:`2` : :math:`\frac{1}{\omega_{n}}`
+                                              ! :Default cg_Weight:`0`
+  integer              :: cg_pow              !Power exponent in the :math:`\chi^{2}` , according to 
+                                              ! :math:`\vert \mathcal{G}_{0} - G_{0}^{\mathrm{And}} \vert ^{\mathrm{cg\_pow}}` or 
+                                              ! :math:`\vert \Delta- Delta^{\mathrm{And}} \vert ^{\mathrm{cg\_pow}}`
+                                              ! :Default cg_pow:`2`
+  character(len=12)    :: cg_norm             !Which norm to use in the evaluation of the :math:`\chi^{2}` for matrix quantities. 
+                                              !Requires :f:var:`ed_bath` = :code:`replica, general` .
+                                              ! |*| :code:`ELEMENTAL` : :math:`\chi^{2}` is the sum of each component's :math:`\chi^{2}`
+                                              ! |*| :code:`FROBENIUS` : :math:`\chi^{2}` is calculated on the Frobenius norm (Matrix distance)
+                                              ! :Default cg_norm:`ELEMENTAL`
+  logical              :: cg_minimize_ver     !If :f:var:`cg_grad` = :code:`1` , select which version of :code:`minimize.f` to use
+                                              ! |*| :code:`T` : Lichtenstein (newer)
+                                              ! |*| :code:`F` : Krauth (older)
+                                              ! :Default cg_minimize_ver:`F`
+  real(8)              :: cg_minimize_hh      !Unknown parameter used in the CG minimize procedure ( for :f:var:`cg_grad` = :code:`1` )
+                                              ! :Default cg_minimize_hh:`1d-4`
   !
-  logical              :: finiteT             !flag for finite temperature calculation
-  character(len=7)     :: bath_type           !flag to set bath type: normal (1bath/imp), hybrid(1bath), replica(1replica/imp), general(replica++)
+  logical              :: finiteT             !Flag to set finite-temperature calculation
+  character(len=7)     :: bath_type           !Flag to select the bath geometry 
+                                              ! |*| :code:`normal`  : each impurity orbital has a set of bath levels in a star geometry
+                                              ! |*| :code:`hybrid`  : all impurity orbitals communicate with the same set of bath levels in a star geometry
+                                              ! |*| :code:`replica` : the impurity communicates with clusters of the same form via an hybridization term :math:`V\mathbb{I}`  
+                                              ! |*| :code:`general` : extends :code:`replica` so that each orbital has a different hybridization strength
+                                              ! :Default bath_type:`normal`
   !
-  real(8)              :: nerr                !fix density threshold. a loop over from 1.d-1 to required nerr is performed
-  real(8)              :: ndelta              !initial chemical potential step
-  real(8)              :: ncoeff              !multiplier for the initial ndelta read from a file (ndelta-->ndelta*ncoeff)
+  real(8)              :: nerr                !Error threshold for fixed-density calculations
+                                              ! :Default nerr:`1d-4`
+  real(8)              :: ndelta              !Initial chemical potential variation for fixed-density calculations
+                                              ! :Default ndelta:`1d-1`
+  real(8)              :: ncoeff              !Multiplier for the :code:`ndelta` value if :f:var:`xmu` and its error are 
+                                              !read from a file ( :math:`\mathrm{ndelta} \rightarrow \mathrm{ndelta} \cdot \mathrm{ncoeff}` )
+                                              ! :Default ncoeff:`1d0`
   integer              :: niter               !
-  logical              :: Jz_basis            !"Flag to enable the Jz basis"
-  logical              :: Jz_max              !"Flag to enable a maximum value for Jz"
-  real(8)              :: Jz_max_value        !"Maximum value for Jz"
+  logical              :: Jz_basis            !Flag to enable the :math:`J_{z}` basis in SOC calculations :Default Jz_basis:`F`
+  logical              :: Jz_max              !Flag to enable a maximum value for :math:`J_{z}` :Default Jz_max:`F`
+  real(8)              :: Jz_max_value        !Maximum value for Jz :Default Jz_max_value:`1000d0`
 
   !Some parameters for function dimension:
-  integer(c_int),bind(c, name="Lmats")             :: Lmats !Number of Matsubara frequencies
-  integer(c_int),bind(c, name="Lreal")             :: Lreal !Number of real-axis frequencies
-  integer(c_int),bind(c, name="Lfit")              :: Lfit  !Number of frequencies for bath fitting
+  integer(c_int),bind(c, name="Lmats")             :: Lmats !Number of Matsubara frequencies :Default Lmats:`4096`
+  integer(c_int),bind(c, name="Lreal")             :: Lreal !Number of real-axis frequencies :Default Lreal:`5000`
+  integer(c_int),bind(c, name="Lfit")              :: Lfit  !Number of frequencies for bath fitting :Default Lfit:`1000`
 
-  integer(c_int),bind(c, name="Ltau")              :: Ltau  !Number of imaginary time points
-  integer(c_int),bind(c, name="Lpos")              :: Lpos  !Number of points in PDF lattice
+  integer(c_int),bind(c, name="Ltau")              :: Ltau  !Number of imaginary time points :Default Ltau:`1024`
+  integer(c_int),bind(c, name="Lpos")              :: Lpos  !Number of points in Probability Distribution Function lattice for phonons :Default Lpos:`100`
 
   !LOG AND Hamiltonian UNITS
   !=========================================================
-  character(len=100)   :: Hfile  !File where to retrieve/store the bath parameters.
-  character(len=100)   :: HLOCfile !File read the input local H
-  character(len=100)   :: SectorFile !File where to retrieve/store the sectors contributing to the spectrum
-  character(len=100)   :: GPHfile !File of Phonon couplings. Put NONE to use only density couplings.
-  integer(c_int),bind(c, name="LOGfile"),save             :: LOGfile  !Logfile unit
+  character(len=100)   :: Hfile  !File where to retrieve/store the bath parameters :Default Hfile:`hamiltonian[.used/restart]`
+  character(len=100)   :: HLOCfile !File read the input local H :Default HLOCfile:`inputHLOC.in`
+  character(len=100)   :: SectorFile !File where to retrieve/store the sectors contributing to the spectrum :Default SectorFile:`sectors[.used/restart]`
+  character(len=100)   :: GPHfile !File of Phonon couplings. Set to NONE to use only density couplings. :Default GPHfile:`NONE`
+  integer(c_int),bind(c, name="LOGfile"),save             :: LOGfile  !Logfile unit  :Default LOGfile:`6`
 
   !THIS IS JUST A RELOCATED GLOBAL VARIABLE
   character(len=200)                                 :: ed_input_file="" !Name of input file

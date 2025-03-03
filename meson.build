@@ -18,6 +18,7 @@ python_src  = ['src/python/edipy2/edi2py.py',
 library('edi2py', 
                     fortran_src,
                     fortran_args: ['-ffree-line-length-none', '-cpp', '-D_MPI'],
+                    link_args: ['-Wl,-z,noexecstack'],
                     dependencies: [scifor_dep,edipack_dep],
                     install: true,
                     install_dir: python.get_install_dir() / 'edipy2'

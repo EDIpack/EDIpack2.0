@@ -118,6 +118,7 @@ libfile = os.path.join(libpath, "libedi2py" + libext)
 try:
     libedi2py = CDLL(libfile)
 except:
+    print("Couldn't load the libedi2py library. Import will fail.")
     libedi2py = None
 
 ####################################################################
