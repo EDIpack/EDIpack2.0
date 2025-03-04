@@ -13,28 +13,28 @@ MODULE ED_INPUT_VARS
   ! These variables are bound to c types ! 
   !======================================!
   
-  integer(c_int), bind(c, name="Nbath")                              :: Nbath             !
+  integer(c_int),bind(c, name="Nbath")                               :: Nbath             !
   !Number of bath sites:
-  ! |*| :f:var:`bath_type` = :code:`normal` : number of bath sites per orbital
-  ! |*| :f:var:`bath_type` = :code:`hybrid` : total number of bath sites
-  ! |*| :f:var:`bath_type` = :code:`replica/general` : number of replicas 
+  ! * :f:var:`bath_type` = :code:`normal` : number of bath sites per orbital
+  ! * :f:var:`bath_type` = :code:`hybrid` : total number of bath sites
+  ! * :f:var:`bath_type` = :code:`replica/general` : number of replicas 
   ! :Default Nbath:`6`
   !
-  integer(c_int), bind(c, name="Norb")                               :: Norb              !
+  integer(c_int),bind(c, name="Norb")                                :: Norb              !
   !Number of impurity orbitals (max :code:`5` )
   ! :Default Norb:`1`
   !
-  integer(c_int), bind(c, name="Nspin")                              :: Nspin             !
+  integer(c_int),bind(c, name="Nspin")                               :: Nspin             !
   !If :code:`1`, assume :math:`H_{\downarrow}` =
   ! :math:`H_{\uparrow}` . If :code:`2` , the Hamiltonian
   ! needs to explicitly include spin-up and spin-down blocks
   ! :Default Nspin:`1`
   !
-  integer(c_int), bind(c, name="Nloop")                              :: Nloop             !
+  integer(c_int),bind(c, name="Nloop")                               :: Nloop             !
   !Maximum number of DMFT loops 
   ! :Default Nloop:`100`
   !
-  integer(c_int), bind(c, name="Nph")                                :: Nph               !
+  integer(c_int),bind(c, name="Nph")                                 :: Nph               !
   !Max number of phonons allowed (cut off)
   ! :Default Nph:`0`
   !
@@ -67,7 +67,7 @@ MODULE ED_INPUT_VARS
   !Inverse temperature, at zero temperature it is used as a IR cut-off.
   ! :Default beta:`1000d0`
   !
-  integer(c_int), bind(c, name="Nsuccess")                           :: Nsuccess          !
+  integer(c_int),bind(c, name="Nsuccess")                            :: Nsuccess          !
   !Number of repeated success to fall below convergence threshold 
   ! :Default Nsuccess:`1`
   !
@@ -111,10 +111,10 @@ MODULE ED_INPUT_VARS
   
   logical(c_bool),bind(c, name="ed_total_ud")                        :: ed_total_ud       !
   !Flag to select which type of quantum numbers have to be considered (if :f:var:`ed_mode` = :code:`normal`)
-  ! |*| :code:`T` : blocks have different total :math:`N_{\uparrow}` and :math:`N_{\downarrow}`
-  ! |*| :code:`F` : blocks have different total :math:`N^{\alpha}_{\uparrow}` and :math:`N^{\alpha}_{\downarrow}`
-  ! where :math:`\alpha` is the orbital index. Speeds up calculation in the case where orbitals are not hybridized
-  ! :Default ed_total_ud:`T`
+  ! * :code:`T` : blocks have different total :math:`N_{\uparrow}` and :math:`N_{\downarrow}`
+  ! * :code:`F` : blocks have different total :math:`N^{\alpha}_{\uparrow}` and :math:`N^{\alpha}_{\downarrow}`
+  !where :math:`\alpha` is the orbital index. Speeds up calculation in the case where orbitals are not hybridized 
+  !:Default ed_total_ud:`T`
   !
   logical                                                            :: ed_total_ud_
   logical(c_bool),bind(c, name="ed_twin")                            :: ed_twin           !
@@ -129,8 +129,8 @@ MODULE ED_INPUT_VARS
 
   logical              :: HFmode            !
   !Flag to set the form of the Hubbard-Kanamori interaction
-  ! |*| :code:`T` : :math:`U(n_{\uparrow}-\frac{1}{2})(n_{\downarrow}-\frac{1}{2})`
-  ! |*| :code:`F` : :math:`Un_{\uparrow}n_{\downarrow}` 
+  ! * :code:`T` : :math:`U(n_{\uparrow}-\frac{1}{2})(n_{\downarrow}-\frac{1}{2})`
+  ! * :code:`F` : :math:`Un_{\uparrow}n_{\downarrow}` 
   ! :Default HFmode:`T`
   !
   real(8)              :: cutoff                        !
@@ -147,8 +147,8 @@ MODULE ED_INPUT_VARS
   !
   integer              :: ph_type                       !
   !Shape of the e part of the e-ph interaction: 
-  ! |*| :code:`1` = orbital occupation
-  ! |*| :code:`2` = orbital hybridization
+  ! * :code:`1` = orbital occupation
+  ! * :code:`2` = orbital hybridization
   ! :Default ph_type:`1`
   !
   real(8)              :: A_ph                          !
@@ -210,20 +210,20 @@ MODULE ED_INPUT_VARS
   !
   character(len=7)     :: ed_mode            !
   !Flag to set the ED mode 
-  ! |*| :code:`normal` : normal
-  ! |*| :code:`superc` : s-wave superconductive (singlet pairing)
-  ! |*| :code:`nonsu2` : broken SU(2) symmetry
+  ! * :code:`normal` : normal
+  ! * :code:`superc` : s-wave superconductive (singlet pairing)
+  ! * :code:`nonsu2` : broken SU(2) symmetry
   ! :Default ed_mode:`normal`
   !
   logical              :: ed_finite_temp     !
   !Flag to set whether the problem is at finite temperature.
-  ! If :code:`T` then :f:var:`lanc_nstates_total` must be greater than 1.
+  !If :code:`T` then :f:var:`lanc_nstates_total` must be greater than 1.
   ! :Default ed_finite_temp:`F`
   !
   logical              :: ed_sparse_H        !
   !Flag to select  storage of the Fock space Hamiltonian as a sparse matrix
-  ! |*| :code:`T` : H is stored. CPU intensive
-  ! |*| :code:`F` : on-the-fly H*v product is stored. Memory intensive
+  ! * :code:`T` : :math:`H` is stored. CPU intensive
+  ! * :code:`F` : on-the-fly :math:`H \cdot v` product is stored. Memory intensive
   ! :Default ed_sparse_H:`T`
   !
   logical              :: ed_solve_offdiag_gf !
@@ -275,11 +275,11 @@ MODULE ED_INPUT_VARS
   !
   integer              :: ed_verbose        !
   !Verbosity level:
-  ! |*| :code:`0` : almost nothing 
-  ! |*| ...                       
-  ! |*| :code:`3` : most of the verbose output
-  ! |*| ...
-  ! |*| :code:`5` : everything. Really, everything
+  ! * :code:`0` : almost nothing 
+  ! * ...                       
+  ! * :code:`3` : most of the verbose output
+  ! * ...
+  ! * :code:`5` : everything. Really, everything
   ! :Default ed_verbose:`3`
   !
   real(8)              :: ed_offset_bath    !
@@ -299,8 +299,8 @@ MODULE ED_INPUT_VARS
   character(len=12)    :: lanc_method       !
   !Flag to select the Lanczos method to be used in the 
   !determination of the spectrum. 
-  ! |*| :code:`ARPACK` : uses the Arnoldi algorithm 
-  ! |*| :code:`LANCZOS`: uses an in-house Lanczos algorithm (limited to zero temperature)
+  ! * :code:`ARPACK` : uses the Arnoldi algorithm 
+  ! * :code:`LANCZOS`: uses an in-house Lanczos algorithm (limited to zero temperature)
   ! :Default lanc_method:`ARPACK`
   !
   real(8)              :: lanc_tolerance    !
@@ -348,20 +348,20 @@ MODULE ED_INPUT_VARS
   !
   character(len=5)     :: cg_Scheme         !
   !Which quantity to use in the bath fitting routine:
-  ! |*| :code:`WEISS` : the lattice Weiss field Green's function :math:`\mathcal{G}_{0}(i\omega_{n})` is fitted
-  ! |*| :code:`DELTA` : the lattice Hybridization function :math:`\Delta(i\omega_{n})` is fitted
+  ! * :code:`WEISS` : the lattice Weiss field Green's function :math:`\mathcal{G}_{0}(i\omega_{n})` is fitted
+  ! * :code:`DELTA` : the lattice Hybridization function :math:`\Delta(i\omega_{n})` is fitted
   ! :Default cg_Scheme:`Weiss`
   !
   integer              :: cg_method         !
   !Conjugate-gradient fitting routine to be used:
-  ! |*| :code:`0` : Numerical Recipes
-  ! |*| :code:`1` :minimize (FORTRAN77 code)
+  ! * :code:`0` : Numerical Recipes
+  ! * :code:`1` :minimize (FORTRAN77 code)
   ! :Default cg_method:`0`
   !
   integer              :: cg_grad           !
   !Flag to set the type of gradient evaluation (if :f:var:`cg_method` = :code:`0` ) 
-  ! |*| :code:`0` : analytic
-  ! |*| :code:`1` : numeric
+  ! * :code:`0` : analytic
+  ! * :code:`1` : numeric
   ! :Default cg_grad:`0`
   !
   integer              :: cg_Niter          !
@@ -374,16 +374,16 @@ MODULE ED_INPUT_VARS
   !
   integer              :: cg_stop           !
   !Conjugate-gradient stopping condition
-  ! |*| :code:`0` : :code:`1 .and. 2`
-  ! |*| :code:`1` : :math:`\vert F_{n-1} -F_{n} \vert < \mathrm{tol} \cdot (1+F_{n})`
-  ! |*| :code:`2` : :math:`\vert\vert x_{n-1} -x_{n} \vert\vert <\mathrm{tol} \cdot (1+ \vert\vert x_{n} \vert\vert`)
+  ! * :code:`0` : :code:`1 .and. 2`
+  ! * :code:`1` : :math:`\vert F_{n-1} -F_{n} \vert < \mathrm{tol} \cdot (1+F_{n})`
+  ! * :code:`2` : :math:`\vert\vert x_{n-1} -x_{n} \vert\vert <\mathrm{tol} \cdot (1+ \vert\vert x_{n} \vert\vert`)
   ! :Default cg_stop:`0`
   !
   integer              :: cg_Weight         !
   !Weight assigned to the imaginary frequency data points in the calculation of the :math:`\chi^{2}`
-  ! |*| :code:`0` : :math:`1`
-  ! |*| :code:`1` : :math:`\frac{1}{n}`
-  ! |*| :code:`2` : :math:`\frac{1}{\omega_{n}}`
+  ! * :code:`0` : :math:`1`
+  ! * :code:`1` : :math:`\frac{1}{n}`
+  ! * :code:`2` : :math:`\frac{1}{\omega_{n}}`
   ! :Default cg_Weight:`0`
   !
   integer              :: cg_pow            !
@@ -395,14 +395,14 @@ MODULE ED_INPUT_VARS
   character(len=12)    :: cg_norm           !
   !Which norm to use in the evaluation of the :math:`\chi^{2}` for matrix quantities. 
   !Relevant for :f:var:`ed_bath` = :code:`replica, general` 
-  ! |*| :code:`ELEMENTAL` : :math:`\chi^{2}` is the sum of each component's :math:`\chi^{2}`
-  ! |*| :code:`FROBENIUS` : :math:`\chi^{2}` is calculated on the Frobenius norm (Matrix distance)
+  ! * :code:`ELEMENTAL` : :math:`\chi^{2}` is the sum of each component's :math:`\chi^{2}`
+  ! * :code:`FROBENIUS` : :math:`\chi^{2}` is calculated on the Frobenius norm (Matrix distance)
   ! :Default cg_norm:`ELEMENTAL`
   !
   logical              :: cg_minimize_ver   !
   !If :f:var:`cg_grad` = :code:`1` , select which version of :code:`minimize.f` to use
-  ! |*| :code:`T` : Lichtenstein (newer)
-  ! |*| :code:`F` : Krauth (older)
+  ! * :code:`T` : Lichtenstein (newer)
+  ! * :code:`F` : Krauth (older)
   ! :Default cg_minimize_ver:`F`
   !
   real(8)              :: cg_minimize_hh    !
@@ -414,10 +414,10 @@ MODULE ED_INPUT_VARS
   !
   character(len=7)     :: bath_type         !
   !Flag to select the bath geometry 
-  ! |*| :code:`normal`  : each impurity orbital has a set of bath levels in a star geometry
-  ! |*| :code:`hybrid`  : all impurity orbitals communicate with the same set of bath levels in a star geometry
-  ! |*| :code:`replica` : the impurity communicates with clusters of the same form via an hybridization term :math:`V\mathbb{I}`  
-  ! |*| :code:`general` : extends :code:`replica` so that each orbital has a different hybridization strength
+  ! * :code:`normal`  : each impurity orbital has a set of bath levels in a star geometry
+  ! * :code:`hybrid`  : all impurity orbitals communicate with the same set of bath levels in a star geometry
+  ! * :code:`replica` : the impurity communicates with clusters of the same form via an hybridization term :math:`V\mathbb{I}`  
+  ! * :code:`general` : extends :code:`replica` so that each orbital has a different hybridization strength
   ! :Default bath_type:`normal`
   !
   real(8)              :: nerr              !
@@ -451,7 +451,7 @@ MODULE ED_INPUT_VARS
   !-----------------------------------------
   
   integer(c_int),bind(c, name="Lmats")             :: Lmats !
-  !!Number of Matsubara frequencies 
+  !Number of Matsubara frequencies 
   ! :Default Lmats:`4096`
   !
   integer(c_int),bind(c, name="Lreal")             :: Lreal !
