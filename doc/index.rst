@@ -123,7 +123,13 @@ EDIpy2
 
 :doc:`edipy2`
      Installation and basic use of `EDIpy2`: the `python` API of `EDIpack2.0`
+     
+EDIpack2TRIQS
+======================
 
+:doc:`edipack2triqs`
+     Link to the source code and documentation of the EDIpack2.0 - TRIQS 
+     compatibility layer
 
 
 Browse Source Code
@@ -166,6 +172,13 @@ Browse Source Code
    :hidden:
 
    edipy2
+   
+.. toctree::
+   :caption: EDIpack2TRIQS
+   :maxdepth: 2
+   :hidden:
+
+   edipack2triqs
 
 .. toctree::
    :caption: Browse code
@@ -179,6 +192,7 @@ Browse Source Code
    
    EDIpack2.0 on GitHub <https://github.com/edipack/EDIpack2.0>
    SciFortran on GitHub <https://github.com/SciFortran/SciFortran>
+   EDIpack2TRIQS on GitHub <https://github.com/krivenko/edipack2triqs>
 
 
 
