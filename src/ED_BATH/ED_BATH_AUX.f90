@@ -1,5 +1,5 @@
 MODULE ED_BATH_AUX
-  !Implements a number of auxiliary procedures used to construct replica/general bath
+  !Implements a number of auxiliary procedures used in the bath handling
   !
   USE SF_CONSTANTS, only: zero
   USE SF_IOTOOLS, only:free_unit,reg,file_length,str
@@ -10,16 +10,6 @@ MODULE ED_BATH_AUX
   USE ED_VARS_GLOBAL
   USE ED_AUX_FUNX
   implicit none
-
-  public :: hreplica_build                   !INTERNAL (for effective_bath)
-  public :: hreplica_mask                    !INTERNAL (for effective_bath)
-  public :: hreplica_site                    !INTERNAL (for effective_bath)
-  !
-  public :: hgeneral_build                   !INTERNAL (for effective_bath)
-  public :: hgeneral_mask                    !INTERNAL (for effective_bath)
-  public :: hgeneral_site                    !INTERNAL (for effective_bath)
-
-
 
 
 
@@ -67,178 +57,9 @@ contains
 
 
 
-  subroutine Hreplica_site(site)
-#if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
-#endif
-    integer :: site
-    if(site<1.OR.site>size(Hreplica_lambda_ineq,1))stop "ERROR Hreplica_site: site not in [1,Nlat]"
-    if(.not.allocated(Hreplica_lambda_ineq))stop "ERROR Hreplica_site: Hreplica_lambda_ineq not allocated"
-    Hreplica_lambda(:,:)  = Hreplica_lambda_ineq(site,:,:)
-  end subroutine Hreplica_site
-
-
-
-  function Hreplica_build(lambdavec) result(H)
-#if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
-#endif
-    !
-    !This function is used to reconstruct the local bath Hamiltonian from basis expansion given the vector of :math:`\vec{\lambda}` parameters :math:`h^p=\sum_i \lambda^p_i O_i`. The resulting Hamiltonian has dimensions [ |Nspin| , |Nspin| , |Norb| , |Norb| ]
-    !
-    real(8),dimension(:),optional                             :: lambdavec !the input vector of bath parameters
-    real(8),dimension(:),allocatable                          :: lambda
-    integer                                                   :: isym
-    complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: H
-    !
-    if(.not.Hreplica_status)STOP "ERROR Hreplica_build: Hreplica_basis is not setup"
-    allocate(lambda(size(Hreplica_basis)));lambda=1d0
-    if(present(lambdavec))then
-       if(size(lambdavec)/=size(Hreplica_basis)) STOP "ERROR Hreplica_build: Wrong coefficient vector size"
-       lambda = lambdavec
-    endif
-    H=zero
-    do isym=1,size(lambda)
-       H=H+lambda(isym)*Hreplica_basis(isym)%O
-    enddo
-  end function Hreplica_build
-
-  
-  function Hreplica_mask(wdiag,uplo) result(Hmask)
-#if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
-#endif
-    logical,optional                                          :: wdiag,uplo
-    logical                                                   :: wdiag_,uplo_
-    complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: H
-    logical,dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb)    :: Hmask
-    integer                                                   :: iorb,jorb,ispin,jspin,io,jo
-    !
-    wdiag_=.false.;if(present(wdiag))wdiag_=wdiag
-    uplo_ =.false.;if(present(uplo))  uplo_=uplo
-    !
-    H = Hreplica_build(Hreplica_lambda(Nbath,:)) 
-    Hmask=.false.
-    where(abs(H)>1d-6)Hmask=.true.
-    !
-    !
-    if(wdiag_)then
-       do ispin=1,Nnambu*Nspin
-          do iorb=1,Norb
-             Hmask(ispin,ispin,iorb,iorb)=.true.
-          enddo
-       enddo
-    endif
-    !
-    if(uplo_)then
-       do ispin=1,Nnambu*Nspin
-          do jspin=1,Nnambu*Nspin
-             do iorb=1,Norb
-                do jorb=1,Norb
-                   io = index_stride_so(ispin,iorb)
-                   jo = index_stride_so(jspin,jorb)
-                   if(io>jo)Hmask(ispin,jspin,iorb,jorb)=.false.
-                enddo
-             enddo
-          enddo
-       enddo
-    endif
-    !
-  end function Hreplica_mask
-
-
-
-
-
-  subroutine Hgeneral_site(site)
-#if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
-#endif
-    integer :: site
-    if(site<1.OR.site>size(Hgeneral_lambda_ineq,1))stop "ERROR Hgeneral_site: site not in [1,Nlat]"
-    if(.not.allocated(Hgeneral_lambda_ineq))stop "ERROR Hgeneral_site: Hgeneral_lambda_ineq not allocated"
-    Hgeneral_lambda(:,:)  = Hgeneral_lambda_ineq(site,:,:)
-  end subroutine Hgeneral_site
-
-  function Hgeneral_build(lambdavec) result(H)
-#if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
-#endif
-    !
-    !This function is used to reconstruct the local bath Hamiltonian from basis expansion given the vector of :math:`\vec{\lambda}` parameters :math:`h^p=\sum_i \lambda^p_i O_i`. The resulting Hamiltonian has dimensions [ |Nspin| , |Nspin| , |Norb| , |Norb| ]
-    !
-    real(8),dimension(:),optional                             :: lambdavec  !the input vector of bath parameters
-    real(8),dimension(:),allocatable                          :: lambda
-    integer                                                   :: isym
-    complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: H
-    !
-    if(.not.Hgeneral_status)STOP "ERROR Hgeneral_build: Hgeneral_basis is not setup"
-    allocate(lambda(size(Hgeneral_basis)));lambda=1d0
-    if(present(lambdavec))then
-       if(size(lambdavec)/=size(Hgeneral_basis)) STOP "ERROR Hgeneral_build: Wrong coefficient vector size"
-       lambda = lambdavec
-    endif
-    H=zero
-    do isym=1,size(lambda)
-       H=H+lambda(isym)*Hgeneral_basis(isym)%O
-    enddo
-  end function Hgeneral_build
-
-  function Hgeneral_mask(wdiag,uplo) result(Hmask)
-#if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
-#endif
-    logical,optional                                          :: wdiag,uplo
-    logical                                                   :: wdiag_,uplo_
-    complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: H
-    logical,dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb)    :: Hmask
-    integer                                                   :: iorb,jorb,ispin,jspin,io,jo
-    !
-    wdiag_=.false.;if(present(wdiag))wdiag_=wdiag
-    uplo_ =.false.;if(present(uplo))  uplo_=uplo
-    !
-    H = Hgeneral_build(Hgeneral_lambda(Nbath,:))
-    Hmask=.false.
-    where(abs(H)>1d-6)Hmask=.true.
-    !
-    !
-    if(wdiag_)then
-       do ispin=1,Nnambu*Nspin
-          do iorb=1,Norb
-             Hmask(ispin,ispin,iorb,iorb)=.true.
-          enddo
-       enddo
-    endif
-    !
-    if(uplo_)then
-       do ispin=1,Nnambu*Nspin
-          do jspin=1,Nnambu*Nspin
-             do iorb=1,Norb
-                do jorb=1,Norb
-                   io = index_stride_so(ispin,iorb)
-                   jo = index_stride_so(jspin,jorb)
-                   if(io>jo)Hmask(ispin,jspin,iorb,jorb)=.false.
-                enddo
-             enddo
-          enddo
-       enddo
-    endif
-    !
-  end function Hgeneral_mask
-
-
-
-
-
-
-
-
-
-
-
   function get_Whyb_matrix_1orb(v,u) result(w)
 #if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     real(8),dimension(Nspin,Nbath)       :: v,u
     real(8),dimension(Nspin,Nspin,Nbath) :: w
@@ -252,7 +73,7 @@ contains
 
   function get_Whyb_matrix_Aorb(v,u) result(w)
 #if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     real(8),dimension(Nspin,Norb,Nbath)       :: v,u
     real(8),dimension(Nspin,Nspin,Norb,Nbath) :: w
@@ -266,7 +87,7 @@ contains
 
   function get_Whyb_matrix_dmft_bath(dmft_bath_) result(w)
 #if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     type(effective_bath)                      :: dmft_bath_
     real(8),dimension(Nspin,Nspin,Norb,Nbath) :: w
@@ -287,7 +108,7 @@ contains
   !+-------------------------------------------------------------------+
   function is_identity_nn(mnnn) result(flag)
 #if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: mnnn
     real(8),dimension(Nnambu*Nspin*Norb,Nnambu*Nspin*Norb) :: mtmp
@@ -312,7 +133,7 @@ contains
 
   function is_identity_so(mlso) result(flag)
 #if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     complex(8),dimension(Nnambu*Nspin*Norb,Nnambu*Nspin*Norb) :: mlso
     real(8),dimension(Nnambu*Nspin*Norb,Nnambu*Nspin*Norb) :: mtmp
@@ -342,7 +163,7 @@ contains
   !+-------------------------------------------------------------------+
   function is_diagonal_nn(mnnn) result(flag)
 #if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: mnnn
     complex(8),dimension(Nnambu*Nspin*Norb,Nnambu*Nspin*Norb) :: mtmp
@@ -363,7 +184,7 @@ contains
 
   function is_diagonal_so(mlso) result(flag)
 #if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     complex(8),dimension(Nnambu*Nspin*Norb,Nnambu*Nspin*Norb) :: mlso
     complex(8),dimension(Nnambu*Nspin*Norb,Nnambu*Nspin*Norb) :: mtmp
@@ -389,7 +210,7 @@ contains
 
   function check_herm(A,N,error) result(bool)
 #if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     integer,intent(in)                   :: N
     complex(8),dimension(N,N),intent(in) :: A
@@ -403,7 +224,7 @@ contains
 
   function check_nambu(A,N,error) result(bool)
 #if __INTEL_COMPILER
-  use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     integer,intent(in)                       :: N
     complex(8),dimension(2*N,2*N),intent(in) :: A

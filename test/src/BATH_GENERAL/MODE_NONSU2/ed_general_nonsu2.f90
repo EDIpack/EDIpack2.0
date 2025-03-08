@@ -29,7 +29,7 @@ program ed_replica_normal
   !
   complex(8),dimension(4,4)                   :: Gamma1,Gamma2,Gamma5,GammaN,GammaS
   complex(8),dimension(4,4)                   :: GammaE0,GammaEx,GammaEy,GammaEz
-  real(8),dimension(:),allocatable            :: lambdasym_vector
+  real(8),dimension(:,:),allocatable            :: lambdasym_vector
   complex(8),dimension(:,:,:,:,:),allocatable :: Hsym_basis
   !MPI Vars:
   integer                                     :: irank,comm,rank,size2,ierr
@@ -81,12 +81,12 @@ program ed_replica_normal
   !
   ! Set up replica hamiltonian
   Nsymm=4
-  allocate(lambdasym_vector(Nsymm))
+  allocate(lambdasym_vector(Nbath,Nsymm))
   allocate(Hsym_basis(Nspin,Nspin,Norb,Norb,Nsymm))
-  Hsym_basis(:,:,:,:,1)=j2so(Gamma5)  ;lambdasym_vector(1)=Mh
-  Hsym_basis(:,:,:,:,2)=j2so(GammaE0) ;lambdasym_vector(2)=sb_field
-  Hsym_basis(:,:,:,:,3)=j2so(GammaEz) ;lambdasym_vector(3)=sb_field
-  Hsym_basis(:,:,:,:,4)=j2so(GammaEx) ;lambdasym_vector(4)=-sb_field
+  Hsym_basis(:,:,:,:,1)=j2so(Gamma5)  ;lambdasym_vector(:,1)=Mh
+  Hsym_basis(:,:,:,:,2)=j2so(GammaE0) ;lambdasym_vector(:,2)=sb_field
+  Hsym_basis(:,:,:,:,3)=j2so(GammaEz) ;lambdasym_vector(:,3)=sb_field
+  Hsym_basis(:,:,:,:,4)=j2so(GammaEx) ;lambdasym_vector(:,4)=-sb_field
   call ed_set_Hgeneral(Hsym_basis,lambdasym_vector)
   Nb=ed_get_bath_dimension(Nsymm)!(Hsym_basis)
   !

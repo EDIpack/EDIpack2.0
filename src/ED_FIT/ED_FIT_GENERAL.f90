@@ -793,7 +793,7 @@ contains
     Delta=zero
     do ibath=1,Nbath
        V    = one*diag(Vk(ibath,:))!real
-       Htmp = nn2so_reshape( Hgeneral_build(Lk(ibath)%element) ,Nspin,Norb)
+       Htmp = nn2so_reshape( build_Hgeneral(Lk(ibath)%element) ,Nspin,Norb)
        do i=1,Ldelta
           Haux = zeye(Nspin*Norb)*xi*Xdelta(i) - Htmp
           call inv(Haux)
@@ -834,7 +834,7 @@ contains
     stride=0
     do ibath=1,Nbath
        V               = diag(Vk(ibath,:))
-       H_reconstructed = nn2so_reshape( Hgeneral_build(Lk(ibath)%element) ,Nspin,Norb)
+       H_reconstructed = nn2so_reshape( build_Hgeneral(Lk(ibath)%element) ,Nspin,Norb)
        do i=1,Ldelta
           Haux(:,:,i)  = zeye(Nspin*Norb)*xi*Xdelta(i) - H_reconstructed
           call inv(Haux(:,:,i))
@@ -851,7 +851,7 @@ contains
        !Derivate_lambda_p
        do k=1,Nsym
           stride = stride + 1
-          Hbasis_so=nn2so_reshape(Hgeneral_basis(k)%O,Nspin,Norb)
+          Hbasis_so=nn2so_reshape(Hb%basis(k)%O,Nspin,Norb)
           do l=1,Ldelta
              Htmp = (Haux(:,:,l) .x. Hbasis_so) .x. Haux(:,:,l)
              Htmp = (V .x. Htmp) .x. V
@@ -921,7 +921,7 @@ contains
     Delta=zero
     do ibath=1,Nbath
        V    = kron(pauli_sigma_z,diag(Vk(ibath,:)))
-       Htmp = nn2so_reshape( Hgeneral_build(Lk(ibath)%element) , Nnambu*Nspin,Norb)
+       Htmp = nn2so_reshape( build_Hgeneral(Lk(ibath)%element) , Nnambu*Nspin,Norb)
        do i=1,Ldelta
           Haux     = zeye(Nnambu*Nspin*Norb)*xi*Xdelta(i) - Htmp
           call inv(Haux)

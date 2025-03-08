@@ -23,17 +23,10 @@ MODULE ED_IO
      !The impurity Green's function is an array having the following possible dimensions:
      !
      !  * [:f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin`:math:`\cdot`:f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]
-     !  * [:f:var:`nlat` :math:`\cdot` :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nlat` :math:`\cdot` :f:var:`nspin` 
-     !    :math:`\cdot` :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`] 
-     !  * [:f:var:`nlat`, :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]
      !  * [:f:var:`nspin`, :f:var:`nspin`, :f:var:`norb`, :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]
-     !  * [:f:var:`nlat`, :f:var:`nspin`, :f:var:`nspin`, :f:var:`norb`, :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]
      !
      module procedure :: ed_get_gimp_site_n3
      module procedure :: ed_get_gimp_site_n5
-     module procedure :: ed_get_gimp_lattice_n3
-     module procedure :: ed_get_gimp_lattice_n4
-     module procedure :: ed_get_gimp_lattice_n6
   end interface ed_get_gimp
 
   interface ed_get_dimp
@@ -43,10 +36,8 @@ MODULE ED_IO
      !The impurity phonon's Green's function is an array having the following possible dimensions:
      !
      !  * [ :f:var:`lmats` / :f:var:`lreal`]
-     !  * [:f:var:`nlat`,  :f:var:`lmats` / :f:var:`lreal`]
      !
      module procedure :: ed_get_dimp_site_n1
-     module procedure :: ed_get_dimp_lattice_n2
   end interface ed_get_dimp
 
   interface ed_get_sigma
@@ -55,17 +46,10 @@ MODULE ED_IO
      !| The self-energy is an array having the following possible dimensions:
      !
      !  * [:f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin`:math:`\cdot`:f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]
-     !  * [:f:var:`nlat` :math:`\cdot` :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nlat` :math:`\cdot` :f:var:`nspin` 
-     !    :math:`\cdot` :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`] 
-     !  * [:f:var:`nlat`, :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]
      !  * [:f:var:`nspin`, :f:var:`nspin`, :f:var:`norb`, :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]
-     !  * [:f:var:`nlat`, :f:var:`nspin`, :f:var:`nspin`, :f:var:`norb`, :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]
      !
      module procedure :: ed_get_sigma_site_n3
      module procedure :: ed_get_sigma_site_n5
-     module procedure :: ed_get_sigma_lattice_n3
-     module procedure :: ed_get_sigma_lattice_n4
-     module procedure :: ed_get_sigma_lattice_n6
   end interface ed_get_sigma
 
 
@@ -78,24 +62,16 @@ MODULE ED_IO
      !The impurity non-interacting Green's function is an array having the following possible dimensions:
      ! 
      !  * [:f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin`:math:`\cdot`:f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]  
-     !  * [:f:var:`nlat` :math:`\cdot` :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nlat` :math:`\cdot` :f:var:`nspin` 
-     !    :math:`\cdot` :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`] 
-     !  * [:f:var:`nlat`, :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]
      !  * [:f:var:`nspin`, :f:var:`nspin`, :f:var:`norb`, :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]
-     !  * [:f:var:`nlat`, :f:var:`nspin`, :f:var:`nspin`, :f:var:`norb`, :f:var:`norb`, :f:var:`lmats` / :f:var:`lreal`]
      !
-     !The bath is an array having the following possible dimensions:
+     !The bath is an array having the following dimension:
      !
      !  * [:f:var:`nb`] for single-impurity DMFT
-     !  * [:f:var:`nlat`, :f:var:`nb`] for real-space DMFT, with :f:var:`nlat` the number of inequivalent impurity sites
      !
      !Where :f:var:`nb` is the length of the :f:var:`bath` array.
      !
      module procedure :: ed_get_g0imp_site_n3
      module procedure :: ed_get_g0imp_site_n5
-     module procedure :: ed_get_g0imp_lattice_n3
-     module procedure :: ed_get_g0imp_lattice_n4
-     module procedure :: ed_get_g0imp_lattice_n6
   end interface ed_get_g0imp
 
 
@@ -106,10 +82,8 @@ MODULE ED_IO
      !The impurity spin susceptibility function is an array having the following possible dimensions:
      !
      !  * [ :f:var:`lmats` / :f:var:`lreal`]
-     !  * [:f:var:`nlat`,  :f:var:`lmats` / :f:var:`lreal`]
      !
      module procedure :: ed_get_spinChi_site_n3
-     module procedure :: ed_get_spinChi_lattice_n3
   end interface ed_get_spinChi
 
   interface ed_get_densChi
@@ -119,10 +93,8 @@ MODULE ED_IO
      !The impurity dens susceptibility function is an array having the following possible dimensions:
      !
      !  * [ :f:var:`lmats` / :f:var:`lreal`]
-     !  * [:f:var:`nlat`,  :f:var:`lmats` / :f:var:`lreal`]
      !
      module procedure :: ed_get_densChi_site_n3
-     module procedure :: ed_get_densChi_lattice_n3
   end interface ed_get_densChi
 
   interface ed_get_pairChi
@@ -132,10 +104,8 @@ MODULE ED_IO
      !The impurity pair susceptibility function is an array having the following possible dimensions:
      !
      !  * [ :f:var:`lmats` / :f:var:`lreal`]
-     !  * [:f:var:`nlat`,  :f:var:`lmats` / :f:var:`lreal`]
      !
      module procedure :: ed_get_pairChi_site_n3
-     module procedure :: ed_get_pairChi_lattice_n3
   end interface ed_get_pairChi
 
   interface ed_get_exctChi
@@ -145,10 +115,8 @@ MODULE ED_IO
      !The impurity exct susceptibility function is an array having the following possible dimensions:
      !
      !  * [ :f:var:`lmats` / :f:var:`lreal`]
-     !  * [:f:var:`nlat`,  :f:var:`lmats` / :f:var:`lreal`]
      !
      module procedure :: ed_get_exctChi_site_n3
-     module procedure :: ed_get_exctChi_lattice_n3
   end interface ed_get_exctChi
 
 
@@ -160,12 +128,9 @@ MODULE ED_IO
      ! 
      !  * scalar: if :f:var:`iorb` is provided for single-impurity DMFT, density for that orbital
      !  * [:f:var:`norb`]: if no optional variable is provided for single-impurity DMFT, density for all orbitals
-     !  * [:f:var:`nlat`]: if :f:var:`iorb` (default = 1) is provided for real-space DMFT with :f:var:`nlat` impurities, density for that orbital for all impurity sites
-     !  * [:f:var:`nlat`, :f:var:`norb`]: if :f:var:`nlat` is provided for real-space DMFT, density for all impurity sites and orbitals
      !
      module procedure :: ed_get_dens_n0
      module procedure :: ed_get_dens_n1
-     module procedure :: ed_get_dens_n2
   end interface ed_get_dens
 
   interface ed_get_mag
@@ -175,14 +140,9 @@ MODULE ED_IO
      ! 
      !  * scalar: if :f:var:`component` and :f:var:`iorb` are provided for single-impurity DMFT, given magnetization component for that orbital
      !  * [:f:var:`norb`]: for single-impurity DMFT, one magnetization component for all orbitals
-     !  * [:f:var:`nlat`]: for real-space DMFT with :f:var:`nlat` impurities, magnetization for that orbital for all impurity sites
-     !  * [:f:var:`nlat`, :f:var:`norb`]: if :f:var:`nlat` is provided for real-space DMFT, one magnetization component for all orbitals and impurity sites
-     !  * [:f:var:`nlat`, :code:`3`, :f:var:`norb`]: if :f:var:`nlat` is provided for real-space DMFT, all magnetization components for all orbitals and sites
      !
      module procedure :: ed_get_mag_n0
      module procedure :: ed_get_mag_n1
-     module procedure :: ed_get_mag_n2
-     module procedure :: ed_get_mag_n3
   end interface ed_get_mag
 
   interface ed_get_docc
@@ -192,12 +152,9 @@ MODULE ED_IO
      ! 
      !  * scalar: if :f:var:`iorb` is provided for single-impurity DMFT, dobule-occupation for that orbital
      !  * [:f:var:`norb`]: if no optional variable is provided for single-impurity DMFT, double-occupation for all orbitals
-     !  * [:f:var:`nlat`]: if :f:var:`iorb` (default = 1) is provided for real-space DMFT with :f:var:`nlat` impurities, double-occupation for that orbital for all impurity sites
-     !  * [:f:var:`nlat`, :f:var:`norb`]: if :f:var:`nlat` is provided for real-space DMFT, double-occupation for all impurity sites and orbitals
      !
      module procedure :: ed_get_docc_n0
      module procedure :: ed_get_docc_n1
-     module procedure :: ed_get_docc_n2
   end interface ed_get_docc
 
   interface ed_get_phi
@@ -206,14 +163,12 @@ MODULE ED_IO
      !The :f:var:`self` variable can have the following dimensions:
      ! 
      !  * scalar: if :f:var:`iorb` is provided for single-impurity DMFT, :math:`\phi` for that orbital
-     !  * [:f:var:`norb`]: if no optional variable is provided for single-impurity DMFT, :math:`\phi` for all orbitals
-     !  * [:f:var:`nlat`]: if :f:var:`iorb` (default = 1) is provided for real-space DMFT with :f:var:`nlat` impurities, :math:`\phi` for that orbital for all impurity sites
-     !  * [:f:var:`nlat`, :f:var:`norb`]: if :f:var:`nlat` is provided for real-space DMFT, :math:`\phi` for all impurity sites and orbitals
+     !  * [:f:var:`norb`]: for single-impurity DMFT, :math:`\phi` for all diagonal orbitals
+     !  * [:f:var:`norb` , :f:var:`norb`]: for single-impurity DMFT, :math:`\phi` for all orbitals
      !
      module procedure :: ed_get_phisc_n0
      module procedure :: ed_get_phisc_n1
      module procedure :: ed_get_phisc_n2
-     module procedure :: ed_get_phisc_n3
   end interface ed_get_phi
 
 
@@ -232,10 +187,7 @@ MODULE ED_IO
      !The returned array can have the following dimensions:
      !
      !  * [:code:`4`]: for single-site DMFT
-     !  * [:f:var:`nlat`, :code:`4`]: for real-space DMFT with :f:var:`nlat` impurities
-     !
      module procedure :: ed_get_eimp_n1
-     module procedure :: ed_get_eimp_n2
   end interface ed_get_eimp
 
   interface ed_get_epot
@@ -244,10 +196,8 @@ MODULE ED_IO
      !The returned array can have the following dimensions:
      !
      !  * scalar: for single-site DMFT
-     !  * [:f:var:`nlat`]: for real-space DMFT with :f:var:`nlat` impurities
      !
      module procedure :: ed_get_epot_n0
-     module procedure :: ed_get_epot_n1
   end interface ed_get_epot
 
   interface ed_get_eint
@@ -256,10 +206,8 @@ MODULE ED_IO
      !The returned array can have the following dimensions:
      !
      !  * scalar: for single-site DMFT
-     !  * [:f:var:`nlat`]: for real-space DMFT with :f:var:`nlat` impurities
      !
      module procedure :: ed_get_eint_n0
-     module procedure :: ed_get_eint_n1
   end interface ed_get_eint
 
   interface ed_get_ehartree
@@ -267,10 +215,8 @@ MODULE ED_IO
      !:f:var:`ed_ehartree`. The returned array can have the following dimensions:
      !
      !  * scalar: for single-site DMFT
-     !  * [:f:var:`nlat`]: for real-space DMFT with :f:var:`nlat` impurities
      !
      module procedure :: ed_get_ehartree_n0
-     module procedure :: ed_get_ehartree_n1
   end interface ed_get_ehartree
 
   interface ed_get_eknot
@@ -279,10 +225,8 @@ MODULE ED_IO
      !The returned array can have the following dimensions:
      !
      !  * scalar: for single-site DMFT
-     !  * [:f:var:`nlat`]: for real-space DMFT with :f:var:`nlat` impurities
      !
      module procedure :: ed_get_eknot_n0
-     module procedure :: ed_get_eknot_n1
   end interface ed_get_eknot
 
 
@@ -299,10 +243,8 @@ MODULE ED_IO
      !The returned array can have the following dimensions:
      !
      !  * [:code:`4`]: for single-site DMFT
-     !  * [:f:var:`nlat`, :code:`4`]: for real-space DMFT with :f:var:`nlat` impurities
      !
      module procedure :: ed_get_doubles_n1
-     module procedure :: ed_get_doubles_n2
   end interface ed_get_doubles
 
   interface ed_get_dust
@@ -311,10 +253,8 @@ MODULE ED_IO
      !The returned array can have the following dimensions:
      !
      !  * scalar: for single-site DMFT
-     !  * [:f:var:`nlat`]: for real-space DMFT with :f:var:`nlat` impurities
      !
      module procedure :: ed_get_dust_n0
-     module procedure :: ed_get_dust_n1
   end interface ed_get_dust
 
   interface ed_get_dund
@@ -323,10 +263,8 @@ MODULE ED_IO
      !The returned array can have the following dimensions:
      !
      !  * scalar: for single-site DMFT
-     !  * [:f:var:`nlat`]: for real-space DMFT with :f:var:`nlat` impurities
      !
      module procedure :: ed_get_dund_n0
-     module procedure :: ed_get_dund_n1
   end interface ed_get_dund
 
   interface ed_get_dse
@@ -335,10 +273,8 @@ MODULE ED_IO
      !The returned array can have the following dimensions:
      !
      !  * scalar: for single-site DMFT
-     !  * [:f:var:`nlat`]: for real-space DMFT with :f:var:`nlat` impurities
      !
      module procedure :: ed_get_dse_n0
-     module procedure :: ed_get_dse_n1
   end interface ed_get_dse
 
   interface ed_get_dph
@@ -347,10 +283,8 @@ MODULE ED_IO
      !The returned array can have the following dimensions:
      !
      !  * scalar: for single-site DMFT
-     !  * [:f:var:`nlat`]: for real-space DMFT with :f:var:`nlat` impurities
      !
      module procedure :: ed_get_dph_n0
-     module procedure :: ed_get_dph_n1
   end interface ed_get_dph
 
 
@@ -362,10 +296,8 @@ MODULE ED_IO
      !The density matrix is an array having the following possible dimensions:
      ! 
      !  * [:f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin`:math:`\cdot`:f:var:`norb`]  for single-impurity DMFT
-     !  * [:code:`nlat`, :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin`:math:`\cdot`:f:var:`norb`] for real-space DMFT
      !
      module procedure :: get_density_matrix_single
-     module procedure :: get_density_matrix_lattice
   end interface ed_get_sp_dm
 
 
@@ -396,7 +328,6 @@ MODULE ED_IO
   public :: ed_get_dund
   public :: ed_get_dse
   public :: ed_get_dph
-  public :: ed_get_neigen_total
   public :: ed_get_imp_info
   public :: ed_get_sp_dm
   public :: ed_get_quantum_SOC_operators
@@ -494,30 +425,11 @@ contains
     !impurity site for real-space DMFT (if that is the case). The ordering of the results in the output files is described by comments
     !in the files themselves
     !
-    if (allocated(single_particle_density_matrix)) then
-       call ed_get_quantum_soc_operators_lattice()
-    else
-       call ed_get_quantum_SOC_operators_single()
-    endif
+    call ed_get_quantum_SOC_operators_single()
   end subroutine ed_get_quantum_soc_operators
 
 
 
-
-  !+----------------------------------------------------------------------------+
-  !PURPOSE  : get number of spectrum eigenstates for inequivalent impurity sites
-  !+----------------------------------------------------------------------------+ 
-  subroutine ed_get_neigen_total(nlii,Nlat) 
-    !In the case of inequivalent impurity sites, this function returns the number of eigenstates per impurity
-    !site in the ED spectrum.
-    integer                      :: Nlat !number of inequivalent impurity sites for real-space DMFT
-    integer,dimension(Nlat)      :: nlii !array containing the number of eigenstates per inequivalent impurity site
-    nlii=0d0
-    if(allocated(neigen_total_ineq))then
-       if(Nlat>size(neigen_total_ineq)) stop "ed_get_neigen_total error: required N_sites > evaluated N_sites"
-       nlii=neigen_total_ineq
-    endif
-  end subroutine ed_get_neigen_total
 
 
 

@@ -11,7 +11,8 @@ MODULE ED_BATH_USER
   USE ED_AUX_FUNX
   !
   USE ED_BATH_AUX
-  USE ED_BATH_DIM
+  USE ED_BATH_REPLICA
+  USE ED_BATH_DIM  
   USE ED_BATH_DMFT
   implicit none
 
@@ -196,26 +197,17 @@ contains
     call set_dmft_bath(bath_,dmft_bath_)
     !
     select case(bath_type)
-    case default
-       if(size(Hreplica_basis) .ne. dmft_bath_%Nbasis)then
+    case default ; stop "impose_bath_offset error: called with bath_type != {replica,general}"
+    case ('replica','general')
+       if(Hb%Nsym .ne. dmft_bath_%Nbasis)then
           dmft_bath_%item(ibath)%lambda(dmft_bath_%Nbasis)=offset
        else
-          do isym=1,size(Hreplica_basis)
-             if(is_identity(Hreplica_basis(isym)%O)) dmft_bath_%item(ibath)%lambda(isym)=offset
-             return
-          enddo
-       endif
-    case("general")
-       if(size(Hgeneral_basis) .ne. dmft_bath_%Nbasis)then
-          dmft_bath_%item(ibath)%lambda(dmft_bath_%Nbasis)=offset
-       else
-          do isym=1,size(Hgeneral_basis)
-             if(is_identity(Hgeneral_basis(isym)%O)) dmft_bath_%item(ibath)%lambda(isym)=offset
+          do isym=1,Hb%Nsym
+             if(is_identity(Hb%basis(isym)%O)) dmft_bath_%item(ibath)%lambda(isym)=offset
              return
           enddo
        endif
     end select
-
     !
     call get_dmft_bath(dmft_bath_,bath_)
     call deallocate_dmft_bath(dmft_bath_)

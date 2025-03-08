@@ -16,11 +16,6 @@ MODULE ED_VARS_GLOBAL
   implicit none
 
 
-  type H_operator
-     ! The matrix storing in the basis [:f:var:`nspin` , :f:var:`nspin` , :f:var:`norb` , :f:var:`norb` ] each element of the Matrix basis decomposing the replica/general bath Hamiltonian :math:`H_p=\sum_{i=1}^{N_{basis}} \lambda_i(p) O_i`, where :math:`N_{basis}` is the dimension of the user defined basis.  
-     complex(8),dimension(:,:,:,:),allocatable               :: O !Replica/General hamiltonian
-  end type H_operator
-
   type effective_bath_component
      ! Effective bath component for the replica/general bath. Each istance of this type defines the parameters :math:`\vec{\lambda}` and the amplitudes :math:`\vec{V}`. The first is used to decompose the Hamiltonian of each element of the bath :math:`H_p=\sum_{i=1}^{N_{basis}} \lambda_i(p) O_i`, the latter describes the hopping from/to the impurity.
      real(8)                                                 :: v
@@ -40,6 +35,16 @@ MODULE ED_VARS_GLOBAL
   end type effective_bath
 
 
+
+  ! !Replica/General bath basis set
+  ! !=========================================================
+  ! type(H_operator),dimension(:),allocatable          :: Hreplica_basis   ![Nsym]
+  ! real(8),dimension(:,:),allocatable                 :: Hreplica_lambda  ![Nbath,Nsym]
+  ! logical                                            :: Hreplica_status=.false.
+  ! !
+  ! type(H_operator),dimension(:),allocatable          :: Hgeneral_basis   ![Nsym]
+  ! real(8),dimension(:,:),allocatable                 :: Hgeneral_lambda  ![Nbath,Nsym]
+  ! logical                                            :: Hgeneral_status=.false.
 
 
 
@@ -156,15 +161,6 @@ MODULE ED_VARS_GLOBAL
   !correctly allocate  Nambu arrays of dim 2*Norb) 
   !=========================================================
   integer                                            :: Nnambu=1
-  !Replica/General bath basis set
-  !=========================================================
-  type(H_operator),dimension(:),allocatable          :: Hreplica_basis   ![Nsym]
-  real(8),dimension(:,:),allocatable                 :: Hreplica_lambda  ![Nbath,Nsym]
-  logical                                            :: Hreplica_status=.false.
-  !
-  type(H_operator),dimension(:),allocatable          :: Hgeneral_basis   ![Nsym]
-  real(8),dimension(:,:),allocatable                 :: Hgeneral_lambda  ![Nbath,Nsym]
-  logical                                            :: Hgeneral_status=.false.
 
   !local part of the Hamiltonian
   !=========================================================
@@ -201,7 +197,7 @@ MODULE ED_VARS_GLOBAL
 
 
 
-  
+
   !Green's functions
   type(GFmatrix),allocatable,dimension(:,:,:,:)      :: impGmatrix
   type(GFmatrix)                                     :: impDmatrix
@@ -250,31 +246,13 @@ MODULE ED_VARS_GLOBAL
   real(8),dimension(:,:),allocatable                 :: spin_field ![Norb,3=x,y,z]
 
 
-  !--------------- LATTICE WRAP VARIABLES -----------------!
-  complex(8),dimension(:,:,:,:,:),allocatable        :: Hloc_ineq
-  complex(8),dimension(:,:),allocatable,save         :: Dmats_ph_ineq,Dreal_ph_ineq
-  complex(8),dimension(:,:,:,:,:),allocatable,save   :: single_particle_density_matrix_ineq
-  complex(8),dimension(:,:,:),allocatable,save       :: impurity_density_matrix_ineq
-  real(8),dimension(:,:),allocatable,save            :: dens_ineq 
-  real(8),dimension(:,:),allocatable,save            :: docc_ineq
-  real(8),dimension(:,:,:),allocatable,save          :: mag_ineq
-  real(8),dimension(:,:,:),allocatable,save          :: phisc_ineq
-  real(8),dimension(:,:),allocatable,save            :: dd_ineq,e_ineq
-  integer,allocatable,dimension(:,:)                 :: neigen_sector_ineq
-  integer,allocatable,dimension(:)                   :: neigen_total_ineq
-  real(8),dimension(:,:,:),allocatable               :: Hreplica_lambda_ineq ![Nineq,Nbath,Nsym]
-  real(8),dimension(:,:,:),allocatable               :: Hgeneral_lambda_ineq ![Nineq,Nbath,Nsym]
-
-
 
   !File suffixes for printing fine tuning.
   !=========================================================
   character(len=32)                                  :: ed_file_suffix=""       !suffix string attached to the output files.
   character(len=10)                                  :: ineq_site_suffix="_ineq"
   integer                                            :: site_indx_padding=4
-  !logical                                           :: Jhflag              !spin-exchange and pair-hopping flag.
   logical                                            :: offdiag_gf_flag=.false.
-  ! character(len=200)                               :: ed_input_file=""
 
 
   !This is the internal Mpi Communicator and variables.

@@ -86,7 +86,7 @@ contains
        allocate(diag_hybr(Nnambu*Nspin,Norb,Nbath));diag_hybr=0d0
        allocate(bath_diag(Nnambu*Nspin,Norb,Nbath));bath_diag=0d0
        do ibath=1,Nbath
-          Hbath_tmp(:,:,:,:,ibath) = Hreplica_build(dmft_bath%item(ibath)%lambda)
+          Hbath_tmp(:,:,:,:,ibath) = build_Hreplica(dmft_bath%item(ibath)%lambda)
           do ispin=1,Nspin
              do iorb=1,Norb
                 diag_hybr(ispin,iorb,ibath)=dmft_bath%item(ibath)%v
@@ -102,7 +102,7 @@ contains
        allocate(diag_hybr(Nnambu*Nspin,Norb,Nbath));diag_hybr=0d0
        allocate(bath_diag(Nnambu*Nspin,Norb,Nbath));bath_diag=0d0
        do ibath=1,Nbath
-          Hbath_tmp(:,:,:,:,ibath) = Hgeneral_build(dmft_bath%item(ibath)%lambda)
+          Hbath_tmp(:,:,:,:,ibath) = build_Hgeneral(dmft_bath%item(ibath)%lambda)
           do ispin=1,Nspin
              do iorb=1,Norb
                 diag_hybr(ispin,iorb,ibath)=dmft_bath%item(ibath)%vg(iorb+Norb*(ispin-1))

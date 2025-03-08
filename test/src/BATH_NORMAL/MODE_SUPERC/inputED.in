@@ -53,6 +53,7 @@
  WFIN=5.000000000                              !Largest real-axis frequency
  XMIN=-3.000000000                             !Smallest position for the lattice PDF
  XMAX=3.000000000                              !Largest position for the lattice PDF
+ RDM_FLAG=F
  CHISPIN_FLAG=F                                !Flag to activate spin susceptibility calculation.
  CHIDENS_FLAG=F                                !Flag to activate density susceptibility calculation.
  CHIPAIR_FLAG=F                                !Flag to activate pair susceptibility calculation.

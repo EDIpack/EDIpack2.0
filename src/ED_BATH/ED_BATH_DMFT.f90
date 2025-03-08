@@ -10,20 +10,9 @@ MODULE ED_BATH_DMFT
   USE ED_AUX_FUNX
   !
   USE ED_BATH_AUX
+  USE ED_BATH_REPLICA
   USE ED_BATH_DIM 
   implicit none
-
-  ! private
-
-
-  ! public :: allocate_dmft_bath
-  ! public :: deallocate_dmft_bath
-  ! public :: init_dmft_bath
-  ! public :: write_dmft_bath
-  ! public :: read_dmft_bath
-  ! public :: save_dmft_bath
-  ! public :: set_dmft_bath
-  ! public :: get_dmft_bath
 
 
 
@@ -110,9 +99,9 @@ contains
        !
     case('replica')
        !
-       if(.not.Hreplica_status)stop "ERROR allocate_dmft_bath: Hreplica_basis not allocated"
+       if(.not.Hb%status)stop "ERROR allocate_dmft_bath: Hb.basis not allocated"
        call deallocate_dmft_bath(dmft_bath_)     !
-       Nsym=size(Hreplica_basis)
+       Nsym=Hb%Nsym
        !
        allocate(dmft_bath_%item(Nbath))
        dmft_Bath_%Nbasis=Nsym
@@ -122,9 +111,9 @@ contains
        !
     case('general')
        !
-       if(.not.Hgeneral_status)stop "ERROR allocate_dmft_bath: Hgeneral_basis not allocated"
+       if(.not.Hb%status)stop "ERROR allocate_dmft_bath: Hgeneral_basis not allocated"
        call deallocate_dmft_bath(dmft_bath_)     !
-       Nsym=size(Hgeneral_basis)
+       Nsym=Hb%Nsym
        !
        allocate(dmft_bath_%item(Nbath))
        dmft_Bath_%Nbasis=Nsym
@@ -178,9 +167,7 @@ contains
 
 
 
-
-
-  subroutine init_dmft_bath(dmft_bath_,used)
+  subroutine init_dmft_bath(dmft_bath_)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
@@ -194,25 +181,21 @@ contains
     !
     !.. note::
     !
-    !   If the file :f:var:`hfile` with the correct :f:var:`ed_file_suffix` and :f:var:`hsuffix` is found in the running directory, the bath is initilized by reading the from the file.
+    !   If the file :f:var:`hfile` with the correct :f:var:`ed_file_suffix` and extension :f:var:`.restart` is found in the running directory, the bath is initilized by reading the from the file.
+    !   If the file :f:var:`bfile` with the correct :f:var:`ed_file_suffix` and extension :f:var:`.restart` is found in the running directory, the replica/general bath matrix basi is re-initilized by reading the from the file.
     !
     !
     type(effective_bath) :: dmft_bath_
-    logical,optional     :: used
     integer              :: Nbasis
     integer              :: i,ibath,isym,unit,flen,Nh,Nsym
     integer              :: io,jo,iorb,ispin,jorb,jspin
-    logical              :: IOfile,used_,diagonal_hsym,all_lambdas_are_equal
+    logical              :: IOfile,diagonal_hsym,equal_lambdas
     real(8)              :: de
     real(8)              :: offset(Nbath)
-    real(8)              :: one_lambdaval
-    character(len=20)    :: hsuffix
     !
 #ifdef _DEBUG
     write(Logfile,"(A)")"DEBUG init_dmft_bath"
 #endif
-    used_   = .false.   ;if(present(used))used_=used
-    hsuffix = ".restart";if(used_)hsuffix=reg(".used")
     if(.not.dmft_bath_%status)stop "ERROR init_dmft_bath error: bath not allocated"
     !
     select case(bath_type)
@@ -250,13 +233,17 @@ contains
           enddo
        endif
        !
-    case('replica')
+    case('replica','general')
        offset=0.d0
        if(Nbath>1) offset=linspace(-ed_offset_bath,ed_offset_bath,Nbath)
        !
        !BATH V INITIALIZATION
        do ibath=1,Nbath
-          dmft_bath_%item(ibath)%v=max(0.1d0,1d0/sqrt(dble(Nbath)))
+          if(bath_type=='replica')then
+             dmft_bath_%item(ibath)%v    =max(0.1d0,1d0/sqrt(dble(Nbath)))
+          elseif(bath_type=='general')then
+             dmft_bath_%item(ibath)%vg(:)=max(0.1d0,1d0/sqrt(dble(Nbath)))
+          endif
        enddo
        !
        !BATH LAMBDAS INITIALIZATION
@@ -264,72 +251,27 @@ contains
        Nsym = dmft_bath_%Nbasis
        do isym=1,Nsym
           do ibath=1,Nbath
-             dmft_bath_%item(ibath)%lambda(isym) =  Hreplica_lambda(ibath,isym)
+             dmft_bath_%item(ibath)%lambda(isym) =  Hb%linit(ibath,isym)
           enddo
-          diagonal_hsym = is_diagonal(Hreplica_basis(isym)%O)
-          one_lambdaval = Hreplica_lambda(Nbath,isym)
-          all_lambdas_are_equal = all(Hreplica_lambda(:,isym)==one_lambdaval)
-          if(diagonal_hsym.AND.all_lambdas_are_equal.AND.Nbath>1)then
+          !
+          diagonal_hsym = is_diagonal(Hb%basis(isym)%O)
+          equal_lambdas = all(Hb%linit(:,isym)==Hb%linit(Nbath,isym))
+          !
+          if(diagonal_hsym.AND.equal_lambdas.AND.Nbath>1)then
              offset=linspace(-ed_offset_bath,ed_offset_bath,Nbath)
-             if(is_identity(Hreplica_basis(isym)%O).AND.mod(Nbath,2)==0)then
-                offset(Nbath/2) = max(-1.d-1,offset(Nbath/2))
+             if(is_identity(Hb%basis(isym)%O).AND.mod(Nbath,2)==0)then
+                offset(Nbath/2)     = max(-1.d-1,offset(Nbath/2))
                 offset(Nbath/2 + 1) = min(1.d-1,offset(Nbath/2 + 1))
              endif
              do ibath=1,Nbath
-                dmft_bath_%item(ibath)%lambda(isym) =  Hreplica_lambda(ibath,isym) + offset(ibath)
+                dmft_bath_%item(ibath)%lambda(isym) =  Hb%linit(ibath,isym) + offset(ibath)
              enddo
              write(LOGfile,*) "                                                                    "
-             write(LOGfile,*) "WARNING: some of your lambdasym values have been internally changed "
+             write(LOGfile,*) "WARNING: some of your inital lambda have been internally changed    "
              write(LOGfile,*) "         while calling ed_init_solver. This happens whenever the    "
              write(LOGfile,*) "         corresponding Hsym is diagonal and all the replicas receive"
              write(LOGfile,*) "         the same initial lambda value, due to the deprecated legacy"
              write(LOGfile,*) "         practice of defining a unique lambda vector forall replicas"
-             write(LOGfile,*) "         and let the solver decide how to handle these degeneracies."
-             write(LOGfile,*) "         >>> If you really intend to have a degenerate diagonal term"
-             write(LOGfile,*) "             in the bath you can define a suitable restart file.    "
-             write(LOGfile,*) "         >>> If instead this is what you expected please consider to"
-             write(LOGfile,*) "             move the desired rescaling in your driver, since this  "
-             write(LOGfile,*) "             funcionality might be removed in a future update.      "
-             write(LOGfile,*) "                                                                    "
-          endif
-       enddo
-       !
-    case('general')
-       offset=0.d0
-       if(Nbath>1) offset=linspace(-ed_offset_bath,ed_offset_bath,Nbath)
-       !
-       !BATH V INITIALIZATION
-       do ibath=1,Nbath
-          dmft_bath_%item(ibath)%vg(:)=max(0.1d0,1d0/sqrt(dble(Nbath)))
-       enddo
-       !
-       !BATH LAMBDAS INITIALIZATION
-       !Do not need to check for Hgeneral_basis: this is done at allocation time of the dmft_bath.
-       Nsym = dmft_bath_%Nbasis
-       do isym=1,Nsym
-          do ibath=1,Nbath
-             dmft_bath_%item(ibath)%lambda(isym) =  Hgeneral_lambda(ibath,isym)
-          enddo
-          !
-          diagonal_hsym = is_diagonal(Hgeneral_basis(isym)%O)
-          one_lambdaval = Hgeneral_lambda(Nbath,isym)
-          all_lambdas_are_equal = all(Hgeneral_lambda(:,isym)==one_lambdaval)
-          !
-          if(diagonal_hsym.AND.all_lambdas_are_equal.AND.Nbath>1)then
-             offset=linspace(-ed_offset_bath,ed_offset_bath,Nbath)
-             if(is_identity(Hgeneral_basis(isym)%O).AND.mod(Nbath,2)==0)then
-                offset(Nbath/2) = max(-1.d-1,offset(Nbath/2))
-                offset(Nbath/2 + 1) = min(1.d-1,offset(Nbath/2 + 1))
-             endif
-             do ibath=1,Nbath
-                dmft_bath_%item(ibath)%lambda(isym) =  Hgeneral_lambda(ibath,isym) + offset(ibath)
-             enddo
-             write(LOGfile,*) "                                                                    "
-             write(LOGfile,*) "WARNING: some of your lambdasym values have been internally changed "
-             write(LOGfile,*) "         while calling ed_init_solver. This happens whenever the    "
-             write(LOGfile,*) "         corresponding Hsym is diagonal and all the generals receive"
-             write(LOGfile,*) "         the same initial lambda value, due to the deprecated legacy"
-             write(LOGfile,*) "         practice of defining a unique lambda vector forall generals"
              write(LOGfile,*) "         and let the solver decide how to handle these degeneracies."
              write(LOGfile,*) "         >>> If you really intend to have a degenerate diagonal term"
              write(LOGfile,*) "             in the bath you can define a suitable restart file.    "
@@ -345,106 +287,21 @@ contains
     !
     !
     !Read from file if exist:
-    inquire(file=trim(Hfile)//trim(ed_file_suffix)//trim(hsuffix),exist=IOfile)
+    inquire(file=trim(Hfile)//trim(ed_file_suffix)//".restart",exist=IOfile)
     if(IOfile)then
-       write(LOGfile,"(A)")'Reading bath from file '//trim(Hfile)//trim(ed_file_suffix)//trim(hsuffix)
-       unit = free_unit()
-       flen = file_length(trim(Hfile)//trim(ed_file_suffix)//trim(hsuffix))
-       !
-       open(unit,file=trim(Hfile)//trim(ed_file_suffix)//trim(hsuffix))
-       !
-       select case(bath_type)
-       case default
-          !
-          read(unit,*)
-          select case(ed_mode)
-          case default
-             do i=1,min(flen,Nbath)
-                read(unit,*)((&
-                     dmft_bath_%e(ispin,iorb,i),&
-                     dmft_bath_%v(ispin,iorb,i),&
-                     iorb=1,Norb),ispin=1,Nspin)
-             enddo
-          case ("superc")
-             do i=1,min(flen,Nbath)
-                read(unit,*)((&
-                     dmft_bath_%e(ispin,iorb,i),&
-                     dmft_bath_%d(ispin,iorb,i),&
-                     dmft_bath_%v(ispin,iorb,i),&
-                     iorb=1,Norb),ispin=1,Nspin)
-             enddo
-          case("nonsu2")
-             do i=1,min(flen,Nbath)
-                read(unit,*)((&
-                     dmft_bath_%e(ispin,iorb,i),&
-                     dmft_bath_%v(ispin,iorb,i),&
-                     dmft_bath_%u(ispin,iorb,i),&
-                     iorb=1,Norb),ispin=1,Nspin)
-             enddo
-          end select
-          !
-       case ('hybrid')
-          read(unit,*)
-          !
-          select case(ed_mode)
-          case default
-             do i=1,min(flen,Nbath)
-                read(unit,*)(&
-                     dmft_bath_%e(ispin,1,i),&
-                     (&
-                     dmft_bath_%v(ispin,iorb,i),&
-                     iorb=1,Norb),&
-                     ispin=1,Nspin)
-             enddo
-          case ("superc")
-             do i=1,min(flen,Nbath)
-                read(unit,*)(&
-                     dmft_bath_%e(ispin,1,i),&
-                     dmft_bath_%d(ispin,1,i),&
-                     (&
-                     dmft_bath_%v(ispin,iorb,i),&
-                     iorb=1,Norb),&
-                     ispin=1,Nspin)
-             enddo
-          case ("nonsu2")
-             do i=1,min(flen,Nbath)
-                read(unit,*)(&
-                     dmft_bath_%e(ispin,1,i),&
-                     (&
-                     dmft_bath_%v(ispin,iorb,i),&
-                     dmft_bath_%u(ispin,iorb,i),&
-                     iorb=1,Norb),&
-                     ispin=1,Nspin)
-             enddo
-          end select
-          !
-       case ('replica')
-          read(unit,*)
-          !
-          read(unit,*)dmft_bath_%Nbasis
-          do i=1,Nbath
-             read(unit,*)dmft_bath_%item(i)%v,&
-                  (dmft_bath_%item(i)%lambda(io),io=1,dmft_bath_%Nbasis)
-          enddo
-          !
-          !
-       case ('general')
-          read(unit,*)
-          !
-          read(unit,*)dmft_bath_%Nbasis
-          do i=1,Nbath
-             read(unit,*)dmft_bath_%item(i)%vg(:),&
-                  (dmft_bath_%item(i)%lambda(io),io=1,dmft_bath_%Nbasis)
-          enddo
-          !
-       end select
-       close(unit)
-       !
+       call read_dmft_bath(dmft_bath_,used=.false.)
     endif
   end subroutine init_dmft_bath
 
 
-  subroutine read_dmft_bath(dmft_bath_,file,used)
+
+
+
+
+
+
+
+  subroutine read_dmft_bath(dmft_bath_,used)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
@@ -452,42 +309,42 @@ contains
     ! Read the :f:var:`effective_bath` from a file associated to the [optional] unit.
     !
     type(effective_bath)      :: dmft_bath_
-    character(len=*),optional :: file
     logical,optional          :: used
-    character(len=120)        :: file_
     logical                   :: used_
+    character(len=120)        :: file,bfile
     logical                   :: IOfile
     integer                   :: i,io,jo,iorb,ispin,flen,unit
     character(len=20)         :: hsuffix
+    character(len=64)         :: string_fmt,string_fmt_first
+    character(len=1)          :: a
     !
 #ifdef _DEBUG
     if(ed_verbose>1)write(Logfile,"(A)")"DEBUG read_dmft_bath"
 #endif
     !
-    used_   = .true.   ;if(present(used))used_=used
-    hsuffix = ".used";if(.not.used_)hsuffix=reg(".restart")
-    file_   = str(Hfile)//str(ed_file_suffix)//str(hsuffix)
-    if(present(file))file_=str(file)
+    used_   = .true.     ;if(present(used))used_=used
+    hsuffix = ".restart" ;if(used_)hsuffix=reg(".used") !default=used
+    file    = str(Hfile)//str(ed_file_suffix)//str(hsuffix)
+    bfile   = str(Bfile)//str(ed_file_suffix)//str(hsuffix)
     !
-    !
-    inquire(file=str(file_),exist=IOfile)
+    inquire(file=str(file),exist=IOfile)
     if(.not.IOfile)stop "read_dmft_bath ERROR: indicated file does not exist"
-    if(ed_verbose>2)write(LOGfile,"(A)")'Reading bath from file '//str(file_)
+    if(ed_verbose>2)write(LOGfile,"(A)")'Reading bath from file '//str(file)
     !
     if(dmft_bath_%status)call deallocate_dmft_bath(dmft_bath_)
     call allocate_dmft_bath(dmft_bath_)
     !
-    unit = free_unit()
-    flen = file_length(str(file_),verbose=ed_verbose>2)
+    flen = file_length(str(file),verbose=ed_verbose>2)
     !
-    open(free_unit(unit),file=str(file_))
+    open(free_unit(unit),file=str(file))
     !
+    !Take care of the comment in the preamble:
+    read(unit,*)
+    !
+    !BATH TYPE=normal,hybrid,replica,general
     select case(bath_type)
     case default
-       !
-       !Take case of the comment in the preamble:
-       read(unit,*)
-       !
+       !ED MODE=normal,superc,nonsu2
        select case(ed_mode)
        case default
           do i=1,min(flen,Nbath)
@@ -515,10 +372,7 @@ contains
        end select
        !
     case('hybrid')
-       !
-       !Take case of the comment in the preamble:
-       read(unit,*)
-       !
+       !ED MODE=normal,superc,nonsu2
        select case(ed_mode)
        case default
           do i=1,min(flen,Nbath)
@@ -552,23 +406,32 @@ contains
        end select
        !
     case ('replica')
-       read(unit,*)
-       !
        read(unit,*)dmft_bath_%Nbasis
        do i=1,Nbath
           read(unit,*)dmft_bath_%item(i)%v,&
                (dmft_bath_%item(i)%lambda(io),io=1,dmft_bath_%Nbasis)
        enddo
-       !
+       inquire(file=str(bfile),exist=IOfile)
+       if(IOfile)call read_Hreplica(str(bfile))
+       if(allocated(Hb%linit))then
+          do i=1,Nbath
+             Hb%linit(i,:) = dmft_bath_%item(i)%lambda(:)
+          enddo
+       endif
        !
     case ('general')
-       read(unit,*)
-       !
        read(unit,*)dmft_bath_%Nbasis
        do i=1,Nbath
           read(unit,*)dmft_bath_%item(i)%vg(:),&
                (dmft_bath_%item(i)%lambda(io),io=1,dmft_bath_%Nbasis)
        enddo
+       inquire(file=str(bfile),exist=IOfile)
+       if(IOfile)call read_Hgeneral(str(bfile))
+       if(allocated(Hb%linit))then
+          do i=1,Nbath
+             Hb%linit(i,:) = dmft_bath_%item(i)%lambda(:)
+          enddo
+       endif
        !
     end select
     !
@@ -579,6 +442,44 @@ contains
 
 
 
+
+
+
+  subroutine save_dmft_bath(dmft_bath_,used)
+    !
+    ! Save the :f:var:`effective_bath` to a file with .used or .restart extension according to input.
+    !
+    type(effective_bath)      :: dmft_bath_
+    character(len=256)        :: file,bfile
+    logical,optional          :: used
+    logical                   :: used_
+    character(len=16)         :: extension
+    integer                   :: unit_
+#ifdef _DEBUG
+    if(ed_verbose>1)write(Logfile,"(A)")"DEBUG save_dmft_bath"
+#endif
+    if(.not.dmft_bath_%status)stop "save_dmft_bath error: bath is not allocated"
+    !
+    used_    =.false.    ;if(present(used))used_=used
+    extension=".restart" ;if(used_)extension=".used"
+    !
+    file     =str(Hfile)//str(ed_file_suffix)//str(extension)
+    bfile    =str(Bfile)//str(ed_file_suffix)//str(extension)
+    !
+    unit_=free_unit()
+    if(MpiMaster)then
+       open(unit_,file=str(file))
+       call write_dmft_bath(dmft_bath_,unit_)
+       close(unit_)
+       select case (bath_type)
+       case default;
+       case ("replica","general")
+          call save_Hreplica(str(bfile))
+       end select
+    endif
+  end subroutine save_dmft_bath
+
+  
   subroutine write_dmft_bath(dmft_bath_,unit)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
@@ -600,45 +501,47 @@ contains
 #endif
     unit_=LOGfile;if(present(unit))unit_=unit
     if(.not.dmft_bath_%status)stop "write_dmft_bath error: bath not allocated"
+    !
+    !BATH TYPE=normal,hybrid,replica,general
     select case(bath_type)
     case default
-       !
+       !ED MODE=normal,superc,nonsu2
        select case(ed_mode)
        case default
-          write(unit_,"(90(A21,1X))")&
+          write(unit_,"(*(A21,1X))")&
                ((&
                "#Ek_l"//reg(str(iorb))//"_s"//reg(str(ispin)),&
                "Vk_l"//reg(str(iorb))//"_s"//reg(str(ispin)),&
                iorb=1,Norb),ispin=1,Nspin)
           do i=1,Nbath
-             write(unit_,"(90(ES21.12,1X))")((&
+             write(unit_,"(*(ES21.12,1X))")((&
                   dmft_bath_%e(ispin,iorb,i),&
                   dmft_bath_%v(ispin,iorb,i),&
                   iorb=1,Norb),ispin=1,Nspin)
           enddo
        case ("superc")
-          write(unit_,"(90(A21,1X))")&
+          write(unit_,"(*(A21,1X))")&
                ((&
                "#Ek_l"//reg(str(iorb))//"_s"//reg(str(ispin)),&
                "Dk_l"//reg(str(iorb))//"_s"//reg(str(ispin)) ,&
                "Vk_l"//reg(str(iorb))//"_s"//reg(str(ispin)),&
                iorb=1,Norb),ispin=1,Nspin)
           do i=1,Nbath
-             write(unit_,"(90(ES21.12,1X))")((&
+             write(unit_,"(*(ES21.12,1X))")((&
                   dmft_bath_%e(ispin,iorb,i),&
                   dmft_bath_%d(ispin,iorb,i),&
                   dmft_bath_%v(ispin,iorb,i),&
                   iorb=1,Norb),ispin=1,Nspin)
           enddo
        case ("nonsu2")
-          write(unit_,"(90(A21,1X))")&
+          write(unit_,"(*(A21,1X))")&
                ((&
                "#Ek_l"//reg(str(iorb))//"_s"//reg(str(ispin)),&
                "Vak_l"//reg(str(iorb))//"_s"//reg(str(ispin)),&
                "Vbk_l"//reg(str(iorb))//"_s"//reg(str(ispin)),&
                iorb=1,Norb), ispin=1,Nspin)
           do i=1,Nbath
-             write(unit_,"(90(ES21.12,1X))")((&
+             write(unit_,"(*(ES21.12,1X))")((&
                   dmft_bath_%e(ispin,iorb,i),&
                   dmft_bath_%v(ispin,iorb,i),&
                   dmft_bath_%u(ispin,iorb,i),&
@@ -647,34 +550,34 @@ contains
        end select
        !
     case('hybrid')
-       !
+       !ED MODE=normal,superc,nonsu2
        select case(ed_mode)
        case default
-          write(unit_,"(90(A21,1X))")(&
+          write(unit_,"(*(A21,1X))")(&
                "#Ek_s"//reg(str(ispin)),&
                ("Vk_l"//reg(str(iorb))//"_s"//reg(str(ispin)),iorb=1,Norb),&
                ispin=1,Nspin)
           do i=1,Nbath
-             write(unit_,"(90(ES21.12,1X))")(&
+             write(unit_,"(*(ES21.12,1X))")(&
                   dmft_bath_%e(ispin,1,i),&
                   (dmft_bath_%v(ispin,iorb,i),iorb=1,Norb),&
                   ispin=1,Nspin)
           enddo
        case ("superc")
-          write(unit_,"(90(A21,1X))")(&
+          write(unit_,"(*(A21,1X))")(&
                "#Ek_s"//reg(str(ispin)),&
                "Dk_s"//reg(str(ispin)) ,&
                ("Vk_l"//reg(str(iorb))//"_s"//reg(str(ispin)),iorb=1,Norb),&
                ispin=1,Nspin)
           do i=1,Nbath
-             write(unit_,"(90(ES21.12,1X))")(&
+             write(unit_,"(*(ES21.12,1X))")(&
                   dmft_bath_%e(ispin,1,i),&
                   dmft_bath_%d(ispin,1,i),&
                   (dmft_bath_%v(ispin,iorb,i),iorb=1,Norb),&
                   ispin=1,Nspin)
           enddo
        case ("nonsu2")
-          write(unit_,"(90(A21,1X))")(&
+          write(unit_,"(*(A21,1X))")(&
                "#Ek_s"//reg(str(ispin)),&
                (&
                "Vak_l"//reg(str(iorb))//"_s"//reg(str(ispin)),&
@@ -682,7 +585,7 @@ contains
                iorb=1,Norb),&
                ispin=1,Nspin)
           do i=1,Nbath
-             write(unit_,"(90(ES21.12,1X))")(&
+             write(unit_,"(*(ES21.12,1X))")(&
                   dmft_bath_%e(ispin,1,i),    &
                   (dmft_bath_%v(ispin,iorb,i),dmft_bath_%u(ispin,iorb,i),iorb=1,Norb),&
                   ispin=1,Nspin)
@@ -691,19 +594,18 @@ contains
        !
     case ('replica')
        !
-       string_fmt      ="("//str(Nnambu*Nspin*Norb)//"(A1,F5.2,A1,F5.2,A1,2x))"
-       !
-       write(unit_,"(90(A21,1X))")"#V_i",("Lambda_i"//reg(str(io)),io=1,dmft_bath_%Nbasis)
+       write(unit_,"(*(A21,1X))")"#V_i",("Lambda_i"//reg(str(io)),io=1,dmft_bath_%Nbasis)
        write(unit_,"(I3)")dmft_bath_%Nbasis
        do i=1,Nbath
-          write(unit_,"(90(ES21.12,1X))")dmft_bath_%item(i)%v,&
+          write(unit_,"(*(ES21.12,1X))")dmft_bath_%item(i)%v,&
                (dmft_bath_%item(i)%lambda(io),io=1,dmft_bath_%Nbasis)
        enddo
        !
        if(unit_/=LOGfile)then
+          string_fmt = "("//str(Nnambu*Nspin*Norb)//"(A1,F5.2,A1,F5.2,A1,2x))"
           write(unit_,*)""
-          do isym=1,size(Hreplica_basis)
-             Ho = nn2so_reshape(Hreplica_basis(isym)%O,Nnambu*Nspin,Norb)
+          do isym=1,Hb%Nsym
+             Ho = nn2so_reshape( Hb%basis(isym)%O, Nnambu*Nspin,Norb)
              do io=1,Nnambu*Nspin*Norb
                 write(unit_,string_fmt)&
                      ('(',dreal(Ho(io,jo)),',',dimag(Ho(io,jo)),')',jo =1,Nnambu*Nspin*Norb)
@@ -713,19 +615,18 @@ contains
        endif
     case ('general')
        !
-       string_fmt      ="("//str(Nnambu*Nspin*Norb)//"(A1,F5.2,A1,F5.2,A1,2x))"
-       !
-       write(unit_,"(A1,90(A21,1X))")"#",("V_i"//reg(str(io)),io=1,Nspin*Norb),("Lambda_i"//reg(str(io)),io=1,dmft_bath_%Nbasis)
+       write(unit_,"(A1,*(A21,1X))")"#",("V_i"//reg(str(io)),io=1,Nspin*Norb),("Lambda_i"//reg(str(io)),io=1,dmft_bath_%Nbasis)
        write(unit_,"(I3)")dmft_bath_%Nbasis
        do i=1,Nbath
-          write(unit_,"(90(ES21.12,1X))")(dmft_bath_%item(i)%vg(io),io=1,Nspin*Norb),&
+          write(unit_,"(*(ES21.12,1X))")(dmft_bath_%item(i)%vg(io),io=1,Nspin*Norb),&
                (dmft_bath_%item(i)%lambda(io),io=1,dmft_bath_%Nbasis) 
        enddo
        !
        if(unit_/=LOGfile)then
+          string_fmt = "("//str(Nnambu*Nspin*Norb)//"(A1,F5.2,A1,F5.2,A1,2x))"
           write(unit_,*)""
-          do isym=1,size(Hgeneral_basis)
-             Ho = nn2so_reshape(Hgeneral_basis(isym)%O,Nnambu*Nspin,Norb)
+          do isym=1,Hb%Nsym
+             Ho = nn2so_reshape( Hb%basis(isym)%O, Nnambu*Nspin,Norb)
              do io=1,Nnambu*Nspin*Norb
                 write(unit_,string_fmt)&
                      ('(',dreal(Ho(io,jo)),',',dimag(Ho(io,jo)),')',jo =1,Nnambu*Nspin*Norb)
@@ -746,32 +647,11 @@ contains
 
 
 
-  subroutine save_dmft_bath(dmft_bath_,file,used)
-    !
-    ! Save the :f:var:`effective_bath` to a file with .used or .restart extension according to input.
-    !
-    type(effective_bath)      :: dmft_bath_
-    character(len=*),optional :: file
-    character(len=256)        :: file_
-    logical,optional          :: used
-    logical                   :: used_
-    character(len=16)         :: extension
-    integer                   :: unit_
-#ifdef _DEBUG
-    if(ed_verbose>1)write(Logfile,"(A)")"DEBUG save_dmft_bath"
-#endif
-    if(.not.dmft_bath_%status)stop "save_dmft_bath error: bath is not allocated"
-    used_=.false.;if(present(used))used_=used
-    extension=".restart";if(used_)extension=".used"
-    file_=str(str(Hfile)//str(ed_file_suffix)//str(extension))
-    if(present(file))file_=str(file)    
-    unit_=free_unit()
-    if(MpiMaster)then
-       open(unit_,file=str(file_))
-       call write_dmft_bath(dmft_bath_,unit_)
-       close(unit_)
-    endif
-  end subroutine save_dmft_bath
+
+
+
+
+
 
 
 

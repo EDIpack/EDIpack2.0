@@ -17,14 +17,14 @@ echo $HERE
 
 while read DIR; do
     if [ -d $DIR ]; then
-	if ls $DIR/*.x  1> /dev/null 2>&1; then
+	if [ -f $DIR/*.x ] ; then
 	    echo "TESTING $DIR"
 	    cd $DIR
 	    pwd
 	    for exe in *.x
 	    do
 		echo "Running $exe:"
-		./$exe ED_VERBOSE=1 LOGFILE=6 2>/dev/null
+		./$exe ED_VERBOSE=1 LOGFILE=6 
 		echo ""
 		echo ""
 		sleep 1

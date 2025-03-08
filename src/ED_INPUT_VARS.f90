@@ -12,7 +12,7 @@ MODULE ED_INPUT_VARS
   !======================================!
   ! These variables are bound to c types ! 
   !======================================!
-  
+
   integer(c_int),bind(c, name="Nbath")                               :: Nbath             !
   !Number of bath sites:
   ! * :f:var:`bath_type` = :code:`normal` : number of bath sites per orbital
@@ -108,7 +108,7 @@ MODULE ED_INPUT_VARS
   ! These variable need an equivalent "internal" one because        !
   ! parse_input_variable is not capable of reading logical(c_bool)  !
   !-----------------------------------------------------------------!
-  
+
   logical(c_bool),bind(c, name="ed_total_ud")                        :: ed_total_ud       !
   !Flag to select which type of quantum numbers have to be considered (if :f:var:`ed_mode` = :code:`normal`)
   ! * :code:`T` : blocks have different total :math:`N_{\uparrow}` and :math:`N_{\downarrow}`
@@ -190,7 +190,7 @@ MODULE ED_INPUT_VARS
   !
   logical              :: rdm_flag          !
   !Flag to activate Reduced Density Matrix evaluation 
-  ! :Default rdm_flag:`T`
+  ! :Default rdm_flag:`F`
   !
   logical              :: chispin_flag      !
   !Flag to activate spin susceptibility evaluation 
@@ -449,7 +449,7 @@ MODULE ED_INPUT_VARS
 
   !Some parameters for function dimensions:
   !-----------------------------------------
-  
+
   integer(c_int),bind(c, name="Lmats")             :: Lmats !
   !Number of Matsubara frequencies 
   ! :Default Lmats:`4096`
@@ -475,6 +475,10 @@ MODULE ED_INPUT_VARS
   character(len=100)                                           :: Hfile      !
   !File where to retrieve/store the bath parameters 
   ! :Default Hfile:`hamiltonian[.used/restart]`
+  !
+  character(len=100)                                           :: Bfile      !
+  !File where to retrieve/store the bath parameters 
+  ! :Default Bfile:`hbasis[.used/restart]`
   !
   character(len=100)                                           :: HLOCfile   !
   !File read the input local H 
@@ -503,8 +507,8 @@ contains
   !PURPOSE  : READ THE INPUT FILE AND SETUP GLOBAL VARIABLES
   !+-------------------------------------------------------------------+
   subroutine ed_read_input(INPUTunit)
-  !
-!This functions reads the input file provided by :code:`INPUTunit` and sets the global variables accordingly
+    !
+    !This functions reads the input file provided by :code:`INPUTunit` and sets the global variables accordingly
 #ifdef _MPI
     USE MPI
     USE SF_MPI
@@ -522,33 +526,33 @@ contains
        rank  =get_Rank_MPI()
     endif
 #endif
-  !
-!
-  !
-!Store the name of the input file:
+    !
+    !
+    !
+    !Store the name of the input file:
     ed_input_file=str(INPUTunit)
-  !
-!
-  !
-!DEFAULT VALUES OF THE PARAMETERS:
+    !
+    !
+    !
+    !DEFAULT VALUES OF THE PARAMETERS:
     call parse_input_variable(Norb,"NORB",INPUTunit,default=1,comment="Number of impurity orbitals (max 5).")
     call parse_input_variable(Nbath,"NBATH",INPUTunit,default=6,comment="Number of bath sites:(normal=>Nbath per orb)(hybrid=>Nbath total)(replica/general=>Nbath=Nreplica/Ngeneral)")
     call parse_input_variable(Nspin,"NSPIN",INPUTunit,default=1,comment="Number of spin degeneracy (max 2)")
     call parse_input_variable(Nph,"NPH",INPUTunit,default=0,comment="Max number of phonons allowed (cut off)")
     call parse_input_variable(bath_type,"BATH_TYPE",INPUTunit,default='normal',comment="flag to set bath type: normal (1bath/imp), hybrid(1bath), replica(1replica/imp), general(replica++)")
-  !
-!
-  !
-!allocate(Uloc(Norb)) #TODO: put me back!
-  !
-!call parse_input_variable(uloc,"ULOC",INPUTunit,default=(/( 2d0,i=1,size(Uloc) )/),comment="Values of the local interaction per orbital")
+    !
+    !
+    !
+    !allocate(Uloc(Norb)) #TODO: put me back!
+    !
+    !call parse_input_variable(uloc,"ULOC",INPUTunit,default=(/( 2d0,i=1,size(Uloc) )/),comment="Values of the local interaction per orbital")
     call parse_input_variable(uloc,"ULOC",INPUTunit,default=[2d0,0d0,0d0,0d0,0d0],comment="Values of the local interaction per orbital (max 5)")
     call parse_input_variable(ust,"UST",INPUTunit,default=0.d0,comment="Value of the inter-orbital interaction term")
     call parse_input_variable(Jh,"JH",INPUTunit,default=0.d0,comment="Hunds coupling")
     call parse_input_variable(Jx,"JX",INPUTunit,default=0.d0,comment="S-E coupling")
     call parse_input_variable(Jp,"JP",INPUTunit,default=0.d0,comment="P-H coupling")
-  !
-!
+    !
+    !
     call parse_input_variable(nloop,"NLOOP",INPUTunit,default=100,comment="Max number of DMFT iterations.")
     call parse_input_variable(nsuccess,"NSUCCESS",INPUTunit,default=1,comment="Number of successive iterations below threshold for convergence")
     call parse_input_variable(dmft_error,"DMFT_ERROR",INPUTunit,default=0.00001d0,comment="Error threshold for DMFT convergence")
@@ -580,28 +584,28 @@ contains
     call parse_input_variable(spin_field_z,"SPIN_FIELD_Z",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="magnetic field per orbital coupling to Z-spin component")
     call parse_input_variable(exc_field,"EXC_FIELD",INPUTunit,default=[0d0,0d0,0d0,0d0],comment="external field coupling to exciton order parameters")
     call parse_input_variable(pair_field,"PAIR_FIELD",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="pair field per orbital coupling to s-wave order parameter component")
-  !
-!
+    !
+    !
     call parse_input_variable(chispin_flag,"CHISPIN_FLAG",INPUTunit,default=.false.,comment="Flag to activate spin susceptibility calculation.")
     call parse_input_variable(chidens_flag,"CHIDENS_FLAG",INPUTunit,default=.false.,comment="Flag to activate density susceptibility calculation.")
     call parse_input_variable(chipair_flag,"CHIPAIR_FLAG",INPUTunit,default=.false.,comment="Flag to activate pair susceptibility calculation.")
     call parse_input_variable(chiexct_flag,"CHIEXCT_FLAG",INPUTunit,default=.false.,comment="Flag to activate excitonis susceptibility calculation.")
-  !
-!
+    !
+    !
     call parse_input_variable(ed_mode,"ED_MODE",INPUTunit,default='normal',comment="Flag to set ED type: normal=normal, superc=superconductive, nonsu2=broken SU(2)")
     call parse_input_variable(ed_finite_temp,"ED_FINITE_TEMP",INPUTunit,default=.false.,comment="flag to select finite temperature method. note that if T then lanc_nstates_total must be > 1")
     call parse_input_variable(ed_sectors,"ED_SECTORS",INPUTunit,default=.false.,comment="flag to reduce sector scan for the spectrum to specific sectors +/- ed_sectors_shift.")
     call parse_input_variable(ed_sectors_shift,"ED_SECTORS_SHIFT",INPUTunit,1,comment="shift to ed_sectors")
     call parse_input_variable(ed_sparse_H,"ED_SPARSE_H",INPUTunit,default=.true.,comment="flag to select  storage of sparse matrix H (mem--, cpu++) if TRUE, or direct on-the-fly H*v product (mem++, cpu--) if FALSE ")
-  !
-!
+    !
+    !
     call parse_input_variable(ed_total_ud_,"ED_TOTAL_UD",INPUTunit,default=.true.,comment="flag to select which type of quantum numbers have to be considered: T (default) total Nup-Ndw, F orbital based Nup-Ndw")
     ed_total_ud = ed_total_ud_
     call parse_input_variable(ed_twin_,"ED_TWIN",INPUTunit,default=.false.,comment="flag to reduce (T) or not (F,default) the number of visited sector using twin symmetry.")
     ed_twin = ed_twin_
     call parse_input_variable(ed_obs_all,"ED_OBS_ALL",INPUTunit,default=.true.,comment="flag to print observables for every loop.")
-  !
-!
+    !
+    !
     call parse_input_variable(ed_solve_offdiag_gf,"ED_SOLVE_OFFDIAG_GF",INPUTunit,default=.false.,comment="flag to select the calculation of the off-diagonal impurity GF. this is T by default if bath_type/=normal") 
     call parse_input_variable(ed_print_Sigma,"ED_PRINT_SIGMA",INPUTunit,default=.true.,comment="flag to print impurity Self-energies")
     call parse_input_variable(ed_print_G,"ED_PRINT_G",INPUTunit,default=.true.,comment="flag to print impurity Greens function")
@@ -615,39 +619,39 @@ contains
     call parse_input_variable(ed_hw_bath,"ed_hw_bath",INPUTunit,default=2d0,comment="half-bandwidth for the bath initialization: flat in -ed_hw_bath:ed_hw_bath")
     call parse_input_variable(ed_offset_bath,"ed_offset_bath",INPUTunit,default=1d-1,comment="offset for the initialization of diagonal terms in replica/general bath: -offset:offset")
 
-  !
-!
+    !
+    !
     call parse_input_variable(Lmats,"LMATS",INPUTunit,default=4096,comment="Number of Matsubara frequencies.")
     call parse_input_variable(Lreal,"LREAL",INPUTunit,default=5000,comment="Number of real-axis frequencies.")
     call parse_input_variable(Ltau,"LTAU",INPUTunit,default=1024,comment="Number of imaginary time points.")
     call parse_input_variable(Lfit,"LFIT",INPUTunit,default=1000,comment="Number of Matsubara frequencies used in the \Chi2 fit.")
     call parse_input_variable(Lpos,"LPOS",INPUTunit,default=100,comment="Number of points for the lattice PDF.")
-  !
-!
+    !
+    !
     call parse_input_variable(nread,"NREAD",INPUTunit,default=0.d0,comment="Objective density for fixed density calculations.")
     call parse_input_variable(nerr,"NERR",INPUTunit,default=1.d-4,comment="Error threshold for fixed density calculations.")
     call parse_input_variable(ndelta,"NDELTA",INPUTunit,default=0.1d0,comment="Initial step for fixed density calculations.")
     call parse_input_variable(ncoeff,"NCOEFF",INPUTunit,default=1d0,comment="multiplier for the initial ndelta read from a file (ndelta-->ndelta*ncoeff).")
-  !
-!
+    !
+    !
     call parse_input_variable(wini,"WINI",INPUTunit,default=-5.d0,comment="Smallest real-axis frequency")
     call parse_input_variable(wfin,"WFIN",INPUTunit,default=5.d0,comment="Largest real-axis frequency")
     call parse_input_variable(xmin,"XMIN",INPUTunit,default=-3.d0,comment="Smallest position for the lattice PDF")
     call parse_input_variable(xmax,"XMAX",INPUTunit,default=3.d0,comment="Largest position for the lattice PDF")
-    call parse_input_variable(rdm_flag,"RDM_FLAG",INPUTunit,default=.true.,comment="Flag to activate RDM calculation.")
+    call parse_input_variable(rdm_flag,"RDM_FLAG",INPUTunit,default=.false.,comment="Flag to activate RDM calculation.")
     call parse_input_variable(chispin_flag,"CHISPIN_FLAG",INPUTunit,default=.false.,comment="Flag to activate spin susceptibility calculation.")
     call parse_input_variable(chispin_flag,"CHISPIN_FLAG",INPUTunit,default=.false.,comment="Flag to activate spin susceptibility calculation.")
     call parse_input_variable(chidens_flag,"CHIDENS_FLAG",INPUTunit,default=.false.,comment="Flag to activate density susceptibility calculation.")
     call parse_input_variable(chipair_flag,"CHIPAIR_FLAG",INPUTunit,default=.false.,comment="Flag to activate pair susceptibility calculation.")
     call parse_input_variable(chiexct_flag,"CHIEXCT_FLAG",INPUTunit,default=.false.,comment="Flag to activate excitonis susceptibility calculation.")
-  !
-!
+    !
+    !
     call parse_input_variable(hfmode,"HFMODE",INPUTunit,default=.true.,comment="Flag to set the Hartree form of the interaction (n-1/2). see xmu.")
     call parse_input_variable(eps,"EPS",INPUTunit,default=0.01d0,comment="Broadening on the real-axis.")
     call parse_input_variable(cutoff,"CUTOFF",INPUTunit,default=1.d-9,comment="Spectrum cut-off, used to determine the number states to be retained.")
     call parse_input_variable(gs_threshold,"GS_THRESHOLD",INPUTunit,default=1.d-9,comment="Energy threshold for ground state degeneracy loop up")
-  !
-!    
+    !
+    !    
     call parse_input_variable(lanc_method,"LANC_METHOD",INPUTunit,default="arpack",comment="select the lanczos method to be used in the determination of the spectrum. ARPACK (default), LANCZOS (T=0 only), DVDSON (no MPI)")
     call parse_input_variable(lanc_nstates_sector,"LANC_NSTATES_SECTOR",INPUTunit,default=2,comment="Initial number of states per sector to be determined.")
     call parse_input_variable(lanc_nstates_total,"LANC_NSTATES_TOTAL",INPUTunit,default=1,comment="Initial number of total states to be determined.")
@@ -658,8 +662,8 @@ contains
     call parse_input_variable(lanc_ngfiter,"LANC_NGFITER",INPUTunit,default=200,comment="Number of Lanczos iteration in GF determination. Number of momenta.")
     call parse_input_variable(lanc_tolerance,"LANC_TOLERANCE",INPUTunit,default=1d-18,comment="Tolerance for the Lanczos iterations as used in Arpack and plain lanczos.")
     call parse_input_variable(lanc_dim_threshold,"LANC_DIM_THRESHOLD",INPUTunit,default=1024,comment="Min dimension threshold to use Lanczos determination of the spectrum rather than Lapack based exact diagonalization.")
-  !
-!
+    !
+    !
     call parse_input_variable(cg_method,"CG_METHOD",INPUTunit,default=0,comment="Conjugate-Gradient method: 0=NumericalRecipes, 1=minimize.")
     call parse_input_variable(cg_grad,"CG_GRAD",INPUTunit,default=0,comment="Gradient evaluation method: 0=analytic (default), 1=numeric.")
     call parse_input_variable(cg_ftol,"CG_FTOL",INPUTunit,default=0.00001d0,comment="Conjugate-Gradient tolerance.")
@@ -671,21 +675,22 @@ contains
     call parse_input_variable(cg_pow,"CG_POW",INPUTunit,default=2,comment="Fit power for the calculation of the generalized distance as |G0 - G0and|**cg_pow")
     call parse_input_variable(cg_minimize_ver,"CG_MINIMIZE_VER",INPUTunit,default=.false.,comment="Flag to pick old/.false. (Krauth) or new/.true. (Lichtenstein) version of the minimize CG routine")
     call parse_input_variable(cg_minimize_hh,"CG_MINIMIZE_HH",INPUTunit,default=1d-4,comment="Unknown parameter used in the CG minimize procedure.")
-  !
-!
+    !
+    !
     call parse_input_variable(Jz_basis,"JZ_BASIS",INPUTunit,default=.false.,comment="Flag to enable the Jz basis")
     call parse_input_variable(Jz_max,"JZ_MAX",INPUTunit,default=.false.,comment="Whether to cutoff Jz")
     call parse_input_variable(Jz_max_value,"JZ_MAX_VALUE",INPUTunit,default=1000.d0,comment="Maximum Jz")
-  !
-!
+    !
+    !
     call parse_input_variable(SectorFile,"SectorFile",INPUTunit,default="sectors",comment="File where to retrieve/store the sectors contributing to the spectrum.")
     call parse_input_variable(Hfile,"Hfile",INPUTunit,default="hamiltonian",comment="File where to retrieve/store the bath parameters.")
+    call parse_input_variable(Bfile,"Bfile",INPUTunit,default="hbasis",comment="File where to retrieve/store the H bath matrix basis.")
     call parse_input_variable(HLOCfile,"HLOCfile",INPUTunit,default="inputHLOC.in",comment="File read the input local H.")
     call parse_input_variable(LOGfile,"LOGFILE",INPUTunit,default=6,comment="LOG unit.")
 
     if(nph>0)then
-     !
-!Here the non-diagonal (non-density) phononic coupling are read
+       !
+       !Here the non-diagonal (non-density) phononic coupling are read
        g_ph=0.d0
        if(trim(GPHfile).eq."NONE")then
           do iorb=1,Norb
@@ -699,8 +704,8 @@ contains
                 read(unit_gph,*) g_ph(iorb,:)
              enddo
              close(unit_gph)
-           !
-!maybe an assert_hermitian would be globally useful
+             !
+             !maybe an assert_hermitian would be globally useful
              if(any(g_ph /= transpose(conjg(g_ph))))then
                 stop "ERROR: non hermitian phonon coupling matrix (g_ph) in input"
              end if
@@ -708,8 +713,8 @@ contains
              stop "GPHfile/=NONE but there is no GPHfile with the provided name"
           endif
        endif
-     !
-!TO BE PUT SOMEWHERE ELSE
+       !
+       !TO BE PUT SOMEWHERE ELSE
        open(free_unit(unit_gph),file="GPHinput.used")
        do iorb=1,Norb
           write(unit_gph,*) g_ph(iorb,:)
@@ -728,10 +733,10 @@ contains
        endif
     endif
 #endif
-  !
-!
-  !
-!
+    !
+    !
+    !
+    !
     Ltau=max(int(beta),Ltau)
     if(master)then
        call print_input()
@@ -739,8 +744,8 @@ contains
        call scifor_version()
        call code_version(version)
     endif
-  !
-!
+    !
+    !
     if(nread .ne. 0d0) then
        inquire(file="xmu.restart",EXIST=bool)
        if(bool)then
@@ -751,23 +756,23 @@ contains
           write(*,"(A,F9.7,A)")"Adjusting XMU to ",xmu," as per provided xmu.restart "
        endif
     endif
-  !
-!Act on the input variable only after printing.
-  !
-!In the new parser variables are hard-linked into the list:
-  !
-!any change to the variable is immediately copied into the list... (if you delete .ed it won't be printed out)
+    !
+    !Act on the input variable only after printing.
+    !
+    !In the new parser variables are hard-linked into the list:
+    !
+    !any change to the variable is immediately copied into the list... (if you delete .ed it won't be printed out)
     call substring_delete(Hfile,".restart")
     call substring_delete(Hfile,".ed")
   end subroutine ed_read_input
 
   subroutine ed_update_input(name,vals)
-  !
-!This functions updates some variables in the input file, namely
-  !
-!:f:var:`exc_field`, :f:var:`pair_field`, :f:var:`exc_field`,
-  !
-!:f:var:`spin_field_x`, :f:var:`spin_field_y`, and :f:var:`spin_field_z`.
+    !
+    !This functions updates some variables in the input file, namely
+    !
+    !:f:var:`exc_field`, :f:var:`pair_field`, :f:var:`exc_field`,
+    !
+    !:f:var:`spin_field_x`, :f:var:`spin_field_y`, and :f:var:`spin_field_z`.
     character(len=*)      :: name !the name of the variable to update
     real(8),dimension(:)  :: vals !the new value of the variable
     select case (name)
@@ -789,33 +794,33 @@ contains
        if(size(vals)/=Norb)stop "WRONG SIZE IN ED_UPDATE_SPIN_FIELD_Z"
        spin_field_z=vals
     end select
-    
+
   end subroutine ed_update_input
 
 
 
 
   subroutine substring_delete (s,sub)
-  !
-!! S_S_DELETE2 recursively removes a substring from a string.
-  !
-!    The remainder is left justified and padded with blanks.
-  !
-!    The substitution is recursive, so
-  !
-!    that, for example, removing all occurrences of "ab" from
-  !
-!    "aaaaabbbbbQ" results in "Q".
-  !
-!  Parameters:
-  !
-!    Input/output, character ( len = * ) S, the string to be transformed.
-  !
-!    Input, character ( len = * ) SUB, the substring to be removed.
-  !
-!    Output, integer ( kind = 4 ) IREP, the number of occurrences of
-  !
-!    the substring.
+    !
+    !! S_S_DELETE2 recursively removes a substring from a string.
+    !
+    !    The remainder is left justified and padded with blanks.
+    !
+    !    The substitution is recursive, so
+    !
+    !    that, for example, removing all occurrences of "ab" from
+    !
+    !    "aaaaabbbbbQ" results in "Q".
+    !
+    !  Parameters:
+    !
+    !    Input/output, character ( len = * ) S, the string to be transformed.
+    !
+    !    Input, character ( len = * ) SUB, the substring to be removed.
+    !
+    !    Output, integer ( kind = 4 ) IREP, the number of occurrences of
+    !
+    !    the substring.
     integer          :: ihi
     integer          :: irep
     integer          :: loc
@@ -840,24 +845,24 @@ contains
   end subroutine substring_delete
 
   subroutine s_chop ( s, ilo, ihi )
-  !
-!! S_CHOP "chops out" a portion of a string, and closes up the hole.
-  !
-!  Example:
-  !
-!    S = 'Fred is not a jerk!'
-  !
-!    call s_chop ( S, 9, 12 )
-  !
-!    S = 'Fred is a jerk!    '
-  !
-!  Parameters:
-  !
-!    Input/output, character ( len = * ) S, the string to be transformed.
-  !
-!    Input, integer ( kind = 4 ) ILO, IHI, the locations of the first and last
-  !
-!    characters to be removed.
+    !
+    !! S_CHOP "chops out" a portion of a string, and closes up the hole.
+    !
+    !  Example:
+    !
+    !    S = 'Fred is not a jerk!'
+    !
+    !    call s_chop ( S, 9, 12 )
+    !
+    !    S = 'Fred is a jerk!    '
+    !
+    !  Parameters:
+    !
+    !    Input/output, character ( len = * ) S, the string to be transformed.
+    !
+    !    Input, integer ( kind = 4 ) ILO, IHI, the locations of the first and last
+    !
+    !    characters to be removed.
     integer               ::ihi
     integer               ::ihi2
     integer               ::ilo

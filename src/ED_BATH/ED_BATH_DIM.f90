@@ -11,6 +11,7 @@ MODULE ED_BATH_DIM
   USE ED_AUX_FUNX
   !
   USE ED_BATH_AUX
+  USE ED_BATH_REPLICA
   implicit none
 
   private
@@ -33,7 +34,6 @@ MODULE ED_BATH_DIM
 
   public :: get_bath_dimension
   public :: check_bath_dimension
-
 
 
 
@@ -83,13 +83,13 @@ contains
     case('replica')
        if(ed_mode=='superc')stop "get_bath_dimension_direct ERROR: called with ed_mode=superc"
        allocate(H(Nspin,Nspin,Norb,Norb))
-       if(present(H_nn))then    !User defined H_nn
-          H=H_nn
-       elseif(Hreplica_status)then !User defined Hreplica_basis
-          H=Hreplica_build()!we build with all lambda set to one as we only need to count non-zero elements!Hreplica_lambda(Nbath,:))
-       else                        !Error:
+       if(present(H_nn))then  !User defined H_nn
+          H = H_nn
+       elseif(Hb%status)then  !User defined Hbath.basis
+          H = build_Hreplica()!Build with all lambda set to one as we only need to count non-zero elements!Hreplica_lambda(Nbath,:))
+       else                   !Error:
           deallocate(H)
-          stop "ERROR get_bath_dimension_direct: ed_mode=replica neither H_nn present nor Hreplica_basis defined"
+          stop "ERROR get_bath_dimension_direct: ed_mode=replica/general neither H_nn present nor Hb.basis defined"
        endif
        !
        !Check Hermiticity:
@@ -118,13 +118,13 @@ contains
     case('general')
        if(ed_mode=='superc')stop "get_bath_dimension_direct ERROR: called with ed_mode=superc"
        allocate(H(Nspin,Nspin,Norb,Norb))
-       if(present(H_nn))then    !User defined H_nn
+       if(present(H_nn))then  !User defined H_nn
           H=H_nn
-       elseif(Hgeneral_status)then !User defined Hgeneral_basis
-          H=Hgeneral_build()
-       else                        !Error:
+       elseif(Hb%status)then  !User defined Hbath.basis
+          H = build_Hgeneral()!Build with all lambda set to one as we only need to count non-zero elements!Hreplica_lambda(Nbath,:))
+       else                   !Error:
           deallocate(H)
-          stop "ERROR get_bath_dimension_direct: ed_mode=general neither H_nn present nor Hgeneral_basis defined"
+          stop "ERROR get_bath_dimension_direct: ed_mode=general neither H_nn present nor Hb.basis defined"
        endif
        !
        !Check Hermiticity:
@@ -153,20 +153,16 @@ contains
     end select
   end function get_bath_dimension_direct
 
-  
+
   function get_bath_dimension_symmetries(Nsym) result(bath_size)
     integer :: Nsym !Number of symmetries (for :f:var:`ed_mode` = :code:`replica, general` )
     integer :: bath_size,ndx,isym
     !
     select case(bath_type)
-    case("replica")
-       if(.not.Hreplica_status)STOP "get_bath_dimension_symmetries: H(replica/general)_basis  not allocated"
-       if(Nsym/=size(Hreplica_lambda,2))&
-            stop "ERROR get_bath_dimension_symmetries:  size(Hreplica_basis) != size(Hreplica_lambda,2)"
-    case("general")
-       if(.not.Hgeneral_status)STOP "get_bath_dimension_symmetries: H(general/general)_basis  not allocated"
-       if(Nsym/=size(Hgeneral_lambda,2))&
-            stop "ERROR get_bath_dimension_symmetries:  size(Hgeneral_basis) != size(Hgeneral_lambda,2)"
+    case("replica","general")
+       if(.not.Hb%status)STOP "get_bath_dimension_symmetries: Hb.basis  not allocated"
+       if(Nsym/=Hb%Nsym)&
+            stop "ERROR get_bath_dimension_symmetries:  input Nsym != size(Hb.basis)==Hb.Nsym"
     case default
        stop "ERROR get_bath_dimension_symmetris wiht bath_type!=replica/general"
     end select
@@ -204,15 +200,13 @@ contains
     select case (bath_type)
     case default
        Ntrue = get_bath_dimension()
-    case ('replica')
-       Ntrue   = get_bath_dimension_symmetries(size(Hreplica_basis))
-    case ('general')
-       Ntrue   = get_bath_dimension_symmetries(size(Hgeneral_basis))
+    case ('replica','general')
+       Ntrue   = get_bath_dimension_symmetries(Hb%Nsym)
     end select
     bool  = ( size(bath_) == Ntrue )
   end function check_bath_dimension
 
-  
+
 
 END MODULE ED_BATH_DIM
 

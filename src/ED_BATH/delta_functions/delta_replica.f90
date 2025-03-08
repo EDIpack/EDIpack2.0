@@ -32,7 +32,7 @@ function delta_bath_array_replica(x,dmft_bath_,axis) result(Delta)
      invH_k=zero
      !
      do ibath=1,Nbath
-        Hk  = nn2so_reshape(Hreplica_build(dmft_bath_%item(ibath)%lambda),Nspin,Norb)
+        Hk  = nn2so_reshape(build_Hreplica(dmft_bath_%item(ibath)%lambda),Nspin,Norb)
         do i=1,L
            invH_k   = zeye(Nspin*Norb)*x(i) - Hk
            call inv(invH_k)
@@ -47,7 +47,7 @@ function delta_bath_array_replica(x,dmft_bath_,axis) result(Delta)
      !
      do ibath=1,Nbath
         v  = dmft_bath_%item(ibath)%v
-        Hk = nn2so_reshape(Hreplica_build(dmft_bath_%item(ibath)%lambda),Nnambu*Nspin,Norb)
+        Hk = nn2so_reshape(build_Hreplica(dmft_bath_%item(ibath)%lambda),Nnambu*Nspin,Norb)
         Vk = kron( pauli_sigma_z, one*diag(v) )
         do i=1,L
            invH_k   = diag(Z(:,i)) - Hk
