@@ -2,6 +2,7 @@
 
 [![TestSuite](https://img.shields.io/github/actions/workflow/status/edipack/EDIpack2.0/PushWorkflow.yml?label=TestSuite&logo=Fortran&style=flat-square)](https://github.com/edipack/EDIpack2.0/actions/workflows/PushWorkflow.yml) 
 [![api docs](https://img.shields.io/static/v1?label=API&message=documentation&color=734f96&logo=read-the-docs&logoColor=white&style=flat-square)](https://edipack.github.io/EDIpack2.0/)
+[![Anaconda-Server Badge](https://anaconda.org/edipack/edipack2/badges/version.svg)](https://anaconda.org/edipack/edipack2)
 
 <!-- TO BE SETUP ASAP
 [![Coverage]()]()
