@@ -495,6 +495,7 @@ MODULE ED_INPUT_VARS
   logical                                                      :: print_input_vars   !
   !Flag to toggle the printing on the terminal output of a list of input variables and their 
   !values
+  ! :Default print_input_vars:`T`
   !
   !THIS IS JUST A RELOCATED GLOBAL VARIABLE
   character(len=200)                                 :: ed_input_file=""  !Name of input file
