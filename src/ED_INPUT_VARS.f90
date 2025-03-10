@@ -492,6 +492,10 @@ MODULE ED_INPUT_VARS
   !Logfile unit  
   ! :Default LOGfile:`6`
   !
+  logical                                                      :: print_input_vars   !
+  !Flag to toggle the printing on the terminal output of a list of input variables and their 
+  !values
+  !
   !THIS IS JUST A RELOCATED GLOBAL VARIABLE
   character(len=200)                                 :: ed_input_file=""  !Name of input file
 
@@ -681,6 +685,7 @@ contains
     call parse_input_variable(SectorFile,"SectorFile",INPUTunit,default="sectors",comment="File where to retrieve/store the sectors contributing to the spectrum.")
     call parse_input_variable(Hfile,"Hfile",INPUTunit,default="hamiltonian",comment="File where to retrieve/store the bath parameters.")
     call parse_input_variable(HLOCfile,"HLOCfile",INPUTunit,default="inputHLOC.in",comment="File read the input local H.")
+    call parse_input_variable(print_input_vars,"PRINT_INPUT_VARS",INPUTunit,default=.true.,comment="Flag to toggle console printing of input variables list")
     call parse_input_variable(LOGfile,"LOGFILE",INPUTunit,default=6,comment="LOG unit.")
 
     if(nph>0)then
@@ -734,7 +739,7 @@ contains
 !
     Ltau=max(int(beta),Ltau)
     if(master)then
-       call print_input()
+       if(print_input_vars)call print_input()
        call save_input(INPUTunit)
        call scifor_version()
        call code_version(version)
