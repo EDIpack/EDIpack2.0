@@ -1,9 +1,8 @@
-function f0and_bath_array_normal(x,dmft_bath_,axis) result(F0and)
+function f0and_bath_array_normal(x,axis) result(F0and)
 #if __INTEL_COMPILER
   use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
   complex(8),dimension(:),intent(in)                  :: x !complex  array for the frequency
-  type(effective_bath)                                :: dmft_bath_ !the current :f:var:`effective_bath` instance
   character(len=*),optional                           :: axis!string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis    
   character(len=1)                                    :: axis_
   complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x)) :: F0and
@@ -20,8 +19,8 @@ function f0and_bath_array_normal(x,dmft_bath_,axis) result(F0and)
   !
   L = size(x)
   !
-  Delta =  delta_bath_array(x,dmft_bath_,axis_)
-  Fdelta= fdelta_bath_array(x,dmft_bath_,axis_)
+  Delta =  delta_bath_array(x,axis_)
+  Fdelta= fdelta_bath_array(x,axis_)
   select case(axis_)
   case default;stop "f0and_bath_array_normal error: axis_ not support"
   case ("m")

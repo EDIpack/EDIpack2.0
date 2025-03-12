@@ -1,9 +1,8 @@
-function delta_bath_array_general(x,dmft_bath_,axis) result(Delta)
+function delta_bath_array_general(x,axis) result(Delta)
 #if __INTEL_COMPILER
   use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
   complex(8),dimension(:),intent(in)                                :: x          !complex  array for the frequency
-  type(effective_bath)                                              :: dmft_bath_ !the current :f:var:`effective_bath` instance
   character(len=*),optional                                         :: axis       !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis
   complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x))               :: Delta
   integer                                                           :: i,ih,L
@@ -29,8 +28,8 @@ function delta_bath_array_general(x,dmft_bath_,axis) result(Delta)
   case ("normal","nonsu2")             !normal OR nonsu2
      invH_k=zero
      do ibath=1,Nbath
-        Vk = one*diag(dmft_bath_%item(ibath)%vg(:))
-        Hk = nn2so_reshape(build_Hgeneral(dmft_bath_%item(ibath)%lambda),Nspin,Norb)
+        Vk = one*diag(dmft_bath%item(ibath)%vg(:))
+        Hk = nn2so_reshape(build_Hgeneral(dmft_bath%item(ibath)%lambda),Nspin,Norb)
         do i=1,L
            invH_k   = zeye(Nspin*Norb)*x(i) - Hk
            call inv(invH_k)
@@ -44,8 +43,8 @@ function delta_bath_array_general(x,dmft_bath_,axis) result(Delta)
      Z = zeta_superc(x,0d0,axis_)
      !
      do ibath=1,Nbath
-        v  = dmft_bath_%item(ibath)%vg
-        Hk = nn2so_reshape(build_Hgeneral(dmft_bath_%item(ibath)%lambda),Nnambu*Nspin,Norb)
+        v  = dmft_bath%item(ibath)%vg
+        Hk = nn2so_reshape(build_Hgeneral(dmft_bath%item(ibath)%lambda),Nnambu*Nspin,Norb)
         Vk = kron( pauli_sigma_z, one*diag(v) )
         do i=1,L
            invH_k   = diag(Z(:,i)) - Hk

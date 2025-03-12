@@ -52,8 +52,9 @@ MODULE ED_BATH_REPLICA
      !  * rank-2, dimensions: [ |Nbath| , |Nsym| ]
      !  * rank-3, dimensions: [ |Nlat| , |Nbath| , |Nsym| ]
      !
-     module procedure init_Hreplica_symmetries_d5
-     module procedure init_Hreplica_symmetries_d3
+     module procedure :: init_Hreplica_symmetries_d5
+     module procedure :: init_Hreplica_symmetries_d3
+     module procedure :: init_Hreplica_symmetries_legacy
   end interface set_Hreplica
 
 
@@ -83,7 +84,20 @@ MODULE ED_BATH_REPLICA
      ! A clone of :f:var:`set_Hreplica`
      module procedure :: init_Hreplica_symmetries_d5
      module procedure :: init_Hreplica_symmetries_d3
+     module procedure :: init_Hreplica_symmetries_legacy
   end interface set_Hgeneral
+
+
+  interface set_linit_Hgeneral
+     ! A clone of :f:var:`set_linit_Hreplica`
+     module procedure :: set_linit_Hreplica
+  end interface set_linit_Hgeneral
+
+
+  interface set_hsym_Hgeneral
+     ! A clone of :f:var:`set_hsym_Hreplica`
+     module procedure :: set_hsym_Hreplica
+  end interface set_hsym_Hgeneral
 
 
   interface build_Hgeneral
@@ -104,29 +118,30 @@ MODULE ED_BATH_REPLICA
   end interface Hgeneral_mask
 
 
-  !##################################################################
-  !
-  !     REPLICA BATH ROUTINES:
-  !
-  !##################################################################
+
+
   public :: allocate_Hreplica
   public :: deallocate_Hreplica
+  public :: set_Hreplica
   public :: save_Hreplica
   public :: read_Hreplica
-  public :: set_Hreplica
+  public :: set_linit_Hreplica
+  public :: set_hsym_Hreplica
   public :: build_Hreplica
   public :: print_Hreplica
-  public :: Hreplica_mask                    !INTERNAL (for effective_bath)
+  public :: Hreplica_mask
 
 
   public :: allocate_Hgeneral
   public :: deallocate_Hgeneral
+  public :: set_Hgeneral
   public :: save_Hgeneral
   public :: read_Hgeneral
-  public :: set_Hgeneral
+  public :: set_linit_Hgeneral
+  public :: set_hsym_Hgeneral
   public :: build_Hgeneral
   public :: print_Hgeneral
-  public :: Hgeneral_mask                    !INTERNAL (for effective_bath)
+  public :: Hgeneral_mask
 
 
   integer :: ibath
@@ -360,6 +375,60 @@ contains
   end subroutine init_Hreplica_symmetries_d3
 
 
+  subroutine init_Hreplica_symmetries_legacy(Hvec,lvec)
+    complex(8),dimension(:,:,:,:,:) :: Hvec      ![size(H),Nsym]
+    real(8),dimension(:)            :: lvec ![Nsym]
+    integer                         :: isym,Nsym
+    logical                         :: bool
+    !
+    if(ed_mode=="superc")Nnambu=2
+    Nsym=size(lvec)
+#ifdef _DEBUG
+    if(ed_verbose>3)write(Logfile,"(A)")"DEBUG init_Hreplica_symmetries_legacy: from {[Hs,Lam]}_b"
+#endif
+    call assert_shape(Hvec,[Nnambu*Nspin,Nnambu*Nspin,Norb,Norb,Nsym],"init_Hreplica_symmetries","Hvec")
+    !
+    !CHECK NAMBU and HERMITICTY of each Hvec
+    do isym=1,Nsym
+       select case(ed_mode)
+       case default  ;bool = check_herm(nn2so_reshape(Hvec(:,:,:,:,isym),Nspin,Norb),Nspin*Norb)
+       case("superc");bool = check_nambu(nn2so_reshape(Hvec(:,:,:,:,isym),Nnambu*Nspin,Norb),Nspin*Norb)
+       end select
+       if(.not.bool)then
+          write(LOGfile,"(A)")"init_Hreplica_symmetries_site ERROR: not Hermitian/Nambu of replica basis O_"//str(isym)
+          stop
+       endif
+    enddo
+    !
+    call allocate_hreplica(Nsym)
+    !
+    !> BACK-COMPATIBILITY PATCH (cfr init_dmft_bath)
+    do isym=1,Nsym
+       Hb%basis(isym)%O = Hvec(:,:,:,:,isym)
+       do ibath=1,Nbath
+          Hb%linit(ibath,isym) = lvec(isym)
+       enddo
+    enddo
+    !
+    ! PRINT DEPRECATION MESSAGE TO LOG
+    write(LOGfile,*) "                                                                               "
+    write(LOGfile,*) "WARNING: Passing a single lambdasym vector to ed_set_Hreplica is /deprecated/. "
+    write(LOGfile,*) "         You should instead define a different lambda for each bath component, "
+    write(LOGfile,*) "         namely passing a [Nbath]x[Nsym] array instead of a [Nsym] vector.     "
+    write(LOGfile,*) "         Your single lambda vector has been internally copied into the required"
+    write(LOGfile,*) "         higher-rank array, so giving each replica the same set of lambdas.    "
+    write(LOGfile,*) "         >>> This back-compatibility patch might be removed in a future update."
+    write(LOGfile,*) "                                                                               "
+    !
+    if(ed_verbose>2)then
+       do ibath=1,Nbath
+          write(LOGfile,*) "Hreplica #"//str(ibath)//":"
+          call print_Hreplica( build_Hreplica( Hb%linit(ibath,:)) )
+       enddo
+    endif
+    !
+  end subroutine init_Hreplica_symmetries_legacy
+
 
 
 
@@ -372,6 +441,39 @@ contains
   !##################################################################
   !##################################################################
   !##################################################################
+  subroutine set_linit_Hreplica(lvec)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+#endif
+    !
+    !This function is used to set the initial value of :f:math:`\lambda` parameters in the bath Hamiltonian matrix decomposition
+    !
+    real(8),dimension(:,:) :: lvec   !the input vector of bath parameters [Nsym,Nbath]
+    !
+    if(.not.Hb%status)stop "set_linit_Hreplica error: Hb.status=F"
+    call assert_shape(lvec,[Nbath,Hb%Nsym],"set_linit_Hreplica","lvec")
+    Hb%linit = lvec       
+  end subroutine set_linit_Hreplica
+
+
+  subroutine set_hsym_Hreplica(isym,Hsym)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+#endif
+    !
+    !This function is used to set a matrix element in the basis of the bath Hamiltonian matrix decomposition
+    !
+    integer                       :: isym
+    complex(8),dimension(:,:,:,:) :: Hsym      ![Nambu*Nspin,Nambu*Nspin,Norb,Norb]
+    !
+    if(.not.Hb%status)stop "set_basis_Hreplica error: Hb.status=F"
+    !
+    if(ed_mode=="superc")Nnambu=2
+    call assert_shape(Hsym,[Nnambu*Nspin,Nnambu*Nspin,Norb,Norb],"set_hsym_Hreplica","Hsym")
+    Hb%basis(isym)%O  = Hsym
+  end subroutine set_hsym_Hreplica
+
+
 
   function build_Hreplica(lvec) result(H)
 #if __INTEL_COMPILER

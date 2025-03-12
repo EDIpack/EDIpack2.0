@@ -1,9 +1,8 @@
-function fdelta_bath_array_replica(x,dmft_bath_,axis) result(Fdelta)
+function fdelta_bath_array_replica(x,axis) result(Fdelta)
 #if __INTEL_COMPILER
   use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
   complex(8),dimension(:),intent(in)                                :: x !complex  array for the frequency
-  type(effective_bath)                                              :: dmft_bath_ !the current :f:var:`effective_bath` instance
   character(len=*),optional                                         :: axis    !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis
   complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x))               :: Fdelta
   character(len=1)                                                  :: axis_
@@ -25,8 +24,8 @@ function fdelta_bath_array_replica(x,dmft_bath_,axis) result(Fdelta)
   Z = zeta_superc(x,0d0,axis_)
   !
   do ibath=1,Nbath
-     V  = dmft_bath_%item(ibath)%v
-     Hk = nn2so_reshape(build_Hreplica(dmft_bath_%item(ibath)%lambda),Nnambu*Nspin,Norb)
+     V  = dmft_bath%item(ibath)%v
+     Hk = nn2so_reshape(build_Hreplica(dmft_bath%item(ibath)%lambda),Nnambu*Nspin,Norb)
      Vk = kron( pauli_sigma_z, one*diag(v) )
      do i=1,L
         invH_k   = one*diag(Z(:,i)) - Hk

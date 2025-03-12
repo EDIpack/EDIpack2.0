@@ -893,8 +893,8 @@ contains
     !Get G0^-1,F0^-1
     ispin=1
     !
-    invG0 = invg0_bath_function(zeta,dmft_bath,axis_)
-    invF0 = invf0_bath_function(zeta,dmft_bath,axis_)
+    invG0 = invg0_bath_function(zeta,axis_)
+    invF0 = invf0_bath_function(zeta,axis_)
     !
     !Get G, F
     G     = get_impG_superc(zeta)
@@ -975,8 +975,8 @@ contains
     !Get G0^-1,F0^-1
     ispin=1
     !
-    invG0 = invg0_bath_function(zeta,dmft_bath,axis_)
-    invF0 = invf0_bath_function(zeta,dmft_bath,axis_)
+    invG0 = invg0_bath_function(zeta,axis_)
+    invF0 = invf0_bath_function(zeta,axis_)
     !
     !Get G, F
     G     = get_impG_superc(zeta)

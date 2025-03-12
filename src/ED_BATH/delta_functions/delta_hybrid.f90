@@ -1,9 +1,8 @@
-function delta_bath_array_hybrid(x,dmft_bath_,axis) result(Delta)
+function delta_bath_array_hybrid(x,axis) result(Delta)
 #if __INTEL_COMPILER
   use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
   complex(8),dimension(:),intent(in)                                :: x          !complex  array for the frequency
-  type(effective_bath)                                              :: dmft_bath_ !the current :f:var:`effective_bath` instance
   character(len=*),optional                                         :: axis       !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis
   complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x))               :: Delta
   !
@@ -37,8 +36,8 @@ function delta_bath_array_hybrid(x,dmft_bath_,axis) result(Delta)
   case default;stop "delta_bath_array_hybrid error: ed_mode not supported"
   case ("normal")
      do ispin=1,Nspin
-        eps  = dmft_bath_%e(ispin,1     ,1:Nbath)
-        vops = dmft_bath_%v(ispin,1:Norb,1:Nbath)
+        eps  = dmft_bath%e(ispin,1     ,1:Nbath)
+        vops = dmft_bath%v(ispin,1:Norb,1:Nbath)
         do iorb=1,Norb
            do jorb=1,Norb
               do i=1,L
@@ -50,9 +49,9 @@ function delta_bath_array_hybrid(x,dmft_bath_,axis) result(Delta)
      !
   case ("superc")
      do ispin=1,Nspin
-        eps  = dmft_bath_%e(ispin,1     ,1:Nbath)
-        dps  = dmft_bath_%d(ispin,1     ,1:Nbath)
-        vops = dmft_bath_%v(ispin,1:Norb,1:Nbath)
+        eps  = dmft_bath%e(ispin,1     ,1:Nbath)
+        dps  = dmft_bath%d(ispin,1     ,1:Nbath)
+        vops = dmft_bath%v(ispin,1:Norb,1:Nbath)
         do iorb=1,Norb
            do jorb=1,Norb
               select case(axis_)
@@ -73,8 +72,8 @@ function delta_bath_array_hybrid(x,dmft_bath_,axis) result(Delta)
      enddo
      !
   case ("nonsu2")
-     ehel  = dmft_bath_%e(1:Nspin,1,1:Nbath)
-     wohel = get_Whyb_matrix(dmft_bath_%v(1:Nspin,1:Norb,1:Nbath),dmft_bath_%u(1:Nspin,1:Norb,1:Nbath))
+     ehel  = dmft_bath%e(1:Nspin,1,1:Nbath)
+     wohel = get_Whyb_matrix(dmft_bath%v(1:Nspin,1:Norb,1:Nbath),dmft_bath%u(1:Nspin,1:Norb,1:Nbath))
      do iorb=1,Norb
         do jorb=1,Norb
            do ispin=1,Nspin

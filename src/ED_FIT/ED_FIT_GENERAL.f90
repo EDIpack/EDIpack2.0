@@ -47,7 +47,6 @@ contains
     integer                                     :: iter,stride,counter,Asize
     real(8)                                     :: chi
     logical                                     :: check
-    type(effective_bath)                        :: dmft_bath
     character(len=256)                          :: suffix
     integer                                     :: unit
     complex(8),dimension(:,:,:,:,:),allocatable :: fgand ![Nspin][][Norb][][Ldelta]  
@@ -67,8 +66,8 @@ contains
        print *, "         be aware that CG_POW is not doing what you would expect for a chi^q"
     endif
     !
-    call allocate_dmft_bath(dmft_bath)
-    call set_dmft_bath(bath_,dmft_bath)
+    call allocate_dmft_bath()
+    call set_dmft_bath(bath_)
     allocate(array_bath(size(bath_)-1))
     Nsym  =bath_(1)
     array_bath=bath_(2:)
@@ -211,21 +210,21 @@ contains
     close(unit)
     !
     bath_(2:size(bath_))=array_bath
-    call set_dmft_bath(bath_,dmft_bath) ! *** array_bath --> dmft_bath *** (per write fit result)
-    call write_dmft_bath(dmft_bath,LOGfile)
-    call save_dmft_bath(dmft_bath)
+    call set_dmft_bath(bath_) ! *** array_bath --> dmft_bath *** (per write fit result)
+    call write_dmft_bath(LOGfile)
+    call save_dmft_bath()
     !
     allocate(fgand(Nspin,Nspin,Norb,Norb,Ldelta))
     if(cg_scheme=='weiss')then
-       fgand = g0and_bath_function(xi*Xdelta(:),dmft_bath)
+       fgand = g0and_bath_function(xi*Xdelta(:))
     else
-       fgand = delta_bath_function(xi*Xdelta(:),dmft_bath)
+       fgand = delta_bath_function(xi*Xdelta(:))
     endif
     call write_fit_result()
     deallocate(fgand)
     !
-    call get_dmft_bath(dmft_bath,bath_)                ! ***  dmft_bath --> bath_ ***    (bath in output)
-    call deallocate_dmft_bath(dmft_bath)
+    call get_dmft_bath(bath_)                ! ***  dmft_bath --> bath_ ***    (bath in output)
+    call deallocate_dmft_bath()
     deallocate(FGmatrix,Gdelta,Xdelta,Wdelta)
     deallocate(getIspin,getJspin)
     deallocate(getIorb,getJorb)
@@ -276,7 +275,6 @@ contains
     integer                                                :: iter,stride,counter,Asize
     real(8)                                                :: chi
     logical                                                :: check
-    type(effective_bath)                                   :: dmft_bath
     character(len=256)                                     :: suffix
     integer                                                :: unit
     complex(8),dimension(:,:,:,:,:,:),allocatable          :: fgand ![2][Nspin][][Norb][][Ldelta]  
@@ -290,8 +288,8 @@ contains
     check= check_bath_dimension(bath_)
     if(.not.check)stop "chi2_fitgf_general_superc error: wrong bath dimensions"
     !
-    call allocate_dmft_bath(dmft_bath)
-    call set_dmft_bath(bath_,dmft_bath)
+    call allocate_dmft_bath()
+    call set_dmft_bath(bath_)
     allocate(array_bath(size(bath_)-1))
     Nsym  =bath_(1)
     array_bath=bath_(2:)
@@ -422,23 +420,23 @@ contains
     close(unit)
     !
     bath_(2:size(bath_))=array_bath
-    call set_dmft_bath(bath_,dmft_bath) ! *** array_bath --> dmft_bath *** (per write fit result)
-    call write_dmft_bath(dmft_bath,LOGfile)
-    call save_dmft_bath(dmft_bath)
+    call set_dmft_bath(bath_) ! *** array_bath --> dmft_bath *** (per write fit result)
+    call write_dmft_bath(LOGfile)
+    call save_dmft_bath()
     !
     allocate(fgand(2,Nspin,Nspin,Norb,Norb,Ldelta))
     if(cg_scheme=='weiss')then
-       fgand(1,:,:,:,:,:) = g0and_bath_function(xi*Xdelta(:),dmft_bath)
-       fgand(2,:,:,:,:,:) = f0and_bath_function(xi*Xdelta(:),dmft_bath)
+       fgand(1,:,:,:,:,:) = g0and_bath_function(xi*Xdelta(:))
+       fgand(2,:,:,:,:,:) = f0and_bath_function(xi*Xdelta(:))
     else
-       fgand(1,:,:,:,:,:) = delta_bath_function(xi*Xdelta(:),dmft_bath)
-       fgand(2,:,:,:,:,:) =fdelta_bath_function(xi*Xdelta(:),dmft_bath)
+       fgand(1,:,:,:,:,:) = delta_bath_function(xi*Xdelta(:))
+       fgand(2,:,:,:,:,:) =fdelta_bath_function(xi*Xdelta(:))
     endif
     call write_fit_result()
     deallocate(fgand)
     !
-    call get_dmft_bath(dmft_bath,bath_)                ! ***  dmft_bath --> bath_ ***    (bath in output)
-    call deallocate_dmft_bath(dmft_bath)
+    call get_dmft_bath(bath_)                ! ***  dmft_bath --> bath_ ***    (bath in output)
+    call deallocate_dmft_bath()
     deallocate(FGmatrix,FFmatrix,Gdelta,Fdelta,Xdelta,Wdelta)
     deallocate(getIspin,getJspin)
     deallocate(getIorb,getJorb)

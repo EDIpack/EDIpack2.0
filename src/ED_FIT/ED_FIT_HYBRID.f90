@@ -24,7 +24,6 @@ contains
     integer                                     :: iorb,jorb
     real(8)                                     :: chi
     logical                                     :: check
-    type(effective_bath)                        :: dmft_bath
     character(len=256)                          :: suffix
     integer                                     :: unit
     complex(8),dimension(:,:,:,:,:),allocatable :: fgand ![Nspin][][Norb][][Ldelta]
@@ -74,8 +73,8 @@ contains
     !
     Spin_indx=ispin
     !
-    call allocate_dmft_bath(dmft_bath)
-    call set_dmft_bath(bath_,dmft_bath)
+    call allocate_dmft_bath()
+    call set_dmft_bath(bath_)
     !
     !E_{\s,1}(:)  [ 1 ][ 1 ][Nbath]
     !V_{\s,:}(:)  [ 1 ][ Norb][Nbath]
@@ -194,21 +193,21 @@ contains
        enddo
     enddo
     !
-    call write_dmft_bath(dmft_bath,LOGfile)
+    call write_dmft_bath(LOGfile)
     !
-    call save_dmft_bath(dmft_bath)
+    call save_dmft_bath()
     !
     allocate(fgand(Nspin,Nspin,Norb,Norb,Ldelta))
     if(cg_scheme=='weiss')then
-       fgand = g0and_bath_function(xi*Xdelta(:),dmft_bath)
+       fgand = g0and_bath_function(xi*Xdelta(:))
     else
-       fgand = delta_bath_function(xi*Xdelta(:),dmft_bath)
+       fgand = delta_bath_function(xi*Xdelta(:))
     endif
     call write_fit_result(ispin)
     deallocate(fgand)
     !
-    call get_dmft_bath(dmft_bath,bath_)
-    call deallocate_dmft_bath(dmft_bath)
+    call get_dmft_bath(bath_)
+    call deallocate_dmft_bath()
     deallocate(Gdelta,Xdelta,Wdelta)
     deallocate(getIorb,getJorb)
     !
@@ -257,7 +256,6 @@ contains
     integer                                     :: iorb,jorb
     real(8)                                     :: chi
     logical                                     :: check
-    type(effective_bath)                        :: dmft_bath
     character(len=256)                          :: suffix
     integer                                     :: unit
     complex(8),dimension(:,:,:,:,:),allocatable :: fgand,ffand ![Nspin][][Norb][][Ldelta]
@@ -310,8 +308,8 @@ contains
     !
     Spin_indx=ispin 
     !
-    call allocate_dmft_bath(dmft_bath)
-    call set_dmft_bath(bath_,dmft_bath)
+    call allocate_dmft_bath()
+    call set_dmft_bath(bath_)
     !
     !E_{\s,1}(:)  [ 1 ][ 1 ][Nbath]
     !D_{\s,1}(:)  [ 1 ][ 1 ][Nbath]
@@ -436,23 +434,23 @@ contains
        enddo
     enddo
     !
-    call write_dmft_bath(dmft_bath,LOGfile)
+    call write_dmft_bath(LOGfile)
     !
-    call save_dmft_bath(dmft_bath)
+    call save_dmft_bath()
 
     allocate(fgand(Nspin,Nspin,Norb,Norb,Ldelta))
     allocate(ffand(Nspin,Nspin,Norb,Norb,Ldelta))
     if(cg_scheme=='weiss')then
-       fgand = g0and_bath_function(xi*Xdelta(:),dmft_bath)
-       ffand = f0and_bath_function(xi*Xdelta(:),dmft_bath)
+       fgand = g0and_bath_function(xi*Xdelta(:))
+       ffand = f0and_bath_function(xi*Xdelta(:))
     else
-       fgand = delta_bath_function(xi*Xdelta(:),dmft_bath)
-       ffand =fdelta_bath_function(xi*Xdelta(:),dmft_bath)
+       fgand = delta_bath_function(xi*Xdelta(:))
+       ffand =fdelta_bath_function(xi*Xdelta(:))
     endif
     call write_fit_result(ispin)
     deallocate(fgand,ffand)
-    call get_dmft_bath(dmft_bath,bath_)
-    call deallocate_dmft_bath(dmft_bath)
+    call get_dmft_bath(bath_)
+    call deallocate_dmft_bath()
     deallocate(Gdelta,Fdelta,Xdelta,Wdelta)
     deallocate(getIorb,getJorb)
     !
@@ -503,7 +501,6 @@ contains
     integer                            :: iter,stride,count,Asize
     real(8)                            :: chi
     logical                            :: check
-    type(effective_bath)               :: dmft_bath
     character(len=256)                 :: suffix
     integer                            :: unit
     complex(8),dimension(:,:,:,:,:),allocatable :: fgand ![Nspin][][Norb][][Ldelta]
@@ -556,8 +553,8 @@ contains
        Wdelta=Xdelta
     end select
     !
-    call allocate_dmft_bath(dmft_bath)
-    call set_dmft_bath(bath_,dmft_bath)
+    call allocate_dmft_bath()
+    call set_dmft_bath(bath_)
     !
     do i=1,totNso
        Gdelta(i,1:Ldelta) = fg(getIspin(i),getJspin(i),getIorb(i),getJorb(i),1:Ldelta)
@@ -684,21 +681,21 @@ contains
     ! dmft_bath%v(Nspin,:,:) = dmft_bath%v(1,:,:)
     ! dmft_bath%u(Nspin,:,:) = dmft_bath%u(1,:,:)
     !
-    call write_dmft_bath(dmft_bath,LOGfile)
+    call write_dmft_bath(LOGfile)
     !
-    call save_dmft_bath(dmft_bath)
+    call save_dmft_bath()
     !
     allocate(fgand(Nspin,Nspin,Norb,Norb,Ldelta))
     if(cg_scheme=='weiss')then
-       fgand = g0and_bath_function(xi*Xdelta(:),dmft_bath)
+       fgand = g0and_bath_function(xi*Xdelta(:))
     else
-       fgand = delta_bath_function(xi*Xdelta(:),dmft_bath)
+       fgand = delta_bath_function(xi*Xdelta(:))
     endif
     call write_fit_result()
     deallocate(fgand)
     !
-    call get_dmft_bath(dmft_bath,bath_)
-    call deallocate_dmft_bath(dmft_bath)
+    call get_dmft_bath(bath_)
+    call deallocate_dmft_bath()
     deallocate(Gdelta,Xdelta,Wdelta)
     deallocate(getIspin,getJspin)
     deallocate(getIorb,getJorb)

@@ -571,7 +571,7 @@ contains
     axis_="m";if(present(axis))axis_=str(axis)
     !
     !Get G0^-1
-    invG0 = invg0_bath_function(zeta,dmft_bath,axis_)
+    invG0 = invg0_bath_function(zeta,axis_)
     !
     !Get G^-1
     invG  = get_impG_normal(zeta)

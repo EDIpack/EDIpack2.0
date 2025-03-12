@@ -101,14 +101,14 @@ contains
     !
     bath = 0d0
     !
-    call allocate_dmft_bath(dmft_bath)
-    call init_dmft_bath(dmft_bath)
-    call get_dmft_bath(dmft_bath,bath)
+    call allocate_dmft_bath()
+    call init_dmft_bath()
+    call get_dmft_bath(bath)
     !
     if(isetup)then
        call setup_global
     endif
-    call deallocate_dmft_bath(dmft_bath)
+    call deallocate_dmft_bath()
     isetup=.false.
     !
     !DELETE THE MPI FRAMEWORK:
@@ -161,10 +161,10 @@ contains
     !  
     if(MpiMaster.and.flag_mpi_)call save_input_file(str(ed_input_file))
     !
-    call allocate_dmft_bath(dmft_bath)
-    call set_dmft_bath(bath,dmft_bath)
-    call write_dmft_bath(dmft_bath)
-    call save_dmft_bath(dmft_bath,used=.true.)
+    call allocate_dmft_bath()
+    call set_dmft_bath(bath)
+    call write_dmft_bath()
+    call save_dmft_bath(used=.true.)
     !
     !SOLVE THE QUANTUM IMPURITY PROBLEM:
     call diagonalize_impurity()
@@ -176,7 +176,7 @@ contains
     call local_energy_impurity()
     call rdm_impurity()
     !
-    call deallocate_dmft_bath(dmft_bath)
+    call deallocate_dmft_bath()
     call es_delete_espace(state_list)
     !
     !DELETE THE LOCAL MPI COMMUNICATOR:
@@ -208,7 +208,7 @@ contains
     write(LOGfile,"(A)")"FINALIZE SOLVER "
     !
     !just in case deallocate some objects
-    call deallocate_dmft_bath(dmft_bath)
+    call deallocate_dmft_bath()
     call es_delete_espace(state_list)
     call deallocate_grids
     nullify(spHtimesV_cc)

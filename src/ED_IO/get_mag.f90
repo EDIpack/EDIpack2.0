@@ -33,3 +33,11 @@ subroutine ed_get_mag_n1(self,component)
   call assert_shape(self,[Norb],'ed_get_mag','mag')
   self = ed_mag(id,:)
 end subroutine ed_get_mag_n1
+
+
+subroutine ed_get_mag_n2(self)
+  real(8),dimension(:,:)      :: self
+  !
+  call assert_shape(self,shape(ed_mag),'ed_get_mag','mag')
+  self = ed_mag
+end subroutine ed_get_mag_n2

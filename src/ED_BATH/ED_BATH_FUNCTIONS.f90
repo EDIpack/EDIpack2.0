@@ -145,12 +145,11 @@ contains
   include "delta_functions/delta_hybrid.f90"
   include "delta_functions/delta_replica.f90"
   include "delta_functions/delta_general.f90"
-  function delta_bath_array(x,dmft_bath_,axis) result(Delta)
+  function delta_bath_array(x,axis) result(Delta)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     complex(8),dimension(:),intent(in)                                :: x          !complex  array for the frequency
-    type(effective_bath)                                              :: dmft_bath_ !the current :f:var:`effective_bath` instance
     character(len=*),optional                                         :: axis       !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x))               :: Delta
     character(len=1)                                                  :: axis_
@@ -159,12 +158,14 @@ contains
     !
     Delta=zero
     !
+    if(.not.dmft_bath%status)stop "delta_bath_array error: dmft_bath not allocated"
+    !
     select case(bath_type)
     case default;stop "delta_bath_array error: bath_type not supported"
-    case("normal")  ;Delta = delta_bath_array_normal(x,dmft_bath_,axis_)
-    case("hybrid")  ;Delta = delta_bath_array_hybrid(x,dmft_bath_,axis_)
-    case("replica") ;Delta = delta_bath_array_replica(x,dmft_bath_,axis_)
-    case("general") ;Delta = delta_bath_array_general(x,dmft_bath_,axis_)
+    case("normal")  ;Delta = delta_bath_array_normal(x,axis_)
+    case("hybrid")  ;Delta = delta_bath_array_hybrid(x,axis_)
+    case("replica") ;Delta = delta_bath_array_replica(x,axis_)
+    case("general") ;Delta = delta_bath_array_general(x,axis_)
     end select
     !
   end function delta_bath_array
@@ -175,12 +176,11 @@ contains
   include "delta_functions/fdelta_hybrid.f90"
   include "delta_functions/fdelta_replica.f90"
   include "delta_functions/fdelta_general.f90"
-  function fdelta_bath_array(x,dmft_bath_,axis) result(Fdelta)
+  function fdelta_bath_array(x,axis) result(Fdelta)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     complex(8),dimension(:),intent(in)                                :: x          !complex  array for the frequency
-    type(effective_bath)                                              :: dmft_bath_ !the current :f:var:`effective_bath` instance
     character(len=*),optional                                         :: axis       !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x))               :: Fdelta
     character(len=1)                                                  :: axis_
@@ -188,7 +188,9 @@ contains
     axis_="m";if(present(axis))axis_=str(to_lower(axis))
     !
     Fdelta=zero
-    !    
+    !
+    if(.not.dmft_bath%status)stop "fdelta_bath_array error: dmft_bath not allocated"
+    !
     if(ed_mode/="superc")then
        print*,"fdelta_bath_array WARNING: called with ed_mode != superc. Return zero"
        call sleep(2000)
@@ -197,10 +199,10 @@ contains
     !
     select case(bath_type)
     case default;stop "fdelta_bath_array error: bath_type not supported"
-    case("normal")  ;FDelta = fdelta_bath_array_normal(x,dmft_bath_,axis_)
-    case("hybrid")  ;FDelta = fdelta_bath_array_hybrid(x,dmft_bath_,axis_)
-    case("replica") ;FDelta = fdelta_bath_array_replica(x,dmft_bath_,axis_)
-    case("general") ;FDelta = fdelta_bath_array_general(x,dmft_bath_,axis_)
+    case("normal")  ;FDelta = fdelta_bath_array_normal(x,axis_)
+    case("hybrid")  ;FDelta = fdelta_bath_array_hybrid(x,axis_)
+    case("replica") ;FDelta = fdelta_bath_array_replica(x,axis_)
+    case("general") ;FDelta = fdelta_bath_array_general(x,axis_)
     end select
     !
   end function fdelta_bath_array
@@ -221,12 +223,11 @@ contains
   !##################################################################
   include "g0and_functions/g0and_normal.f90"
   include "g0and_functions/g0and_hyrege.f90"
-  function g0and_bath_array(x,dmft_bath_,axis) result(G0and)
+  function g0and_bath_array(x,axis) result(G0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     complex(8),dimension(:),intent(in)                  :: x          !complex  array for the frequency
-    type(effective_bath)                                :: dmft_bath_ !the current :f:var:`effective_bath` instance
     character(len=*),optional                           :: axis       !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis    
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x)) :: G0and
     character(len=1)                                    :: axis_
@@ -235,12 +236,14 @@ contains
     !
     G0and = zero
     !
+    if(.not.dmft_bath%status)stop "g0and_bath_array error: dmft_bath not allocated"
+    !
     select case(bath_type)
     case default;stop "G0and_bath_array error: bath_type not supported"
     case("normal")
-       G0and = G0and_bath_array_normal(x,dmft_bath_,axis_)
+       G0and = G0and_bath_array_normal(x,axis_)
     case("hybrid","replica","general")
-       G0and = G0and_bath_array_hyrege(x,dmft_bath_,axis_)
+       G0and = G0and_bath_array_hyrege(x,axis_)
     end select
     !
   end function g0and_bath_array
@@ -248,12 +251,11 @@ contains
 
   include "g0and_functions/f0and_normal.f90"
   include "g0and_functions/f0and_hyrege.f90"
-  function f0and_bath_array(x,dmft_bath_,axis) result(F0and)
+  function f0and_bath_array(x,axis) result(F0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     complex(8),dimension(:),intent(in)                  :: x !complex  array for the frequency
-    type(effective_bath)                                :: dmft_bath_ !the current :f:var:`effective_bath` instance
     character(len=*),optional                           :: axis!string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis    
     character(len=1)                                    :: axis_
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x)) :: F0and
@@ -261,6 +263,8 @@ contains
     axis_="m";if(present(axis))axis_=str(to_lower(axis))
     !
     F0and=zero
+    !
+    if(.not.dmft_bath%status)stop "f0and_bath_array error: dmft_bath not allocated"
     !
     if(ed_mode/="superc")then
        print*,"f0and_bath_array WARNING: called with ed_mode != superc. Return zero"
@@ -271,9 +275,9 @@ contains
     select case(bath_type)
     case default;stop "f0and_bath_array error: bath_type not supported"
     case("normal")
-       F0and = f0and_bath_array_normal(x,dmft_bath_,axis_)
+       F0and = f0and_bath_array_normal(x,axis_)
     case("hybrid","replica","general")
-       F0and = f0and_bath_array_hyrege(x,dmft_bath_,axis_)
+       F0and = f0and_bath_array_hyrege(x,axis_)
     end select
     !
   end function f0and_bath_array
@@ -293,12 +297,11 @@ contains
   !##################################################################  
   include "invg0_functions/invg0_normal.f90"
   include "invg0_functions/invg0_hyrege.f90"
-  function invg0_bath_array(x,dmft_bath_,axis) result(G0and)
+  function invg0_bath_array(x,axis) result(G0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     complex(8),dimension(:),intent(in)                  :: x          !complex  array for the frequency
-    type(effective_bath)                                :: dmft_bath_ !the current :f:var:`effective_bath` instance
     character(len=*),optional                           :: axis       !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis    
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x)) :: G0and    
     character(len=1)                                    :: axis_
@@ -306,12 +309,15 @@ contains
     axis_="m";if(present(axis))axis_=str(to_lower(axis))
     !
     G0and = zero
+    !
+    if(.not.dmft_bath%status)stop "invg0_bath_array error: dmft_bath not allocated"
+    !
     select case(bath_type)
     case default;stop "invg0_bath_array error: bath_type not supported"
     case("normal")
-       G0and = invg0_bath_array_normal(x,dmft_bath_,axis_)
+       G0and = invg0_bath_array_normal(x,axis_)
     case("hybrid","replica","general")
-       G0and = invg0_bath_array_hyrege(x,dmft_bath_,axis_)
+       G0and = invg0_bath_array_hyrege(x,axis_)
     end select
   end function invg0_bath_array
 
@@ -319,12 +325,11 @@ contains
 
   include "invg0_functions/invf0_normal.f90"
   include "invg0_functions/invf0_hyrege.f90"
-  function invf0_bath_array(x,dmft_bath_,axis) result(F0and)
+  function invf0_bath_array(x,axis) result(F0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
     complex(8),dimension(:),intent(in)                  :: x          !complex  array for the frequency
-    type(effective_bath)                                :: dmft_bath_ !the current :f:var:`effective_bath` instance
     character(len=*),optional                           :: axis       !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis    
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x)) :: F0and
     character(len=1)                                    :: axis_
@@ -332,6 +337,8 @@ contains
     axis_="m";if(present(axis))axis_=str(to_lower(axis))
     !
     F0and=zero
+    !
+    if(.not.dmft_bath%status)stop "invf0_bath_array error: dmft_bath not allocated"
     !
     if(ed_mode/="superc")then
        print*,"f0and_bath_array WARNING: called with ed_mode != superc. Return zero"
@@ -342,9 +349,9 @@ contains
     select case(bath_type)
     case default;stop "f0and_bath_array error: bath_type not supported"
     case("normal")
-       F0and = invf0_bath_array_normal(x,dmft_bath_,axis_)
+       F0and = invf0_bath_array_normal(x,axis_)
     case("hybrid","replica","general")
-       F0and = invf0_bath_array_hyrege(x,dmft_bath_,axis_)
+       F0and = invf0_bath_array_hyrege(x,axis_)
     end select
     !
   end function invf0_bath_array
@@ -371,7 +378,6 @@ contains
     character(len=*),optional                           :: axis !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis 
     character(len=*),optional                           :: type !string indicating the desired function, :code:`'n'` for normal (default), :code:`'a'` for anomalous
     !
-    type(effective_bath)                                :: dmft_bath_
     logical                                             :: check
     character(len=1)                                    :: axis_,type_
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x)) :: g0
@@ -381,16 +387,16 @@ contains
     type_='n';if(present(type))type_=trim(type)
     check= check_bath_dimension(bath_)
     if(.not.check)stop "g0and_bath_mats_main_ error: wrong bath dimensions"
-    call allocate_dmft_bath(dmft_bath_)
-    call set_dmft_bath(bath_,dmft_bath_)
+    call allocate_dmft_bath()
+    call set_dmft_bath(bath_)
     select case(type_)
     case default;stop "ed_get_g0and ERROR: type is wrong: either Normal or Anomalous"
     case ('n','N')
-       g0 = g0and_bath_function(x,dmft_bath_)
+       g0 = g0and_bath_function(x)
     case('a','A')
-       g0 = f0and_bath_function(x,dmft_bath_)
+       g0 = f0and_bath_function(x)
     end select
-    call deallocate_dmft_bath(dmft_bath_)
+    call deallocate_dmft_bath()
     !
     L=size(x)
     call assert_shape(g0and,[Nspin*Norb,Nspin*Norb,L],'ed_get_g0and','g0and')
@@ -404,7 +410,6 @@ contains
     character(len=*),optional                           :: axis
     character(len=*),optional                           :: type
     !
-    type(effective_bath)                                :: dmft_bath_
     logical                                             :: check
     character(len=1)                                    :: axis_,type_
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x)) :: g0
@@ -414,16 +419,16 @@ contains
     type_='n';if(present(type))type_=trim(type)
     check= check_bath_dimension(bath_)
     if(.not.check)stop "g0and_bath_mats_main_ error: wrong bath dimensions"
-    call allocate_dmft_bath(dmft_bath_)
-    call set_dmft_bath(bath_,dmft_bath_)
+    call allocate_dmft_bath()
+    call set_dmft_bath(bath_)
     select case(type_)
     case default;stop "ed_get_g0and ERROR: type is wrong: either Normal or Anomalous"
     case ('n','N')
-       g0 = g0and_bath_function(x,dmft_bath_)
+       g0 = g0and_bath_function(x)
     case('a','A')
-       g0 = f0and_bath_function(x,dmft_bath_)
+       g0 = f0and_bath_function(x)
     end select
-    call deallocate_dmft_bath(dmft_bath_)
+    call deallocate_dmft_bath()
     !
     L=size(x)
     call assert_shape(g0and,[Nspin,Nspin,Norb,Norb,L],'ed_get_g0and','g0and')
@@ -448,7 +453,6 @@ contains
     character(len=*),optional                           :: axis !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis 
     character(len=*),optional                           :: type !string indicating the desired function, :code:`'n'` for normal (default), :code:`'a'` for anomalous
     !
-    type(effective_bath)                                :: dmft_bath_
     logical                                             :: check
     character(len=1)                                    :: axis_,type_
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x)) :: d0
@@ -458,16 +462,16 @@ contains
     type_='n';if(present(type))type_=trim(type)
     check= check_bath_dimension(bath_)
     if(.not.check)stop "delta_bath_mats_main_ error: wrong bath dimensions"
-    call allocate_dmft_bath(dmft_bath_)
-    call set_dmft_bath(bath_,dmft_bath_)
+    call allocate_dmft_bath()
+    call set_dmft_bath(bath_)
     select case(type_)
     case default;stop "ed_get_delta ERROR: type is wrong: either Normal or Anomalous"
     case ('n','N')
-       d0 = delta_bath_function(x,dmft_bath_,axis_)
+       d0 = delta_bath_function(x,axis_)
     case('a','A')
-       d0 = fdelta_bath_function(x,dmft_bath_,axis_)
+       d0 = fdelta_bath_function(x,axis_)
     end select
-    call deallocate_dmft_bath(dmft_bath_)
+    call deallocate_dmft_bath()
     !
     L=size(x)
     call assert_shape(delta,[Nspin*Norb,Nspin*Norb,L],'ed_get_delta','delta')
@@ -481,7 +485,6 @@ contains
     character(len=*),optional                           :: axis
     character(len=*),optional                           :: type
     !
-    type(effective_bath)                                :: dmft_bath_
     logical                                             :: check
     character(len=1)                                    :: axis_,type_
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x)) :: d0
@@ -491,16 +494,16 @@ contains
     type_='n';if(present(type))type_=trim(type)
     check= check_bath_dimension(bath_)
     if(.not.check)stop "delta_bath_mats_main_ error: wrong bath dimensions"
-    call allocate_dmft_bath(dmft_bath_)
-    call set_dmft_bath(bath_,dmft_bath_)
+    call allocate_dmft_bath()
+    call set_dmft_bath(bath_)
     select case(type_)
     case default;stop "ed_get_delta ERROR: type is wrong: either Normal or Anomalous"
     case ('n','N')
-       d0 = delta_bath_function(x,dmft_bath_,axis_)
+       d0 = delta_bath_function(x,axis_)
     case('a','A')
-       d0 = fdelta_bath_function(x,dmft_bath_,axis_)
+       d0 = fdelta_bath_function(x,axis_)
     end select
-    call deallocate_dmft_bath(dmft_bath_)
+    call deallocate_dmft_bath()
     !
     L=size(x)
     call assert_shape(delta,[Nspin,Nspin,Norb,Norb,L],'ed_get_delta','delta')

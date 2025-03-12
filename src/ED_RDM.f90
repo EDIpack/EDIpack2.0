@@ -15,10 +15,6 @@ MODULE ED_RDM
   private 
 
 
-  interface get_impurity_rdm
-     module procedure :: get_rdm_single
-  end interface get_impurity_rdm
-
   !>>DA RIVEDERE<<
   interface get_reduced_rdm
      module procedure :: get_reduced_rdm_global
@@ -32,12 +28,8 @@ MODULE ED_RDM
 
 
   public :: rdm_impurity
-  public :: get_impurity_rdm
   public :: get_reduced_rdm
   public :: print_rdm
-
-
-
 
 
 contains
@@ -74,23 +66,6 @@ contains
 
 
 
-  subroutine get_rdm_single(dm,doprint)
-    complex(8),dimension(:,:),allocatable,intent(inout) :: dm
-    logical               ,intent(in) ,optional         :: doprint
-    logical                                             :: doprint_
-    doprint_=.false.; if(present(doprint)) doprint_=doprint
-    if(.not.allocated(impurity_density_matrix))stop "ERROR: impurity_density_matrix is not allocated"
-    !
-    if(allocated(dm))deallocate(dm)
-    allocate(dm, source=impurity_density_matrix)
-    !
-    if(doprint_)call print_rdm(dm,4**Norb)
-    !
-  end subroutine get_rdm_single
-
-
-
-
   subroutine get_reduced_rdm_global(rdm,orbital_mask,doprint)
     complex(8),dimension(:,:),allocatable,intent(inout) :: rdm
     logical,dimension(Norb),intent(in)                  :: orbital_mask
@@ -104,6 +79,7 @@ contains
     case("nonsu2");stop "it is not implemented"
     end select
   end subroutine get_reduced_rdm_global
+
 
 
   subroutine get_reduced_rdm_normal(rdm,orbital_mask,doprint)
@@ -243,7 +219,6 @@ contains
       tracing_state = bjoin(tracing_ibits,Norb-Nred)
       !
     end subroutine split_state
-
   end subroutine get_reduced_rdm_normal
 
 
@@ -259,6 +234,20 @@ contains
   !##################################################################
   !##################################################################
 
+  ! subroutine get_rdm_single(rdm,doprint)
+  !   complex(8),dimension(:,:),allocatable,intent(inout) :: rdm
+  !   logical,intent(in),optional                         :: doprint
+  !   logical                                             :: doprint_
+  !   !
+  !   doprint_=.false.; if(present(doprint)) doprint_=doprint
+  !   if(.not.allocated(impurity_density_matrix))stop "ERROR: impurity_density_matrix is not allocated"
+  !   !
+  !   if(allocated(rdm))deallocate(rdm)
+  !   allocate(rdm, source=impurity_density_matrix)
+  !   !
+  !   if(doprint_)call print_rdm(rdm,4**Norb)
+  !   !
+  ! end subroutine get_rdm_single
 
 
 

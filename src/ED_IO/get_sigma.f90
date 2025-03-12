@@ -16,7 +16,7 @@ subroutine ed_get_sigma_site_n3(self,axis,type,z)
   !
   !
   call allocate_grids
-  if(.not.dmft_bath%status)call read_dmft_bath(dmft_bath)
+  if(.not.dmft_bath%status)call read_dmft_bath()
   if(.not.allocated(impGmatrix))call read_impGmatrix()
   !
   if(present(z))then
@@ -46,7 +46,7 @@ subroutine ed_get_sigma_site_n3(self,axis,type,z)
   self = nn2so_reshape( gf, Nspin,Norb,L)
   !
   call deallocate_grids
-  call deallocate_dmft_bath(dmft_bath)
+  call deallocate_dmft_bath()
   !
 end subroutine ed_get_sigma_site_n3
 
@@ -67,7 +67,7 @@ subroutine ed_get_sigma_site_n5(self,axis,type,z)
   !
   !
   call allocate_grids
-  if(.not.dmft_bath%status)call read_dmft_bath(dmft_bath)
+  if(.not.dmft_bath%status)call read_dmft_bath()
   if(.not.allocated(impGmatrix))call read_impGmatrix()
   !
   if(present(z))then
@@ -95,7 +95,7 @@ subroutine ed_get_sigma_site_n5(self,axis,type,z)
   end select
   !
   call deallocate_grids
-  call deallocate_dmft_bath(dmft_bath)
+  call deallocate_dmft_bath()
   !
 end subroutine ed_get_sigma_site_n5
 

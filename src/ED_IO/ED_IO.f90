@@ -138,11 +138,13 @@ MODULE ED_IO
      !
      !The :f:var:`self` variable can have the following dimensions:
      ! 
-     !  * scalar: if :f:var:`component` and :f:var:`iorb` are provided for single-impurity DMFT, given magnetization component for that orbital
-     !  * [:f:var:`norb`]: for single-impurity DMFT, one magnetization component for all orbitals
+     !  * scalar: if :f:var:`component` and :f:var:`iorb` are provided returns  given magnetization component for that orbital
+     !  * [:f:var:`norb`]: returns the specified magnetization component for all orbitals
+     !  * [:code:`3` , :f:var:`norb`, ]: returns all components for all orbitals
      !
      module procedure :: ed_get_mag_n0
      module procedure :: ed_get_mag_n1
+     module procedure :: ed_get_mag_n2
   end interface ed_get_mag
 
   interface ed_get_docc
@@ -289,16 +291,26 @@ MODULE ED_IO
 
 
 
-
-
   interface ed_get_sp_dm
-     !This subroutine returns to the user the impurity density matrix.
+     !This subroutine returns to the user the impurity single particle density matrix.
      !The density matrix is an array having the following possible dimensions:
      ! 
-     !  * [:f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin`:math:`\cdot`:f:var:`norb`]  for single-impurity DMFT
+     !  * [:f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin`:math:`\cdot`:f:var:`norb`] 
      !
-     module procedure :: get_density_matrix_single
+     module procedure :: get_density_matrix_n2
+     module procedure :: get_density_matrix_n4
   end interface ed_get_sp_dm
+
+
+
+  interface ed_get_impurity_rdm
+     !This subroutine returns to the user the impurity reduced density matrix (RDM).
+     !The RDM is an array having the following dimensions:
+     ! 
+     !  * [:math:`4^N` , :math:`4^N` ]  where :math:`N` = :f:var:`Norb`
+     !
+     module procedure :: get_rdm_single
+  end interface ed_get_impurity_rdm
 
 
 
@@ -328,11 +340,13 @@ MODULE ED_IO
   public :: ed_get_dund
   public :: ed_get_dse
   public :: ed_get_dph
-  public :: ed_get_imp_info
   public :: ed_get_sp_dm
+  public :: ed_get_impurity_rdm
   public :: ed_get_quantum_SOC_operators
-
-
+  public :: ed_get_imp_info
+  public :: ed_get_nsectors
+  public :: ed_get_neigen_sector
+  public :: ed_set_neigen_sector
 
   !****************************************************************************************!
   !****************************************************************************************!
@@ -404,15 +418,31 @@ contains
 
 
 
+  !+--------------------------------------------------------------------------+!
+  ! PURPOSE: Impurity RDM
+  !+--------------------------------------------------------------------------+!
+  include "get_imp_rdm.f90"
 
 
 
 
 
 
+  function ed_get_nsectors() result(N)
+    integer :: N
+    N = Nsectors
+  end function ed_get_nsectors
 
 
+  subroutine ed_get_neigen_sector(nvec)
+    integer,dimension(Nsectors) :: nvec
+    nvec = neigen_sector    
+  end subroutine ed_get_neigen_sector
 
+  subroutine ed_set_neigen_sector(nvec)
+    integer,dimension(Nsectors) :: nvec
+    neigen_sector = nvec 
+  end subroutine ed_set_neigen_sector
 
 
   !+-------------------------------------------------------------------+

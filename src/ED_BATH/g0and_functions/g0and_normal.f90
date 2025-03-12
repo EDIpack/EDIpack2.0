@@ -1,9 +1,8 @@
-function g0and_bath_array_normal(x,dmft_bath_,axis) result(G0and)
+function g0and_bath_array_normal(x,axis) result(G0and)
 #if __INTEL_COMPILER
   use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
   complex(8),dimension(:),intent(in)                  :: x          !complex  array for the frequency
-  type(effective_bath)                                :: dmft_bath_ !the current :f:var:`effective_bath` instance
   character(len=*),optional                           :: axis       !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis    
   complex(8),dimension(Nspin,Nspin,Norb,Norb,size(x)) :: G0and
   character(len=1)                                    :: axis_
@@ -24,7 +23,7 @@ function g0and_bath_array_normal(x,dmft_bath_,axis) result(G0and)
   select case(ed_mode)
   case default;stop "g0and_bath_array_normal error: ed_mode not supported"
   case ("normal")
-     Delta = delta_bath_array(x,dmft_bath_)
+     Delta = delta_bath_array(x)
      do ispin=1,Nspin
         do iorb=1,Norb
            fg(:) = x(:) + xmu - impHloc(ispin,ispin,iorb,iorb) - Delta(ispin,ispin,iorb,iorb,:)
@@ -32,8 +31,8 @@ function g0and_bath_array_normal(x,dmft_bath_,axis) result(G0and)
         enddo
      enddo
   case ("superc")
-     Delta =  delta_bath_array(x,dmft_bath_,axis_)
-     Fdelta= fdelta_bath_array(x,dmft_bath_,axis_)
+     Delta =  delta_bath_array(x,axis_)
+     Fdelta= fdelta_bath_array(x,axis_)
      select case(axis_)
      case default ;stop "g0and_bath_array_normal error: axis not supported"         !mats
      case ("m")
@@ -57,7 +56,7 @@ function g0and_bath_array_normal(x,dmft_bath_,axis) result(G0and)
      end select
   case ("nonsu2")
      allocate(fgorb(Nspin,Nspin),zeta(Nspin,Nspin))
-     Delta = delta_bath_array(x,dmft_bath_)
+     Delta = delta_bath_array(x)
      do i=1,L
         zeta  = (x(i) + xmu)*zeye(Nspin)
         fgorb = zero
