@@ -20,10 +20,10 @@ subroutine init_Hreplica_symmetries_site_c(Hvec,lambdavec,Nsym) bind(c, name='in
   call ed_set_Hreplica(Hvec,lambdavec)
 end subroutine init_Hreplica_symmetries_site_C
 
-subroutine init_Hreplica_symmetries_ineq_c(Hvec,lambdavec,Nlat,Nsym) bind(c, name='init_Hreplica_symmetries_ineq')
-  use, intrinsic :: iso_c_binding
-  integer(c_int),value                                     :: Nlat, Nsym
-  real(c_double),dimension(Nspin,Nspin,Norb,Norb,Nsym)     :: Hvec
-  real(c_double),dimension(Nlat,Nsym)                      :: lambdavec
-  call ed_set_Hreplica(Hvec,lambdavec)
-end subroutine init_Hreplica_symmetries_ineq_c
+! subroutine init_Hreplica_symmetries_ineq_c(Hvec,lambdavec,Nlat,Nsym) bind(c, name='init_Hreplica_symmetries_ineq')
+!   use, intrinsic :: iso_c_binding
+!   integer(c_int),value                                     :: Nlat, Nsym
+!   real(c_double),dimension(Nspin,Nspin,Norb,Norb,Nsym)     :: Hvec
+!   real(c_double),dimension(Nlat,Nsym)                      :: lambdavec
+!   call ed_set_Hreplica(Hvec,lambdavec)
+! end subroutine init_Hreplica_symmetries_ineq_c
