@@ -415,7 +415,7 @@ subroutine get_pairChi_c(self,zeta,dim_zeta,zetaflag,axis) bind(c,name='ed_get_p
   !
 end subroutine get_pairChi_c
 
-subroutine get_exctChi_c(self,zeta,dim_zeta,zetaflag,axis,Nsites,latticeflag) bind(c,name='ed_get_exctchi')
+subroutine get_exctChi_c(self,zeta,dim_zeta,zetaflag,axis) bind(c,name='ed_get_exctchi')
   use, intrinsic :: iso_c_binding
   integer(c_int),value                                                :: dim_zeta
   complex(c_double_complex),dimension(dim_zeta)                       :: zeta
