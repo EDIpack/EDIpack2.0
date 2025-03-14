@@ -200,7 +200,7 @@ contains
 
   subroutine save_Hreplica(file)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nnambu,Nspin,Norb
+    use ED_INPUT_VARS, only: Nspin,Norb
 #endif
     character(len=*)                                          :: file
     integer                                                   :: unit
@@ -232,7 +232,7 @@ contains
 
   subroutine read_Hreplica(file)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nnambu,Nspin,Norb
+    use ED_INPUT_VARS, only: Nspin,Norb
 #endif
     character(len=*)                                          :: file
     integer                                                   :: unit
@@ -508,7 +508,7 @@ contains
 
   subroutine print_Hreplica(H,file)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nnambu,Nspin,Norb
+    use ED_INPUT_VARS, only: Nspin,Norb
 #endif
     complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: H
     character(len=*),optional                                 :: file
