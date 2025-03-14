@@ -3,46 +3,17 @@
 Install
 #####################
 
-EDIpack2.0 is available in the form of a static Fortran library
-`libedipack2.a` and the related Fortran module `EDIPACK2`.
-Installation is available using CMake. In the current release the
-library enables standard Fortran API and Python API `EDIpy2`. 
+**EDIpack2** is available in the form of a static Fortran library
+(`libedipack2.a`) and the related Fortran module `EDIPACK2`.
+The installation is available using CMake.
 
-Anaconda
-======================
+Additionally, the current release includes a shared dynamical library
+(`libedi2py.so`/ `.dylib`) to interface **EDIpack2** with Python
+leveraging over `C` interoperability. 
 
-We provide Linux and MacOS packages for the `Anaconda <https://www.anaconda.com/>`_ 
-distribution. To install the module, the virtual environment of choice should include
-python 3.10 or later.
-
-Once a command-line tool such as `conda <https://www.anaconda.com/>`_ or 
-`mamba <https://mamba.readthedocs.io/en/latest/>`_ is installed, an environment 
-using one of the available python version can be created, and then the EDIpack2.0 
-package can be installed:
-
-.. code-block:: shell
-
-   conda create -n edipack
-   conda activate edipack
-   conda install -c conda-forge -c edipack edipack2
+Finally an installation method is provided through Anaconda. 
 
 
-this installs a bundle of the `scifor` and `edipack2` libraries. In order to compile a
-fortran program linking the libraries, we provide  `.pc` files which are readable via 
-:code:`pkg-config`. If not present, the :code:`compilers` and :code:`pkg-config` conda
-packages need to be installed
-
-.. code-block:: shell
-
-   conda install compilers
-   conda install pkg-config
-   
-The inclusion and linking flag can then be obtained via 
-
-.. code-block:: shell
-
-   pkg-config --cflags edipack2 scifor
-   pkg-config --libs   edipack2 scifor
 
 Compiling from source
 ======================
@@ -184,6 +155,42 @@ or
    ninja uninstall
 
 
+
+Anaconda
+======================
+
+We provide Linux and MacOS packages for the `Anaconda <https://www.anaconda.com/>`_ 
+distribution. To install the module, the virtual environment of choice should include
+python 3.10 or later.
+
+Once a command-line tool such as `conda <https://www.anaconda.com/>`_ or 
+`mamba <https://mamba.readthedocs.io/en/latest/>`_ is installed, an environment 
+using one of the available python version can be created, and then the EDIpack2.0 
+package can be installed:
+
+.. code-block:: shell
+
+   conda create -n edipack
+   conda activate edipack
+   conda install -c conda-forge -c edipack edipack2
+
+
+this installs a bundle of the `scifor` and `edipack2` libraries. In order to compile a
+fortran program linking the libraries, we provide  `.pc` files which are readable via 
+:code:`pkg-config`. If not present, the :code:`compilers` and :code:`pkg-config` conda
+packages need to be installed
+
+.. code-block:: shell
+
+   conda install compilers
+   conda install pkg-config
+   
+The inclusion and linking flag can then be obtained via 
+
+.. code-block:: shell
+
+   pkg-config --cflags edipack2 scifor
+   pkg-config --libs   edipack2 scifor
 
 
 Install Python API

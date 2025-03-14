@@ -1,10 +1,11 @@
 MODULE ED_GFMATRIX
   !
-  !Contains definition :f:var:`gfmatrix` data structures which
-  !constains all the weights and poles of the impurity Green's
-  !functions. This is essentially the result of the DMFT calculation,
+  !Contains definition of the :f:var:`gfmatrix` class. This 
+  !constains all the weights and poles of the dynamical correlation functions in the sub-classes :f:var:`gfspectrum` and :f:var:`gfchannel`.
+  !This is one of the key results of the calculation,
   !used to generate the Green's functions and the related Self-energy
-  !on any given array of points in the complex plane :f:math:`z\in\mathbb{C}`. 
+  !on any given array of points in the complex frequency plane :math:`z\in\mathbb{C}`.
+  !
   !
   USE SF_CONSTANTS
   USE SF_IOTOOLS, only:free_unit,reg,str
@@ -23,23 +24,39 @@ MODULE ED_GFMATRIX
   !their combination thereof as well as for any state |n> of the spectrum such that
   !GF(z) = sum w/z-e
   type GFspectrum
+     !
+     !Sub-Class containins the actual weight and the poles in two separate rank-1 array.
+     !
      complex(8),dimension(:),allocatable       :: weight
      real(8),dimension(:),allocatable          :: poles
   end type GFspectrum
 
   !N_channel = c,cdag,c \pm cdag, c \pm i*cdag, ...
   type GFchannel
+     !
+     !Sub-class containing a given set of :f:var:`gfspectrum` weights and poles.
+     !Each instance of this class correponds to a given input state and a given operator in the Kallen-Lehman representation.  
+     !
      type(GFspectrum),dimension(:),allocatable :: channel 
   end type GFchannel
 
   !state_list%size = # of state in the spectrum 
   type GFmatrix
+     !
+     !Type storing all the weights and poles of a given dynamical correlation function, mostly Green's functions,
+     !obtained through the dynamical Lanczos algorithm. This structure is used to evalaute on-the-fly any
+     !given dynamical function at any point in the complex frequency plane using additional procedures
+     !contained in the **EDIpack2** library. 
+     !
      type(GFchannel),dimension(:),allocatable  :: state
      logical                                   :: status=.false.
   end type GFmatrix
 
 
   interface allocate_GFmatrix
+     !
+     ! Class interface to allocate the internal components of the :f:var:`gfmatrix` type 
+     !
      module procedure :: allocate_GFmatrix_Nstate
      module procedure :: allocate_GFmatrix_Nchan
      module procedure :: allocate_GFmatrix_Nexc
@@ -47,6 +64,9 @@ MODULE ED_GFMATRIX
 
 
   interface deallocate_GFmatrix
+     !
+     ! Class interface to deallocate the :f:var:`gfmatrix` type and all its components.
+     !
      module procedure :: deallocate_GFmatrix_single
      module procedure :: deallocate_GFmatrix_all1
      module procedure :: deallocate_GFmatrix_all2
@@ -56,6 +76,9 @@ MODULE ED_GFMATRIX
   end interface deallocate_GFmatrix
 
   interface write_GFmatrix
+     !
+     ! Class interface to write the :f:var:`gfmatrix` to a given unit
+     !
      module procedure :: write_GFmatrix_single
      module procedure :: write_GFmatrix_all1
      module procedure :: write_GFmatrix_all2
@@ -65,6 +88,9 @@ MODULE ED_GFMATRIX
   end interface write_GFmatrix
 
   interface read_GFmatrix
+     !
+     ! Class interface to read the :f:var:`gfmatrix` from a given unit
+     !
      module procedure :: read_GFmatrix_single
      module procedure :: read_GFmatrix_all1
      module procedure :: read_GFmatrix_all2

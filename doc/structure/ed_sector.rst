@@ -1,7 +1,21 @@
 Quantum Numbers Sectors
 ============================
 
-The :mod:`ed_sector` represents a key part of the ED code. Here the
+The direct diagonalization of the Hamiltonian for a finite system
+becomes quickly impossible due to the exponential increase of its
+size :math:`D^{Ns}`, where :math:`D` is the dimension of the local
+Hilbert space (:math:`D=4` for spin-:math:`1/2` electrons).
+
+A way to partially soften such severe behavior is to take into account
+conserved quantities. For any quantity :math:`{\cal Q}` such that
+:math:`[H,{\cal Q}]=0`,  we can separate the structure of the
+Hamiltonian matrix into different blocks, each corresponding to a
+discrete value :math:`q` of the spectrum of :math:`Q`.
+Analyzing one-by-one such symmetry sector it becomes possible to
+construct at least part of the energy spectrum.
+
+
+The :mod:`ED_SECTOR` represents a key part of the ED code. Here the
 symmetry sectors construction  essentially consist in the determination of the
 injective map :math:`{\cal M}:{\cal S}(\vec{Q})\rightarrow{\cal F}`
 relating the states of the sectors :math:`|i\rangle\in{\cal
