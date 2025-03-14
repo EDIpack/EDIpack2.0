@@ -1,4 +1,7 @@
 subroutine ed_get_sigma_site_n3(self,axis,type,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:),intent(inout)   :: self ! Green's function matrix
   character(len=*),optional                   :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
   character(len=*),optional                   :: type ! Can be :f:var:`"n"` for Normal (default), :f:var:`"a"` for anomalous
@@ -51,6 +54,9 @@ subroutine ed_get_sigma_site_n3(self,axis,type,z)
 end subroutine ed_get_sigma_site_n3
 
 subroutine ed_get_sigma_site_n5(self,axis,type,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:,:,:),intent(inout) :: self
   character(len=*),optional                     :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
   character(len=*),optional                     :: type ! Can be :f:var:`"n"` for Normal (default), :f:var:`"a"` for anomalous

@@ -68,6 +68,9 @@ contains
   !PURPOSE  : Evaluate and print out many interesting physical qties
   !+-------------------------------------------------------------------+
   subroutine observables_superc()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !Calculate the values of the local observables
     integer                 :: val
     integer,dimension(2*Ns) :: ib
@@ -376,6 +379,9 @@ contains
   !PURPOSE  : Get internal energy from the Impurity problem.
   !+-------------------------------------------------------------------+
   subroutine local_energy_superc()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !Calculate the values of the local observables
     integer,dimension(2*Ns) :: ib
     integer,dimension(2,Ns) :: Nud

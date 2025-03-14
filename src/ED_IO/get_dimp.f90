@@ -1,4 +1,7 @@
 subroutine ed_get_dimp_site_n1(self,axis,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:),intent(inout)       :: self ! phonon's Green's function matrix
   character(len=*),optional                   :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
   complex(8),dimension(:),optional            :: z    ! User provided array of complex frequency where to evaluate Self
@@ -22,7 +25,7 @@ subroutine ed_get_dimp_site_n1(self,axis,z)
      end select
   endif
   !
-  self = get_impD(z_,axis_)
+  !self = get_impD(z_,axis_)
   call deallocate_grids
   !
 end subroutine ed_get_dimp_site_n1

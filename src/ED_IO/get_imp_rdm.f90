@@ -1,5 +1,8 @@
 
 subroutine get_rdm_single(rdm,doprint)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:),intent(inout) :: rdm
   logical,intent(in),optional             :: doprint
   logical                                 :: doprint_
@@ -18,6 +21,9 @@ subroutine get_rdm_single(rdm,doprint)
 contains
   !
   subroutine print_rdm(dm,Nrdm)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                  ,intent(in)            :: Nrdm
     complex(8),dimension(:,:),intent(in)            :: dm
     integer                                         :: unit

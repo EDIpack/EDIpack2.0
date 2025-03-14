@@ -86,6 +86,9 @@ contains
   !+------------------------------------------------------------------+
 
   function get_spinChi(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)         :: zeta
     character(len=*),optional                  :: axis
     complex(8),dimension(Norb,Norb,size(zeta)) :: self
@@ -99,6 +102,9 @@ contains
 
 
   function get_densChi(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)         :: zeta
     character(len=*),optional                  :: axis
     complex(8),dimension(Norb,Norb,size(zeta)) :: self
@@ -112,6 +118,9 @@ contains
 
 
   function get_pairChi(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)         :: zeta
     character(len=*),optional                  :: axis
     complex(8),dimension(Norb,Norb,size(zeta)) :: self
@@ -125,6 +134,9 @@ contains
 
 
   function get_exctChi(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)           :: zeta
     character(len=*),optional                    :: axis
     complex(8),dimension(3,Norb,Norb,size(zeta)) :: self
@@ -217,6 +229,9 @@ contains
 
   ! SPIN-SPIN
   subroutine print_spinChi()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(Norb,Norb,Lmats) :: Cmats
     complex(8),dimension(Norb,Norb,Lreal) :: Creal
     complex(8),dimension(Norb,Norb,Ltau)  :: Ctau
@@ -245,6 +260,9 @@ contains
 
   ! DENSITY-DENSITY
   subroutine print_densChi()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(Norb,Norb,Lmats) :: Cmats
     complex(8),dimension(Norb,Norb,Lreal) :: Creal
     complex(8),dimension(Norb,Norb,Ltau)  :: Ctau
@@ -271,6 +289,9 @@ contains
 
   ! PAIR-PAIR
   subroutine print_pairChi()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(Norb,Norb,Lmats) :: Cmats
     complex(8),dimension(Norb,Norb,Lreal) :: Creal
     complex(8),dimension(Norb,Norb,Ltau)  :: Ctau
@@ -298,6 +319,9 @@ contains
 
   ! EXCITON
   subroutine print_exctChi()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(3,Norb,Norb,Lmats) :: Cmats
     complex(8),dimension(3,Norb,Norb,Lreal) :: Creal
     complex(8),dimension(3,Norb,Norb,Ltau)  :: Ctau

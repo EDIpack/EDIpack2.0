@@ -1,4 +1,7 @@
 subroutine get_density_matrix_n2(dm,iprint)!,custom_rot,dm_eig_,dm_rot_)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   !passed
   complex(8),intent(out) :: dm(:,:)
   logical,optional       :: iprint
@@ -25,6 +28,9 @@ subroutine get_density_matrix_n2(dm,iprint)!,custom_rot,dm_eig_,dm_rot_)
 end subroutine get_density_matrix_n2
 
 subroutine get_density_matrix_n4(dm,iprint)!,custom_rot,dm_eig_,dm_rot_)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   !passed
   complex(8),intent(out) :: dm(:,:,:,:)
   logical,optional       :: iprint
@@ -52,6 +58,9 @@ end subroutine get_density_matrix_n4
 
 
 subroutine print_dm(dm_,ndx)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   implicit none
   integer               ,intent(in) :: ndx
   complex(8),intent(in)             :: dm_(Nspin*Norb,Nspin*Norb)
