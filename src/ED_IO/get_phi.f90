@@ -1,4 +1,7 @@
 subroutine ed_get_phisc_n0(self,iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8)          :: self ! :math:`\phi` value or array of values
   integer,optional :: iorb ! first orbital index
   integer,optional :: jorb ! second orbital index
@@ -11,6 +14,9 @@ end subroutine ed_get_phisc_n0
 
 !phi(a,a) or phi_i(a_,a_)
 subroutine ed_get_phisc_n1(self,iorb,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:) :: self
   integer,optional     :: iorb
   integer,optional     :: Nlat ! number of inequivalent impurity sites for real-space DMFT
@@ -33,6 +39,9 @@ end subroutine ed_get_phisc_n1
 
 !phi_ab
 subroutine ed_get_phisc_n2(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:,:) :: self
   call assert_shape(self,[Norb,Norb],'ed_get_phisc','phisc')
   self = ed_phisc
@@ -41,6 +50,9 @@ end subroutine ed_get_phisc_n2
 
 !phi_i,ab
 subroutine ed_get_phisc_n3(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:,:,:) :: self
   integer                  :: Nlat
   if(.not.allocated(phisc_ineq))stop "ed_get_phisc error: phisc_ineq not allocated"

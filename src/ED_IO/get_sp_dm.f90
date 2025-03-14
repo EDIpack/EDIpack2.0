@@ -1,4 +1,7 @@
 subroutine get_density_matrix_single(dm_)!,custom_rot,dm_eig_,dm_rot_)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   !passed
   complex(8),allocatable,intent(out)           :: dm_(:,:)
   ! complex(8),allocatable,intent(in) ,optional  :: custom_rot(:,:)
@@ -58,6 +61,9 @@ end subroutine get_density_matrix_single
 
 
 subroutine get_density_matrix_lattice(dm_)!,custom_rot,dm_eig_,dm_rot_)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   implicit none
   !passed
   complex(8),allocatable,intent(out)           :: dm_(:,:,:)
@@ -133,6 +139,9 @@ end subroutine get_density_matrix_lattice
 
 
 subroutine print_dm(dm_,ndx)!,dm_rot_,dm_eig_,dm_custom_rot,ndx)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   implicit none
   integer               ,intent(in)            :: ndx
   complex(8),allocatable,intent(in)            :: dm_(:,:)

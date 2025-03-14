@@ -734,7 +734,7 @@ contains
   
   subroutine print_Hbuild(H,file)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nnambu,Nspin,Norb
+    use ED_INPUT_VARS, only: Nspin,Norb
 #endif
     complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: H
     character(len=*),optional                                 :: file

@@ -1,4 +1,7 @@
 subroutine ed_get_gimp_site_n3(self,axis,type,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:),intent(inout)   :: self ! Green's function matrix
   character(len=*),optional                   :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
   character(len=*),optional                   :: type ! Can be :f:var:`"n"` for Normal (default), :f:var:`"a"` for anomalous
@@ -46,6 +49,9 @@ subroutine ed_get_gimp_site_n3(self,axis,type,z)
 end subroutine ed_get_gimp_site_n3
 
 subroutine ed_get_gimp_site_n5(self,axis,type,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:,:,:),intent(inout) :: self
   character(len=*),optional                   :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
   character(len=*),optional                   :: type ! Can be :f:var:`"n"` for Normal (default), :f:var:`"a"` for anomalous
@@ -97,6 +103,9 @@ end subroutine ed_get_gimp_site_n5
 
 
 subroutine ed_get_gimp_lattice_n3(self,nlat,axis,type,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:),intent(inout)     :: self !! [Nlso,Nlso,:]
   integer,intent(in)                            :: nlat  ! Number of inequivalent impurity sites for real-space DMFT
   character(len=*),optional                     :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
@@ -171,6 +180,9 @@ subroutine ed_get_gimp_lattice_n3(self,nlat,axis,type,z)
 end subroutine ed_get_gimp_lattice_n3
 
 subroutine ed_get_gimp_lattice_n4(self,nlat,axis,type,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:,:),intent(inout) :: self !! [Nlat,Nso,Nso,:]
   integer,intent(in)                          :: nlat
   character(len=*),optional                   :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
@@ -244,6 +256,9 @@ subroutine ed_get_gimp_lattice_n4(self,nlat,axis,type,z)
 end subroutine ed_get_gimp_lattice_n4
 
 subroutine ed_get_gimp_lattice_n6(self,nlat,axis,type,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:,:,:,:),intent(inout) :: self
   integer,intent(in)                              :: nlat
   character(len=*),optional                       :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real

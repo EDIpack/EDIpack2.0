@@ -60,6 +60,9 @@ contains
   !+------------------------------------------------------------------+
 
   subroutine build_impG_normal()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     !Evaluates the impurity electrons Green's function :math:`G(z)` and the phonons one :math:`D(z)` using dynamical Lanczos method. The result is stored in rank-5 arrays :f:var:`impgmats`, :f:var:`impgreal` of dimensions [ |Nspin| , |Nspin| , |Norb| , |Norb| , :f:var:`Lmats` / :f:var:`Lreal` ] and rank-1 array :f:var:`impdmats`, :f:var:`impdreal`.    
     !
@@ -115,6 +118,9 @@ contains
 
 
   subroutine lanc_build_gf_normal_diag(iorb,ispin)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer,intent(in)          :: iorb,ispin
     !
     if(ed_verbose>1)write(LOGfile,*)"Get G_l"//str(iorb,3)//"_m"//str(iorb,3)//"_s"//str(ispin)
@@ -161,6 +167,9 @@ contains
 
 
   subroutine lanc_build_gf_normal_mix(iorb,jorb,ispin)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                     :: iorb,jorb,ispin
     !
     if(ed_verbose>1)write(LOGfile,*)"Get G_l"//str(iorb,3)//"_m"//str(jorb,3)//"_s"//str(ispin)
@@ -206,6 +215,9 @@ contains
 
 
   subroutine lanc_build_gf_phonon_main()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer,dimension(Ns_Ud)    :: iDimUps,iDimDws
     integer                     :: Nups(Ns_Ud)
     integer                     :: Ndws(Ns_Ud)
@@ -284,6 +296,9 @@ contains
 
 
   subroutine add_to_lanczos_gf_normal(vnorm2,Ei,alanc,blanc,isign,iorb,jorb,ispin,ichan,istate)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8)                                 :: vnorm2,pesoBZ,peso,pesoF
     real(8)                                    :: Ei,Egs,de
     integer                                    :: nlanc,itype
@@ -352,6 +367,9 @@ contains
 
 
   subroutine add_to_lanczos_phonon(vnorm2,Ei,alanc,blanc,istate)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     real(8)                                    :: vnorm2,Ei,Ej,Egs,pesoF,pesoAB,pesoBZ,de,peso
     integer                                    :: nlanc
     real(8),dimension(:)                       :: alanc
@@ -410,6 +428,9 @@ contains
 
 
   function get_impG_normal(zeta,axis) result(Gf)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     ! Reconstructs the system impurity electrons Green's functions using :f:var:`impgmatrix` to retrieve weights and poles.
     !
@@ -461,6 +482,9 @@ contains
   contains
     !
     subroutine get_normal_Gab(iorb,jorb,ispin)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
       integer,intent(in)                 :: iorb,jorb,ispin
       integer                            :: Nstates,istate
       integer                            :: Nchannels,ichan
@@ -496,6 +520,9 @@ contains
 
 
   function get_impD_normal(zeta,axis) result(G)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     ! Reconstructs the phonon Green's functions using :f:var:`impdmatrix` to retrieve weights and poles.
     !
@@ -559,6 +586,9 @@ contains
 
 
   function get_Sigma_normal(zeta,axis) result(Sigma)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                     :: zeta      !array of frequencies
     character(len=*),optional                              :: axis      !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(zeta)) :: Sigma,invG0,invG
@@ -612,6 +642,9 @@ contains
 
 
   subroutine PrintHmask()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     logical(8),dimension(Nspin,Nspin,Norb,Norb) :: Hmask
     integer                                     :: iorb,jorb,ispin,jspin
     Hmask= .true.
@@ -630,6 +663,9 @@ contains
 
 
   function Gbool(ispin,jspin,iorb,jorb) result(bool)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     logical(8),dimension(Nspin,Nspin,Norb,Norb) :: Hmask
     integer                                     :: iorb,jorb,ispin,jspin
     logical                                     :: bool

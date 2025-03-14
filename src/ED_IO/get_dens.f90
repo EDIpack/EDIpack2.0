@@ -1,4 +1,7 @@
 subroutine ed_get_dens_n0(self,iorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8) :: self !The density value or array of values
   integer,optional      :: iorb !the orbital index
   integer               :: iorb_
@@ -9,6 +12,9 @@ end subroutine ed_get_dens_n0
 
 
 subroutine ed_get_dens_n1(self,iorb,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:) :: self
   integer,optional     :: iorb 
   integer,optional     :: Nlat !the number of inequivalent impurity sites for real-space DMFT
@@ -30,6 +36,9 @@ end subroutine ed_get_dens_n1
 
 
 subroutine ed_get_dens_n2(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:,:) :: self
   integer                :: Nlat
   if(.not.allocated(dens_ineq))stop "ed_get_dens error: dens_ineq not allocated"
@@ -43,6 +52,9 @@ end subroutine ed_get_dens_n2
 
 
 subroutine ed_get_imp_info(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(2) :: self
   self = ed_imp_info
 end subroutine ed_get_imp_info

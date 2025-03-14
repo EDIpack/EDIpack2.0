@@ -52,6 +52,9 @@ contains
   !                            NONSU2
   !+------------------------------------------------------------------+
   subroutine build_impG_nonsu2()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     !
     !Evaluates the impurity electrons Green's functions :math:`G(z)` using dynamical Lanczos method. The result is stored in rank-5 arrays :f:var:`impgmats`, :f:var:`impgreal` , :f:var:`impfmats` , :f:var:`impfreal` of dimensions [ |Nspin| , |Nspin| , |Norb| , |Norb| , :f:var:`Lmats` / :f:var:`Lreal` ]
@@ -142,6 +145,9 @@ contains
 
   !PURPOSE: Evaluate the same orbital IORB, same spin ISPIN impurity GF.
   subroutine lanc_build_gf_nonsu2_diagOrb_diagSpin(iorb,ispin)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer      :: iorb,ispin,isite
     type(sector) :: sectorI,sectorJ
     integer :: ib(2*Ns)
@@ -191,6 +197,9 @@ contains
 
   !PURPOSE: Evaluate the  different orbital IORB,JORB, different spin ISPIN,JSPIN impurity GF.
   subroutine lanc_build_gf_nonsu2_mixOrb_mixSpin(iorb,jorb,ispin,jspin)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer      :: iorb,jorb,ispin,jspin
     type(sector) :: sectorI,sectorJ
     !
@@ -285,6 +294,9 @@ contains
 
 
   subroutine add_to_lanczos_gf_nonsu2(vnorm2,Ei,alanc,blanc,isign,iorb,jorb,ispin,jspin,ichan,istate)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8)                                 :: vnorm2,pesoBZ,peso
     real(8)                                    :: Ei,Egs,de
     integer                                    :: nlanc,itype
@@ -354,6 +366,9 @@ contains
 
 
   function get_impG_nonsu2(zeta,axis) result(Gf)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     ! Reconstructs the system impurity electrons Green's functions using :f:var:`impgmatrix` to retrieve weights and poles.
     !
@@ -460,6 +475,9 @@ contains
   contains
     !
     subroutine get_nonsu2_Gab(iorb,jorb,ispin,jspin)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
       integer,intent(in)                 :: iorb,jorb,ispin,jspin
       integer                            :: Nstates,istate
       integer                            :: Nchannels,ichan
@@ -501,6 +519,9 @@ contains
 
 
   function get_Sigma_nonsu2(zeta,axis) result(Sigma)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                     :: zeta
     character(len=*),optional                              :: axis       !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis
     character(len=1)                                       :: axis_
@@ -552,6 +573,9 @@ contains
 
 
   subroutine PrintHmask()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     logical(8),dimension(Nspin,Nspin,Norb,Norb) :: Hmask
     integer                                     :: iorb,jorb,ispin,jspin
     Hmask=.true.
@@ -572,6 +596,9 @@ contains
 
 
   function Gbool(ispin,jspin,iorb,jorb) result(bool)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     logical(8),dimension(Nspin,Nspin,Norb,Norb) :: Hmask
     integer                                     :: iorb,jorb,ispin,jspin
     logical                                     :: bool

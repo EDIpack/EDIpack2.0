@@ -30,6 +30,9 @@ contains
 
 
   subroutine buildChi_impurity()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     ! 
     ! Build the quantum impurity electrons Susceptibilities :math:`\hat{\chi}` calling the correct procedure according to the value of :f:var:`ed_mode`.
     ! Write the results on file.
@@ -86,6 +89,9 @@ contains
   !+------------------------------------------------------------------+
 
   function get_spinChi(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)         :: zeta
     character(len=*),optional                  :: axis
     complex(8),dimension(Norb,Norb,size(zeta)) :: self
@@ -99,6 +105,9 @@ contains
 
 
   function get_densChi(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)         :: zeta
     character(len=*),optional                  :: axis
     complex(8),dimension(Norb,Norb,size(zeta)) :: self
@@ -112,6 +121,9 @@ contains
 
 
   function get_pairChi(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)         :: zeta
     character(len=*),optional                  :: axis
     complex(8),dimension(Norb,Norb,size(zeta)) :: self
@@ -125,6 +137,9 @@ contains
 
 
   function get_exctChi(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)           :: zeta
     character(len=*),optional                    :: axis
     complex(8),dimension(3,Norb,Norb,size(zeta)) :: self
@@ -147,6 +162,9 @@ contains
   !                    PRINT FUNCTIONS
   !+------------------------------------------------------------------+
   subroutine print_spinChimatrix(file)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !This subroutine prints weights and poles of the impurity spin susceptibility function by calling :f:func:`write_GFmatrix`. These are stored
     !in a file named :code:`"file"//str(ed_file_suffix)//.restart"` taking into account the value of the global variable :f:var:`ed_file_suffix` ,
     !which is :code:`"_ineq_Nineq"` padded with 4 zeros in the case of inequivalent sites, as per documentation
@@ -160,6 +178,9 @@ contains
 
 
   subroutine print_densChimatrix(file)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !This subroutine prints weights and poles of the impurity charge density susceptibility function by calling :f:func:`write_GFmatrix`. These are stored
     !in a file named :code:`"file"//str(ed_file_suffix)//.restart"` taking into account the value of the global variable :f:var:`ed_file_suffix` ,
     !which is :code:`"_ineq_Nineq"` padded with 4 zeros in the case of inequivalent sites, as per documentation
@@ -173,6 +194,9 @@ contains
 
 
   subroutine print_pairChimatrix(file)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !This subroutine prints weights and poles of the impurity pair susceptibility function by calling :f:func:`write_GFmatrix`. These are stored
     !in a file named :code:`"file"//str(ed_file_suffix)//.restart"` taking into account the value of the global variable :f:var:`ed_file_suffix` ,
     !which is :code:`"_ineq_Nineq"` padded with 4 zeros in the case of inequivalent sites, as per documentation
@@ -186,6 +210,9 @@ contains
 
 
   subroutine print_exctChimatrix(file)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !This subroutine prints weights and poles of the impurity exciton susceptibilities function by calling :f:func:`write_GFmatrix`. These are stored
     !in a file named :code:`"file"//str(ed_file_suffix)//.restart"` taking into account the value of the global variable :f:var:`ed_file_suffix` ,
     !which is :code:`"_ineq_Nineq"` padded with 4 zeros in the case of inequivalent sites, as per documentation

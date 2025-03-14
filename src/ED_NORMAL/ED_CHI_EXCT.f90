@@ -46,6 +46,9 @@ contains
   ! Triplet: \sum_{\sigma\rho} C^+_{a\sigma} \tau_{\sigma\rho} C_{b\rho}
   !+------------------------------------------------------------------+
   subroutine build_exctChi_normal()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     !
     ! Evaluates the impurity exciton-exciton susceptibility :math:`\chi^{X}_{ab}=\langle T_\tau X^\dagger_{ab}(\tau) X_{ab}\rangle` in the Matsubara :math:`i\omega_n` and Real :math:`\omega` frequency axis, the imaginary time :math:`\tau` as well as the singlet and triplet components of the operator. 
@@ -79,6 +82,9 @@ contains
   ! \chi_ab  = <Delta*_ab(\tau)Delta_ab(0)>
   !\Delta_ab = \sum_\sigma C^+_{a\sigma}C_{b\sigma}
   subroutine lanc_ed_build_exctChi_singlet(iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer      :: iorb,jorb
     type(sector) :: sectorI
     real(8),dimension(:),allocatable :: vup,vdw,vtmp
@@ -122,6 +128,9 @@ contains
   ! \chi_ab  = <Z_ab(\tau)Z_ab(0)>
   !Z_ab = \sum_sp C^+_{as}.tau^z_{sp}.C_{bp}
   subroutine lanc_ed_build_exctChi_tripletZ(iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                          :: iorb,jorb
     real(8),dimension(:),allocatable :: vup,vdw,vtmp
     !
@@ -185,6 +194,9 @@ contains
   ! in that case |v> and |w> belong to the same sector (the same as |0>) and the
   ! mixed term is in general non null.
   subroutine lanc_ed_build_exctChi_tripletXY(iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                          :: iorb,jorb
     real(8),dimension(:),allocatable :: vtmp
     !
@@ -240,6 +252,9 @@ contains
 
 
   subroutine add_to_lanczos_exctChi(vnorm2,Ei,alanc,blanc,iorb,jorb,indx,ichan)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                                    :: iorb,jorb,ichan,indx
     real(8)                                    :: pesoF,pesoAB,pesoBZ,peso,vnorm2  
     real(8)                                    :: Ei,Ej,Egs,de
@@ -331,6 +346,9 @@ contains
 
 
   function get_exctChi_normal(zeta,axis) result(Chi)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     ! Reconstructs the system impurity electrons Green's functions using :f:var:`impgmatrix` to retrieve weights and poles.
     !
@@ -363,6 +381,9 @@ contains
   contains
     !
     subroutine get_Chiab(indx,iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
       integer,intent(in) :: indx,iorb,jorb
       integer            :: Nstates,istate
       integer            :: Nchannels,ichan

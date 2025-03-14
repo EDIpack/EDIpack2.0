@@ -53,6 +53,9 @@ contains
   !PURPOSE  : Lanc method
   !+-------------------------------------------------------------------+
   subroutine imp_rdm_nonsu2()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !Evaluates the RDM using the saved eigen-states in the :f:var:`state_list` and an efficient sparse algorithm.
     !For any given eigen-state :math:`|N\rangle` we proceed as follows.
     !Such state is a linear combination of the basis state in a given sector: 

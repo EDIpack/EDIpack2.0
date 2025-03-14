@@ -1,4 +1,7 @@
 subroutine ed_get_docc_n0(self,iorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8)          :: self !double-occupation value or array of values
   integer,optional :: iorb !orbital index
   integer          :: iorb_
@@ -8,6 +11,9 @@ subroutine ed_get_docc_n0(self,iorb)
 end subroutine ed_get_docc_n0
 
 subroutine ed_get_docc_n1(self,iorb,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:) :: self
   integer,optional     :: iorb
   integer,optional     :: Nlat !number of inequivalent impurity sites for real-space DMFT
@@ -28,6 +34,9 @@ subroutine ed_get_docc_n1(self,iorb,Nlat)
 end subroutine ed_get_docc_n1
 
 subroutine ed_get_docc_n2(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:,:) :: self
   integer                :: Nlat
   if(.not.allocated(docc_ineq))stop "ed_get_docc error: docc_ineq not allocated"

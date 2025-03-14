@@ -43,6 +43,9 @@ contains
   !                        SUPERC
   !+------------------------------------------------------------------+
   subroutine build_impG_superc()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     !
     !Evaluates the impurity electrons Green's functions :math:`G(z)` and :math:`F(z)` and the phonons one :math:`D(z)` using dynamical Lanczos method. The result is stored in rank-5 arrays :f:var:`impgmats`, :f:var:`impgreal` , :f:var:`impfmats` , :f:var:`impfreal` of dimensions [ |Nspin| , |Nspin| , |Norb| , |Norb| , :f:var:`Lmats` / :f:var:`Lreal` ] and rank-1 array :f:var:`impdmats`, :f:var:`impdreal`.    
@@ -124,6 +127,9 @@ contains
 
 
   subroutine lanc_build_gf_superc_Gdiag(iorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer      :: iorb
     !
     write(LOGfile,"(A)")"Get G & barG_l"//str(iorb)
@@ -200,6 +206,9 @@ contains
 
 
   subroutine lanc_build_gf_superc_Gmix(iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer      :: iorb,jorb
     !
     write(LOGfile,"(A)")"Get G_l"//str(iorb)//"_m"//str(jorb)
@@ -275,6 +284,9 @@ contains
 
 
   subroutine lanc_build_gf_superc_Fmix(iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                :: iorb,jorb
     type(sector)           :: sectorI,sectorJ
     !
@@ -351,6 +363,9 @@ contains
 
 
   subroutine lanc_build_gf_phonon_main()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     type(sector)                :: sectorI
     integer,dimension(Ns_Ud)    :: iDimUps,iDimDws
     integer                     :: Nups(Ns_Ud)
@@ -422,6 +437,9 @@ contains
 
 
   subroutine add_to_lanczos_gf_superc(vnorm2,Ei,alanc,blanc,isign,ichan,iorb,jorb,ic,istate)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8)                                 :: vnorm2,pesoBZ,peso
     real(8)                                    :: Ei,Egs,de
     integer                                    :: nlanc,itype
@@ -498,6 +516,9 @@ contains
 
 
   subroutine add_to_lanczos_phonon(vnorm2,Ei,alanc,blanc,istate)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     real(8)                                    :: vnorm2,Ei,Ej,Egs,pesoF,pesoAB,pesoBZ,de,peso
     integer                                    :: nlanc
     real(8),dimension(:)                       :: alanc
@@ -553,6 +574,9 @@ contains
 
 
   function get_impG_superc(zeta,axis) result(Gf)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     ! Reconstructs the system impurity electrons normal Green's functions using :f:var:`impgmatrix` to retrieve weights and poles.
     !
@@ -597,6 +621,9 @@ contains
   contains
     !
     subroutine get_superc_Gdiag(iorb) !get auxG(1:2)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
       integer,intent(in)                 :: iorb
       integer                            :: Nstates,istate
       integer                            :: Nchannels,ic,ichan
@@ -630,6 +657,9 @@ contains
     end subroutine get_superc_Gdiag
 
     subroutine get_superc_Gmix(iorb,jorb) !get auxG(3,:)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
       integer,intent(in) :: iorb,jorb
       integer            :: Nstates,istate
       integer            :: Nchannels,ic,ichan
@@ -671,6 +701,9 @@ contains
 
 
   function get_impF_superc(zeta,axis) result(Ff)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     ! Reconstructs the system impurity anomalous electrons Green's functions using :f:var:`impgmatrix` to retrieve weights and poles.
     !
@@ -727,6 +760,9 @@ contains
   contains
     !
     subroutine get_superc_Gdiag(iorb) !get auxG(1:2)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
       integer,intent(in) :: iorb
       integer            :: Nstates,istate
       integer            :: Nchannels,ic,is
@@ -764,6 +800,9 @@ contains
     end subroutine get_superc_Gdiag
     !
     subroutine  get_superc_Fmix(iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
       integer,intent(in) :: iorb,jorb
       integer            :: Nstates,istate
       integer            :: Nchannels,ic,ichan
@@ -805,6 +844,9 @@ contains
 
 
   function get_impD_superc(zeta,axis) result(G)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     ! Reconstructs the phonon Green's functions using :f:var:`impdmatrix` to retrieve weights and poles.
     !
@@ -872,6 +914,9 @@ contains
 
 
   function get_Sigma_superc(zeta,axis) result(Sigma)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                     :: zeta
     character(len=*),optional                              :: axis       !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(zeta)) :: Sigma
@@ -954,6 +999,9 @@ contains
 
 
   function get_Self_superc(zeta,axis) result(Self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                     :: zeta
     character(len=*),optional                              :: axis       !string indicating the desired axis, :code:`'m'` for Matsubara (default), :code:`'r'` for Real-axis
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(zeta)) :: Self

@@ -1,4 +1,7 @@
 subroutine ed_get_mag_n0(self,component,iorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8) :: self !Magnetization
   character(len=1),optional :: component !Component of the magnetization, can be :code:`"x"`, :code:`"y"`, :code:`"z"` (default :code:`"z"` )
   integer,optional          :: iorb !Orbital (default :code:`1`)
@@ -19,6 +22,9 @@ subroutine ed_get_mag_n0(self,component,iorb)
 end subroutine ed_get_mag_n0
 
 subroutine ed_get_mag_n1(self,component,iorb,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:)     :: self
   character(len=1),optional :: component
   integer,optional          :: iorb
@@ -50,6 +56,9 @@ subroutine ed_get_mag_n1(self,component,iorb,Nlat)
 end subroutine ed_get_mag_n1
 
 subroutine ed_get_mag_n2(self,component,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:,:)    :: self
   character(len=1),optional :: component
   integer                   :: Nlat
