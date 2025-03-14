@@ -141,11 +141,19 @@ contains
   !##################################################################
   !             DELTA/ FDELTA
   !##################################################################
+#if __INTEL_COMPILER
+  #include "delta_functions/delta_normal.f90"
+  #include "delta_functions/delta_hybrid.f90"
+  #include "delta_functions/delta_replica.f90"
+  #include "delta_functions/delta_general.f90"
+#else
   include "delta_functions/delta_normal.f90"
   include "delta_functions/delta_hybrid.f90"
   include "delta_functions/delta_replica.f90"
   include "delta_functions/delta_general.f90"
-  function delta_bath_array(x,dmft_bath_,axis) result(Delta)
+#endif
+
+function delta_bath_array(x,dmft_bath_,axis) result(Delta)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
@@ -171,11 +179,19 @@ contains
 
 
 
+#if __INTEL_COMPILER
+  #include "delta_functions/fdelta_normal.f90"
+  #include "delta_functions/fdelta_hybrid.f90"
+  #include "delta_functions/fdelta_replica.f90"
+  #include "delta_functions/fdelta_general.f90"
+#else
   include "delta_functions/fdelta_normal.f90"
   include "delta_functions/fdelta_hybrid.f90"
   include "delta_functions/fdelta_replica.f90"
   include "delta_functions/fdelta_general.f90"
-  function fdelta_bath_array(x,dmft_bath_,axis) result(Fdelta)
+#endif
+
+function fdelta_bath_array(x,dmft_bath_,axis) result(Fdelta)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
@@ -219,9 +235,15 @@ contains
   !##################################################################
   !             G0and / F0and
   !##################################################################
+#if __INTEL_COMPILER
+  #include "g0and_functions/g0and_normal.f90"
+  #include "g0and_functions/g0and_hyrege.f90"
+#else
   include "g0and_functions/g0and_normal.f90"
   include "g0and_functions/g0and_hyrege.f90"
-  function g0and_bath_array(x,dmft_bath_,axis) result(G0and)
+#endif
+
+function g0and_bath_array(x,dmft_bath_,axis) result(G0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
@@ -246,9 +268,15 @@ contains
   end function g0and_bath_array
 
 
+#if __INTEL_COMPILER
+  #include "g0and_functions/f0and_normal.f90"
+  #include "g0and_functions/f0and_hyrege.f90"
+#else
   include "g0and_functions/f0and_normal.f90"
   include "g0and_functions/f0and_hyrege.f90"
-  function f0and_bath_array(x,dmft_bath_,axis) result(F0and)
+#endif
+
+function f0and_bath_array(x,dmft_bath_,axis) result(F0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
@@ -291,9 +319,15 @@ contains
   !##################################################################
   !              G0^-1 / F0^-1
   !##################################################################  
+#if __INTEL_COMPILER
+  #include "invg0_functions/invg0_normal.f90"
+  #include "invg0_functions/invg0_hyrege.f90"
+#else
   include "invg0_functions/invg0_normal.f90"
   include "invg0_functions/invg0_hyrege.f90"
-  function invg0_bath_array(x,dmft_bath_,axis) result(G0and)
+#endif
+
+function invg0_bath_array(x,dmft_bath_,axis) result(G0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
@@ -317,9 +351,16 @@ contains
 
 
 
+#if __INTEL_COMPILER
+  #include "invg0_functions/invf0_normal.f90"
+  #include "invg0_functions/invf0_hyrege.f90"
+#else
   include "invg0_functions/invf0_normal.f90"
   include "invg0_functions/invf0_hyrege.f90"
-  function invf0_bath_array(x,dmft_bath_,axis) result(F0and)
+#endif
+  
+
+function invf0_bath_array(x,dmft_bath_,axis) result(F0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
