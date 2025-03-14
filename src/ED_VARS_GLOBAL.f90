@@ -36,17 +36,6 @@ MODULE ED_VARS_GLOBAL
 
 
 
-  ! !Replica/General bath basis set
-  ! !=========================================================
-  ! type(H_operator),dimension(:),allocatable          :: Hreplica_basis   ![Nsym]
-  ! real(8),dimension(:,:),allocatable                 :: Hreplica_lambda  ![Nbath,Nsym]
-  ! logical                                            :: Hreplica_status=.false.
-  ! !
-  ! type(H_operator),dimension(:),allocatable          :: Hgeneral_basis   ![Nsym]
-  ! real(8),dimension(:,:),allocatable                 :: Hgeneral_lambda  ![Nbath,Nsym]
-  ! logical                                            :: Hgeneral_status=.false.
-
-
 
   !-------------------- CUSTOM OBSERVABLE STRUCTURE ----------------------!
   type observable

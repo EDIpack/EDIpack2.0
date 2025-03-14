@@ -105,6 +105,14 @@ SET(CMAKE_Fortran_MODULE_DIRECTORY ${LIB_TMP_INC})
 INCLUDE_DIRECTORIES(BEFORE ${CMAKE_Fortran_MODULE_DIRECTORY})
 
 
+
+
+
+
+
+####################################################
+#       EDIpack2 library
+####################################################
 ADD_SUBDIRECTORY(${LIB_SRC}/ED_BATH)
 
 ADD_SUBDIRECTORY(${LIB_SRC}/ED_NORMAL)
@@ -196,18 +204,32 @@ ADD_LIBRARY(${PROJECT_NAME} STATIC
 )
 
 
+
+
+
+####################################################
+#       EDI 2 PY interface library
+####################################################
+ADD_SUBDIRECTORY(${LIB_SRC}/python/c_bindings)
+ADD_DEPENDENCIES(ED2PY_LIB ${PROJECT_NAME})
+ADD_LIBRARY(${PYBINDING} SHARED
+  $<TARGET_OBJECTS:ED2PY_LIB>
+)
+
+# Add the linker flag only for Linux
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+  TARGET_LINK_OPTIONS(${PYBINDING} PRIVATE -Wl,-z,noexecstack)
+endif()
+TARGET_LINK_LIBRARIES(${PYBINDING} ${PROJECT_NAME})
+TARGET_LINK_LIBRARIES(${PYBINDING} ${SCIFOR_LINK_LIBRARIES})
+
+
+
+
 SET(PERMISSION_777
   OWNER_WRITE OWNER_READ OWNER_EXECUTE
   GROUP_WRITE GROUP_READ GROUP_EXECUTE
   WORLD_WRITE WORLD_READ WORLD_EXECUTE)
-
-
-ADD_SUBDIRECTORY(${LIB_SRC}/python/c_bindings)
-ADD_LIBRARY(${PYBINDING} SHARED
-  $<TARGET_OBJECTS:ED2PY_LIB>
-)
-TARGET_LINK_LIBRARIES(${PYBINDING} ${PROJECT_NAME})
-TARGET_LINK_LIBRARIES(${PYBINDING} ${SCIFOR_LINK_LIBRARIES})
 
 
 #Build the PKG-CONFIG file

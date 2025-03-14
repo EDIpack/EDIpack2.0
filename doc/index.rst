@@ -11,7 +11,8 @@ A massively parallel Exact Diagonalization solver for Quantum Impurity problems.
 
 EDIpack2.0 is a Lanczos based Exact Diagonalization method 
 for the solution of generic Quantum Impurity problems,  exploiting MPI
-distributed memory parallelisation.
+distributed memory parallelization.
+
 The 2.0 version extends the former EDIpack_ library enabling the solution of
 single-site, multi-orbital models with different conserved
 quantum numbers :math:`\vec{Q}` corresponding to separate operational
@@ -42,16 +43,17 @@ variable `ed_mode=normal,superc,nonsu2` as follow:
 .. _PhysRevB.107.115117: https://journals.aps.org/prb/abstract/10.1103/PhysRevB.107.115117
 
 
-All operational modes include **electron-phonon** coupling (local or Holstein
-phonons). EDIpack2.0  is designed to obtain the lowest part of the
+In the current state both the `normal` and `superc` operational modes
+include **electron-phonon** coupling (local or Holstein phonons).
+
+EDIpack2.0  is designed to obtain the lowest part of the
 spectrum of the problem, thus it naturally works at **zero temperature**
 but can also be used to explore **low temperature** properties.  
  
 The EDIpack2.0 diagonalization algorithm is based on a massively
 parallel execution of matrix-vector products, required in the context
-of Lanczos-Arnoldi linear procedures.  See `j.cpc.2021.108261`_  for a detailed
-descriptions of these algorithms.
-However, substantial modifications have been introduced in the 2.0
+of Lanczos-Arnoldi linear procedures.
+However, substantial modifications have been introduced in this
 version to address the *Superconducting* and *non-SU(2)* channels.  
 An updated manuscript will be released soon. 
 
@@ -118,6 +120,20 @@ EDIpack2
      description of the relevant modules.
 
 
+EDI2py
+======================
+:doc:`edi2py`
+     An brief explanation of the automatically generated
+     Fortran-Python interface (see EDIpy2)
+
+
+EDIpack2ineq
+======================
+:doc:`edipack2ineq`
+     A quick link to the real-space extension of the library to handle
+     inequivalent sites.
+     
+
 EDIpy2
 ======================
 
@@ -160,6 +176,23 @@ Browse Source Code
    edipack2
 
 
+   
+.. toctree::
+   :caption: EDI2py
+   :maxdepth: 1
+   :hidden:
+
+   edi2py
+
+
+.. toctree::
+   :caption: EDIpack2ineq
+   :maxdepth: 2
+   :hidden:
+
+   edipack2ineq
+
+   
 .. toctree::
    :caption: EDIpy2
    :maxdepth: 2
