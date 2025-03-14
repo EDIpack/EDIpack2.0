@@ -307,7 +307,7 @@ contains
     !
     logical,optional              :: used
     logical                       :: used_    
-    character(len=120)            :: file,bfile
+    character(len=120)            :: file,bathfile
     logical                       :: IOfile
     integer                       :: i,io,jo,iorb,ispin,flen,unit
     character(len=20)             :: hsuffix
@@ -321,7 +321,7 @@ contains
     used_   = .true.      ;if(present(used))used_=used
     hsuffix = ".restart"  ;if(used_)hsuffix=reg(".used") !default=used
     file    = str(Hfile)//str(ed_file_suffix)//str(hsuffix)
-    bfile   = str(Bfile)//str(ed_file_suffix)//str(hsuffix)
+    bathfile   = str(Bfile)//str(ed_file_suffix)//str(hsuffix)
     !
     inquire(file=str(file),exist=IOfile)
     if(.not.IOfile)stop "read_dmft_bath ERROR: indicated file does not exist"
@@ -407,8 +407,8 @@ contains
           read(unit,*)dmft_bath%item(i)%v,&
                (dmft_bath%item(i)%lambda(io),io=1,dmft_bath%Nbasis)
        enddo
-       inquire(file=str(bfile),exist=IOfile)
-       if(IOfile)call read_Hreplica(str(bfile))
+       inquire(file=str(bathfile),exist=IOfile)
+       if(IOfile)call read_Hreplica(str(bathfile))
        if(allocated(Hb%linit))then
           do i=1,Nbath
              Hb%linit(i,:) = dmft_bath%item(i)%lambda(:)
@@ -421,8 +421,8 @@ contains
           read(unit,*)dmft_bath%item(i)%vg(:),&
                (dmft_bath%item(i)%lambda(io),io=1,dmft_bath%Nbasis)
        enddo
-       inquire(file=str(bfile),exist=IOfile)
-       if(IOfile)call read_Hgeneral(str(bfile))
+       inquire(file=str(bathfile),exist=IOfile)
+       if(IOfile)call read_Hgeneral(str(bathfile))
        if(allocated(Hb%linit))then
           do i=1,Nbath
              Hb%linit(i,:) = dmft_bath%item(i)%lambda(:)
@@ -445,7 +445,7 @@ contains
     !
     ! Save the :f:var:`effective_bath` to a file with .used or .restart extension according to input.
     !
-    character(len=256)        :: file,bfile
+    character(len=256)        :: file,bathfile
     logical,optional          :: used
     logical                   :: used_
     character(len=16)         :: extension
@@ -459,7 +459,7 @@ contains
     extension=".restart" ;if(used_)extension=".used"
     !
     file     =str(Hfile)//str(ed_file_suffix)//str(extension)
-    bfile    =str(Bfile)//str(ed_file_suffix)//str(extension)
+    bathfile =str(Bfile)//str(ed_file_suffix)//str(extension)
     !
     unit_=free_unit()
     if(MpiMaster)then
@@ -469,7 +469,7 @@ contains
        select case (bath_type)
        case default;
        case ("replica","general")
-          call save_Hreplica(str(bfile))
+          call save_Hreplica(str(bathfile))
        end select
     endif
   end subroutine save_dmft_bath
