@@ -61,6 +61,15 @@ MESSAGE( STATUS "
 ${Yellow}Compile with${ColourReset}:
 $ ${BARE_MAKE_PROGRAM}
 
+${Yellow}Compile with${ColourReset}:
+$ ${BARE_MAKE_PROGRAM} ${PROJECT_NAME}
+
+${Yellow}Compile with${ColourReset}:
+$ ${BARE_MAKE_PROGRAM} ${INEQLIB}
+
+${Yellow}Compile with${ColourReset}:
+$ ${BARE_MAKE_PROGRAM} ${PYBINDING}
+
 ${Yellow}Install with${ColourReset}:
 $ ${BARE_MAKE_PROGRAM} install
 
