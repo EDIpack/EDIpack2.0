@@ -225,21 +225,33 @@ TARGET_LINK_LIBRARIES(${PYBINDING} ${SCIFOR_LINK_LIBRARIES})
 
 
 
-
 SET(PERMISSION_777
   OWNER_WRITE OWNER_READ OWNER_EXECUTE
   GROUP_WRITE GROUP_READ GROUP_EXECUTE
   WORLD_WRITE WORLD_READ WORLD_EXECUTE)
 
 
+ADD_SUBDIRECTORY(${LIB_SRC}/python/c_bindings)
+ADD_LIBRARY(${PYBINDING} SHARED
+  $<TARGET_OBJECTS:ED2PY_LIB>
+)
+
+TARGET_LINK_LIBRARIES(${PYBINDING} ${PROJECT_NAME})
+TARGET_LINK_LIBRARIES(${PYBINDING} ${SCIFOR_LINK_LIBRARIES})
+
+# Add the linker flag only for Linux
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    TARGET_LINK_OPTIONS(${PYBINDING} PRIVATE -Wl,-z,noexecstack)
+endif()
+
+
+############################################################
+############################################################
+############################################################
+
 #Build the PKG-CONFIG file
 SET(TMP_PKCONFIG_FILE ${LIB_TMP_ETC}/${PROJECT_NAME}.pc)
 CONFIGURE_FILE( ${LIB_ETC}/${PROJECT_NAME}.pc.in ${TMP_PKCONFIG_FILE} @ONLY)
-
-############################################################
-############################################################
-############################################################
-
 
 
 #Final messages + additional custom targets:
