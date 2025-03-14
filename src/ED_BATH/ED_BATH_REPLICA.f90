@@ -200,7 +200,7 @@ contains
 
   subroutine save_Hreplica(file)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nnambu,Nspin,Norb
+    use ED_INPUT_VARS, only: Nspin,Norb
 #endif
     character(len=*)                                          :: file
     integer                                                   :: unit
