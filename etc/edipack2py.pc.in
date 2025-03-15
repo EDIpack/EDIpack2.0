@@ -1,0 +1,14 @@
+edipack2py_dir=@CMAKE_INSTALL_PREFIX@
+
+exec_prefix=${edipack2py_dir}/bin
+includedir=${edipack2py_dir}/include
+libdir=${edipack2py_dir}/lib
+
+Name: edipack2py
+Description: The EDIpack2 C-bindings for Python API library
+Cflags: -I${includedir}
+Requires: edipack2
+Libs: -L${libdir} -ledipack2py
+Version:@VERSION@
+
+

@@ -1,4 +1,5 @@
-module edipack2py_bindings
+module edipack2ineq2py_bindings
+  use edipack2ineq
   use edipack2
   use scifor
   implicit none
@@ -74,11 +75,11 @@ contains
   end function get_ed_mode_c
 
   !include library functions
-  include "edipack2py_read_input.f90"
-  include "edipack2py_main.f90"
-  include "edipack2py_bath.f90"
-  include "edipack2py_io.f90"
-  include "edipack2py_bath_fit.f90"
-  include "edipack2py_aux_funx.f90"
+  include "edipack2ineq2py_read_input.f90"
+  include "edipack2ineq2py_main.f90"
+  include "edipack2ineq2py_bath.f90"
+  include "edipack2ineq2py_io.f90"
+  include "edipack2ineq2py_bath_fit.f90"
+  include "edipack2ineq2py_aux_funx.f90"
 
-end module edipack2py_bindings
+end module edipack2ineq2py_bindings
