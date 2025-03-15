@@ -44,6 +44,9 @@ contains
   ! \chi_ab = <Delta*_a(\tau)Delta_b(0)>
   !+------------------------------------------------------------------+
   subroutine build_pairChi_normal()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     ! Evaluates the impurity Pair susceptibility :math:`\chi^{\Delta}=\langle T_\tau \Delta_a(\tau) \Delta_b\rangle` in the Matsubara :math:`i\omega_n` and Real :math:`\omega` frequency axis as well as imaginary time :math:`\tau`.
     !
@@ -84,6 +87,9 @@ contains
   ! \chi_aa = <Delta*_a(\tau)Delta_a(0)>
   !         = <[C^+_a(\tau)C^+_a(\tau)][C_a(0)C_a(0)]>
   subroutine lanc_ed_build_pairChi_diag(iorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                          :: iorb
     real(8),dimension(:),allocatable :: vtmp
     !
@@ -127,6 +133,9 @@ contains
   !         = <[C^+_a(\tau)C^+_a(\tau)][C_b(0)C_b(0)]>
   !from aux: <[C^+_a C^+_a + C^+_b C^+_b][C_a C_a + C_b C_b]>  
   subroutine lanc_ed_build_pairChi_mix(iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                     :: iorb,jorb
     real(8),dimension(:),allocatable :: va,vb,vtmp
     !
@@ -172,6 +181,9 @@ contains
 
 
   subroutine add_to_lanczos_pairChi(vnorm2,Ei,alanc,blanc,iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                                    :: iorb,jorb
     real(8)                                    :: pesoF,pesoAB,pesoBZ,peso,vnorm2  
     real(8)                                    :: Ei,Ej,Egs,de
@@ -241,6 +253,9 @@ contains
 
 
   function get_pairChi_normal(zeta,axis) result(Chi)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     ! Reconstructs the system impurity electrons Green's functions using :f:var:`impgmatrix` to retrieve weights and poles.
     !
@@ -278,6 +293,9 @@ contains
   contains
     !
     subroutine get_Chiab(iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
       integer,intent(in) :: iorb,jorb
       integer            :: Nstates,istate
       integer            :: Nchannels,ichan

@@ -45,6 +45,9 @@ contains
   ! reduction for both values of isign in the same call.
   !+------------------------------------------------------------------+
   subroutine build_spinChi_normal()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     ! Evaluates the impurity Spin susceptibility :math:`\chi^z=\langle T_\tau S^z_a(\tau) S^z_b\rangle` in the Matsubara :math:`i\omega_n` and Real :math:`\omega` frequency axis as well as imaginary time :math:`\tau`.
     !
@@ -87,6 +90,9 @@ contains
 
 
   subroutine lanc_ed_build_spinChi_diag(iorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                     :: iorb
     type(sector)                :: sectorI,sectorJ
     !
@@ -111,6 +117,9 @@ contains
 
 
   subroutine lanc_ed_build_spinChi_mix(iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                     :: iorb,jorb
     real(8),dimension(:),allocatable :: vI,vJ
     !
@@ -139,6 +148,9 @@ contains
 
 
   subroutine add_to_lanczos_spinChi(vnorm2,Ei,alanc,blanc,iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8)                                 :: vnorm2,peso,pesoF
     real(8)                                    :: Ei,Ej,Egs,pesoAB,pesoBZ,de
     integer                                    :: nlanc
@@ -226,6 +238,9 @@ contains
 
 
   function get_spinChi_normal(zeta,axis) result(Chi)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !
     ! Reconstructs the system impurity electrons Green's functions using :f:var:`impgmatrix` to retrieve weights and poles.
     !
@@ -262,6 +277,9 @@ contains
   contains
     !
     subroutine get_Chiab(iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
       integer,intent(in) :: iorb,jorb
       integer            :: Nstates,istate
       integer            :: Nchannels,ichan

@@ -1,4 +1,7 @@
 subroutine ed_get_docc_n0(self,iorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8)          :: self !double-occupation value or array of values
   integer,optional :: iorb !orbital index
   integer          :: iorb_
@@ -8,6 +11,9 @@ subroutine ed_get_docc_n0(self,iorb)
 end subroutine ed_get_docc_n0
 
 subroutine ed_get_docc_n1(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:) :: self
   call assert_shape(self,[Norb],'ed_get_docc','docc')
   self = ed_docc

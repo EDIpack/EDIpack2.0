@@ -67,6 +67,9 @@ contains
 
 
   subroutine get_reduced_rdm_global(rdm,orbital_mask,doprint)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:,:),allocatable,intent(inout) :: rdm
     logical,dimension(Norb),intent(in)                  :: orbital_mask
     logical,intent(in),optional                         :: doprint
@@ -83,6 +86,9 @@ contains
 
 
   subroutine get_reduced_rdm_normal(rdm,orbital_mask,doprint)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:,:),allocatable,intent(inout) :: rdm
     logical,dimension(Norb),intent(in)                  :: orbital_mask
     logical,intent(in),optional                         :: doprint
@@ -181,6 +187,9 @@ contains
     !
     ! Compute the Fermionic sign associated to the required swipes
     subroutine get_sign(sign,state,indices)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
       real(8), intent(out)                              :: sign
       integer, intent(in)                               :: state(Norb)
       integer, intent(in)                               :: indices(:)
@@ -255,6 +264,9 @@ contains
   !                      PRINT RDMs
   !+------------------------------------------------------------------+
   subroutine print_rdm_orb(dm,orbital_mask)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:,:),intent(in) :: dm
     logical,dimension(Norb),intent(in)   :: orbital_mask
     integer                              :: unit,Nsites
@@ -294,6 +306,9 @@ contains
 
   !
   subroutine print_rdm_LEGACY(dm,Nrdm)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer                  ,intent(in)            :: Nrdm
     complex(8),dimension(:,:),intent(in)            :: dm
     integer                                         :: unit

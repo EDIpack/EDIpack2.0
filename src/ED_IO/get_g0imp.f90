@@ -1,4 +1,7 @@
 subroutine ed_get_g0imp_site_n3(self,bath,axis,type,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:),intent(inout)   :: self ! Green's function matrix
   real(8),dimension(:)                        :: bath ! The bath vector
   character(len=*),optional                   :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
@@ -43,6 +46,9 @@ end subroutine ed_get_g0imp_site_n3
 
 
 subroutine ed_get_g0imp_site_n5(self,bath,axis,type,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:,:,:),intent(inout) :: self
   real(8),dimension(:)                          :: bath ! The bath vector
   character(len=*),optional                     :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real

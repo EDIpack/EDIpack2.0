@@ -40,6 +40,9 @@ contains
 
 
   subroutine buildGF_impurity()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     ! 
     ! Build the quantum impurity electrons Green's functions :math:`\hat{G}` and the phonons Green's function :math:`\hat{D}` , calling the correct procedure according to the value of :f:var:`ed_mode` .
     ! Write the results on file according to the values of input variables :f:var:`ed_print_g` , :f:var:`ed_print_sigma`, :f:var:`ed_print_impD`  and :f:var:`ed_print_g0` .
@@ -87,6 +90,9 @@ contains
   !+------------------------------------------------------------------+
 
   function get_impG(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                     :: zeta
     character(len=*),optional                              :: axis
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(zeta)) :: self
@@ -104,6 +110,9 @@ contains
   end function get_impG
   !
   function get_impF(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                     :: zeta
     character(len=*),optional                              :: axis
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(zeta)) :: self
@@ -119,6 +128,9 @@ contains
   end function get_impF
   !
   function get_impD(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in) :: zeta
     character(len=*),optional          :: axis
     complex(8),dimension(size(zeta))   :: self
@@ -141,6 +153,9 @@ contains
 
 
   function get_Sigma(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                     :: zeta
     character(len=*),optional                              :: axis
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(zeta)) :: self
@@ -158,6 +173,9 @@ contains
   end function get_Sigma
   !
   function get_Self(zeta,axis) result(self)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                     :: zeta
     character(len=*),optional                              :: axis
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(zeta)) :: self
@@ -178,6 +196,9 @@ contains
   !PURPOSE  : get scattering rate and renormalization constant Z
   !+-------------------------------------------------------------------+
   subroutine get_szr()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !Calculate the values of the scattering rate and quasiparticle weight
     integer                                       :: ispin,iorb
     real(8)                                       :: wm(2),vm(1)
@@ -224,6 +245,9 @@ contains
   !                    PRINT FUNCTIONS
   !+------------------------------------------------------------------+
   subroutine print_impGmatrix(file)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !This subroutine prints weights and poles of the impurity Green's function by calling :f:func:`write_GFmatrix`. These are stored
     !in a file named :code:`"file"//str(ed_file_suffix)//.restart"` taking into account the value of the global variable :f:var:`ed_file_suffix` ,
     !which is :code:`"_ineq_Nineq"` padded with 4 zeros in the case of inequivalent sites, as per documentation
@@ -236,6 +260,9 @@ contains
   end subroutine print_impGmatrix
 
   subroutine print_impDmatrix(file)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !This subroutine prints weights and poles of the  phonon Green's function by calling :f:func:`write_GFmatrix`. These are stored
     !in a file named :code:`"file"//str(ed_file_suffix)//.restart"` taking into account the value of the global variable :f:var:`ed_file_suffix` ,
     !which is :code:`"_ineq_Nineq"` padded with 4 zeros in the case of inequivalent sites, as per documentation
@@ -252,6 +279,9 @@ contains
 
 
   subroutine print_impG
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !This subroutine print the impurity Green's function on plain text files in the execution folder.
     !The files are formatted like :math:`[\omega,\mathrm{Im}G,\mathrm{Re}G]` .
     !One file per Green'sfunction component, with the name
@@ -302,6 +332,9 @@ contains
   
 
   subroutine print_impD
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Lmats,Lreal
+#endif
     !This subroutine print the impurity phonon self-energy on the files
     !  * :code:`"impDph_iw.ed"`  matsubara axis
     !  * :code:`impDph_realw.ed"` real frequency axis
@@ -331,6 +364,9 @@ contains
   
 
   subroutine print_Sigma
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !This subroutine print the impurity self-energy on plain text files in the execution folder.
     !The files are formatted like :math:`[\omega,\mathrm{Im}\Sigma,\mathrm{Re}\Sigma]` .
     !One file per self-energy component, with the name
@@ -385,6 +421,9 @@ contains
 
 
   subroutine print_impG0
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !This subroutine print the non-interacting impurity Green's function on plain text files in the execution folder.
     !The files are formatted like :math:`[\omega,\mathrm{Im}G_{0},\mathrm{Re}G_{0}]` .
     !One file per Green's function component, with the name
@@ -435,6 +474,9 @@ contains
 
 
   subroutine write_szr()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     integer :: unit,iorb,jorb,ispin
     !Z renormalization constant
     unit = free_unit()
@@ -510,6 +552,9 @@ contains
 
 
   subroutine Gprint_Normal(file,Self,axis)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     character(len=*)                 :: file
     complex(8),dimension(:,:,:,:,:)  :: Self
     character(len=1)                 :: axis
@@ -568,6 +613,9 @@ contains
 
 
   subroutine Gprint_superc(file,Self,axis)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     character(len=*)                 :: file
     complex(8),dimension(:,:,:,:,:)  :: Self
     character(len=1)                 :: axis
@@ -622,6 +670,9 @@ contains
 
 
   subroutine Gprint_nonsu2(file,Self,axis)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     character(len=*)                 :: file
     complex(8),dimension(:,:,:,:,:)  :: Self
     character(len=1)                 :: axis

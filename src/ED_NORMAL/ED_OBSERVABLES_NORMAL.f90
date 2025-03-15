@@ -70,6 +70,9 @@ contains
   !PURPOSE  : Lanc method
   !+-------------------------------------------------------------------+
   subroutine observables_normal()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !Calculate the values of the local observables
     integer                         :: iprob,istate,Nud(2,Ns),iud(2),jud(2),val
     integer,dimension(2*Ns_Ud)      :: Indices,Jndices
@@ -406,6 +409,9 @@ contains
   !PURPOSE  : Get internal energy from the Impurity problem.
   !+-------------------------------------------------------------------+
   subroutine local_energy_normal()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     !Calculate the value of the local energy components
     integer                             :: istate,iud(2),jud(2)
     integer,dimension(2*Ns_Ud)          :: Indices,Jndices

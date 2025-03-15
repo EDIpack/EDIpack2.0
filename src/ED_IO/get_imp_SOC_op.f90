@@ -54,6 +54,9 @@ end function os2so_reshape
 
 
 subroutine SOC_jz_symmetrize(funct,mask)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   !passed
   complex(8),allocatable,intent(inout)         ::  funct(:,:,:,:,:)
   logical(8),allocatable,intent(in)            ::  mask(:,:,:,:,:)
@@ -142,6 +145,9 @@ end subroutine SOC_jz_symmetrize
 !PURPOSE  : Atomic SOC and j vector components
 !+-------------------------------------------------------------------+
 function atomic_SOC() result (LS)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(Nspin*Norb,Nspin*Norb)  :: LS,LS_
   integer                                      :: i,j
   LS_=zero;LS=zero
@@ -199,6 +205,9 @@ function atomic_SOC_rotation() result (LS_rot)
 end function atomic_SOC_rotation
 
 function orbital_Lz_rotation_Norb() result (U_rot)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(Norb,Norb)              :: U_rot,U_rot_
   integer                                      :: i,j
   U_rot=zero;U_rot_=zero
@@ -217,6 +226,9 @@ function orbital_Lz_rotation_Norb() result (U_rot)
 end function orbital_Lz_rotation_Norb
 
 function orbital_Lz_rotation_NorbNspin() result (U_rot)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(Norb,Norb)              :: U_rot_
   complex(8),dimension(Norb*Nspin,Norb*Nspin)  :: U_rot
   integer                                      :: i,j
@@ -237,6 +249,9 @@ function orbital_Lz_rotation_NorbNspin() result (U_rot)
 end function orbital_Lz_rotation_NorbNspin
 
 function atomic_j(component) result (ja)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(Nspin*Norb,Nspin*Norb)  :: ja,ja_
   character(len=1)                             :: component
   integer                                      :: i,j
@@ -269,6 +284,9 @@ end function atomic_j
 
 
 subroutine ed_get_quantum_SOC_operators_single()
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   implicit none
   complex(8),allocatable            ::  Simp(:,:,:)
   complex(8),allocatable            ::  Limp(:,:,:)
@@ -383,6 +401,9 @@ end subroutine ed_get_quantum_SOC_operators_single
 
 
 subroutine print_operators(S,L,J,Jsq,LS,ndx)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   implicit none
   complex(8),allocatable,intent(in)   :: S(:,:,:)
   complex(8),allocatable,intent(in)   :: L(:,:,:)

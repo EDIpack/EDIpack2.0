@@ -141,10 +141,17 @@ contains
   !##################################################################
   !             DELTA/ FDELTA
   !##################################################################
+#if __INTEL_COMPILER
+  #include "delta_functions/delta_normal.f90"
+  #include "delta_functions/delta_hybrid.f90"
+  #include "delta_functions/delta_replica.f90"
+  #include "delta_functions/delta_general.f90"
+#else
   include "delta_functions/delta_normal.f90"
   include "delta_functions/delta_hybrid.f90"
   include "delta_functions/delta_replica.f90"
   include "delta_functions/delta_general.f90"
+#endif
   function delta_bath_array(x,axis) result(Delta)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
@@ -171,11 +178,18 @@ contains
   end function delta_bath_array
 
 
-
+#if __INTEL_COMPILER
+  #include "delta_functions/fdelta_normal.f90"
+  #include "delta_functions/fdelta_hybrid.f90"
+  #include "delta_functions/fdelta_replica.f90"
+  #include "delta_functions/fdelta_general.f90"
+#else
   include "delta_functions/fdelta_normal.f90"
   include "delta_functions/fdelta_hybrid.f90"
   include "delta_functions/fdelta_replica.f90"
   include "delta_functions/fdelta_general.f90"
+#endif
+
   function fdelta_bath_array(x,axis) result(Fdelta)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
@@ -221,8 +235,13 @@ contains
   !##################################################################
   !             G0and / F0and
   !##################################################################
+#if __INTEL_COMPILER
+  #include "g0and_functions/g0and_normal.f90"
+  #include "g0and_functions/g0and_hyrege.f90"
+#else
   include "g0and_functions/g0and_normal.f90"
   include "g0and_functions/g0and_hyrege.f90"
+#endif
   function g0and_bath_array(x,axis) result(G0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
@@ -248,9 +267,13 @@ contains
     !
   end function g0and_bath_array
 
-
+#if __INTEL_COMPILER
+  #include "g0and_functions/f0and_normal.f90"
+  #include "g0and_functions/f0and_hyrege.f90"
+#else
   include "g0and_functions/f0and_normal.f90"
   include "g0and_functions/f0and_hyrege.f90"
+#endif
   function f0and_bath_array(x,axis) result(F0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
@@ -295,8 +318,13 @@ contains
   !##################################################################
   !              G0^-1 / F0^-1
   !##################################################################  
+#if __INTEL_COMPILER
+  #include "invg0_functions/invg0_normal.f90"
+  #include "invg0_functions/invg0_hyrege.f90"
+#else
   include "invg0_functions/invg0_normal.f90"
   include "invg0_functions/invg0_hyrege.f90"
+#endif
   function invg0_bath_array(x,axis) result(G0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
@@ -322,9 +350,13 @@ contains
   end function invg0_bath_array
 
 
-
+#if __INTEL_COMPILER
+  #include "invg0_functions/invf0_normal.f90"
+  #include "invg0_functions/invf0_hyrege.f90"
+#else
   include "invg0_functions/invf0_normal.f90"
   include "invg0_functions/invf0_hyrege.f90"
+#endif
   function invf0_bath_array(x,axis) result(F0and)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
@@ -372,6 +404,9 @@ contains
   !                bath --> G0and/F0and
   !##################################################################
   subroutine ed_get_g0and_n2(x,bath_,G0and,axis,type)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                  :: x !complex array of frequencies
     real(8),dimension(:)                                :: bath_ !user-accessible bath array
     complex(8),dimension(:,:,:)                         :: G0and !non-interacting Green's function
@@ -404,6 +439,9 @@ contains
   end subroutine ed_get_g0and_n2
 
   subroutine ed_get_g0and_n4(x,bath_,G0and,axis,type)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                  :: x
     real(8),dimension(:)                                :: bath_
     complex(8),dimension(:,:,:,:,:)                     :: G0and
@@ -447,6 +485,9 @@ contains
   !                bath --> Delta / FDelta
   !##################################################################  
   subroutine ed_get_delta_n2(x,bath_,delta,axis,type)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                  :: x !complex array of frequencies
     real(8),dimension(:)                                :: bath_ !user-accessible bath array
     complex(8),dimension(:,:,:)                            :: delta !hybridization function
@@ -479,6 +520,9 @@ contains
   end subroutine ed_get_delta_n2
 
   subroutine ed_get_delta_n4(x,bath_,delta,axis,type)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:),intent(in)                  :: x
     real(8),dimension(:)                                :: bath_
     complex(8),dimension(:,:,:,:,:)                            :: delta
@@ -523,6 +567,9 @@ contains
   
 
   function zeta_superc(x,mu,axis) result(zeta)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     complex(8),dimension(:)                        :: x
     real(8)                                        :: mu
     character(len=*)                               :: axis

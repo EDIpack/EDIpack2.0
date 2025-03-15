@@ -1,4 +1,7 @@
 subroutine ed_get_spinChi_site_n3(self,axis,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:),intent(inout) :: self ! spin susceptibility 
   character(len=*),optional                 :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
   complex(8),dimension(:),optional          :: z    ! User provided array of complex frequency where to evaluate Self
@@ -34,6 +37,9 @@ end subroutine ed_get_spinChi_site_n3
 
 
 subroutine ed_get_densChi_site_n3(self,axis,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:),intent(inout) :: self ! spin susceptibility 
   character(len=*),optional                 :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
   complex(8),dimension(:),optional          :: z    ! User provided array of complex frequency where to evaluate Self
@@ -69,6 +75,9 @@ end subroutine ed_get_densChi_site_n3
 
 
 subroutine ed_get_pairChi_site_n3(self,axis,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:),intent(inout) :: self ! spin susceptibility 
   character(len=*),optional                 :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
   complex(8),dimension(:),optional          :: z    ! User provided array of complex frequency where to evaluate Self
@@ -103,6 +112,9 @@ subroutine ed_get_pairChi_site_n3(self,axis,z)
 end subroutine ed_get_pairChi_site_n3
 
 subroutine ed_get_exctChi_site_n3(self,axis,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:,:,:),intent(inout) :: self ! spin susceptibility 
   character(len=*),optional                   :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
   complex(8),dimension(:),optional            :: z    ! User provided array of complex frequency where to evaluate Self
