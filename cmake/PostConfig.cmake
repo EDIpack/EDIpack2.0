@@ -34,17 +34,6 @@ INSTALL(DIRECTORY ${CMAKE_Fortran_MODULE_DIRECTORY}/ DESTINATION ${LIB_TARGET_IN
 
 #INSTALL(CODE "execute_process(COMMAND \"${CMAKE_COMMAND}\" -E rm -f ${LIB_VERSION_FILE})")
 
-MESSAGE( STATUS "Install ${EDI} the ${PROJECT_NAME} library (static)")
-INSTALL(TARGETS ${EDI} DESTINATION ${LIB_TARGET_LIB})
-MESSAGE( STATUS "")
-MESSAGE( STATUS "Install ${EDI2INEQ} the inequivalent sites extension (static)")
-INSTALL(TARGETS ${EDI2INEQ} DESTINATION ${LIB_TARGET_LIB})
-MESSAGE( STATUS "")
-MESSAGE( STATUS "Install ${EDI2PY} the ${PROJECT_NAME} C-bindings (dynamic)")
-INSTALL(TARGETS ${EDI2PY} DESTINATION ${LIB_TARGET_LIB})
-MESSAGE( STATUS "")
-MESSAGE( STATUS "Install ${EDI2INEQ2PY} the ${EDI2INEQ} C-bindings (dynamic)")
-INSTALL(TARGETS ${EDI2INEQ2PY} DESTINATION ${LIB_TARGET_LIB})
 
 INSTALL(DIRECTORY ${LIB_TMP_ETC}/ DESTINATION ${LIB_TARGET_ETC})
 
@@ -60,65 +49,42 @@ INSTALL(FILES ${LIB_TMP_VER} DESTINATION ${LIB_TARGET_DIR}
 
 
 
-INSTALL(FILES ${LIB_TARGET_ETC}/${EDI}.pc         DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID)
-INSTALL(FILES ${LIB_TARGET_ETC}/${EDI2INEQ}.pc    DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID)
-INSTALL(FILES ${LIB_TARGET_ETC}/${EDI2PY}.pc      DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID)
-INSTALL(FILES ${LIB_TARGET_ETC}/${EDI2INEQ2PY}.pc DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID)
+#Build the PKG-CONFIG file: these are build at CMake. Copy per target is the way to go
+CONFIGURE_FILE( ${LIB_ETC}/${EDI}.pc.in          ${LIB_TMP_ETC}/${EDI}.pc @ONLY)
+CONFIGURE_FILE( ${LIB_ETC}/${EDI2PY}.pc.in       ${LIB_TMP_ETC}/${EDI2PY}.pc @ONLY)
+CONFIGURE_FILE( ${LIB_ETC}/${EDI2INEQ}.pc.in     ${LIB_TMP_ETC}/${EDI2INEQ}.pc @ONLY)
+CONFIGURE_FILE( ${LIB_ETC}/${EDI2INEQ2PY}.pc.in  ${LIB_TMP_ETC}/${EDI2INEQ2PY}.pc @ONLY)
 
+
+
+#Only Files:
+INSTALL(FILES ${LIB_TARGET_ETC}/${EDI}.pc         DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID)
+INSTALL(FILES ${LIB_TARGET_ETC}/${EDI2PY}.pc      DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID OPTIONAL)
+INSTALL(FILES ${LIB_TARGET_ETC}/${EDI2INEQ}.pc    DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID OPTIONAL)
+INSTALL(FILES ${LIB_TARGET_ETC}/${EDI2INEQ2PY}.pc DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID OPTIONAL)
+
+
+#Copy the module environment file in place
 INSTALL(DIRECTORY ${LIB_TARGET_ETC}/modules/ DESTINATION $ENV{HOME}/.modules.d)
 
-get_filename_component(BARE_MAKE_PROGRAM ${CMAKE_MAKE_PROGRAM} NAME)
-MESSAGE( STATUS "${Red}Library version:${ColourReset} ${VERSION}")
-MESSAGE( STATUS "${Red}Library will be installed in:${ColourReset} ${CMAKE_INSTALL_PREFIX}")
-MESSAGE( STATUS "
->> ${Red}TO CONCLUDE INSTALLATION${ColourReset} <<
-${Yellow}Compile with${ColourReset}:
-$ ${BARE_MAKE_PROGRAM}
 
-${Yellow}Compile with${ColourReset}:
-$ ${BARE_MAKE_PROGRAM} ${EDI}
+IF(NOT TARGET ${EDI2PY})
+  ADD_CUSTOM_TARGET(${EDI2PY}_)
+  ADD_DEPENDENCIES(${EDI2PY}_ ${EDI2PY})
+ENDIF()
 
-${Yellow}Compile with${ColourReset}:
-$ ${BARE_MAKE_PROGRAM} ${EDI2PY}
 
-${Yellow}Compile with${ColourReset}:
-$ ${BARE_MAKE_PROGRAM} ${EDI2INEQ}
 
-${Yellow}Compile with${ColourReset}:
-$ ${BARE_MAKE_PROGRAM} ${EDI2INEQ2PY}
+IF(NOT TARGET ${EDI2INEQ})
+  ADD_CUSTOM_TARGET(${EDI2INEQ}_)
+  ADD_DEPENDENCIES(${EDI2INEQ}_ ${EDI})  
+ENDIF()
 
-${Yellow}Install with${ColourReset}:
-$ ${BARE_MAKE_PROGRAM} install
 
-${Yellow}Uninstall with${ColourReset}:
-$ ${BARE_MAKE_PROGRAM} uninstall
-
-${Yellow}Make documenation${ColourReset}:
-$ ${BARE_MAKE_PROGRAM} doc
-
-${Yellow}Make test${ColourReset}:
-$ ${BARE_MAKE_PROGRAM} test
-")
-
-INSTALL(CODE "MESSAGE(
-\"
-ADD LIBRARY TO YOUR SYSTEM: 
-Pick ONE method below [or add it in your bash profile, e.g. ~/.bashrc]:
-${Yellow}Method 1: use the provided ${PROJECT_NAME} environment module${ColourReset}:
-   $ module use $HOME/.modules.d
-   $ module load ${TMP_MODULE_NAME}
-
-${Yellow}Method 2: source the config script${ColourReset}:
-   $ source ${LIB_TARGET_BIN}/${PROJECT_NAME}_config_user.sh
-
-${Yellow}Method 3: use pkg-config with the provided ${PROJECT_NAME}.pc${ColourReset}:
-   $ export PKG_CONFIG_PATH=${LIB_TARGET_ETC}/:$PKG_CONFIG_PATH
-   $ pkg-config --cflags --libs ${PROJECT_NAME}
-
-${Yellow}Method ADMIN: Add this line to the system shell configuration file, e.g. /etc/bash.bashrc${ColourReset}
-   $ source ${LIB_TARGET_BIN}/${PROJECT_NAME}_config_global.sh
-\")
-")
+IF(NOT TARGET ${EDI2INEQ2PY})
+  ADD_CUSTOM_TARGET(${EDI2INEQ2PY}_)
+  ADD_DEPENDENCIES(${EDI2INEQ2PY}_ ${EDI} ${EDI2INEQ})
+ENDIF()
 
 
 
@@ -126,7 +92,6 @@ ${Yellow}Method ADMIN: Add this line to the system shell configuration file, e.g
 ADD_CUSTOM_TARGET(distclean 
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_MODULE_PATH}/DistClean.cmake
 )
-
 
 # Uninstall target
 if(NOT TARGET uninstall)
@@ -147,7 +112,6 @@ ENDIF()
 #SPHINX DOCUMENTATION TARGET
 if(NOT TARGET doc)
   FIND_PACKAGE(Sphinx QUIET)
-
   IF(${SPHINX_FOUND})
     ADD_CUSTOM_TARGET(doc
       COMMAND ${SPHINX_EXECUTABLE} -T -b html
@@ -158,11 +122,66 @@ if(NOT TARGET doc)
 endif()
 
 
-
-
 IF(NOT TARGET test)
   ADD_CUSTOM_TARGET(test
     COMMAND ${BARE_MAKE_PROGRAM} -C ${LIB_TEST} all test
   )
 ENDIF()
+
+
+
+
+#Install Targets (if exist)
+INSTALL(TARGETS ${EDI}         DESTINATION ${LIB_TARGET_LIB})
+INSTALL(TARGETS ${EDI2PY}      DESTINATION ${LIB_TARGET_LIB} OPTIONAL)  
+INSTALL(TARGETS ${EDI2INEQ}    DESTINATION ${LIB_TARGET_LIB} OPTIONAL)
+INSTALL(TARGETS ${EDI2INEQ2PY} DESTINATION ${LIB_TARGET_LIB} OPTIONAL)
+
+
+  
+get_filename_component(BARE_MAKE_PROGRAM ${CMAKE_MAKE_PROGRAM} NAME)
+MESSAGE( STATUS "
+>> ${Red}TO CONCLUDE INSTALLATION ($=cmdline)${ColourReset} <<
+*${Yellow}Build ${EDI} [Default]${ColourReset}:  
+$ ${BARE_MAKE_PROGRAM} -j OR  $ ${BARE_MAKE_PROGRAM} -j ${EDI}
+*${Yellow}Build ${EDI2PY} C-bindings${ColourReset}: 
+$ ${BARE_MAKE_PROGRAM} ${EDI2PY}
+*${Yellow}Build ${EDI2INEQ} Inequivalent Sites Extension${ColourReset}: 
+$ ${BARE_MAKE_PROGRAM} ${EDI2INEQ}
+*${Yellow}Build ${EDI2INEQ2PY} Inequivalent Sites Extension C-bindings${ColourReset}: 
+$ ${BARE_MAKE_PROGRAM} ${EDI2INEQ2PY}
+*${Yellow}Install${ColourReset}: 
+$ ${BARE_MAKE_PROGRAM} install
+*${Yellow}Uninstall${ColourReset}: 
+$ ${BARE_MAKE_PROGRAM} uninstall
+*${Yellow}Build documenation${ColourReset}: 
+$ ${BARE_MAKE_PROGRAM} doc
+*${Yellow}Build and Runtest${ColourReset}: 
+$ ${BARE_MAKE_PROGRAM} test
+")
+MESSAGE( STATUS "${Red}Library version:${ColourReset} ${VERSION}")
+MESSAGE( STATUS "${Red}Library will be installed in:${ColourReset} ${CMAKE_INSTALL_PREFIX}")
+
+# INSTALL(CODE "MESSAGE(
+# \"
+# ADD LIBRARY TO YOUR SYSTEM: 
+# Pick ONE method below [or add it in your bash profile, e.g. ~/.bashrc]:
+# ${Yellow}Method 1: use the provided ${PROJECT_NAME} environment module${ColourReset}:
+#    $ module use $HOME/.modules.d
+#    $ module load ${TMP_MODULE_NAME}
+
+# ${Yellow}Method 2: source the config script${ColourReset}:
+#    $ source ${LIB_TARGET_BIN}/${PROJECT_NAME}_config_user.sh
+
+# ${Yellow}Method 3: use pkg-config with the provided ${PROJECT_NAME}.pc${ColourReset}:
+#    $ export PKG_CONFIG_PATH=${LIB_TARGET_ETC}/:$PKG_CONFIG_PATH
+#    $ pkg-config --cflags --libs ${PROJECT_NAME}
+
+# ${Yellow}Method ADMIN: Add this line to the system shell configuration file, e.g. /etc/bash.bashrc${ColourReset}
+#    $ source ${LIB_TARGET_BIN}/${PROJECT_NAME}_config_global.sh
+# \")
+# ")
+
+
+
 
