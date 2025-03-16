@@ -1,5 +1,6 @@
 #Build the Library module for environment modules
 FILE(REMOVE_RECURSE ${LIB_TMP_ETC}/modules)
+set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
 
 #Create default .version file if following conditions are verified:
 #1. master branch
@@ -132,10 +133,18 @@ ENDIF()
 
 
 #Install Targets (if exist)
-INSTALL(TARGETS ${EDI}         DESTINATION ${LIB_TARGET_LIB})
-INSTALL(TARGETS ${EDI2PY}      DESTINATION ${LIB_TARGET_LIB} OPTIONAL)  
-INSTALL(TARGETS ${EDI2INEQ}    DESTINATION ${LIB_TARGET_LIB} OPTIONAL)
-INSTALL(TARGETS ${EDI2INEQ2PY} DESTINATION ${LIB_TARGET_LIB} OPTIONAL)
+if(TARGET ${EDI})
+  INSTALL(TARGETS ${EDI}         DESTINATION ${LIB_TARGET_LIB})
+endif()
+if(TARGET ${EDI2PY})
+  INSTALL(TARGETS ${EDI2PY}      DESTINATION ${LIB_TARGET_LIB} OPTIONAL) 
+endif()
+if(TARGET ${EDI2INEQ})
+  INSTALL(TARGETS ${EDI2INEQ}    DESTINATION ${LIB_TARGET_LIB} OPTIONAL)
+endif()
+if(TARGET ${EDI2INEQ2PY})
+  INSTALL(TARGETS ${EDI2INEQ2PY} DESTINATION ${LIB_TARGET_LIB} OPTIONAL)
+endif()
 
 
   
@@ -151,7 +160,7 @@ $ ${BARE_MAKE_PROGRAM} ${EDI2INEQ}
 *${Yellow}Build ${EDI2INEQ2PY} Inequivalent Sites Extension C-bindings${ColourReset}: 
 $ ${BARE_MAKE_PROGRAM} ${EDI2INEQ2PY}
 *${Yellow}Install${ColourReset}: 
-$ ${BARE_MAKE_PROGRAM} install
+$ ${BARE_MAKE_PROGRAM} (edipack2/edipack2py/edipack2ineq/edipack2ineq2py, default=all) install
 *${Yellow}Uninstall${ColourReset}: 
 $ ${BARE_MAKE_PROGRAM} uninstall
 *${Yellow}Build documenation${ColourReset}: 
