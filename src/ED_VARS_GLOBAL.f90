@@ -1,7 +1,7 @@
 MODULE ED_VARS_GLOBAL
   !
-  !Contains all variables, arrays and derived types instances shared throughout the code.
-  !Specifically, it contains definitions of the :f:var:`effective_bath`, the :f:var:`gfmatrix` and the :f:var:`sector` data structures. 
+  !Contains global variables, arrays and derived types instances shared throughout the code.
+  !In particular, it contains definitions of the :f:var:`effective_bath` and the :f:var:`sector` data structures, loads the :f:mod:`ed_sparse_matrix` and :f:mod:`ed_gfmatrix` classes.    
   !
   USE SF_CONSTANTS
   USE SF_IOTOOLS, only:free_unit,reg,str
@@ -149,7 +149,7 @@ MODULE ED_VARS_GLOBAL
   !Global Nambu factor for SC calculations (Nspin=1 but this index is 2 to
   !correctly allocate  Nambu arrays of dim 2*Norb) 
   !=========================================================
-  integer                                            :: Nnambu=1
+  integer                                            :: Nnambu=1 !Nnambu dimensions used for calculation in the superconductive channel. 1 for normal case, 2 for superconductive case
 
   !local part of the Hamiltonian
   !=========================================================

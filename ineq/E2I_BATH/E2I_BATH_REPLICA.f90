@@ -1,6 +1,9 @@
 MODULE E2I_BATH_REPLICA
+  !
+  !This module implements the functions to set the matrix basis :math:`\{ \hat{O}_i \}_{i=1,\dots,N_{sym}}` and the initial variational parameters :math:`\vec{\lambda}` used to decompose each local bath hamiltonian for the  :f:var:`replica` and :f:var:`general` bath types.  
+  !The functions extends the functionalities to the case of multiple inequivalent impurities.
+  !
   USE EDIPACK2
-  !In these module we implement the functions to set the matrix basis :math:`\{ \hat{O}_i \}_{i=1,\dots,N_{sym}}` and the initial variational parameters :math:`\vec{\lambda}` used to decompose each local bath hamiltonian for the  :f:var:`replica` and :f:var:`general` bath types.  
   !
   USE E2I_VARS_GLOBAL
   USE E2I_AUX_FUNX
@@ -19,7 +22,6 @@ MODULE E2I_BATH_REPLICA
 
 
   interface set_Hreplica
-     !
      ! This function sets the matrix basis :math:`\{ \hat{O}_i \}_{i=1,\dots,N_{sym}}` used to decompose the single bath hamiltonian :math:`h^p`. It also sets the initial values of the variational parameters :math:`\vec{\lambda}` in the :f:var:`replica` ath type.
      !
      ! Input: :f:var:`Hvec` 
@@ -36,14 +38,14 @@ MODULE E2I_BATH_REPLICA
 
   interface set_Hgeneral
      !
+     !A clone of  :f:var:`set_Hreplica`
      !
      module procedure init_Hreplica_symmetries_lattice_d5
      module procedure init_Hreplica_symmetries_lattice_d3
   end interface set_Hgeneral
 
 
-
-  real(8),dimension(:,:,:),allocatable :: Hlambda_ineq  ![Nineq,Nbath,Nsym]
+  real(8),dimension(:,:,:),allocatable :: Hlambda_ineq  !rank-3 array, dimensions: [ |Nlat| , |Nbath| , |Nsym| ]. Stores the initial values of parameters the :math:`\lambda_i` for the baths matrix decomposition
 
   !Internal use
   public :: Hlambda_ineq
@@ -173,10 +175,13 @@ contains
 
 
   subroutine Hreplica_site(site)
+    !
+    !Set the current initial value of the replica bath parameters to the current inequivalent impurity :math:`\lambda_0=\lambda_{site}` 
+    !
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
-    integer :: site
+    integer :: site             !the index of the inequivalent impurity
     if(site<1.OR.site>size(Hlambda_ineq,1))stop "ERROR Hreplica_site: site not in [1,Nlat]"
     if(.not.allocated(Hlambda_ineq))stop "ERROR Hreplica_site: Hreplica_lambda_ineq not allocated"
     call ed_set_linit_Hreplica(Hlambda_ineq(site,:,:))

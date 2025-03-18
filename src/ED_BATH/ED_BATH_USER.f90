@@ -28,7 +28,7 @@ MODULE ED_BATH_USER
      !
      ! Function to impose a specific symmetry breaking pattern into the energy levels of the bath. A common case is to find magnetic solution by breaking spin degeneracy of the levels.
      !
-     ! * :f:var:`bath` is rank-1 [:] array type: double precision with assumed size
+     ! * :f:var:`bath` is rank-1  array type: double precision with assumed size
      !
      !
      module procedure break_symmetry_bath_site
@@ -38,7 +38,7 @@ MODULE ED_BATH_USER
      !
      ! Function to impose a spin symmetry to the parameters of the bath. Enforces a non-magnetic solution
      !
-     ! * :f:var:`bath` is rank-1 [:] array type: double precision with assumed size
+     ! * :f:var:`bath` is rank-1  array type: double precision with assumed size
      !
      module procedure spin_symmetrize_bath_site
   end interface spin_symmetrize_bath
@@ -47,11 +47,13 @@ MODULE ED_BATH_USER
      !
      ! Function to impose a orbital symmetry to the parameters of the bath. Enforces an orbital non-polarized solution. If two orbital indices :f:var:`orb1` and :f:var:`orb2` are passed symmetry is imposed only among such two orbitals
      !
+     !* :f:var:`bath` is rank-1  array type: double precision with assumed size
+     !
      !.. warning::
      !
      !   This operation requires the orbital to be degenerate.
      !
-     ! * :f:var:`bath` is rank-1 [:] array type: double precision with assumed size
+     !
      !
      module procedure orb_symmetrize_bath_site
      module procedure orb_symmetrize_bath_site_o1o2
@@ -61,7 +63,7 @@ MODULE ED_BATH_USER
      !
      ! Function to impose a orbital equality on the parameters of the bath. 
      !
-     ! * :f:var:`bath` is rank-1 [:] array type: double precision with assumed size
+     ! * :f:var:`bath` is rank-1  array type: double precision with assumed size
      !
      module procedure orb_equality_bath_site
   end interface orb_equality_bath
@@ -70,7 +72,7 @@ MODULE ED_BATH_USER
      !
      ! Function to impose particle-hole symmetry to the parameters of the bath. 
      !
-     ! * :f:var:`bath` is rank-1 [:] array type: double precision with assumed size
+     ! * :f:var:`bath` is rank-1  array type: double precision with assumed size
      !
      module procedure ph_symmetrize_bath_site
   end interface ph_symmetrize_bath
@@ -79,7 +81,7 @@ MODULE ED_BATH_USER
      !
      ! Function to perform particle-hole transformation to the parameters of the bath. 
      !
-     ! * :f:var:`bath` is rank-1 [:] array type: double precision with assumed size
+     ! * :f:var:`bath` is rank-1  array type: double precision with assumed size
      !
      module procedure ph_trans_bath_site
   end interface ph_trans_bath
@@ -88,7 +90,7 @@ MODULE ED_BATH_USER
      !
      ! Function to impose normal solution to the parameters of the bath, i.e. suppressed superconductivity if any.
      !
-     ! * :f:var:`bath` is rank-1 [:] array type: double precision with assumed size
+     ! * :f:var:`bath` is rank-1  array type: double precision with assumed size
      !
      module procedure enforce_normal_bath_site
   end interface enforce_normal_bath
@@ -97,7 +99,7 @@ MODULE ED_BATH_USER
      !
      ! Write the bath parameters to a file following the convention of the internal data structure :f:var:`effective_bath`. 
      !
-     ! * :f:var:`bath` is rank-1 [:] array type: double precision with assumed size
+     ! * :f:var:`bath` is rank-1  array type: double precision with assumed size
      !
      module procedure save_array_as_bath_site
   end interface save_array_as_bath
@@ -399,7 +401,7 @@ contains
 
   !---------------------------------------------------------!
 
-  
+
 
   subroutine impose_equal_lambda(bath_,ibath,lambdaindex_vec)
     !

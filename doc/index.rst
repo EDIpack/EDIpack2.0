@@ -4,19 +4,18 @@ EDIpack2.0
 A massively parallel Exact Diagonalization solver for Quantum Impurity problems.
 ***************************************************************************************************************
 
-..
-   .. warning::
-       The documentation is under construction
+.. warning::
+   The documentation is under construction
 
 
-EDIpack2.0 is a Lanczos based Exact Diagonalization method 
+EDIpack2_ is a Lanczos based Exact Diagonalization method 
 for the solution of generic Quantum Impurity problems,  exploiting MPI
 distributed memory parallelization.
 
 The 2.0 version extends the former EDIpack_ library enabling the solution of
 single-site, multi-orbital models with different conserved
 quantum numbers :math:`\vec{Q}` corresponding to separate operational
-modes which, in `EDIpack2.0` software, are selected by the input
+modes which, in `EDIpack2` software, are selected by the input
 variable `ed_mode=normal,superc,nonsu2` as follow: 
 
 * :math:`\vec{Q}=[\vec{N}_\uparrow,\vec{N}_\downarrow]` for which
@@ -46,17 +45,18 @@ variable `ed_mode=normal,superc,nonsu2` as follow:
 In the current state both the `normal` and `superc` operational modes
 include **electron-phonon** coupling (local or Holstein phonons).
 
-EDIpack2.0  is designed to obtain the lowest part of the
+EDIpack2  is designed to obtain the lowest part of the
 spectrum of the problem, thus it naturally works at **zero temperature**
 but can also be used to explore **low temperature** properties.  
  
-The EDIpack2.0 diagonalization algorithm is based on a massively
+The EDIpack2 diagonalization algorithm is based on a massively
 parallel execution of matrix-vector products, required in the context
 of Lanczos-Arnoldi linear procedures.
 However, substantial modifications have been introduced in this
 version to address the *Superconducting* and *non-SU(2)* channels.  
 An updated manuscript will be released soon. 
 
+.. _EDIPACK2: **EDIPACK2**
 .. _EDIPACK: https://github.com/edipack/EDIpack
 .. _j.cpc.2021.108261: https://doi.org/10.1016/j.cpc.2021.108261
 
@@ -96,49 +96,57 @@ Installation
 =================
 
 :doc:`dependencies`
-     Software requirements to install `EDIpack2.0`
+     Software requirements to install `EDIpack2`
      
 :doc:`installation`
-     Build, install and configure `EDIpack2.0`
+     Build, install and configure `EDIpack2`
      
 
+
+
+     
 Usage
 =================
 
 :doc:`quickstart`
-     A quick start guide to  `EDIpack2.0` usage
+     A quick start guide to  `EDIpack2` usage
 
 :doc:`examples`
-     Some examples illustrating the use of `EDIpack2.0` for simple test problems
+     Some examples illustrating the use of `EDIpack2` for simple test problems
+
+
+Structure
+======================
+:doc:`structure`
+     Overview of the `EDIpack2` library structure
+     
      
 
 EDIpack2
 ======================
 
 :doc:`edipack2`
-     An overview of the structure of the library and a detailed
-     description of the relevant modules.
+     A detailed overview  of the whole library with a thorough 
+     description of the relevant modules, data types and procedures.
 
 
 EDI2py
 ======================
-:doc:`edi2py`
-     An brief explanation of the automatically generated
-     Fortran-Python interface (see EDIpy2)
+:doc:`edipack2py`
+     An overview of the Fortran-C interface for EDIpack2_
 
 
 EDIpack2ineq
 ======================
 :doc:`edipack2ineq`
-     A quick link to the real-space extension of the library to handle
-     inequivalent sites.
+     The inequivalent sites extension of  EDIpack2_ 
      
 
-EDIpy2
+EDIpack2ineq2py
 ======================
-
-:doc:`edipy2`
-     Installation and basic use of `EDIpy2`: the `python` API of `EDIpack2.0`
+:doc:`edipack2ineq2py`
+     An overview of the Fortran-C interface for `EDIpack2ineq`
+     
 
 
 
@@ -146,7 +154,7 @@ Browse Source Code
 ============================
 
 :doc:`browsecode`
-     Browse the `EDIpack2.0` structure
+     Browse the `EDIpack2` structure
 
 
 
@@ -169,6 +177,13 @@ Browse Source Code
    examples
    
 .. toctree::
+   :caption: Structure
+   :maxdepth: 1
+   :hidden:
+
+   structure
+
+.. toctree::
    :caption: EDIpack2
    :maxdepth: 2
    :hidden:
@@ -176,13 +191,12 @@ Browse Source Code
    edipack2
 
 
-   
 .. toctree::
-   :caption: EDI2py
+   :caption: EDIpack2py
    :maxdepth: 1
    :hidden:
 
-   edi2py
+   edipack2py
 
 
 .. toctree::
@@ -192,13 +206,14 @@ Browse Source Code
 
    edipack2ineq
 
-   
+
 .. toctree::
-   :caption: EDIpy2
+   :caption: EDIpack2ineq2py
    :maxdepth: 2
    :hidden:
 
-   edipy2
+   edipack2ineq2py
+   
 
 .. toctree::
    :caption: Browse code
@@ -210,7 +225,7 @@ Browse Source Code
 .. toctree::
    :caption: External Links
    
-   EDIpack2.0 on GitHub <https://github.com/edipack/EDIpack2.0>
+   EDIpy2.0 on GitHub <https://github.com/edipack/EDIpy2.0>
    SciFortran on GitHub <https://github.com/SciFortran/SciFortran>
 
 

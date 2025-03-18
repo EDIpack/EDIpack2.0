@@ -21,11 +21,6 @@ MODULE ED_AUX_FUNX
      !
      !   * [|Nso| , |Nso| ]: single-impurity case, rank-2 array
      !   * [|Nspin| , |Nspin| , |Norb| , |Norb| ]: single-impurity case, rank-4 array
-     !   * [|Nlso|, |Nlso| ]: real-space DMFT case, rank-2 array.
-     !   * [|Nlat| , |Nso| , |Nso| ]: real-space RDMFT case, rank-3 array.
-     !   * [|Nlat| , |Nspin| , |Nspin| , |Norb| , |Norb| ]: real-space RDMFT case, rank-5 array.
-     !
-     !In the case of real-space DMFT, the number of impurities |Nlat| must be provided.
      !
      module procedure :: ed_set_Hloc_single_N2
      module procedure :: ed_set_Hloc_single_N4

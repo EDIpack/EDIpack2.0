@@ -1,5 +1,0 @@
-# EDI2py library
-FILE(GLOB ED2PY_SRC
-  edipack2py.f90  
-  )
-ADD_LIBRARY(ED2PY_LIB OBJECT  ${ED2PY_SRC})

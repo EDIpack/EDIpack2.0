@@ -1,5 +1,7 @@
-EDIpack2.0 Fortran Library
-===========================
+.. _edipack2:
+
+The EDIpack2 Fortran Library
+=====================================
 
 Here we give an overview of the structure of the EDIpack2.0 library,
 with a detailed description of the relevant modules and procedures.
@@ -16,7 +18,7 @@ available procedures and variables as needed to solve quantum impurity problems.
    :maxdepth: 1
    :glob:
 
-   structure/edipackmodule
+   edipack2/edipackmodule
       
 
 Core Solver Routines
@@ -30,7 +32,7 @@ solution and finalization.
    :maxdepth: 1
    :glob:
 
-   structure/main
+   edipack2/main
 
 
 General Environment
@@ -52,15 +54,11 @@ of the dimensions of the symmetry sectors.
 
 Finally, :f:mod:`ED_AUX_FUNX`  defines procedures which are used throughout the code.
 
-..
-   :f:mod:`ed_vars_global`  contains the definition of simple data
-   structures, such as  :f:type:`gfmatrix`  storing all weights and poles of the Green's functions    
-
 .. toctree::
    :maxdepth: 2
    :glob:
 
-   structure/general/*
+   edipack2/general/*
 
 
 Sparse Matrix
@@ -74,7 +72,7 @@ sector.
 .. toctree::
    :maxdepth: 2
 
-   structure/classes/01_ed_sparse_matrix
+   edipack2/classes/01_ed_sparse_matrix
 
 
    
@@ -89,7 +87,7 @@ spectrum.
 .. toctree::
    :maxdepth: 2
 
-   structure/classes/02_ed_eigenspace
+   edipack2/classes/02_ed_eigenspace
 
 
 GFmatrix
@@ -104,7 +102,7 @@ Kallen-Lehmann representation.
 .. toctree::
    :maxdepth: 2
 
-   structure/classes/03_ed_gfmatrix
+   edipack2/classes/03_ed_gfmatrix
 
 
 Sectors
@@ -128,7 +126,7 @@ recall are:
    :maxdepth: 1
    :glob:
 
-   structure/ed_sector
+   edipack2/ed_sector
 
 
 
@@ -146,7 +144,7 @@ the bath are grouped in set of modules.
    :maxdepth: 1
    :glob:
 
-   structure/bath
+   edipack2/bath
    
 
 Hamiltonian
@@ -167,7 +165,7 @@ vector product, required by the Arpack/Lanczos.
    :maxdepth: 1
    :glob:
 
-   structure/index_hamiltonian
+   edipack2/index_hamiltonian
 
 
    
@@ -191,7 +189,7 @@ distinct class of modules.
    :maxdepth: 1
    :glob:
 
-   structure/index_diag
+   edipack2/index_diag
    
 
 
@@ -212,7 +210,7 @@ the code).
    :maxdepth: 1
    :glob:
 
-   structure/index_greensfunctions
+   edipack2/index_greensfunctions
 
 
 Observables
@@ -235,7 +233,7 @@ the code).
    :maxdepth: 1
    :glob:
 
-   structure/index_observables
+   edipack2/index_observables
 
 
    
@@ -258,7 +256,7 @@ through the routines listed in :f:mod:`ED_IO`.
    :maxdepth: 1
    :glob:
 
-   structure/index_rdm
+   edipack2/index_rdm
 
 
    
@@ -277,7 +275,7 @@ frequency domain.
 .. toctree::
    :maxdepth: 1
 
-   structure/io/ed_io
+   edipack2/io
 
 
 
@@ -294,7 +292,7 @@ Anderson Green's function with the aim of updating the user bath parameters.
 .. toctree::
    :maxdepth: 1
 
-   structure/fit
+   edipack2/fit
 
 
 

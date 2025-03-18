@@ -192,11 +192,3 @@ The inclusion and linking flag can then be obtained via
    pkg-config --cflags edipack2 scifor
    pkg-config --libs   edipack2 scifor
 
-
-Install Python API
-======================
-
-Installation instruction for the python API are detailed in 
-:ref:`installation instructions <edipy_install>`
-
-

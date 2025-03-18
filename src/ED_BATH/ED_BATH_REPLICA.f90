@@ -1,5 +1,5 @@
 MODULE ED_BATH_REPLICA
-  !In these module we implement the functions to set the matrix basis :math:`\{ \hat{O}_i \}_{i=1,\dots,N_{sym}}` and the initial variational parameters :math:`\vec{\lambda}` used to decompose each local bath hamiltonian for the  :f:var:`replica` and :f:var:`general` bath types.  
+  !In these module we implement the functions to set the matrix basis :math:`\{ \hat{O}_i \}_{i=1,\dots,N_{sym}}` and the initial variational parameters :math:`\vec{\lambda}` used to decompose each local bath hamiltonian for the  :f:var:`replica` and :f:var:`general` bath types. Note that the two bath types share the very same matrix basis, yet for consistency we provide distinct interfaces to the two for each procedure.    
   !
   USE SF_CONSTANTS, only: zero
   USE SF_IOTOOLS, only:free_unit,reg,file_length,str
@@ -33,7 +33,7 @@ MODULE ED_BATH_REPLICA
      logical                                   :: status=.false.
   end type Hreplica
 
-  type(Hreplica),public                        :: Hb
+  type(Hreplica),public                        :: Hb !a default, global and shared instance of :f:var:`Hreplica` to store matrix decomposition
 
 
 
@@ -156,9 +156,10 @@ contains
   !     H_REPLICA ROUTINES:
   !
   !##################################################################
-  !allocate GLOBAL basis for H (used for Hbath) and vectors coefficient
+
   subroutine allocate_Hreplica(Nsym)
-    integer          :: Nsym
+    ! Allocate global basis for :f:var:`Hb` and the initial vector coefficient.
+    integer          :: Nsym    !Number of elements in the matrix decomposition
     integer          :: isym
 #ifdef _DEBUG
     if(ed_verbose>3)write(Logfile,"(A)")"DEBUG allocate_Hreplica"
@@ -178,8 +179,8 @@ contains
   end subroutine allocate_Hreplica
 
 
-  !deallocate GLOBAL basis for H (used for impHloc and bath) and vectors coefficient
   subroutine deallocate_Hreplica()
+    ! Deallocate the global :f:var:`Hb` as well as the initial vector coefficient.
     integer              :: isym
 #ifdef _DEBUG
     if(ed_verbose>3)write(Logfile,"(A)")"DEBUG deallocate_Hreplica"
@@ -199,10 +200,11 @@ contains
 
 
   subroutine save_Hreplica(file)
+    ! Save :f:var:`Hb` to file. 
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    character(len=*)                                          :: file
+    character(len=*)                                          :: file !Name of the file to store :f:var:`Hb`
     integer                                                   :: unit
     integer                                                   :: iorb,jorb
     integer                                                   :: ispin,jspin
@@ -231,10 +233,11 @@ contains
 
 
   subroutine read_Hreplica(file)
+    ! Read :f:var:`Hb` from specified file. 
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    character(len=*)                                          :: file
+    character(len=*)                                          :: file !Name of the file to store :f:var:`Hb`
     integer                                                   :: unit
     integer                                                   :: iorb,jorb
     integer                                                   :: ispin,jspin
@@ -266,7 +269,7 @@ contains
 
 
 
-  !Initialize replica bath using \vec{H} and \vec{\lambda}
+  !
   subroutine init_Hreplica_symmetries_d5(Hvec,lvec)
     complex(8),dimension(:,:,:,:,:) :: Hvec ![Nnambu*Nspin,Nnambu*Nspin,Norb,Norb,Nsym]
     real(8),dimension(:,:)          :: lvec ![Nbath,Nsym]
@@ -442,12 +445,12 @@ contains
   !##################################################################
   !##################################################################
   subroutine set_linit_Hreplica(lvec)
+    !
+    !This function is used to set the initial value of :math:`\lambda` parameters in the bath Hamiltonian matrix decomposition
+    !
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
-    !
-    !This function is used to set the initial value of :f:math:`\lambda` parameters in the bath Hamiltonian matrix decomposition
-    !
     real(8),dimension(:,:) :: lvec   !the input vector of bath parameters [Nsym,Nbath]
     !
     if(.not.Hb%status)stop "set_linit_Hreplica error: Hb.status=F"
@@ -457,12 +460,12 @@ contains
 
 
   subroutine set_hsym_Hreplica(isym,Hsym)
-#if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
-#endif
     !
     !This function is used to set a matrix element in the basis of the bath Hamiltonian matrix decomposition
     !
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+#endif
     integer                       :: isym
     complex(8),dimension(:,:,:,:) :: Hsym      ![Nambu*Nspin,Nambu*Nspin,Norb,Norb]
     !
@@ -476,12 +479,12 @@ contains
 
 
   function build_Hreplica(lvec) result(H)
-#if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
-#endif
     !
     !This function is used to reconstruct the local bath Hamiltonian from basis expansion given the vector of :math:`\vec{\lambda}` parameters :math:`h^p=\sum_i \lambda^p_i O_i`. The resulting Hamiltonian has dimensions [ |Nspin| , |Nspin| , |Norb| , |Norb| ]
     !
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb,Nbath
+#endif
     real(8),dimension(:),optional                             :: lvec   !the input vector of bath parameters
     real(8),dimension(:),allocatable                          :: lambda
     integer                                                   :: isym,nsym

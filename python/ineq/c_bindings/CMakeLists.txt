@@ -1,5 +1,0 @@
-# EDIneq2py library
-FILE(GLOB EDI2PY_SRC
-  edipack2ineq2py.f90  
-  )
-ADD_LIBRARY(EDI2PY_LIB OBJECT  ${EDI2PY_SRC})
