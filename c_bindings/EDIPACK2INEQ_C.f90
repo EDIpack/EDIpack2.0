@@ -1,4 +1,7 @@
-MODULE EDIPACK2INEQ2PY
+MODULE EDIPACK2INEQ_C
+  !
+  ! A Fortran-C interface module for EDIpack2+EDIpack2ineq built around `ISO_C_BINDING`
+  !
   USE COMMON
   USE EDIPACK2INEQ
   implicit none
@@ -19,4 +22,4 @@ contains
   !
   include "edipack2ineq/edipack2ineq2py_io.f90"
   include "edipack2ineq/edipack2ineq2py_main.f90"
-END MODULE EDIPACK2INEQ2PY
+END MODULE EDIPACK2INEQ_C

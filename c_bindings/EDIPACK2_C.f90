@@ -1,6 +1,6 @@
-MODULE EDIPACK2PY
+MODULE EDIPACK2_C
   !
-  ! A Fortran module including C-binding interfaces to the EDIpack2 procedures
+  ! A Fortran-C interface module for EDIpack2 built around `ISO_C_BINDING`
   !
   USE COMMON
   implicit none
@@ -18,4 +18,4 @@ contains
   !
   include "edipack2/edipack2py_io.f90"
   include "edipack2/edipack2py_main.f90"
-END MODULE EDIPACK2PY
+END MODULE EDIPACK2_C
