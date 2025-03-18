@@ -3,15 +3,16 @@
 Install
 #####################
 
-**EDIpack2** is available in the form of a static Fortran library
+|edipack2| is available in the form of a static Fortran library
 (`libedipack2.a`) and the related Fortran module `EDIPACK2`.
-The installation is available using CMake.
+The release version includes additional packages to extend the
+software functionalities: an inequivalent impurities extension |edipack2ineq|
+and two shared dynamical libraries implementing the
+Fortran-C interface. 
 
-Additionally, the current release includes a shared dynamical library
-(`libedi2py.so`/ `.dylib`) to interface **EDIpack2** with Python
-leveraging over `C` interoperability. 
+A standard installation method is available through CMake.
 
-Finally an installation method is provided through Anaconda. 
+An alternative approach is provided via Anaconda. 
 
 
 
@@ -23,7 +24,7 @@ Building
 
 We assume that `SciFortran` and `MPI` have been correctly installed
 and are available in the system. See related documentation. Note that
-the installation of `EDIpack2.0` closely follows the `SciFortran`
+the installation of |edipack2| closely follows the `SciFortran`
 template.
 
 
@@ -31,7 +32,7 @@ Clone the repo:
 
 .. code-block:: bash
 		
-   git clone https://github.com/edipack/EDIpack2.0 EDIpack2
+   git clone https://github.com/edipack/EDIpack2 EDIpack2
 
 
 
@@ -107,6 +108,40 @@ additional variables:
    :code:`BUILD_TYPE=AGGRESSIVE`  includes many deep level debug options which might not compile on some systems or breakdown compilation at linking step.  
 
 
+These steps build the whole set of libraries provided by |edipack2|. A
+specific building for each library is also available specifying the
+required target. For user convenience at the end CMake configuration
+step the following recap is printed:
+
+.. code-block:: bash
+
+   *Build edipack2 [Default]:  
+   $ make -j OR  $ make -j edipack2
+   
+   *Build edipack2_cbinding C-bindings: 
+   $ make edipack2_cbinding
+   
+   *Build edipack2ineq Inequivalent Sites Extension: 
+   $ make edipack2ineq
+   
+   *Build edipack2ineq_cbinding Inequivalent Sites Extension C-bindings: 
+   $ make edipack2ineq_cbinding
+   
+   *Install: 
+   $ make (edipack2/edipack2ineq/edipack2_cbinding/, default=all)   install
+   
+   *Uninstall: 
+   $ make uninstall
+   
+   *Build documenation: 
+   $ make doc
+   
+   *Build and Runtest: 
+   $ make test
+
+
+
+   
 Installing
 ------------
 

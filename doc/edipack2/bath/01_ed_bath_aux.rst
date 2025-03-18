@@ -8,6 +8,3 @@ Bath Auxiliary routines
 
 
 
-.. |Nnambu| replace:: :f:var:`nnambu`
-.. |Nspin| replace:: :f:var:`nspin`
-.. |Norb| replace:: :f:var:`norb`

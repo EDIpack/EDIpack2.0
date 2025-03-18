@@ -1,18 +1,17 @@
 .. _edipack2ineq:
 
-EDIpack2 inequivalent sites extension
+EDIpack2 for inequivalent impurities
 =======================================================
 
-`EDIpack2ineq` is a reduced sub-library of `EDIpack2` which extends
-its functionalities of to handle systems  with several 
-independent impurity problems, i.e. originating from inequivalent
-sites. These are usually emerging from RealSpace-DMFT treatment of
+|edipack2ineq| is a complementary sub-library of |edipack2|, which
+aims to extend its functionalities in handling systems with several 
+independent impurities. These maye emerge from RealSpace-DMFT treatment of
 unit cells with different inequivalent atoms or large super-cells with
-somehow broken translational symmetries (heterostructures, disordered
+broken translational symmetries (heterostructures, disordered
 systems, etc.).
 
 As for its scope the structure of this sub-library closely mimics that
-of `EDIpack2` adding, where needed, new procedures dealing with the
+of |edipack2| adding, where needed, new procedures dealing with the
 inequivalent sites. A standard fortran interface is then used to group
 all the procedures (from `EDIpack2` and `EDIpack2ineq`) under the same
 name.      

@@ -1,4 +1,4 @@
-EDIpack2.0
+EDIpack2
 ################
 
 A massively parallel Exact Diagonalization solver for Quantum Impurity problems.
@@ -8,15 +8,13 @@ A massively parallel Exact Diagonalization solver for Quantum Impurity problems.
    The documentation is under construction
 
 
-EDIpack2_ is a Lanczos based Exact Diagonalization method 
+|edipack2| is a Lanczos based Exact Diagonalization method 
 for the solution of generic Quantum Impurity problems,  exploiting MPI
 distributed memory parallelization.
 
-The 2.0 version extends the former EDIpack_ library enabling the solution of
-single-site, multi-orbital models with different conserved
-quantum numbers :math:`\vec{Q}` corresponding to separate operational
-modes which, in `EDIpack2` software, are selected by the input
-variable `ed_mode=normal,superc,nonsu2` as follow: 
+This version 2 extends the former EDIpack_ library by enabling the solution of
+multi-orbital quantum impurity models with different conserved
+quantum numbers :math:`\vec{Q}`:
 
 * :math:`\vec{Q}=[\vec{N}_\uparrow,\vec{N}_\downarrow]` for which
   either the number of total or orbital spin up and down electrons is
@@ -26,6 +24,8 @@ variable `ed_mode=normal,superc,nonsu2` as follow:
 
 * :math:`\vec{Q}=N_{\rm tot}`  where spin degrees freedom is not fully conserved:  **NON-SU(2)**
 
+in |edipack2| these can be selected using the input
+variable `ed_mode=normal,superc,nonsu2`
 
 .. note::
    The `superc` mode deals with local *s*-wave pairing although in 
@@ -42,21 +42,19 @@ variable `ed_mode=normal,superc,nonsu2` as follow:
 .. _PhysRevB.107.115117: https://journals.aps.org/prb/abstract/10.1103/PhysRevB.107.115117
 
 
-In the current state both the `normal` and `superc` operational modes
-include **electron-phonon** coupling (local or Holstein phonons).
+In the actual development stage both the `normal` and `superc` modes
+include **electron-phonon** coupling to Holstein phonons. 
 
-EDIpack2  is designed to obtain the lowest part of the
-spectrum of the problem, thus it naturally works at **zero temperature**
-but can also be used to explore **low temperature** properties.  
+|edipack2| is designed to obtain the lowest part of the
+spectrum of the quantum impurity problem, thus it naturally works at **zero temperature**
+yet it also supports determination of **low temperature** properties.  
  
-The EDIpack2 diagonalization algorithm is based on a massively
+The |edipack2| diagonalization algorithm is based on a massively
 parallel execution of matrix-vector products, required in the context
 of Lanczos-Arnoldi linear procedures.
 However, substantial modifications have been introduced in this
 version to address the *Superconducting* and *non-SU(2)* channels.  
-An updated manuscript will be released soon. 
 
-.. _EDIPACK2: **EDIPACK2**
 .. _EDIPACK: https://github.com/edipack/EDIpack
 .. _j.cpc.2021.108261: https://doi.org/10.1016/j.cpc.2021.108261
 
@@ -64,10 +62,9 @@ An updated manuscript will be released soon.
 Authors
 =================
 
-The `EDIpack` libraries (1.0 and 2.0) have been developed as a
+The `EDIpack` libraries have been developed as a
 collective effort by different authors, each contributing to diverse
-aspects of the library. The following list does not follow any
-particular order:  
+aspects of the library.
 
 * `Adriano Amaricci`_ (leading author)
   
@@ -96,65 +93,56 @@ Installation
 =================
 
 :doc:`dependencies`
-     Software requirements to install `EDIpack2`
+     Software requirements to install the |edipack2| library.
      
 :doc:`installation`
-     Build, install and configure `EDIpack2`
+     Build, install and configure the library in the OS.
      
 
 
-
-     
 Usage
 =================
 
 :doc:`quickstart`
-     A quick start guide to  `EDIpack2` usage
+     A quick start guide with two simple examples.
 
 :doc:`examples`
-     Some examples illustrating the use of `EDIpack2` for simple test problems
+     Further examples showcasing some potentialities of the software. 
 
 
 Structure
 ======================
 :doc:`structure`
-     Overview of the `EDIpack2` library structure
+     Global view of the |edipack2| library structure.
      
      
 
 EDIpack2
 ======================
-
 :doc:`edipack2`
      A detailed overview  of the whole library with a thorough 
      description of the relevant modules, data types and procedures.
 
-
-EDI2py
-======================
-:doc:`edipack2py`
-     An overview of the Fortran-C interface for EDIpack2_
-
-
+     
 EDIpack2ineq
 ======================
 :doc:`edipack2ineq`
-     The inequivalent sites extension of  EDIpack2_ 
-     
+     The inequivalent impurities extension of |edipack2|
 
-EDIpack2ineq2py
+
+   
+C-bindings
 ======================
-:doc:`edipack2ineq2py`
-     An overview of the Fortran-C interface for `EDIpack2ineq`
+:doc:`edipack2_cbinding`
+     The Fortran-C interface for |edipack2| and |edipack2ineq|
      
-
 
 
 Browse Source Code
 ============================
 
 :doc:`browsecode`
-     Browse the `EDIpack2` structure
+     Browse the software source
 
 
 
@@ -192,27 +180,19 @@ Browse Source Code
 
 
 .. toctree::
-   :caption: EDIpack2py
-   :maxdepth: 1
-   :hidden:
-
-   edipack2py
-
-
-.. toctree::
    :caption: EDIpack2ineq
    :maxdepth: 2
    :hidden:
 
    edipack2ineq
 
-
+   
 .. toctree::
-   :caption: EDIpack2ineq2py
+   :caption: C-Bindings
    :maxdepth: 2
    :hidden:
 
-   edipack2ineq2py
+   edipack2_cbinding
    
 
 .. toctree::

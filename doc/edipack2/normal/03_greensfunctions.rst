@@ -53,10 +53,4 @@ Dyson equation :math:`\hat{\Sigma}(z) = \hat{G}^{-1}_0(z) - \hat{G}^{-1}(z)`.
    :forceadd-members: build_impG_normal, get_impG_normal, get_impD_normal, get_Sigma_normal
 
 .. _j.cpc.2021.108261: https://doi.org/10.1016/j.cpc.2021.108261
-.. |Nbath| replace:: :f:var:`nbath`
-.. |Nlat| replace:: :f:var:`nlat`
-.. |Nspin| replace:: :f:var:`nspin`
-.. |Norb| replace:: :f:var:`norb`
-.. |Nso| replace:: :f:var:`nspin` . :f:var:`norb`
-.. |Nlso| replace:: :f:var:`nlat`. :f:var:`nspin` . :f:var:`norb`
 

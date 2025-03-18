@@ -103,8 +103,6 @@ fortran_src=[os.path.abspath('../src/*.f90'),
                  os.path.abspath('../src/ED_NORMAL/*.f90'),
                  os.path.abspath('../src/ED_SUPERC/*.f90'),
                  os.path.abspath('../src/ED_NONSU2/*.f90'),
-                 os.path.abspath('../c_bindings/EDIPACK2PY.f90'),
-                 os.path.abspath('../c_bindings/edipack2/*.f90'),
                  os.path.abspath('../ineq/*.f90'),
                  os.path.abspath('../ineq/E2I_IO/*.f90'),
                  os.path.abspath('../ineq/E2I_BATH/*.f90'),
@@ -135,6 +133,25 @@ exclude_patterns = []
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = 'sphinx'
+
+
+rst_prolog = """
+.. |edipack2| replace:: `EDIpack2`
+.. |edipack2ineq| replace:: `EDIpack2ineq`
+.. |Nnambu| replace:: :f:var:`nnambu`
+.. |Nspin| replace:: :f:var:`nspin`
+.. |Norb| replace:: :f:var:`norb`
+.. |Nbath| replace:: :f:var:`nbath`
+.. |Nlat| replace:: :f:var:`nlat`
+.. |bath_type| replace:: :f:var:`bath_type`
+.. |ed_mode| replace:: :f:var:`ed_mode`
+.. |Nsym| replace:: :f:var:`nsym`
+.. |Nso| replace:: :f:var:`nspin` . :f:var:`norb`
+.. |Nlso| replace:: :f:var:`nlat`. :f:var:`nspin` . :f:var:`norb`
+.. |Nns| replace:: :f:var:`nnambu` . :f:var:`nspin`
+.. |Nnso| replace:: :f:var:`nnambu` . :f:var:`nspin`. :f:var:`norb`
+"""
+
 
 
 # -- Options for HTML output -------------------------------------------------
