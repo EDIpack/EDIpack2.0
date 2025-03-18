@@ -4,6 +4,12 @@ MODULE COMMON
   USE ISO_C_BINDING
   implicit none
 
+#ifdef _WINEQ
+  integer(c_int),bind(c, name="has_ineq") :: has_ineq=1 
+#else
+  integer(c_int),bind(c, name="has_ineq") :: has_ineq=0
+#endif
+
 contains
 
   !integer to logical
