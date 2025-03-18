@@ -1,6 +1,7 @@
 MODULE COMMON
   USE EDIPACK2
   USE SCIFOR
+  USE ISO_C_BINDING
   implicit none
 
 contains

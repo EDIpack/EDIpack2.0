@@ -5,10 +5,9 @@ Install
 
 |edipack2| is available in the form of a static Fortran library
 (`libedipack2.a`) and the related Fortran module `EDIPACK2`.
-The release version includes additional packages to extend the
+The release version includes additional modules to extend the
 software functionalities: an inequivalent impurities extension |edipack2ineq|
-and two shared dynamical libraries implementing the
-Fortran-C interface. 
+and a shared dynamical library implementing the Fortran-C interface. 
 
 A standard installation method is available through CMake.
 
@@ -101,6 +100,10 @@ additional variables:
      - Compilation flags
      - RELEASE/TESTING/DEBUG/AGGRESSIVE (Default RELEASE)
 
+   * - :code:`-DWITH_INEQ`
+     - Include inequivalent impurities extension (in :code:`EDIPACK2INEQ`)
+     - yes/True OR no/False (default: True)
+
 ..
    TESTING:mild or no optimization,  DEBUG:relevant debugging options,  
 .. warning::
@@ -108,7 +111,7 @@ additional variables:
    :code:`BUILD_TYPE=AGGRESSIVE`  includes many deep level debug options which might not compile on some systems or breakdown compilation at linking step.  
 
 
-These steps build the whole set of libraries provided by |edipack2|. A
+The default target builds either the main library and the C-binding. A
 specific building for each library is also available specifying the
 required target. For user convenience at the end CMake configuration
 step the following recap is printed:
@@ -116,19 +119,13 @@ step the following recap is printed:
 .. code-block:: bash
 
    *Build edipack2 [Default]:  
-   $ make -j OR  $ make -j edipack2
+   $ make -j [all/edipack2, default=all]
    
-   *Build edipack2_cbinding C-bindings: 
+   *Build C-bindings: 
    $ make edipack2_cbinding
-   
-   *Build edipack2ineq Inequivalent Sites Extension: 
-   $ make edipack2ineq
-   
-   *Build edipack2ineq_cbinding Inequivalent Sites Extension C-bindings: 
-   $ make edipack2ineq_cbinding
-   
+      
    *Install: 
-   $ make (edipack2/edipack2ineq/edipack2_cbinding/, default=all)   install
+   $ make [all/edipack2/edipack2_cbinding, default=all] install
    
    *Uninstall: 
    $ make uninstall

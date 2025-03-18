@@ -8,7 +8,7 @@ Name: edipack2py
 Description: The EDIpack2 C-bindings for Python API library
 Cflags: -I${includedir}
 Requires: edipack2
-Libs: -L${libdir} -ledipack2py
+Libs: -L${libdir} -ledipack2_cbinding
 Version:@VERSION@
 
 

@@ -52,39 +52,22 @@ INSTALL(FILES ${LIB_TMP_VER} DESTINATION ${LIB_TARGET_DIR}
 
 #Build the PKG-CONFIG file: these are build at CMake. Copy per target is the way to go
 CONFIGURE_FILE( ${LIB_ETC}/${EDI}.pc.in         ${LIB_TMP_ETC}/${EDI}.pc @ONLY)
-CONFIGURE_FILE( ${LIB_ETC}/${EDI2INEQ}.pc.in    ${LIB_TMP_ETC}/${EDI2INEQ}.pc @ONLY)
 CONFIGURE_FILE( ${LIB_ETC}/${EDI_C}.pc.in       ${LIB_TMP_ETC}/${EDI_C}.pc @ONLY)
-CONFIGURE_FILE( ${LIB_ETC}/${EDI2INEQ_C}.pc.in  ${LIB_TMP_ETC}/${EDI2INEQ_C}.pc @ONLY)
-
-
 
 #Only Files:
 INSTALL(FILES ${LIB_TARGET_ETC}/${EDI}.pc        DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID)
-INSTALL(FILES ${LIB_TARGET_ETC}/${EDI2INEQ}.pc   DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID OPTIONAL)
 INSTALL(FILES ${LIB_TARGET_ETC}/${EDI_C}.pc      DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID OPTIONAL)
-INSTALL(FILES ${LIB_TARGET_ETC}/${EDI2INEQ_C}.pc DESTINATION $ENV{HOME}/.pkgconfig.d/ PERMISSIONS ${PERMISSION_777} SETUID OPTIONAL)
 
 
 #Copy the module environment file in place
 INSTALL(DIRECTORY ${LIB_TARGET_ETC}/modules/ DESTINATION $ENV{HOME}/.modules.d)
 
 
-IF(NOT TARGET ${EDI2INEQ})
-  ADD_CUSTOM_TARGET(${EDI2INEQ}_)
-  ADD_DEPENDENCIES(${EDI2INEQ}_ ${EDI})  
-ENDIF()
-
 
 IF(NOT TARGET ${EDI_C})
   ADD_CUSTOM_TARGET(${EDI_C}_)
   ADD_DEPENDENCIES(${EDI_C}_ ${EDI_C})
 ENDIF()
-
-IF(NOT TARGET ${EDI2INEQ_C})
-  ADD_CUSTOM_TARGET(${EDI2INEQ_C}_)
-  ADD_DEPENDENCIES(${EDI2INEQ_C}_ ${EDI} ${EDI2INEQ})
-ENDIF()
-
 
 
 # Add a distclean target to the Makefile
@@ -129,36 +112,25 @@ ENDIF()
 
 
 
-
-#Install Targets (if exist)
+# #Install Targets (if exist)
 if(TARGET ${EDI})
   INSTALL(TARGETS ${EDI}        DESTINATION ${LIB_TARGET_LIB})
-endif()
-if(TARGET ${EDI2INEQ})
-  INSTALL(TARGETS ${EDI2INEQ}   DESTINATION ${LIB_TARGET_LIB} OPTIONAL)
 endif()
 if(TARGET ${EDI_C})
   INSTALL(TARGETS ${EDI_C}      DESTINATION ${LIB_TARGET_LIB} OPTIONAL) 
 endif()
-if(TARGET ${EDI2INEQ_C})
-  INSTALL(TARGETS ${EDI2INEQ_C} DESTINATION ${LIB_TARGET_LIB} OPTIONAL)
-endif()
 
 
-  
+
 get_filename_component(BARE_MAKE_PROGRAM ${CMAKE_MAKE_PROGRAM} NAME)
 MESSAGE( STATUS "
 >> ${Red}TO CONCLUDE INSTALLATION ($=cmdline)${ColourReset} <<
 *${Yellow}Build ${EDI} [Default]${ColourReset}:  
-$ ${BARE_MAKE_PROGRAM} -j OR  $ ${BARE_MAKE_PROGRAM} -j ${EDI}
-*${Yellow}Build ${EDI_C} C-bindings${ColourReset}: 
+$ ${BARE_MAKE_PROGRAM} -j [all/${EDI}, default=all]
+*${Yellow}Build C-bindings${ColourReset}: 
 $ ${BARE_MAKE_PROGRAM} ${EDI_C}
-*${Yellow}Build ${EDI2INEQ} Inequivalent Sites Extension${ColourReset}: 
-$ ${BARE_MAKE_PROGRAM} ${EDI2INEQ}
-*${Yellow}Build ${EDI2INEQ_C} Inequivalent Sites Extension C-bindings${ColourReset}: 
-$ ${BARE_MAKE_PROGRAM} ${EDI2INEQ_C}
 *${Yellow}Install${ColourReset}: 
-$ ${BARE_MAKE_PROGRAM} (${EDI}/${EDI2INEQ}/${EDI_C}/${EDIINEQ_C}, default=all) install
+$ ${BARE_MAKE_PROGRAM} [all/${EDI}/${EDI_C}, default=all] install
 *${Yellow}Uninstall${ColourReset}: 
 $ ${BARE_MAKE_PROGRAM} uninstall
 *${Yellow}Build documenation${ColourReset}: 
