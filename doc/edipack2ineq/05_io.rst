@@ -1,3 +1,5 @@
+.. _e2i_io:
+
 Input / Output Functions
 =========================
 

@@ -1,8 +1,9 @@
-Bath User
+.. _e2i_bath_user:
+
+Bath symmetry operations
 =================================
 
-In the module :f:mod:`E2I_BATH_USER` we implement a number of auxiliary procedures applying given symmetry
-operations to all the inequivalent impurities baths.  
+
 
 
 .. f:automodule::   e2i_bath_user

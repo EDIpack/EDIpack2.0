@@ -1,18 +1,18 @@
 .. _edipack2ineq:
 
 EDIpack2 for inequivalent impurities
-=======================================================
+#################################################################################
 
 |edipack2ineq| is a complementary sub-library of |edipack2|, which
-aims to extend its functionalities in handling systems with several 
+extends its functionalities to systems with several 
 independent impurities. These maye emerge from RealSpace-DMFT treatment of
 unit cells with different inequivalent atoms or large super-cells with
 broken translational symmetries (heterostructures, disordered
 systems, etc.).
 
-As for its scope the structure of this sub-library closely mimics that
-of |edipack2| adding, where needed, new procedures dealing with the
-inequivalent sites. A standard fortran interface is then used to group
+As for its scope, the structure of this sub-library closely mimics that
+of |edipack2| adding, where needed, new procedures adapted to the 
+inequivalent impurities case. A standard fortran interface is then used to group
 all the procedures (from `EDIpack2` and `EDIpack2ineq`) under the same
 name.      
 
@@ -21,8 +21,8 @@ name.
 
 
 
-Library Frontend
-###########################
+:ref:`Library Frontend <edipack2ineqmodule>`
+=================================================================
 
 The :f:mod:`EDIPACK2INEQ` module represents the main user interface
 (or Fortran API). This modules gives access to all the available
@@ -30,29 +30,31 @@ procedures and variables as needed to solve quantum impurity problems.
 
 
 .. toctree::
-   :maxdepth: 1
-   :glob:
+   :caption: Library Frontend
+   :maxdepth: 2
+   :hidden:
 
-   edipack2ineq/edipack2ineqmodule
+   edipack2ineq/01_edipack2ineqmodule
       
 
    
-Core Solver Routines
-###########################
+:ref:`Core Solver Routines <e2i_main>`
+=================================================================
 
 The module :f:mod:`E2I_MAIN` extends wrapping of the main algorithms into
 three functions, one for each step: initialization,
 solution and finalization. 
 
 .. toctree::
-   :maxdepth: 1
-   :glob:
+   :caption: Core Solver Routines
+   :maxdepth: 2
+   :hidden:
 
-   edipack2ineq/main
+   edipack2ineq/02_main
 
 
 General Environment
-###########################
+=================================================================
 
 This part of the library includes a set of global variables and
 procedures  for `EDIpack2ineq`.  This includes:
@@ -66,13 +68,13 @@ Finally, :f:mod:`E2I_AUX_FUNX`  defines procedures which are used throughout the
    :maxdepth: 2
    :glob:
 
-   edipack2ineq/general/*
+   edipack2ineq/03_general/*
 
 
    
 
-Bath 
-###########################
+:ref:`Quantum Impurity Bath  <e2i_bath>`
+=================================================================
 
 The module :f:mod:`E2I_BATH` contains some extensions to procedures
 enabling user side control of the bath setup and the implementation of
@@ -80,42 +82,52 @@ conventional symmetry operations.
 
       
 .. toctree::
+   :caption: Bath
    :maxdepth: 2
-   :glob:
+   :hidden:
 
-   edipack2ineq/bath/*
+   edipack2ineq/04_bath
    
 
 
 
    
 
-Input/Output
-###########################
+:ref:`Input/Output <e2i_io>`
+=================================================================
 
 The module :f:mod:`E2I_IO` provides to extended input and output
 procedures returning observables or dynamical functions per
 inequivalent site. 
 
 .. toctree::
-   :maxdepth: 1
+   :caption: Input/Output
+   :maxdepth: 2
+   :hidden:
 
-   edipack2ineq/io
+   edipack2ineq/05_io
 
 
 
 
-:math:`\chi^2` Fit
-###########################
+
+
+   
+
+:ref:`Bath Optimization <e2i_fit>`
+=================================================================
 
 The module :f:mod:`E2I_BATH_FIT` contains the extensions of the
 generic function :f:func:`ed_chi2_fitgf` to perform 
 multiple independent minimizations for all inequivalent sites.  
 
-.. toctree::
-   :maxdepth: 1
 
-   edipack2ineq/fit
+.. toctree::
+   :caption: Bath Optimization
+   :maxdepth: 2
+   :hidden:
+
+   edipack2ineq/06_fit
 
  
 

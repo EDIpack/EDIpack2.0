@@ -1,6 +1,6 @@
 .. _main:
 
-Impurity Problem Solution Routines 
+Impurity Problem Solver Routines 
 ====================================
 
 The module :f:mod:`ED_MAIN` contains the procedures that initializes,

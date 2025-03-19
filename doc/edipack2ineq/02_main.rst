@@ -1,5 +1,7 @@
-Inequivalent Impurities Routines 
-====================================
+.. _e2i_main:
+
+Inequivalent Impurities Solver Routines 
+============================================
 
 The module :f:mod:`E2I_MAIN` contains the procedures that initializes,
 launch and finalize multiple **EDIpack2** solvers for independent inequivalent quantum impurity

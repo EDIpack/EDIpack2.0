@@ -279,9 +279,6 @@ through the routines listed in :f:mod:`ED_IO`.
 :ref:`Input/Output <ed_io>`
 =================================================================
 
-..
-   :doc:`edipack2/io`
-     
 This module provides access to the results of the exact
 diagonalization. All quantities such as dynamical response functions,
 self-energy components  or impurity observables  can be retrieved  
@@ -303,8 +300,6 @@ frequency domain.
 :ref:`Bath Optimization <fit>`
 =================================================================
 
-..
-   :doc:`edipack2/fit`
 
 In  this module we provide to the user a generic function
 :f:func:`ed_chi2_fitgf` performing the minimization of a user provided

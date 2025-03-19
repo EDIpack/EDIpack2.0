@@ -6,7 +6,7 @@ EDIpack2 Fortran-C interface
 The C-binding layer is made of a single Fortran module
 :f:mod:`EDIPACK2_C`  which provides a Fortran-C 
 interface. This is achieved using the interoperability features
-implemented in `iso_C_bindings` Fortran module.
+implemented in :f:mod:`ISO_C_BINDINGS` Fortran module.
 
 The :f:mod:`EDIPACK2_C` module essentially consists of a series of
 C-type procedures which wraps one-by-one the relevant |edipack2|

@@ -4,7 +4,7 @@ EDIpack2 Fortran Module
 ==========================
 
 
-:f:mod:`edipack2` is the top module of the **EDIpack2** library. It provides access to the all the relevant procedures of the library, realizing the Fortran API. The user needs to invoke use of this module to get access to **EDIpack2** as:
+:f:mod:`EDIPACK2` is the top module of the |EDIpack2| library. It provides access to the all the relevant procedures of the library, realizing the Fortran API. The user needs to invoke use of this module to get access to |edipack2| as:
 
    .. code-block:: fortran
 
