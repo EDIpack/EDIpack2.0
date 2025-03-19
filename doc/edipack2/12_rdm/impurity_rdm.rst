@@ -1,5 +1,7 @@
+.. _imp_rdm:
+
 Impurity RDM
-==================================
+---------------------------------------------------------------------------
 
 The global unique interface to the all the available procedures
 evaluating impurity RDM.

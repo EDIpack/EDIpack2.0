@@ -1,20 +1,23 @@
-Impurity Reduced Density Matrix
-#######################################
+.. _rdm:
 
-The :f:mod:`ed_rdm`  provides a single interface to the evaluation of
+:ref:`Impurity Reduced Density Matrix <rdm>`
+---------------------------------------------------------------------------
+
+The :f:mod:`ED_RDM`  provides a single interface to the evaluation of
 the Reduced Density Matrix (RDM) :math:`\rho_{imp}={\rm
 Tr}_{bath}\rho` for any value of :f:var:`ed_mode`.
-This is used in the :f:mod:`ed_main` Fortran API. 
+This is used in the :f:mod:`ED_MAIN` Fortran API. 
 
 .. toctree::
    :maxdepth: 2
    :glob:
-
-   rdm
+   :hidden:
+      
+   12_rdm/impurity_rdm
    
 
-Normal mode
-+++++++++++++++
+:ref:`Normal mode <rdm_normal>`
+---------------------------------------------------------------------------
 
 This module implements the  evaluation of impurity RDM
 assuming the conserved quantum numbers are
@@ -33,12 +36,14 @@ operator.
 .. toctree::
    :maxdepth: 2
    :glob:
+   :hidden:
+      
 
    normal/06_rdm
 
 
-Superconductive mode
-++++++++++++++++++++++++
+:ref:`Superconductive mode <rdm_superc>`
+---------------------------------------------------------------------------
 
 This module implements the  evaluation of impurity RDM 
 assuming  :math:`\vec{Q}\equiv S_z=N_\uparrow-N_\downarrow`.
@@ -50,13 +55,15 @@ wave pairing.
 .. toctree::
    :maxdepth: 2
    :glob:
+   :hidden:
+      
 
    superc/06_rdm
 
 
 
-Non-SU(2) mode
-+++++++++++++++++++
+:ref:`Non-SU(2) mode <rdm_nonsu2>`
+---------------------------------------------------------------------------
 
 This module implements the  evaluation of impurity RDM 
 assuming 
@@ -69,6 +76,8 @@ conservation, as for instance in presence of Spin-Orbit coupling.
 .. toctree::
    :maxdepth: 2
    :glob:
+   :hidden:
+      
 
    nonsu2/06_rdm
 

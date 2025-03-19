@@ -1,5 +1,7 @@
-Green's Function calculation
-============================
+.. _gf_nonsu2:
+
+Green's Function calculation: non-SU(2)
+=====================================================================
 
 In this module :f:mod:`ed_gf_nonsu2` the interacting impurity Green's
 functions  :math:`\hat{G}(z)` are evaluated for :f:var:`ed_mode` =

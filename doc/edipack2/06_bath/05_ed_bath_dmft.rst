@@ -1,4 +1,6 @@
-Bath data structure
+.. _ed_bath_dmft:
+
+Bath class implementation
 ============================
 
 

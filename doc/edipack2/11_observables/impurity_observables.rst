@@ -1,5 +1,7 @@
-Impurity observables interface
-==================================
+.. _imp_observables:
+
+Impurity Observables 
+---------------------------------------------------------------------------
 
 The global unique interface to the all the available procedures
 evaluating impurity observables and static correlations.

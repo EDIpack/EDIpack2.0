@@ -2,12 +2,13 @@ Hamiltonian Setup
 ============================
 
 
-In :f:var:`ed_hamiltonian_superc` we implement procedures to setup and
-build the sector Hamiltonian which are then used elsewhere to obtain
+The :f:mod:`ED_HAMILTONIAN_SUPERC` module contains the implementation of
+the  superconducting sector Hamiltonian constructor.
+The Hamiltonian is then used elsewhere to obtain
 the low part of the energy spectrum or construct the dynamical response
 functions. 
 
-The sector electron Hamiltonian has the form:
+The symmetry sector electronic Hamiltonian has the form:
 
 .. math::
 
@@ -22,7 +23,7 @@ terms
       c^{\dagger}_{a\sigma}c_{b\sigma} + \sum_{a} P_{a} c_{a\uparrow} c_{a\downarrow} + H.c.
 
 where :math:`P_a` is the external pair field coupled to the orbital
-resovled pair amplitudes.  
+resolved pair amplitudes.  
 
 The term :math:`H_{\rm int}` describes the local electron-electron
 interaction in the generic Hubbard-Kanamori form with tunable

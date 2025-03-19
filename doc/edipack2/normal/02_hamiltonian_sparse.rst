@@ -1,11 +1,12 @@
 Stored Hamiltonian :math:`H\times\vec{v}`  
 ==============================================
 
-The module :f:mod:`ed_hamiltonian_normal_stored_hxv` implements the
-construction of the sector Hamiltonian sparse matrices and the related
-matrix-vector products algorithms, serial or parallel and according to
-actual quantum numbers, as defined by the value of the variable
-:f:var:`ed_total_ud` distinguishing between conservation of total
+The module :f:mod:`ED_HAMILTONIAN_NORMAL_STORED_HXV` implements the
+construction of the sector Hamiltonian as sparse matrices and the related
+matrix-vector products algorithms, either in serial or parallel
+execution.
+Different implementations are available according to the value of 
+:f:var:`ed_total_ud`, distinguishing between conservation of total
 or orbital resolved spin occupations. 
 
 

@@ -1,42 +1,43 @@
 .. _edipack2:
 
 The EDIpack2 Fortran Library
-=====================================
+#################################################################################
 
-Here we give an overview of the structure of the EDIpack2.0 library,
+Here we give an overview of the structure of the |edipack2| library,
 with a detailed description of the relevant modules and procedures.
 
 
-Library Frontend
-###########################
+:ref:`Library Frontend <edipackmodule>`
+=================================================================
 
 The :f:mod:`EDIPACK2` module represents the main user interface (or Fortran API) 
-of the **EDIpack2** library. This modules gives access to all the
+of the |edipack2| library. This modules gives access to all the
 available procedures and variables as needed to solve quantum impurity problems.  
 
 .. toctree::
-   :maxdepth: 1
-   :glob:
-
-   edipack2/edipackmodule
+   :caption: Library Frontend
+   :maxdepth: 2
+   :hidden:
+      
+   edipack2/01_edipackmodule
       
 
-Core Solver Routines
-###########################
-
-The module :f:mod:`ED_MAIN` wraps the **EDIpack2** algorithm into
-three functions, one for each step: initialization,
-solution and finalization. 
+:ref:`Core Solver Routines <main>`
+=================================================================
+     
+The module :f:mod:`ED_MAIN` wraps the |edipack2| algorithm into
+three functions, one for each step: initialization, solution and finalization. 
 
 .. toctree::
-   :maxdepth: 1
-   :glob:
+   :caption: Core Solver Routines
+   :maxdepth: 2
+   :hidden:
 
-   edipack2/main
+   edipack2/02_main
 
 
 General Environment
-###########################
+=================================================================
 
 This part of the library includes a set of modules which contain
 variables or procedures serving the rest of the code. 
@@ -49,67 +50,55 @@ read method.
 variables and classes, such as the key class  :f:type:`effective_bath`
 which gathers the different bath components according to value of :f:var:`bath_type` and :f:var:`ed_mode`.
 
+:f:mod:`ED_AUX_FUNX`  defines procedures which are used throughout the
+   code.
+   
 :f:mod:`ED_SETUP`  which handles global memory (de)allocation and the evaluation
 of the dimensions of the symmetry sectors.
 
-Finally, :f:mod:`ED_AUX_FUNX`  defines procedures which are used throughout the code.
+
 
 .. toctree::
    :maxdepth: 2
    :glob:
 
-   edipack2/general/*
+   edipack2/03_general/*
 
 
-Sparse Matrix
-###########################
+Classes
+=================================================================   
 
-The module  :f:mod:`ED_SPARSE_MATRIX` contains the implementation of a
+This is a group of modules implementing different classes which are
+used throughout the software to deal with special needs.
+The group includes:
+
+The  :f:mod:`ED_SPARSE_MATRIX` class, which contains the implementation of a
 suitable Compact Row Stored (CRS) sparse matrix, used to store the sparse Hamiltonians in each symmetry
 sector. 
 
+The :f:mod:`ED_EIGENSPACE` class, which implements an ordered
+single linked list to efficiently store the lower part of the energy spectrum.
+
+
+The :f:mod:`ED_GFMATRIX` class which stores the
+results of the dynamical Lanczos calculation of dynamical correlation
+functions in terms of weights and poles of the Kallen-Lehmann representation.  
 
 .. toctree::
    :maxdepth: 2
+   :glob:
 
-   edipack2/classes/01_ed_sparse_matrix
-
-
-   
-
-EigenSpace
-###########################
-
-The module :f:mod:`ED_EIGENSPACE` implements an ordered
-single linked list to store the lower part of the energy
-spectrum.
-
-.. toctree::
-   :maxdepth: 2
-
-   edipack2/classes/02_ed_eigenspace
+   edipack2/04_classes/*
 
 
-GFmatrix
-###########################
-
-The module :f:mod:`ED_GFMATRIX` contains definition of a specific
-class to store the results of the dynamical Lanczos calculation of
-dynamical correlation functions in terms of weights and poles of the
-Kallen-Lehmann representation.  
+  
 
 
-.. toctree::
-   :maxdepth: 2
-
-   edipack2/classes/03_ed_gfmatrix
-
-
-Sectors
-###########################
+:ref:`Symmetry Sectors <sectors>`
+=================================================================
 
 The :f:mod:`ED_SECTOR` module implements the construction of the symmetry
-sectors for the three sets of quantum numbers :math:`\vec{Q}` considered in **EDIpack2**, that we
+sectors for the three sets of quantum numbers :math:`\vec{Q}` considered in |edipack2|, that we
 recall are:
 
 * :math:`\vec{Q}=[\vec{N}_\uparrow,\vec{N}_\downarrow]` for which
@@ -122,38 +111,40 @@ recall are:
   conserved:  **NON-SU(2)**
   
 
+
 .. toctree::
-   :maxdepth: 1
-   :glob:
+   :caption: Symmetry Sectors
+   :maxdepth: 2
+   :hidden:
 
-   edipack2/ed_sector
+   edipack2/05_sectors
 
 
 
-Bath 
-###########################
+:ref:`Quantum Impurity Bath  <bath>`
+=================================================================
 
-In **EDIpack2** the bath is handled using a Reverse Communication
+In |edipack2| the bath is handled using a Reverse Communication
 Strategy. All the procedures designed to define or handle the
 discretized bath as well as those to evaluate suitable functions of
 the bath are grouped in set of modules.   
 
-
-      
+    
 .. toctree::
-   :maxdepth: 1
-   :glob:
+   :caption: Bath
+   :maxdepth: 2
+   :hidden:
 
-   edipack2/bath
+   edipack2/06_bath
    
 
-Hamiltonian
-###########################
+:ref:`Hamiltonian <hamiltonian>`
+=================================================================
 
-This part of the `EDIpack2.0` code implements the setup of the
+This part of the |edipack2| code implements the setup of the
 sector Hamiltonian in each  operational modes,  corresponding to the
 choice of one of the  symmetries implemented in the code selected by the variable :f:var:`ed_mode` =  :code:`normal, superc, nosu2`. See
-:f:mod:`ed_sector` for more info about the symmetries implemented in
+:f:mod:`ED_SECTOR` for more info about the symmetries implemented in
 the code.
 
 Any of three different mode is implemented in a distinct class of
@@ -162,19 +153,19 @@ of the Hamiltonian and the definition of the corresponding matrix
 vector product, required by the Arpack/Lanczos. 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :glob:
-
-   edipack2/index_hamiltonian
+   :hidden:
+      
+   edipack2/07_hamiltonian
 
 
    
 
-Exact Diagonalization
-###########################
+:ref:`Exact Diagonalization <diag>`
+=================================================================
 
-
-This part of the **EDIpack2** code implements the exact
+This part of the |edipack2| code implements the exact
 diagonalization of the general, single-site, multi-orbital quantum
 impurity problem in each of the specific symmetry implemented in the
 code. The operational modes are selected by the variable
@@ -186,17 +177,19 @@ As above, we implemented the three different channels in
 distinct class of modules. 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :glob:
+   :hidden:
 
-   edipack2/index_diag
+   edipack2/08_diag
    
 
 
 
-Green's Functions 
-###########################
-This part of the **EDIpack2** code implements the calculation of the
+:ref:`Green's Functions  <greensfunctions>`
+=================================================================
+     
+This part of the |edipack2| code implements the calculation of the
 impurity interacting Green's functions, self-energy functions and
 impurity susceptibilities. Calculations are performed in  each operational mode,  corresponding to the
 choice of the specific symmetry implemented in the code, i.e. which
@@ -207,16 +200,36 @@ the code).
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :glob:
+   :hidden:
+      
+   edipack2/09_greensfunctions
 
-   edipack2/index_greensfunctions
+
+:ref:`Susceptibilities  <chifunctions>`
+=================================================================
+     
+This part of the |edipack2| code implements the calculation of the
+impurity susceptibilities in different physical channels: spin,
+charge, pair and excitonic. The calculations are performed for
+:f:var:`ed_mode` =  :code:`normal`.  
 
 
-Observables
-###########################
+.. toctree::
+   :maxdepth: 2
+   :glob:
+   :hidden:
+      
+   edipack2/10_chifunctions
 
-This part of the `EDIpack2.0` code implements the calculation of the
+
+   
+
+:ref:`Observables <observables>`
+=================================================================
+
+This part of the |edipack2| code implements the calculation of the
 impurity observables and static correlations, such as density,
 internal energy or double occupation. Calculations are performed in
 each operational mode,  corresponding to the choice of the specific
@@ -224,23 +237,24 @@ symmetry implemented in the code, i.e. which quantum numbers are to be
 conserved. The operational modes are selected by the variable
 :f:var:`ed_mode` =  :code:`normal, superc, nosu2`. The observables
 are printed in plain text files and are accessible to the user
-through the routines lited in :f:mod:`ed_io`  (see
+through the routines lited in :f:mod:`ED_IO`  (see
 :f:mod:`ED_SECTOR` for more info about the symmetries implemented in
 the code).
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :glob:
+   :hidden:
 
-   edipack2/index_observables
+   edipack2/11_observables
 
 
    
-Reduced Density Matrix
-####################################
+:ref:`Reduced Density Matrix <rdm>`
+=================================================================
 
-This part of the `EDIpack2.0` code implements the calculation of the
+This part of the |edipack2| code implements the calculation of the
 impurity Reduced Density Matrix (RDM). Calculations are performed in
 each operational mode,  corresponding to the choice of the specific
 symmetry implemented in the code, i.e. which quantum numbers are to be
@@ -253,17 +267,21 @@ through the routines listed in :f:mod:`ED_IO`.
 
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :glob:
+   :hidden:
 
-   edipack2/index_rdm
+   edipack2/12_rdm
 
 
    
 
-Input/Output
-###########################
+:ref:`Input/Output <ed_io>`
+=================================================================
 
+..
+   :doc:`edipack2/io`
+     
 This module provides access to the results of the exact
 diagonalization. All quantities such as dynamical response functions,
 self-energy components  or impurity observables  can be retrieved  
@@ -273,15 +291,20 @@ self-energy on a given arbitrary set of points in the complex
 frequency domain.    
 
 .. toctree::
-   :maxdepth: 1
+   :caption: Input/Output
+   :maxdepth: 2
+   :hidden:
+      
+   edipack2/13_io
 
-   edipack2/io
 
 
 
+:ref:`Bath Optimization <fit>`
+=================================================================
 
-:math:`\chi^2` Fit
-###########################
+..
+   :doc:`edipack2/fit`
 
 In  this module we provide to the user a generic function
 :f:func:`ed_chi2_fitgf` performing the minimization of a user provided
@@ -290,9 +313,11 @@ Anderson Green's function with the aim of updating the user bath parameters.
 
 
 .. toctree::
-   :maxdepth: 1
-
-   edipack2/fit
+   :caption: Bath Optimization
+   :maxdepth: 2
+   :hidden:
+      
+   edipack2/14_fit
 
 
 

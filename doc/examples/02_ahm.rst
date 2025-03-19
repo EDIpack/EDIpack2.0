@@ -1,7 +1,9 @@
-Attractive Hubbard model: a superconductive example
-#######################################################
+.. _02_ahm:
 
-In this second example we focus on the use of `EDIpack2.0` ED method
+Attractive Hubbard model
+=============================================
+
+In this second example we focus on the use of |edipack2| ED method
 as a solver for DMFT in presence of superconductivity, i.e. :f:var:`ed_mode` = **superc**. 
 
 We consider the simple, but non-trivial, case of the attractive
@@ -15,6 +17,8 @@ single-band Fermi-Hubbard model on a square lattice:
 
 
 
+Source code
+------------------------------
 
 Similarly to the previous case, the preamble of the code contains
 definition of  the required local variables. We load all the required
@@ -78,7 +82,7 @@ dimension of size 2 for all local functions and Hamiltonian.
 
 
 Next we construct the dispersion and the exact DOS of the 2d square
-lattice using `SciFortran` functions. Note again the leading dimension
+lattice using SciFortran_ functions. Note again the leading dimension
 2 of the dispersion.  
 
 .. code-block:: fortran
@@ -189,6 +193,8 @@ real-axis Green's functions using the retrieved normal and anomalous self-energi
    <hr>
 
 
+Results
+------------------------------
 
 We present some results obtained using this `EDIpack2.0` based
 program. To begin with, we show in panel A a snapshot of the evolution
@@ -246,5 +252,5 @@ An example of the input file used in the calculations can be find here:  :downlo
 
 
 
-
+.. _SciFortran: https://github.com/SciFortran/SciFortran
 .. _DMFT_TOOLS: https://github.com/aamaricci/DMFTtools

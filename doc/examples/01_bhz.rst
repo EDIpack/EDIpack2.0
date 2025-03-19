@@ -1,8 +1,10 @@
-Interacting Bernevig-Hughes-Zhang model	
-###################################################################
+.. _01_bhz:
+
+Interacting BHZ model	
+=============================================
 
 In this section we discuss a thorough example , using the
-`EDIpack2.0` ED algorithm as a solver for DMFT for  :f:var:`ed_mode` =
+|edipack2| ED algorithm as a solver for DMFT for  :f:var:`ed_mode` =
 **normal**.  We focus on a paradigmatic multi-orbital model of interacting electrons.
 
 This is a Fermi-Hubbard model describing two-orbital electrons on a
@@ -54,8 +56,11 @@ phase for :math:`M<4t` and a trivial band insulator for
 :math:`M>4t`. As expected a gapless Dirac state is realized at the
 transition point :math:`M=4t`. 
 
+Source code
+------------------------------
+
 In presence of interaction we can solve the model using DMFT. We
-review here the setup of the program using `EDIpack2.0`. 
+review here the setup of the program using |edipack2|. 
 
 
 .. code-block:: fortran
@@ -92,7 +97,7 @@ As now clear from reading the quickstart guide, the preamble define
 all the required local variables of the program. Here we
 also load MPI module and `DMFT_TOOLS`_ library to perform some tasks
 related to DMFT implementation or tight-binding model setup.
-We init the MPI universe using `SciFortran` MPI interface in
+We init the MPI universe using SciFortran_ MPI interface in
 :f:mod:`sf_mpi`. Finally we read the input file using :f:func:`ed_read_input`.
 
 Next we construct the model Hamiltonian :math:`H(k)`. In the following of the
@@ -261,7 +266,11 @@ Hamiltonian:
    <hr>
 
 
-We now show some results obtained using this `EDIpack2.0` based
+
+Results
+------------------------------   
+
+We now show some results obtained using this |edipack2| based
 program, starting from a simple analysis of the effect of interaction
 to the QSHI state. For, we consider
 :math:`M=1` and fix the Hund's exchange to :math:`J/U=0.25`. As
@@ -357,3 +366,4 @@ Here is an example of input file used in the calculations above:  :download:`Inp
 
 
 .. _DMFT_TOOLS: https://github.com/aamaricci/DMFTtools
+.. _SciFortran: https://github.com/SciFortran/SciFortran

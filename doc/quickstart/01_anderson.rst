@@ -1,7 +1,9 @@
-Solving a Single Impurity Anderson model
-#########################################
+.. _01_anderson:
 
-In this section we use the methods in `EDIpack2.0`  to solve a simple
+Solving a Single Impurity Anderson model
+=============================================
+
+In this section we use the methods in |edipack2|  to solve a simple
 example of Anderson quantum impurity problem.
 
 Looking forward for a DMFT application, here we consider the Bethe
@@ -11,8 +13,11 @@ corresponding non-interacting  Green's function :math:`G_0(z) =
 
 We construct a discretized bath by fitting such function on the
 Matsubara frequencies  :math:`G_0(i\omega_n)` using the methods in
-:ref:`fit`. Finally we input this bath into the :f:func:`ed_solve` solver of `EDIpack2.0` in presence of local interaction on the impurity.  
+:ref:`fit`. Finally we input this bath into the :f:func:`ed_solve`
+solver of  |edipack2| in presence of local interaction on the impurity.  
 
+Source code
+------------------------------
 
 The initialization of the code is:
 
@@ -36,14 +41,16 @@ The initialization of the code is:
       call ed_read_input('inputED.conf')
 
       
-where we load both the `EDIpack2.0` and `SciFortran` libraries through
-their main module :f:mod:`edipack2` and :f:mod:`scifor`. We also define
+where we load both the |edipack2| and SciFortran_ libraries through
+their main module :f:mod:`EDIPACK2` and :f:mod:`SCIFOR`. We also define
 some local variables and proceed with reading the input file
-:code:`"inputED.conf"` using the `EDIpack2.0` function
+:code:`"inputED.conf"` using the function
 :f:func:`ed_read_input`.
 
 Next we construct the non-interacting Green's
-function, using procedures available in :f:var:`SciFortran`:
+function, using procedures available in SciFortran_:
+
+.. _SciFortran: https://github.com/SciFortran/SciFortran
 
 
 .. code-block:: fortran
@@ -57,7 +64,7 @@ function, using procedures available in :f:var:`SciFortran`:
 Then we initialize the solver. This step requires the user to pass
 the user bath as a rank-1 double precision array of a given size. The
 correct size of the bath array is evaluated internally by the
-`EDIpack2.0` code through the function
+|edipack2| code through the function
 :f:func:`ed_get_bath_dimension`.
 
 .. code-block:: fortran
@@ -92,6 +99,10 @@ of parameters specified in the input file (see below)
 .. raw:: html
 
    <hr>
+
+
+Results
+------------------------------
 
 Here is a snapshot of the results obtained for :math:`U=1.0, 10.0`.
 

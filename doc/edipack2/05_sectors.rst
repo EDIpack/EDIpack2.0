@@ -1,3 +1,5 @@
+.. _sectors:
+
 Quantum Numbers Sectors
 ============================
 

@@ -1,5 +1,7 @@
-In-plane excitons in quantum spin Hall insulators
-#####################################################
+.. _03_excBHZ:
+
+In-plane spin excitons in QSHI
+==========================================================
 
 In this finale example we discuss an interesting symmetry breaking
 case in the same QSHI model introduced in :doc:`01_bhz`.
@@ -13,8 +15,11 @@ suggest a possible instability towards the in-plane triplet exciton
 state :math:`E_1` or :math:`E_2`. Interestingly, the onset of this
 state breaks several symmetries, e.g. time-reversal and spin SU(2).
 As thus, this is a physical case to investigate the :f:var:`ed_mode` =
-**nonsu2** mode in `EDIpack2.0`. 
+**nonsu2** mode in |edipack2|. 
 
+
+Source code
+------------------------------
 
 The considerations about the model Hamiltonian and the non-interacting
 solution remain identical to the previous case :doc:`01_bhz`. Here we
@@ -66,15 +71,17 @@ printing flags.
 
    <hr>
 
+Results
+------------------------------
 
-We can now discuss some results obtained with this `EDIpack2.0` code concerning the
-exciton condensation in QSHI. More results can be found in `PhysRevB.107.115117`_. 
+We can now discuss some results obtained with this |edipack2| code concerning the
+exciton condensation in QSHI. A more thorough presentation can be found in `PhysRevB.107.115117`_. 
 
 .. _PhysRevB.107.115117: https://journals.aps.org/prb/abstract/10.1103/PhysRevB.107.115117
 
 
 
-To make a connection with the disordered case,  we consider here :math:`M=1` and fix the Hund's
+To make a connection with the non-ordered case,  we consider here :math:`M=1` and fix the Hund's
 exchange to :math:`J/U=0.25`. Then we illustrate the effect of raising
 the interaction strength :math:`U`.
 In the top panels of the following figure we report the evolution
@@ -150,3 +157,7 @@ fig.1 are here:
     :download:`hamiltonian.restart <exct_M1_U6_J0.25_hamiltonian.restart>`
 
 Here is an example of input file used in the calculations above:  :download:`InputFile <inputED_exctBHZ.conf>`
+
+
+
+

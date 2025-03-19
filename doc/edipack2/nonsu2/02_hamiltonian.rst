@@ -2,8 +2,9 @@ Hamiltonian Setup
 ============================
 
 
-In :f:var:`ed_hamiltonian_nonsu2` we implement procedures to setup and
-build the sector Hamiltonian which are then used elsewhere to obtain
+The :f:mod:`ED_HAMILTONIAN_NONSU2` module contains the implementation of
+the  superconducting sector Hamiltonian constructor.
+The Hamiltonian is then used elsewhere to obtain
 the low part of the energy spectrum or construct the dynamical response
 functions. 
 

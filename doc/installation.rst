@@ -1,10 +1,10 @@
 .. _edipack_install:
 
 Install
-#####################
+##############################
 
 |edipack2| is available in the form of a static Fortran library
-(`libedipack2.a`) and the related Fortran module `EDIPACK2`.
+(`libedipack2.a`) and the related Fortran module :f:mod:`EDIPACK2`.
 The release version includes additional modules to extend the
 software functionalities: an inequivalent impurities extension |edipack2ineq|
 and a shared dynamical library implementing the Fortran-C interface. 
@@ -14,24 +14,25 @@ A standard installation method is available through CMake.
 An alternative approach is provided via Anaconda. 
 
 
-
-Compiling from source
-======================
+From source
+========================
 
 Building
----------
+------------------------------
 
-We assume that `SciFortran` and `MPI` have been correctly installed
+We assume that SciFortran_ and MPI_ have been correctly installed
 and are available in the system. See related documentation. Note that
-the installation of |edipack2| closely follows the `SciFortran`
-template.
+the installation of |edipack2| closely follows the SciFortran_ template.
+
+.. _SciFortran: https://github.com/SciFortran/SciFortran
+.. _MPI: https://github.com/open-mpi/ompi
 
 
 Clone the repo:
 
 .. code-block:: bash
 		
-   git clone https://github.com/edipack/EDIpack2 EDIpack2
+   git clone https://github.com/edipack/EDIpack2.0 EDIpack2
 
 
 
@@ -45,8 +46,8 @@ Optionally define the fortran compiler:
 From the repository directory (`cd EDIpack2`) make a standard
 out-of-source CMake compilation:
 
-**GNU Make**
-
+GNU Make
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Using GNU `make` is the default CMake workflow, with widest version
 support (CMake > 3.0). Note that parallel `make` execution is tested
 and working.
@@ -60,7 +61,8 @@ and working.
 
 
 
-**Ninja**
+Ninja
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Using `ninja` if a fortran-capable version of `ninja
 <https://ninja-build.org>`_ is available in your system (and CMake can
@@ -92,6 +94,11 @@ additional variables:
      - MPI support pre-compilation flag
      - yes/True OR no/False (default: True)
 
+   * - :code:`-DWITH_INEQ`
+     - Include inequivalent impurities extension (in :code:`EDIPACK2INEQ`)
+     - yes/True OR no/False (default: True)
+
+     
    * - :code:`-DVERBOSE`
      - Verbose CMake output 
      - yes/True OR no/False (default: True, superseded by :code:`make VERBOSE=yes/no`
@@ -100,12 +107,7 @@ additional variables:
      - Compilation flags
      - RELEASE/TESTING/DEBUG/AGGRESSIVE (Default RELEASE)
 
-   * - :code:`-DWITH_INEQ`
-     - Include inequivalent impurities extension (in :code:`EDIPACK2INEQ`)
-     - yes/True OR no/False (default: True)
 
-..
-   TESTING:mild or no optimization,  DEBUG:relevant debugging options,  
 .. warning::
    
    :code:`BUILD_TYPE=AGGRESSIVE`  includes many deep level debug options which might not compile on some systems or breakdown compilation at linking step.  
@@ -138,9 +140,13 @@ step the following recap is printed:
 
 
 
+
+
+
+
    
 Installing
-------------
+------------------------------
 
 System-wide installation is completed after the build step using either:
 
@@ -158,18 +164,25 @@ or
 Please follow the instructions on the screen to complete installation on your environment.  
 The library can be loaded using one of the following, automatically generated, files :  
 
-*  A generated `environment module`_ , installed to`~/.modules.d/EDIpack2/<PLAT>`
+*  A generated `environment module`_ , installed to `~/.modules.d/edipack2/<PLAT>`
   
 * A generated `bash` script at `<PREFIX>/bin/configvars.sh`, to be sourced for permanent loading.
 
-*  A generated `pkg-config`_ file to, installed to `~/.pkg-config.d/EDIpack2.pc`  
+*  A generated `pkg-config`_ file to, installed to `~/.pkg-config.d/edipack2.pc`  
 
 .. _environment module: https://github.com/cea-hpc/modules
 .. _pkg-config: https://github.com/freedesktop/pkg-config
 
+For ease of use a specific and automatically generated recap message is printed after installation. 
+
+
+
 
 Uninstalling
---------------
+------------------------------
+
+
+
 
 Although CMake does not officially provide uninstall procedures in the
 generated Make/Ninja files. Hence SciFortran supplies a homebrew
@@ -188,8 +201,13 @@ or
 
 
 
-Anaconda
-======================
+
+
+   
+
+
+From Anaconda
+==============================
 
 We provide Linux and MacOS packages for the `Anaconda <https://www.anaconda.com/>`_ 
 distribution. To install the module, the virtual environment of choice should include

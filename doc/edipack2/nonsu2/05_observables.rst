@@ -1,6 +1,7 @@
-Observables
-============================
+.. _observables_nonsu2:
 
+Observables: non-SU(2)
+=====================================================================
 
 In the :code:`nonsu2` case, the following observables are calculated in addition tp the :code:`normal` ones
 

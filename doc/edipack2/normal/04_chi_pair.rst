@@ -1,3 +1,5 @@
+.. _chi_pair:
+
 Pair Susceptibility
 ============================
 

@@ -1,3 +1,5 @@
+.. _examples:
+
 Further examples
 #########################
 
@@ -21,8 +23,7 @@ present.
 
 
 .. toctree::
-   :caption: Examples
-   :maxdepth: 2
+   :maxdepth: 1
    :glob:
 
    examples/*

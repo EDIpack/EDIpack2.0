@@ -2,18 +2,18 @@ Hamiltonian Setup
 ============================
 
 
-In :f:var:`ed_hamiltonian_normal` we  setup and build the sector
+In :f:mod:`ED_HAMILTONIAN_NORMAL` we  setup and build the sector
 Hamiltonian, which are then used elsewhere to obtain the low part of
-the energy spectrum or construct the dynamical response functions. 
+the energy spectrum or to construct the dynamical response functions. 
 
-The sector electron Hamiltonian is:
+The symmetry sector electronic Hamiltonian is:
 
 .. math::
 
    H_e = \vec{H}_\downarrow \otimes \vec{1}_\uparrow + \vec{1}_\downarrow \otimes
    \vec{H}_\uparrow + H_d + H_{nd} 
 
-while considering the electron-phonon coupling one has:
+considering the electron-phonon coupling one has:
 
 .. math::
 

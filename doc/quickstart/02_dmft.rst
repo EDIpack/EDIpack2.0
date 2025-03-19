@@ -1,18 +1,22 @@
-Solving Dynamical Mean-Field Theory with `EDIpack2.0`
-############################################################
+.. _02_dmft:
+
+Solving Dynamical Mean-Field Theory with |edipack2|
+===========================================================
 
 In this section we take a step further to show how to integrate the
-`EDIpack2.0` as a solver for Dynamical Mean-Field Theory calculations. 
+|edipack2| as a solver for Dynamical Mean-Field Theory calculations. 
 Specifically, here we discuss the step-by-step implementation of a Fortran program (see
-below) solving this model using DMFT with the `EDIpack2.0` exact
+below) solving this model using DMFT with the |edipack2| exact
 diagonalization algorithm at :math:`T=0`.
 
 Similar to the previous section, we consider a Fermi-Hubbard
 model defined on a Bethe lattice DOS
 :math:`\rho(x)=\frac{1}{2D}\sqrt{D^2-x^2}`. The preamble of the
 program includes variable definitions (a old-looking Fortran
-specialty) and input file read:
+specialty) and input file read. 
 
+Source code
+------------------------------
 
 .. code-block:: fortran
 
@@ -44,14 +48,14 @@ specialty) and input file read:
       call ed_read_input(trim(finput))
 
 
-In this  we load both the `EDIpack2.0` and `SciFortran` libraries through
-their main module :f:mod:`edipack2` and :f:mod:`scifor`. We  define
+In this  we load both the |edipack2| and SciFortran_ libraries through
+their main module :f:mod:`EDIPACK2` and :f:mod:`SCIFOR`. We  define
 some local variables and  read the input file
-(default :code:`"inputED.conf"`) using the `EDIpack2.0` function :f:func:`ed_read_input`.
+(default :code:`"inputED.conf"`) using the |edipack2| function :f:func:`ed_read_input`.
 
 
 The next step is to construct the Bethe lattice DOS, we use
-`SciFortran` procedure to simplify the task:
+SciFortran_ procedure to simplify the task:
 
 .. code-block:: fortran
 
@@ -114,8 +118,8 @@ present it looks like:
    enddo
 
 
-The first step, line 9, is to call the :f:func:`ed_solve` procedure in
-`EDIpack2` which solve the quantum impurity problem defined by a given
+The first step (line 6) is to call the :f:func:`ed_solve` procedure in
+|edipack2| which solve the quantum impurity problem defined by a given
 input bath :f:var:`bath`. On exit, all the ED related quantities are
 stored in the memory, ready to be retrieved upon call.
 For instance we retrieve the Matsubara self-energy
@@ -148,6 +152,8 @@ The cycle close with a simple error check on the Weiss field itself.
 
    <hr>
 
+Results
+------------------------------
 
 In the following we present some results obtained by executing this
 simple program varying the interaction strenght :f:var:`uloc`.
@@ -240,3 +246,8 @@ presented above:
   * Bath :math:`U=4.00`  :download:`hamiltonian.restart <U4.00_hamiltonian.restart>`
 
 and one of the input files used above:  :download:`InputFile <inputED.conf>`
+
+
+
+
+.. _SciFortran: https://github.com/SciFortran/SciFortran

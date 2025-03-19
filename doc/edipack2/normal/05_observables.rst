@@ -1,5 +1,7 @@
-Observables
-============================
+.. _observables_normal:
+
+Observables: normal
+=====================================================================
 
 In the :code:`normal` case, the following observables are calculated
 

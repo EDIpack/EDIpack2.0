@@ -1,19 +1,22 @@
-Impurity observbales
-###########################
+.. _observables:
 
-The :f:mod:`ed_observables`  provides a single interface  to all the different
+:ref:`Impurity Observables <imp_observables>`
+---------------------------------------------------------------------------
+
+The :f:mod:`ED_OBSERVABLES`  provides a single interface  to all the different
 observables and static correlation calculation procedures available in the code.
-This is used in the :f:mod:`ed_main` Fortran API. 
+This is used in the :f:mod:`ED_MAIN` Fortran API. 
 
 .. toctree::
    :maxdepth: 2
    :glob:
+   :hidden:
 
-   observables
+   11_observables/impurity_observables
    
 
-Normal mode
-+++++++++++++++
+:ref:`Normal mode <observables_normal>`
+---------------------------------------------------------------------------
 
 This set of modules implements the  evaluation of impurity observables
 and other static correlations  assuming :math:`\vec{Q}=\left[\vec{N}_\uparrow,\vec{N}_\downarrow \right]`.
@@ -31,12 +34,14 @@ operator.
 .. toctree::
    :maxdepth: 2
    :glob:
+   :hidden:
+
 
    normal/05_observables
 
 
-Superconductive mode
-++++++++++++++++++++++++
+:ref:`Superconductive mode <observables_superc>`
+---------------------------------------------------------------------------
 
 This set of modules implements the  evaluation of impurity observables
 and other static correlations  assuming 
@@ -49,13 +54,15 @@ wave pairing.
 .. toctree::
    :maxdepth: 2
    :glob:
+   :hidden:
+
 
    superc/05_observables
 
 
 
-Non-SU(2) mode
-+++++++++++++++++++
+:ref:`Non-SU(2) mode <observables_nonsu2>`
+---------------------------------------------------------------------------
 
 This set of modules implements the  evaluation of impurity observables
 and other static correlations   assuming 
@@ -68,6 +75,8 @@ conservation, as for instance in presence of Spin-Orbit coupling.
 .. toctree::
    :maxdepth: 2
    :glob:
+   :hidden:
+
 
    nonsu2/05_observables
 

@@ -1,6 +1,7 @@
-Bath Replica routines
-============================
+.. _ed_bath_replica:
 
+Replica bath setup 
+============================
 
 
 .. f:automodule::   ed_bath_replica

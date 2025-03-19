@@ -1,3 +1,5 @@
+.. _sparse_matrix:
+
 Sparse Matrices 
 =======================
 

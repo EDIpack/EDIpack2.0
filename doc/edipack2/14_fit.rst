@@ -2,10 +2,10 @@
 
 
 :math:`\chi^2` Fit
-###########################
+---------------------------------------------------------------------------
 
 
-In :f:mod:`ed_bath_fit` we perform an optimisation of the user bath by minimizing
+In :f:mod:`ED_BATH_FIT` we perform an optimisation of the user bath by minimizing
 the projection of a user supplied function with respect to the
 corresponding quantum impurity problem, bath dependent, one
 :math:`\min_{\vec{b}}\chi^2(\vec{b})` with:

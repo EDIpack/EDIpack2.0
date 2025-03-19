@@ -1,21 +1,22 @@
-Impurity Green's functions
-###########################
+.. _greensfunctions:
 
-The :f:mod:`ed_greens_functions` and :f:mod:`ed_chi_functions` (only
-for :f:var:`ed_mode` = :code:`normal`) provide
-two simple interfaces to all the different dynamical response functions
-calculation procedures available in the code. 
-This is used  in the :f:mod:`ed_main` Fortran API. 
+:ref:`Impurity Green's functions <imp_greensfunctions>`
+---------------------------------------------------------------------------
+
+The :f:mod:`ED_GREENS_FUNCTIONS` wraps the different Green's functions
+calculation methods available in the code in a single procedure.  
+This is used  in the :f:mod:`ED_MAIN` Fortran API. 
 
 .. toctree::
    :maxdepth: 2
    :glob:
+   :hidden:
 
-   greensfunctions
+   09_greensfunctions/impurity_greensfunctions
    
 
-Normal mode
-++++++++++++++++
+:ref:`Normal mode <gf_normal>`
+---------------------------------------------------------------------------
 
 This set of modules implements the calculations of impurity dynamical
 response functions, e.g. the Green's functions and different
@@ -34,16 +35,13 @@ operator.
 .. toctree::
    :maxdepth: 2
    :glob:
-
+   :hidden:
+      
    normal/03_greensfunctions
-   normal/04_chi_spin
-   normal/04_chi_dens
-   normal/04_chi_pair
-   normal/04_chi_exct
    
 
-Superconductive mode
-+++++++++++++++++++++++
+:ref:`Superconductive mode <gf_superc>`
+---------------------------------------------------------------------------
 
 This set of modules implements the calculations of impurity dynamical
 response functions, e.g. the Green's functions,  assuming 
@@ -56,13 +54,14 @@ wave pairing.
 .. toctree::
    :maxdepth: 2
    :glob:
-
+   :hidden:
+      
    superc/03_greensfunctions
 
 
 
-Non-SU(2) mode
-+++++++++++++++++++++++
+:ref:`Non-SU(2) mode <gf_nonsu2>`
+---------------------------------------------------------------------------
 
 This set of modules implements the calculations of impurity dynamical
 response functions, e.g. the Green's functions,  assuming 
@@ -75,6 +74,7 @@ conservation, as for instance in presence of Spin-Orbit coupling.
 .. toctree::
    :maxdepth: 2
    :glob:
-
+   :hidden:
+      
    nonsu2/03_greensfunctions
 

@@ -1,4 +1,4 @@
-Bath data structure
+Bath class definition
 =======================
 
 

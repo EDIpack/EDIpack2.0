@@ -1,5 +1,7 @@
-Observables
-============================
+.. _observables_superc:
+
+Observables: superconducting
+=====================================================================
 
 
 In the :code:`superc` case, the observables are the same as in the :code:`normal` case.

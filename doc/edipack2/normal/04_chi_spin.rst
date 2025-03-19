@@ -1,5 +1,7 @@
+.. _chi_spin:
+   
 Spin Susceptibility
-============================
+==================================
 
 In :f:mod:`ed_chi_spin` we evaluate the impurity spin-spin
 susceptibility, defined as:

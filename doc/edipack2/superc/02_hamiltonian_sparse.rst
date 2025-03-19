@@ -1,8 +1,8 @@
 Stored Hamiltonian :math:`H\times\vec{v}`  
 ==============================================
 
-The module :f:mod:`ed_hamiltonian_superc_stored_hxv` constructs the
-terms of the sector Hamiltonian storing them into different
+The module :f:mod:`ED_HAMILTONIAN_SUPERC_STORED_HXV` constructs the
+the different contributions to the sector Hamiltonian, storing them into different
 :f:var:`sparse_matrix` instances: :f:var:`sph0` for the electronic
 part and three others for the phononic and electron-phonon terms. 
 

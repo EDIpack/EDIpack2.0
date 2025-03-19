@@ -1,5 +1,8 @@
-Green's Function calculation
-============================
+.. _gf_normal:
+
+
+Green's Function calculation: Normal
+=====================================================================
 
 In this module :f:mod:`ed_gf_normal` the interacting impurity Green's
 functions  :math:`\hat{G}(z)` are evaluated for :f:var:`ed_mode` =

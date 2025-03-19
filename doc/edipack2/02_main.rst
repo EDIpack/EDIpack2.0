@@ -1,3 +1,5 @@
+.. _main:
+
 Impurity Problem Solution Routines 
 ====================================
 

@@ -1,4 +1,6 @@
-Density Susceptibility
+.. _chi_dens:
+
+Charge Susceptibility
 ============================
 
 

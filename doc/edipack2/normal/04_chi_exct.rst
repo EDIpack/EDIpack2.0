@@ -1,3 +1,5 @@
+.. _chi_exct:
+
 Exciton Susceptibility
 ============================
 

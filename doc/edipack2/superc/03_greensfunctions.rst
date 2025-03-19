@@ -1,5 +1,8 @@
-Green's Function calculation
-============================
+.. _gf_superc:
+
+
+Green's Function calculation: Superconducting
+=====================================================================
 
 In this module :f:mod:`ed_gf_superc` the interacting impurity Green's
 functions  :math:`\hat{G}(z)` are evaluated for :f:var:`ed_mode` =

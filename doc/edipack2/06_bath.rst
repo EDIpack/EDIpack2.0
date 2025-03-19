@@ -1,5 +1,7 @@
-Impurity Model Bath
-########################
+.. _bath:
+
+Bath
+-----------------------------------------------
 
 The construction and the handling of the bath is a crucial part of the
 description of the generic single impurity Anderson problem.
@@ -63,8 +65,9 @@ variational parameters.
 .. f:automodule::   ed_bath
    :hide-output: True
 
+		 
 Bath Auxiliary
-++++++++++++++++
+-----------------------------------------------
 
 In this set of modules we implement a number of auxiliary procedures
 which are required to enumerate the bath levels, performs all the
@@ -74,14 +77,14 @@ operations.
 .. toctree::
    :maxdepth: 1
 
-   bath/00_ed_vars_global
-   bath/01_ed_bath_aux
-   bath/02_ed_bath_dim
-   bath/03_ed_bath_user
+   06_bath/00_ed_vars_global
+   06_bath/01_ed_bath_aux
+   06_bath/02_ed_bath_dim
+   06_bath/03_ed_bath_user
 
 
-Bath Replica
-++++++++++++++++
+:ref:`Bath Replica <ed_bath_replica>`
+-----------------------------------------------
 
 The :f:mod:`ED_BATH_REPLICA` module hosts the definition of a
 dedicated data structure storing the matrix basis and the initial parameters
@@ -89,15 +92,18 @@ for the :code:`replica` bath. This, alongside the :f:var:`effective_bath`,
 enables to reconstruct the discrete bath on-the-fly, to perform
 different sanity checks or to apply symmetry operations on the user side.
 
+
 .. toctree::
+   :caption: Bath Replica
    :maxdepth: 1
+   :hidden:
 	      
-   bath/04_ed_bath_replica
+   06_bath/04_ed_bath_replica
 
 
    
-Bath DMFT
-+++++++++++++
+:ref:`Bath DMFT <ed_bath_dmft>`
+-----------------------------------------------
 
 In :f:mod:`ED_BATH_DMFT` we implement operations on the  :f:type:`effective_bath` data
 structure: a suitable representation of the effective bath used
@@ -106,14 +112,17 @@ as :f:var:`dmft_bath`.  Depending on the value :f:var:`bath_type` this quantity 
 different bath parameters which can be directly accessed in the
 construction of symmetry sectors Hamiltonian.  
 
+
 .. toctree::
+   :caption: Bath DMFT
    :maxdepth: 1
+   :hidden:
 
-   bath/05_ed_bath_dmft
+   06_bath/05_ed_bath_dmft
 
 
-Bath Functions
-++++++++++++++++
+:ref:`Bath Functions <ed_bath_functions>`
+-----------------------------------------------
 
 In :f:mod:`ED_BATH_FUNCTIONS` we implement on-the-fly construction of
 the hybridization functions :math:`\Delta(z) = \sum_p
@@ -123,8 +132,10 @@ non-interacting Anderson Green's functions
 all different cases selected by :f:var:`ed_mode` and :f:var:`bath_type`.
 
 .. toctree::
+   :caption: Bath Functions
    :maxdepth: 1
+   :hidden:
 
-   bath/06_ed_bath_functions
+   06_bath/06_ed_bath_functions
 
    

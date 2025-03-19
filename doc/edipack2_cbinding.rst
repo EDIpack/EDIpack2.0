@@ -1,6 +1,6 @@
 .. _edipack2_cbinding:
 
-EDIpack2 C-binding layer
+EDIpack2 Fortran-C interface
 =================================================================
 
 The C-binding layer is made of a single Fortran module

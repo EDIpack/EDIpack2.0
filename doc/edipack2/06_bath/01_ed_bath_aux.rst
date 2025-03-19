@@ -1,6 +1,5 @@
-Bath Auxiliary routines
+Bath auxiliary routines
 ============================
-
 
 
 .. f:automodule::   ed_bath_aux

@@ -1,3 +1,5 @@
+.. _ed_bath_functions:
+
 Bath  dynamical functions
 ===================================
 

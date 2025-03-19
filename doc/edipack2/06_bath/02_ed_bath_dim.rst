@@ -1,4 +1,4 @@
-Bath Dimension routines
+Bath dimensions
 ============================
 
 
