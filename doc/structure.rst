@@ -31,7 +31,7 @@ The naming convention of the |edipack2| procedures is preserved.
 
 
 **EDIpack2 C-binding**: :ref:`edipack2_cbinding`
-=============================================
+=================================================
 A module implementing the Fortran-C interface for |edipack2|,
 including |edipack2ineq| extension where included.
 The  language interoperability leverages over the implicit Fortran

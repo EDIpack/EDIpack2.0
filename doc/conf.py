@@ -96,19 +96,19 @@ templates_path = ['_templates']
 source_suffix = '.rst'
 
 
-fortran_src=[os.path.abspath('../src/*.f90'),
-                 os.path.abspath('../src/ED_IO/*.f90'),
-                 os.path.abspath('../src/ED_BATH/*.f90'),
-                 os.path.abspath('../src/ED_FIT/*.f90'),
-                 os.path.abspath('../src/ED_NORMAL/*.f90'),
-                 os.path.abspath('../src/ED_SUPERC/*.f90'),
-                 os.path.abspath('../src/ED_NONSU2/*.f90'),
-                 os.path.abspath('../ineq/*.f90'),
-                 os.path.abspath('../ineq/E2I_IO/*.f90'),
-                 os.path.abspath('../ineq/E2I_BATH/*.f90'),
-                 os.path.abspath('../ineq/E2I_FIT/*.f90'),
-                 os.path.abspath('../c_bindings/EDIPACK2INEQ2PY.f90'),
-                 os.path.abspath('../c_bindings/edipack2ineq/*.f90'),]
+fortran_src=[os.path.abspath('../src/singlesite/*.f90'),
+                 os.path.abspath('../src/singlesite/ED_IO/*.f90'),
+                 os.path.abspath('../src/singlesite/ED_BATH/*.f90'),
+                 os.path.abspath('../src/singlesite/ED_FIT/*.f90'),
+                 os.path.abspath('../src/singlesite/ED_NORMAL/*.f90'),
+                 os.path.abspath('../src/singlesite/ED_SUPERC/*.f90'),
+                 os.path.abspath('../src/singlesite/ED_NONSU2/*.f90'),
+                 os.path.abspath('../src/ineq/*.f90'),
+                 os.path.abspath('../src/ineq/E2I_IO/*.f90'),
+                 os.path.abspath('../src/ineq/E2I_BATH/*.f90'),
+                 os.path.abspath('../src/ineq/E2I_FIT/*.f90'),
+                 os.path.abspath('../src/c_bindings/EDIPACK2INEQ2PY.f90'),
+                 os.path.abspath('../src/c_bindings/edipack2ineq/*.f90'),]
     
 #DEFAULT
 fortran_ext=['f90', 'f95']
