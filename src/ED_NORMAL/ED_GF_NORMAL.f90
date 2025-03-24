@@ -106,8 +106,8 @@ contains
           call lanc_build_gf_phonon_main()
        endif
        !
-       if(MPIMASTER)call stop_timer
     end if
+    if(MPIMASTER)call stop_timer
     !
   end subroutine build_impG_normal
 
