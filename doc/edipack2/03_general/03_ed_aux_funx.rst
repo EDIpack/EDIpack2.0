@@ -5,5 +5,5 @@ Auxiliary Functions
 
 
 .. f:automodule::   ed_aux_funx
-   :members: ed_set_hloc, c, cdg, bdecomp, ed_set_suffix,ed_reset_suffix, ed_search_variable,search_chemical_potential, scatter_vector_mpi, allgather_vector_mpi
+   :undoc-members: allocate_grids, binary_search, bjoin, breorder, deallocate_grids, gather_vector_mpi, index_stride_so, nn2so_reshape, print_hloc, print_state_vector, scatter_basis_mpi, so2nn_reshape
 
