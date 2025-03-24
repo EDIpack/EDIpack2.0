@@ -11,7 +11,6 @@ GLOB_INC:=$(shell pkg-config --cflags scifor )
 OBJS=ASSERTING.o
 
 all: $(OBJS) NORMAL REPLICA GENERAL # HYBRID
-	@echo "all done"
 
 
 NORMAL REPLICA GENERAL: #HYBRID

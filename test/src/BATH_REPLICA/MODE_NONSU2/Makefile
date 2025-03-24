@@ -32,14 +32,12 @@ all:
 	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
-	@echo ""
 
 debug: FLAG:=${DFLAG} ${FPPFLAG}
 debug:
 	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
-	@echo ""
 
 clean: 
 	@echo "Cleaning bath:REPLICA mode:NONSU2"

@@ -106,7 +106,10 @@ endif()
 
 IF(NOT TARGET test)
   ADD_CUSTOM_TARGET(test
-    COMMAND ${BARE_MAKE_PROGRAM} -C ${LIB_TEST} all test
+    COMMAND ${CMAKE_COMMAND} -E echo "Compiling test..."
+    COMMAND ${CMAKE_MAKE_PROGRAM} -C ${LIB_TEST} all
+    COMMAND ${CMAKE_COMMAND} -E echo "Running test..."
+    COMMAND ${CMAKE_MAKE_PROGRAM} -C ${LIB_TEST} test 
   )
 ENDIF()
 

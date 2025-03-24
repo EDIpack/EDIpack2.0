@@ -32,7 +32,6 @@ all:
 	@cp *.check $(TSTBIN)/
 	@cp *.restart $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
-	@echo ""
 
 debug: FLAG:=${DFLAG} ${FPPFLAG}
 debug:
@@ -40,7 +39,6 @@ debug:
 	@cp *.check $(TSTBIN)/
 	@cp *.restart $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
-	@echo ""
 
 clean: 
 	@echo "Cleaning bath:NORMAL mode:SUPERC"

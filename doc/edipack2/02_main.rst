@@ -5,7 +5,8 @@ Impurity Problem Solver Routines
 
 The module :f:mod:`ED_MAIN` contains the procedures that initializes,
 launch and finalize the **EDIpack2** solver for the quantum impurity
-problem. 
+problem.
+
 
 The initialization, :f:func:`ed_init` setups and allocates all the
 internal variables and memory used in the code,  which remain
@@ -18,3 +19,5 @@ procedures.
 
 .. f:automodule::   ed_main
 
+
+   
