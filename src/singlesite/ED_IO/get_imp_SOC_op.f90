@@ -55,7 +55,7 @@ end function os2so_reshape
 
 subroutine SOC_jz_symmetrize(funct,mask)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   !passed
   complex(8),allocatable,intent(inout)         ::  funct(:,:,:,:,:)
@@ -146,7 +146,7 @@ end subroutine SOC_jz_symmetrize
 !+-------------------------------------------------------------------+
 function atomic_SOC() result (LS)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   complex(8),dimension(Nspin*Norb,Nspin*Norb)  :: LS,LS_
   integer                                      :: i,j
@@ -164,6 +164,9 @@ function atomic_SOC() result (LS)
 end function atomic_SOC
 
 function atomic_SOC_rotation() result (LS_rot)
+#if __INTEL_COMPILER
+  use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(Nspin*Norb,Nspin*Norb)  :: LS_rot,LS_rot_
   integer                                      :: i,j
   LS_rot_=zero;LS_rot=zero
@@ -206,7 +209,7 @@ end function atomic_SOC_rotation
 
 function orbital_Lz_rotation_Norb() result (U_rot)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   complex(8),dimension(Norb,Norb)              :: U_rot,U_rot_
   integer                                      :: i,j
@@ -227,7 +230,7 @@ end function orbital_Lz_rotation_Norb
 
 function orbital_Lz_rotation_NorbNspin() result (U_rot)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   complex(8),dimension(Norb,Norb)              :: U_rot_
   complex(8),dimension(Norb*Nspin,Norb*Nspin)  :: U_rot
@@ -250,7 +253,7 @@ end function orbital_Lz_rotation_NorbNspin
 
 function atomic_j(component) result (ja)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   complex(8),dimension(Nspin*Norb,Nspin*Norb)  :: ja,ja_
   character(len=1)                             :: component
@@ -285,7 +288,7 @@ end function atomic_j
 
 subroutine ed_get_quantum_SOC_operators_single()
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   implicit none
   complex(8),allocatable            ::  Simp(:,:,:)
@@ -399,10 +402,145 @@ end subroutine ed_get_quantum_SOC_operators_single
 
 
 
+! subroutine ed_get_quantum_SOC_operators_lattice()
+! #if __INTEL_COMPILER
+!     use ED_INPUT_VARS, only: Nspin,Norb
+! #endif
+!   implicit none
+!   complex(8),allocatable            ::  Simp(:,:,:,:)
+!   complex(8),allocatable            ::  Limp(:,:,:,:)
+!   complex(8),allocatable            ::  Jimp(:,:),Jimp_sq(:,:)
+!   complex(8),allocatable            ::  LSimp(:)
+!   complex(8),allocatable            ::  rho_so(:,:,:),U(:,:),Udag(:,:)
+!   complex(8),allocatable            ::  rho_nn(:,:,:,:,:)
+!   integer                           ::  unit_
+!   integer                           ::  iorb,ispin,jorb,jspin,io,ibath
+!   integer                           ::  ilat,Nlat
+!   complex(8),allocatable            ::  Simp_tmp(:,:,:)
+!   complex(8),allocatable            ::  Limp_tmp(:,:,:)
+!   complex(8),allocatable            ::  Jimp_tmp(:),Jimp_sq_tmp(:)
+!   complex(8)                        ::  LSimp_tmp
+!   !
+!   if(Norb/=3)  stop "SOC_operators implemented only for 3 orbitals"
+!   if(Nspin/=2) stop "SOC_operators implemented only for 2 spins"
+!   !
+!   Nlat=size(impurity_density_matrix_ineq,1)
+!   !
+!   if(allocated(Simp))       deallocate(Simp)       ;allocate(Simp(Nlat,3,Norb,Norb))            ;Simp=zero
+!   if(allocated(Limp))       deallocate(Limp)       ;allocate(Limp(Nlat,3,Nspin,Nspin))          ;Limp=zero
+!   if(allocated(Jimp))       deallocate(Jimp)       ;allocate(Jimp(Nlat,3))                      ;Jimp=zero
+!   if(allocated(Jimp_sq))    deallocate(Jimp_sq)    ;allocate(Jimp_sq(Nlat,3))                   ;Jimp_sq=zero
+!   if(allocated(LSimp))      deallocate(LSimp)      ;allocate(LSimp(Nlat))                       ;LSimp=zero
+!   !
+!   if(allocated(Simp_tmp))   deallocate(Simp_tmp)   ;allocate(Simp_tmp(3,Norb,Norb))             ;Simp_tmp=zero
+!   if(allocated(Limp_tmp))   deallocate(Limp_tmp)   ;allocate(Limp_tmp(3,Nspin,Nspin))           ;Limp_tmp=zero
+!   if(allocated(Jimp_tmp))   deallocate(Jimp_tmp)   ;allocate(Jimp_tmp(3))                       ;Jimp_tmp=zero
+!   if(allocated(Jimp_sq_tmp))deallocate(Jimp_sq_tmp);allocate(Jimp_sq_tmp(3))                    ;Jimp_sq_tmp=zero
+!   !
+!   !rotations definition
+!   if(allocated(U))          deallocate(U)          ;allocate(U(Nspin*Norb,Nspin*Norb))          ;U=zero
+!   if(allocated(Udag))       deallocate(Udag)       ;allocate(Udag(Nspin*Norb,Nspin*Norb))       ;Udag=zero
+!   if(allocated(rho_so))     deallocate(rho_so)     ;allocate(rho_so(Nlat,Nspin*Norb,Nspin*Norb));rho_so=zero
+!   if(allocated(rho_nn))     deallocate(rho_nn)     ;allocate(rho_nn(Nlat,Nspin,Nspin,Norb,Norb));rho_nn=zero
+!   !
+!   if(bath_type=="replica".and.(.not.Jz_basis))then
+!      !
+!      !impurity dm in {t2g,Sz}. Rotation U: 1
+!      U=eye(Nspin*Norb)
+!      Udag=transpose(conjg(U))
+!      !
+!   elseif(bath_type=="replica".and.Jz_basis)then
+!      !
+!      !impurity dm in {Lz,Sz}. Rotation U: {Lz,Sz}-->{t2g,Sz}
+!      U=transpose(conjg(orbital_Lz_rotation_NorbNspin()))
+!      Udag=transpose(conjg(U))
+!      !
+!   elseif(bath_type=="normal")then
+!      !
+!      !impurity dm in {J,jz}. Rotation U: {J,jz}-->{t2g,Sz}
+!      U=transpose(conjg(atomic_SOC_rotation()))
+!      Udag=transpose(conjg(U))
+!      !
+!   endif
+!   !
+!   do ilat=1,Nlat
+!      !
+!      rho_so(ilat,:,:)=nn2so_reshape(single_particle_density_matrix_ineq(ilat,:,:,:,:),Nspin,Norb)
+!      rho_so(ilat,:,:)=matmul(Udag,matmul(rho_so(ilat,:,:),U))
+!      rho_nn(ilat,:,:,:,:)=so2nn_reshape(rho_so(ilat,:,:),Nspin,Norb)
+!      !
+!      !#####################################################
+!      !#                  < S(iorb,jorb) >                 #
+!      !#####################################################
+!      !
+!      ! Sx =    [ <c+_up,c_dw> + <c+_dw,c_up> ]_(iorb,jorb)
+!      ! Sy = xi*[ <c+_dw,c_up> - <c+_up,c_dw> ]_(iorb,jorb)
+!      ! Sz =    [ <c+_up,c_up> - <c+_dw,c_dw> ]_(iorb,jorb)
+!      !
+!      do iorb=1,Norb
+!         do jorb=1,Norb
+!            Simp(ilat,1,iorb,jorb) = 0.5d0*( rho_nn(ilat,1,2,iorb,jorb) + rho_nn(ilat,2,1,iorb,jorb) )
+!            Simp(ilat,2,iorb,jorb) = 0.5d0*( rho_nn(ilat,2,1,iorb,jorb) - rho_nn(ilat,1,2,iorb,jorb) )*xi
+!            Simp(ilat,3,iorb,jorb) = 0.5d0*( rho_nn(ilat,1,1,iorb,jorb) - rho_nn(ilat,2,2,iorb,jorb) )
+!         enddo
+!      enddo
+!      !
+!      !#####################################################
+!      !#                 < L(ispin,jspin) >                #
+!      !#####################################################
+!      ! 1=yz 2=zx 3=xy
+!      ! Lx = xi*[ <c+_3,c_2> - <c+_2,c_3> ]_(ispin,jspin)
+!      ! Ly = xi*[ <c+_1,c_3> - <c+_3,c_1> ]_(ispin,jspin)
+!      ! Lz = xi*[ <c+_2,c_1> - <c+_1,c_2> ]_(ispin,jspin)
+!      !
+!      do ispin=1,Nspin
+!         do jspin=1,Nspin
+!            Limp(ilat,1,ispin,jspin) = ( rho_nn(ilat,ispin,jspin,3,2) - rho_nn(ilat,ispin,jspin,2,3) )*xi
+!            Limp(ilat,2,ispin,jspin) = ( rho_nn(ilat,ispin,jspin,1,3) - rho_nn(ilat,ispin,jspin,3,1) )*xi
+!            Limp(ilat,3,ispin,jspin) = ( rho_nn(ilat,ispin,jspin,2,1) - rho_nn(ilat,ispin,jspin,1,2) )*xi
+!         enddo
+!      enddo
+!      !
+!      !#####################################################
+!      !#                    < j_{x,y,z} >                  #
+!      !#####################################################
+!      !
+!      jimp(ilat,1) = trace(matmul(rho_so(ilat,:,:),atomic_j("x")))
+!      jimp(ilat,2) = trace(matmul(rho_so(ilat,:,:),atomic_j("y")))
+!      jimp(ilat,3) = trace(matmul(rho_so(ilat,:,:),atomic_j("z")))
+!      !
+!      !#####################################################
+!      !#                   < j^2_{x,y,z} >                 #
+!      !#####################################################
+!      !
+!      jimp_sq(ilat,1) = trace(matmul(rho_so(ilat,:,:),matmul(atomic_j("x"),atomic_j("x"))))
+!      jimp_sq(ilat,2) = trace(matmul(rho_so(ilat,:,:),matmul(atomic_j("y"),atomic_j("y"))))
+!      jimp_sq(ilat,3) = trace(matmul(rho_so(ilat,:,:),matmul(atomic_j("z"),atomic_j("z"))))
+!      !
+!      !#####################################################
+!      !#                        < LS >                     #
+!      !#####################################################
+!      !
+!      LSimp(ilat) = trace(matmul(rho_so(ilat,:,:),atomic_SOC()))
+!      !
+!      write(LOGfile,"(A8,I3,A10,10f18.12,A)") "site:",ilat," Ji   = ",(real(jimp(ilat,io)),io=1,3)
+!      !
+!      Simp_tmp    = zero ; Simp_tmp    = Simp(ilat,:,:,:)
+!      Limp_tmp    = zero ; Limp_tmp    = Limp(ilat,:,:,:)
+!      Jimp_tmp    = zero ; Jimp_tmp    = Jimp(ilat,:)
+!      Jimp_sq_tmp = zero ; Jimp_sq_tmp = Jimp_sq(ilat,:)
+!      LSimp_tmp   = zero ; LSimp_tmp   = LSimp(ilat)
+!      call print_operators(Simp_tmp,Limp_tmp,Jimp_tmp,Jimp_sq_tmp,LSimp_tmp,ilat)
+!      !
+!   enddo
+!   !
+! end subroutine ed_get_quantum_SOC_operators_lattice
+
+
 
 subroutine print_operators(S,L,J,Jsq,LS,ndx)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   implicit none
   complex(8),allocatable,intent(in)   :: S(:,:,:)

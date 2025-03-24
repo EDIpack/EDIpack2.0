@@ -66,6 +66,7 @@ contains
 
 
 
+
   subroutine get_reduced_rdm_global(rdm,orbital_mask,doprint)
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb

@@ -1,5 +1,7 @@
-
 subroutine ed_get_doubles_n2(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:,:) :: self
   integer                :: Nlat !number of inequivalent impurity sites for real-space DMFT
   !
@@ -10,6 +12,9 @@ subroutine ed_get_doubles_n2(self,Nlat)
 end subroutine ed_get_doubles_n2
 
 subroutine ed_get_dust_n1(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:) :: self
   integer              :: Nlat !number of inequivalent impurity sites for real-space DMFT
   !
@@ -30,6 +35,9 @@ subroutine ed_get_dund_n1(self,Nlat)
 end subroutine ed_get_dund_n1
 
 subroutine ed_get_dse_n1(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:) :: self
   integer              :: Nlat !number of inequivalent impurity sites for real-space DMFT
   !
@@ -40,6 +48,9 @@ subroutine ed_get_dse_n1(self,Nlat)
 end subroutine ed_get_dse_n1
 
 subroutine ed_get_dph_n1(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:) :: self
   integer              :: Nlat !number of inequivalent impurity sites for real-space DMFT
   !

@@ -194,6 +194,7 @@ Browse Source Code
    :maxdepth: 2
    :hidden:
 
+<<<<<<< HEAD
    edipack2ineq
 
    
@@ -211,6 +212,16 @@ Browse Source Code
 
    edipack2_python
    
+=======
+   edipy2
+   
+.. toctree::
+   :caption: EDIpack2TRIQS
+   :maxdepth: 2
+   :hidden:
+
+   edipack2triqs
+>>>>>>> c05d93a13356b6b833e4a7da9701897332224a64
 
 .. toctree::
    :caption: Browse code
@@ -226,6 +237,7 @@ Browse Source Code
    EDIpy2.0 on GitHub <https://github.com/edipack/EDIpy2.0>
    edipack2triqs on GitHub <https://github.com/krivenko/edipack2triqs>
    SciFortran on GitHub <https://github.com/SciFortran/SciFortran>
+   EDIpack2TRIQS on GitHub <https://github.com/krivenko/edipack2triqs>
 
 
 

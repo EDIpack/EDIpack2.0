@@ -4,6 +4,9 @@
 
 
 subroutine ed_get_dimp_lattice_n2(self,nlat,axis,z)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   complex(8),dimension(:,:),intent(inout)       :: self !! [Nlso,Nlso,:]
   integer,intent(in)                            :: nlat  ! Number of inequivalent impurity sites for real-space DMFT
   character(len=*),optional                     :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real

@@ -1,4 +1,7 @@
 subroutine ed_get_eimp_n2(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:,:) :: self
   integer                :: Nlat !number of inequivalent impurity sites for real-space DMFT
   !
@@ -10,6 +13,9 @@ end subroutine ed_get_eimp_n2
 
 
 subroutine ed_get_epot_n1(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:) :: self
   integer              :: Nlat !number of inequivalent impurity sites for real-space DM
   !
@@ -20,6 +26,9 @@ subroutine ed_get_epot_n1(self,Nlat)
 end subroutine ed_get_epot_n1
 
 subroutine ed_get_eint_n1(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:) :: self
   integer              :: Nlat !number of inequivalent impurity sites for real-space DM
   !
@@ -30,6 +39,9 @@ subroutine ed_get_eint_n1(self,Nlat)
 end subroutine ed_get_eint_n1
 
 subroutine ed_get_ehartree_n1(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:) :: self
   integer              :: Nlat !number of inequivalent impurity sites for real-space DM
   !
@@ -39,7 +51,11 @@ subroutine ed_get_ehartree_n1(self,Nlat)
   self = e_ineq(:,3)
 end subroutine ed_get_ehartree_n1
 
+
 subroutine ed_get_eknot_n1(self,Nlat)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
   real(8),dimension(:) :: self
   integer              :: Nlat !number of inequivalent impurity sites for real-space DM
   !
