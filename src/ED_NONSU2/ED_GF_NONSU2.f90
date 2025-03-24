@@ -98,36 +98,41 @@ contains
     enddo
     !
     !
-    if(bath_type=="normal")return
-    !
-    !
-    !different orbital, same spin GF: G_{ab}^{ss}(z)
-    do ispin=1,Nspin
-       do iorb=1,Norb
-          do jorb=1,Norb
-             if(iorb==jorb)cycle
-             if(.not.Gbool(ispin,ispin,iorb,jorb))cycle
-             call allocate_GFmatrix(impGmatrix(ispin,ispin,iorb,jorb),Nstate=state_list%size)
-             call lanc_build_gf_nonsu2_mixOrb_mixSpin(iorb,jorb,ispin,ispin)
-          enddo
-       enddo
-    enddo
-    !
-    !
-    !different orbital, different spin GF: G_{ab}^{ss'}(z)
-    do ispin=1,Nspin
-       do jspin=1,Nspin
-          if(ispin==jspin)cycle
-          do iorb=1,Norb
-             do jorb=1,Norb
-                if(iorb==jorb)cycle
-                if(.not.Gbool(ispin,jspin,iorb,jorb))cycle
-                call allocate_GFmatrix(impGmatrix(ispin,jspin,iorb,jorb),Nstate=state_list%size)
-                call lanc_build_gf_nonsu2_mixOrb_mixSpin(iorb,jorb,ispin,jspin)
-             enddo
-          enddo
-       enddo
-    enddo
+    if(bath_type=="normal")then 
+      if(MPIMASTER)call stop_timer
+      return
+    else
+      !
+      !
+      !different orbital, same spin GF: G_{ab}^{ss}(z)
+      do ispin=1,Nspin
+         do iorb=1,Norb
+            do jorb=1,Norb
+               if(iorb==jorb)cycle
+               if(.not.Gbool(ispin,ispin,iorb,jorb))cycle
+               call allocate_GFmatrix(impGmatrix(ispin,ispin,iorb,jorb),Nstate=state_list%size)
+               call lanc_build_gf_nonsu2_mixOrb_mixSpin(iorb,jorb,ispin,ispin)
+            enddo
+         enddo
+      enddo
+      !
+      !
+      !different orbital, different spin GF: G_{ab}^{ss'}(z)
+      do ispin=1,Nspin
+         do jspin=1,Nspin
+            if(ispin==jspin)cycle
+            do iorb=1,Norb
+               do jorb=1,Norb
+                  if(iorb==jorb)cycle
+                  if(.not.Gbool(ispin,jspin,iorb,jorb))cycle
+                  call allocate_GFmatrix(impGmatrix(ispin,jspin,iorb,jorb),Nstate=state_list%size)
+                  call lanc_build_gf_nonsu2_mixOrb_mixSpin(iorb,jorb,ispin,jspin)
+               enddo
+            enddo
+         enddo
+      enddo
+      if(MPIMASTER)call stop_timer
+    endif
     !
   end subroutine build_impG_nonsu2
 
