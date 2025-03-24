@@ -1,4 +1,5 @@
 MODULE E2I_IO
+  !:synopsis: Retrieve observables and response functions, inequivalent sites version
   !Contains a set of routines that retrieve quantities such as Green's functions, self-energies (see :f:mod:`ed_greens_functions` ) and observables (from :f:mod:`ed_observables` ) and pass them to the user, as well ass routines to read and store Green's function and self-energies.
   USE EDIPACK2
   !

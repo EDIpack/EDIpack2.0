@@ -1,5 +1,5 @@
 MODULE ED_INPUT_VARS
-  !
+  !:synopsis: User-accessible input variables
   !Contains all global input variables which can be set by the user through the input file. A specific preocedure :f:func:`ed_read_input` should be called to read the input file using :f:func:`parse_input_variable` procedure from SciFortran. All variables are automatically set to a default, looked for and updated by reading into the file and, sequentially looked for and updated from command line (std.input) using the notation `variable_name=variable_value(s)` (case independent).  
   !
   USE SF_VERSION

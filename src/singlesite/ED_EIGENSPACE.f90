@@ -1,5 +1,5 @@
 module ED_EIGENSPACE
-  !
+  !:synopsis: Data types for the eigenspace
   !A class implementing a data structure to efficiently store the low part of the Fock space spectrum, automatically spreading/retrieving the eigenstates among/from MPI threads. 
   !
   USE ED_VARS_GLOBAL

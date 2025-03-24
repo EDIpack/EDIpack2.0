@@ -1,6 +1,6 @@
 MODULE E2I_VARS_GLOBAL
   USE EDIPACK2
-  !
+  !:synopsis: Global variables, inequivalent sites version
   !Contains all variables, arrays and derived types instances shared throughout the code.
   !Specifically, it contains definitions of the :f:var:`effective_bath`, the :f:var:`gfmatrix` and the :f:var:`sector` data structures. 
   !

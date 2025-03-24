@@ -1,5 +1,5 @@
 MODULE ED_GFMATRIX
-  !
+  !:synopsis: Data types for the storing of the Green's funciton
   !Contains definition of the :f:var:`gfmatrix` class. This 
   !constains all the weights and poles of the dynamical correlation functions in the sub-classes :f:var:`gfspectrum` and :f:var:`gfchannel`.
   !This is one of the key results of the calculation,

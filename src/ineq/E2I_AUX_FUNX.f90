@@ -1,5 +1,5 @@
 MODULE E2I_AUX_FUNX
-  !
+  !:synopsis: Assortment of auxiliary procedures, inequivalent sites version
   !Hosts a number of auxiliary procedures required in different parts of the code.
   !Specifically, it implements: creation/annihilation fermionic operators, binary decomposition of integer representation of Fock states and setup the local impurity Hamiltonian
   !

@@ -1,4 +1,5 @@
 module E2I_MAIN
+  !:synopsis: Main solver routines, inequivalent sites version
   !Contains routine that initialize, run and finalize the Impurity model solver
   USE EDIPACK2
   !

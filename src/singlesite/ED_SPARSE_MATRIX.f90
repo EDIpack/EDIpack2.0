@@ -1,4 +1,5 @@
 MODULE ED_SPARSE_MATRIX
+  !:synopsis: Types to store sparse matrices
   !This class defines a data structure to efficiently store sparse matrices into dedicated CSR matrices, featuring support to MPI parallel storage, so that each matrix is spread across the threads.
   !
   !

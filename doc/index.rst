@@ -139,6 +139,13 @@ EDIpack2 C-bindings
 :doc:`edipack2_cbinding`
      The Fortran-C interface for |edipack2| and |edipack2ineq|
      
+*****************************************  
+Python projects
+*****************************************
+:doc:`edipack2_python`
+     Link to the documentation of the EDIpack python API
+     EDIpy2.0, as well as the TRIQS compatibilty layer
+     
 
 ***************************************
 Browse Source Code
@@ -197,6 +204,13 @@ Browse Source Code
 
    edipack2_cbinding
    
+.. toctree::
+   :caption: Python projects
+   :maxdepth: 2
+   :hidden:
+
+   edipack2_python
+   
 
 .. toctree::
    :caption: Browse code
@@ -207,8 +221,10 @@ Browse Source Code
 
 .. toctree::
    :caption: External Links
-   
+
+   EDIpack2.0 on GitHub <https://github.com/edipack/EDIpack2.0>   
    EDIpy2.0 on GitHub <https://github.com/edipack/EDIpy2.0>
+   edipack2triqs on GitHub <https://github.com/krivenko/edipack2triqs>
    SciFortran on GitHub <https://github.com/SciFortran/SciFortran>
 
 

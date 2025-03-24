@@ -1,5 +1,6 @@
 MODULE E2I_BATH_REPLICA
   !
+  !:synopsis: Replica bath construction and manipulation routines, inequivalent sites version
   !This module implements the functions to set the matrix basis :math:`\{ \hat{O}_i \}_{i=1,\dots,N_{sym}}` and the initial variational parameters :math:`\vec{\lambda}` used to decompose each local bath hamiltonian for the  :f:var:`replica` and :f:var:`general` bath types.  
   !The functions extends the functionalities to the case of multiple inequivalent impurities.
   !

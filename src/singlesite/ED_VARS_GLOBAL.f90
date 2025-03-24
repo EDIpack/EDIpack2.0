@@ -1,5 +1,5 @@
 MODULE ED_VARS_GLOBAL
-  !
+  !:synopsis: Global variable accessible throughout the code
   !Contains global variables, arrays and derived types instances shared throughout the code.
   !In particular, it contains definitions of the :f:var:`effective_bath` and the :f:var:`sector` data structures, loads the :f:mod:`ed_sparse_matrix` and :f:mod:`ed_gfmatrix` classes.    
   !
