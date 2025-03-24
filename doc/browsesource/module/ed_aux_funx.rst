@@ -6,5 +6,5 @@ ED_AUX_FUNX
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/master/src/ED_AUX_FUNX.f90>`_ for :f:mod:`ed_aux_funx` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/detach_rdmft/src/singlesite/ED_AUX_FUNX.f90>`_ for :f:mod:`ed_aux_funx` on GitHub
  

@@ -2,7 +2,7 @@ MODULE EDIPACK2_C
   !
   ! A Fortran-C interface module for EDIpack2+EDIpack2ineq built around `ISO_C_BINDING`
   !
-  USE COMMON
+  USE EDIPACK2_C_COMMON
   USE ISO_C_BINDING
 #ifdef _WINEQ
   USE EDIPACK2INEQ

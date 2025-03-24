@@ -1,0 +1,573 @@
+<!-- -*- mode: jinja2 -*- -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+      <meta name="description" content="Documentation for EDIpack2.0">
+    <meta name="author" content="" >
+    <link rel="icon" href="../favicon.png">
+
+    <title>E2I_BATH_USER &ndash; EDIpack2.0</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="../css/pygments.css" rel="stylesheet">
+    <link href="../css/font-awesome.min.css" rel="stylesheet">
+    <link href="../css/local.css" rel="stylesheet">
+      <link  href="../tipuesearch/tipuesearch.css" rel="stylesheet">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="../js/svg-pan-zoom.min.js"></script>
+  </head>
+
+  <body>
+
+    <!-- Fixed navbar -->
+    <div class="container-fluid mb-sm-4 mb-xl-2">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="../index.html">EDIpack2.0 </a>
+          <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon">
+          </button>
+
+          <div id="navbar" class="navbar-collapse collapse">
+            <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="../lists/files.html">Source Files</a>
+                  </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/modules.html">Modules</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="../lists/procedures.html">Procedures</a>
+                </li>
+            </ul>
+              <div class="d-flex align-items-end flex-grow-1">
+                <form action="../search.html" role="search" class="ms-auto">
+                  <input type="text" class="form-control" aria-label="Search" placeholder="Search" name="q" id="tipue_search_input" autocomplete="off" required>
+                </form>
+              </div>
+          </div><!--/.nav-collapse -->
+        </div>
+      </nav>
+    </div>
+
+    <div class="container">
+  <div class="row">
+    <h1>E2I_BATH_USER
+      <small>Module</small>
+      
+    </h1>
+      <div class="container p-2 mb-4 bg-light border rounded-3">
+    <div class="row align-items-center justify-content-between" id="info-bar">
+      <div class="col">
+        <ul class="list-inline" style="margin-bottom:0px;display:inline">
+
+            <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
+              <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
+                 title=" 0.6% of total for modules and submodules.">185 statements</a>
+            </li>
+
+            <li class="list-inline-item" id="source-file">
+              <i class="fa fa-code"></i>
+              <a href="../src/E2I_BATH_USER.f90"> Source File</a>
+            </li>
+        </ul>
+      </div>
+      <div class="col">
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb justify-content-end mb-0">
+                <li class="breadcrumb-item"><a href='../sourcefile/e2i_bath_user.f90.html'>E2I_BATH_USER.f90</a></li>
+            <li class="breadcrumb-item active" aria-current="page">E2I_BATH_USER</li>
+          </ol>
+        </nav>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
+  </div>
+
+  <div class="row">
+    <div class="col-md-3">
+        <div id="sidebar">
+      <h3>Contents</h3>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+    <em>None</em>
+
+  </div>
+
+    </div>
+
+    <div class="col-md-9" id='text'>
+      
+<br>          <div class="card mb-4">
+      <h3 class="card-header card-title bg-light">Uses</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <ul class="list-inline">
+                  <li class="list-inline-item">SF_CONSTANTS</li>
+                  <li class="list-inline-item">SF_ARRAYS</li>
+                  <li class="list-inline-item">SF_LINALG</li>
+                  <li class="list-inline-item"><a href='e2i_aux_funx.html'>E2I_AUX_FUNX</a></li>
+                  <li class="list-inline-item">SF_IOTOOLS</li>
+                  <li class="list-inline-item"><a href='edipack2.html'>EDIPACK2</a></li>
+                  <li class="list-inline-item"><a href='e2i_vars_global.html'>E2I_VARS_GLOBAL</a></li>
+                  <li class="list-inline-item">SF_MISC</li>
+              </ul>
+            </li>
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.42.4 (0)
+ -->
+<!-- Title: module~~e2i_bath_user~~UsesGraph Pages: 1 -->
+<svg id="modulee2i_bath_userUsesGraph" width="251pt" height="326pt"
+ viewBox="0.00 0.00 251.00 326.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~e2i_bath_user~~UsesGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 322)">
+<title>module~~e2i_bath_user~~UsesGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-322 247,-322 247,4 -4,4"/>
+<!-- module~e2i_bath_user -->
+<g id="module~~e2i_bath_user~~UsesGraph_node1" class="node">
+<title>module~e2i_bath_user</title>
+<polygon fill="none" stroke="black" points="243,-171 146,-171 146,-147 243,-147 243,-171"/>
+<text text-anchor="middle" x="194.5" y="-156.6" font-family="Helvetica,sans-Serif" font-size="10.50">E2I_BATH_USER</text>
+</g>
+<!-- SF_ARRAYS -->
+<g id="module~~e2i_bath_user~~UsesGraph_node2" class="node">
+<title>SF_ARRAYS</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="92,-318 18,-318 18,-294 92,-294 92,-318"/>
+<text text-anchor="middle" x="55" y="-303.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SF_ARRAYS</text>
+</g>
+<!-- module~e2i_bath_user&#45;&gt;SF_ARRAYS -->
+<g id="module~~e2i_bath_user~~UsesGraph_edge1" class="edge">
+<title>module~e2i_bath_user&#45;&gt;SF_ARRAYS</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188.49,-171.2C177.72,-196.01 150.05,-252.73 110,-285 107.29,-287.18 104.33,-289.15 101.24,-290.94"/>
+<polygon fill="#000000" stroke="#000000" points="99.61,-287.84 92.26,-295.48 102.76,-294.09 99.61,-287.84"/>
+</g>
+<!-- SF_CONSTANTS -->
+<g id="module~~e2i_bath_user~~UsesGraph_node3" class="node">
+<title>SF_CONSTANTS</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="103.5,-276 6.5,-276 6.5,-252 103.5,-252 103.5,-276"/>
+<text text-anchor="middle" x="55" y="-261.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SF_CONSTANTS</text>
+</g>
+<!-- module~e2i_bath_user&#45;&gt;SF_CONSTANTS -->
+<g id="module~~e2i_bath_user~~UsesGraph_edge2" class="edge">
+<title>module~e2i_bath_user&#45;&gt;SF_CONSTANTS</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M184.22,-171.16C169.99,-189.06 141.14,-222.61 110,-243 107.55,-244.6 104.97,-246.11 102.3,-247.53"/>
+<polygon fill="#000000" stroke="#000000" points="100.53,-244.49 93.04,-251.98 103.57,-250.8 100.53,-244.49"/>
+</g>
+<!-- SF_IOTOOLS -->
+<g id="module~~e2i_bath_user~~UsesGraph_node4" class="node">
+<title>SF_IOTOOLS</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="94.5,-234 15.5,-234 15.5,-210 94.5,-210 94.5,-234"/>
+<text text-anchor="middle" x="55" y="-219.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SF_IOTOOLS</text>
+</g>
+<!-- module~e2i_bath_user&#45;&gt;SF_IOTOOLS -->
+<g id="module~~e2i_bath_user~~UsesGraph_edge3" class="edge">
+<title>module~e2i_bath_user&#45;&gt;SF_IOTOOLS</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M170.74,-171.18C154.11,-179.91 130.91,-191.7 110,-201 106.12,-202.72 102.06,-204.45 97.97,-206.13"/>
+<polygon fill="#000000" stroke="#000000" points="96.45,-202.97 88.47,-209.95 99.06,-209.47 96.45,-202.97"/>
+</g>
+<!-- SF_LINALG -->
+<g id="module~~e2i_bath_user~~UsesGraph_node5" class="node">
+<title>SF_LINALG</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="90,-192 20,-192 20,-168 90,-168 90,-192"/>
+<text text-anchor="middle" x="55" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SF_LINALG</text>
+</g>
+<!-- module~e2i_bath_user&#45;&gt;SF_LINALG -->
+<g id="module~~e2i_bath_user~~UsesGraph_edge4" class="edge">
+<title>module~e2i_bath_user&#45;&gt;SF_LINALG</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M145.8,-166.29C131.06,-168.54 114.91,-171 100.41,-173.22"/>
+<polygon fill="#000000" stroke="#000000" points="99.55,-169.81 90.19,-174.78 100.6,-176.73 99.55,-169.81"/>
+</g>
+<!-- SF_MISC -->
+<g id="module~~e2i_bath_user~~UsesGraph_node6" class="node">
+<title>SF_MISC</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="84,-150 26,-150 26,-126 84,-126 84,-150"/>
+<text text-anchor="middle" x="55" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SF_MISC</text>
+</g>
+<!-- module~e2i_bath_user&#45;&gt;SF_MISC -->
+<g id="module~~e2i_bath_user~~UsesGraph_edge5" class="edge">
+<title>module~e2i_bath_user&#45;&gt;SF_MISC</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M145.8,-151.71C129,-149.15 110.34,-146.3 94.41,-143.87"/>
+<polygon fill="#000000" stroke="#000000" points="94.79,-140.38 84.38,-142.33 93.74,-147.3 94.79,-140.38"/>
+</g>
+<!-- module~e2i_aux_funx -->
+<g id="module~~e2i_bath_user~~UsesGraph_node7" class="node">
+<title>module~e2i_aux_funx</title>
+<g id="a_module~~e2i_bath_user~~UsesGraph_node7"><a xlink:href="../module/e2i_aux_funx.html" xlink:title="E2I_AUX_FUNX">
+<polygon fill="#337ab7" stroke="#337ab7" points="100,-108 10,-108 10,-84 100,-84 100,-108"/>
+<text text-anchor="middle" x="55" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">E2I_AUX_FUNX</text>
+</a>
+</g>
+</g>
+<!-- module~e2i_bath_user&#45;&gt;module~e2i_aux_funx -->
+<g id="module~~e2i_bath_user~~UsesGraph_edge6" class="edge">
+<title>module~e2i_bath_user&#45;&gt;module~e2i_aux_funx</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M170.74,-146.82C154.11,-138.09 130.91,-126.3 110,-117 106.12,-115.28 102.06,-113.55 97.97,-111.87"/>
+<polygon fill="#000000" stroke="#000000" points="99.06,-108.53 88.47,-108.05 96.45,-115.03 99.06,-108.53"/>
+</g>
+<!-- module~e2i_vars_global -->
+<g id="module~~e2i_bath_user~~UsesGraph_node8" class="node">
+<title>module~e2i_vars_global</title>
+<g id="a_module~~e2i_bath_user~~UsesGraph_node8"><a xlink:href="../module/e2i_vars_global.html" xlink:title="E2I_VARS_GLOBAL">
+<polygon fill="#337ab7" stroke="#337ab7" points="110,-66 0,-66 0,-42 110,-42 110,-66"/>
+<text text-anchor="middle" x="55" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">E2I_VARS_GLOBAL</text>
+</a>
+</g>
+</g>
+<!-- module~e2i_bath_user&#45;&gt;module~e2i_vars_global -->
+<g id="module~~e2i_bath_user~~UsesGraph_edge7" class="edge">
+<title>module~e2i_bath_user&#45;&gt;module~e2i_vars_global</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M184.22,-146.84C169.99,-128.94 141.14,-95.39 110,-75 107.55,-73.4 104.97,-71.89 102.3,-70.47"/>
+<polygon fill="#000000" stroke="#000000" points="103.57,-67.2 93.04,-66.02 100.53,-73.51 103.57,-67.2"/>
+</g>
+<!-- module~edipack2 -->
+<g id="module~~e2i_bath_user~~UsesGraph_node9" class="node">
+<title>module~edipack2</title>
+<g id="a_module~~e2i_bath_user~~UsesGraph_node9"><a xlink:href="../module/edipack2.html" xlink:title="EDIPACK2">
+<polygon fill="#337ab7" stroke="#337ab7" points="87,-24 23,-24 23,0 87,0 87,-24"/>
+<text text-anchor="middle" x="55" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">EDIPACK2</text>
+</a>
+</g>
+</g>
+<!-- module~e2i_bath_user&#45;&gt;module~edipack2 -->
+<g id="module~~e2i_bath_user~~UsesGraph_edge8" class="edge">
+<title>module~e2i_bath_user&#45;&gt;module~edipack2</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M188.49,-146.8C177.72,-121.99 150.05,-65.27 110,-33 105.94,-29.73 101.32,-26.93 96.52,-24.53"/>
+<polygon fill="#000000" stroke="#000000" points="97.74,-21.24 87.18,-20.41 94.92,-27.65 97.74,-21.24"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsesGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="UsesGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.42.4 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="490pt" height="32pt"
+ viewBox="0.00 0.00 489.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 485.5,-28 485.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,0 139.5,0 139.5,-24"/>
+<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="222,-24 158,-24 158,0 222,0 222,-24"/>
+<text text-anchor="middle" x="190" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="294,-24 240,-24 240,0 294,0 294,-24"/>
+<text text-anchor="middle" x="267" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="366,-24 312,-24 312,0 366,0 366,-24"/>
+<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="481.5,-24 384.5,-24 384.5,0 481.5,0 481.5,-24"/>
+<text text-anchor="middle" x="433" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a submodule to the (sub)module which it is
+descended from. Dashed arrows point from a module or program unit to 
+modules which it uses.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+          <div class="card">
+      <h3 class="card-header card-title bg-light">Used by</h3>
+      <div class="card-body">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <div class="depgraph"><?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.42.4 (0)
+ -->
+<!-- Title: module~~e2i_bath_user~~UsedByGraph Pages: 1 -->
+<svg id="modulee2i_bath_userUsedByGraph" width="538pt" height="52pt"
+ viewBox="0.00 0.00 538.00 52.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="module~~e2i_bath_user~~UsedByGraph" class="graph" transform="scale(1 1) rotate(0) translate(4 48)">
+<title>module~~e2i_bath_user~~UsedByGraph</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-48 534,-48 534,4 -4,4"/>
+<!-- module~e2i_bath_user -->
+<g id="module~~e2i_bath_user~~UsedByGraph_node1" class="node">
+<title>module~e2i_bath_user</title>
+<polygon fill="none" stroke="black" points="97,-44 0,-44 0,-20 97,-20 97,-44"/>
+<text text-anchor="middle" x="48.5" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50">E2I_BATH_USER</text>
+</g>
+<!-- module~e2i_bath -->
+<g id="module~~e2i_bath_user~~UsedByGraph_node2" class="node">
+<title>module~e2i_bath</title>
+<g id="a_module~~e2i_bath_user~~UsedByGraph_node2"><a xlink:href="../module/e2i_bath.html" xlink:title="E2I_BATH">
+<polygon fill="#337ab7" stroke="#337ab7" points="195,-44 133,-44 133,-20 195,-20 195,-44"/>
+<text text-anchor="middle" x="164" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">E2I_BATH</text>
+</a>
+</g>
+</g>
+<!-- module~e2i_bath&#45;&gt;module~e2i_bath_user -->
+<g id="module~~e2i_bath_user~~UsedByGraph_edge1" class="edge">
+<title>module~e2i_bath&#45;&gt;module~e2i_bath_user</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M132.88,-32C125.05,-32 116.33,-32 107.58,-32"/>
+<polygon fill="#000000" stroke="#000000" points="107.33,-28.5 97.33,-32 107.33,-35.5 107.33,-28.5"/>
+</g>
+<!-- module~e2i_main -->
+<g id="module~~e2i_bath_user~~UsedByGraph_node3" class="node">
+<title>module~e2i_main</title>
+<g id="a_module~~e2i_bath_user~~UsedByGraph_node3"><a xlink:href="../module/e2i_main.html" xlink:title="E2I_MAIN">
+<polygon fill="#337ab7" stroke="#337ab7" points="292,-24 231,-24 231,0 292,0 292,-24"/>
+<text text-anchor="middle" x="261.5" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">E2I_MAIN</text>
+</a>
+</g>
+</g>
+<!-- module~e2i_main&#45;&gt;module~e2i_bath -->
+<g id="module~~e2i_bath_user~~UsedByGraph_edge2" class="edge">
+<title>module~e2i_main&#45;&gt;module~e2i_bath</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M230.81,-18.22C222.62,-19.93 213.6,-21.82 204.94,-23.64"/>
+<polygon fill="#000000" stroke="#000000" points="204.07,-20.24 195,-25.72 205.51,-27.09 204.07,-20.24"/>
+</g>
+<!-- module~edipack2ineq -->
+<g id="module~~e2i_bath_user~~UsedByGraph_node4" class="node">
+<title>module~edipack2ineq</title>
+<g id="a_module~~e2i_bath_user~~UsedByGraph_node4"><a xlink:href="../module/edipack2ineq.html" xlink:title="EDIPACK2INEQ">
+<polygon fill="#337ab7" stroke="#337ab7" points="417,-44 328,-44 328,-20 417,-20 417,-44"/>
+<text text-anchor="middle" x="372.5" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">EDIPACK2INEQ</text>
+</a>
+</g>
+</g>
+<!-- module~edipack2ineq&#45;&gt;module~e2i_bath -->
+<g id="module~~e2i_bath_user~~UsedByGraph_edge3" class="edge">
+<title>module~edipack2ineq&#45;&gt;module~e2i_bath</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M327.76,-32.65C316.14,-32.79 303.59,-32.93 292,-33 264.89,-33.17 258.11,-33.21 231,-33 222.69,-32.94 213.79,-32.83 205.31,-32.71"/>
+<polygon fill="#000000" stroke="#000000" points="205.28,-29.21 195.23,-32.55 205.17,-36.21 205.28,-29.21"/>
+</g>
+<!-- module~edipack2ineq&#45;&gt;module~e2i_main -->
+<g id="module~~e2i_bath_user~~UsedByGraph_edge4" class="edge">
+<title>module~edipack2ineq&#45;&gt;module~e2i_main</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M327.79,-23.98C319.29,-22.42 310.42,-20.79 302.05,-19.26"/>
+<polygon fill="#000000" stroke="#000000" points="302.63,-15.81 292.17,-17.44 301.37,-22.69 302.63,-15.81"/>
+</g>
+<!-- module~edipack2_c -->
+<g id="module~~e2i_bath_user~~UsedByGraph_node5" class="node">
+<title>module~edipack2_c</title>
+<g id="a_module~~e2i_bath_user~~UsedByGraph_node5"><a xlink:href="../module/edipack2_c.html" xlink:title="EDIPACK2_C">
+<polygon fill="#337ab7" stroke="#337ab7" points="530,-44 453,-44 453,-20 530,-20 530,-44"/>
+<text text-anchor="middle" x="491.5" y="-29.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">EDIPACK2_C</text>
+</a>
+</g>
+</g>
+<!-- module~edipack2_c&#45;&gt;module~edipack2ineq -->
+<g id="module~~e2i_bath_user~~UsedByGraph_edge5" class="edge">
+<title>module~edipack2_c&#45;&gt;module~edipack2ineq</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M452.84,-32C444.67,-32 435.89,-32 427.24,-32"/>
+<polygon fill="#000000" stroke="#000000" points="427.2,-28.5 417.2,-32 427.2,-35.5 427.2,-28.5"/>
+</g>
+</g>
+</svg>
+</div>          <div>
+            <a type="button" class="graph-help" data-bs-toggle="modal" href="#UsedByGraph-help-text">Help</a>
+          </div>
+          <div class="modal fade" id="UsedByGraph-help-text" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-lg" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="-graph-help-label">Graph Key</h4>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+<p>Nodes of different colours represent the following: </p>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+ "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Generated by graphviz version 2.42.4 (0)
+ -->
+<!-- Title: Graph Key Pages: 1 -->
+<svg width="490pt" height="32pt"
+ viewBox="0.00 0.00 489.50 32.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 28)">
+<title>Graph Key</title>
+<polygon fill="white" stroke="transparent" points="-4,4 -4,-28 485.5,-28 485.5,4 -4,4"/>
+<!-- Module -->
+<g id="node1" class="node">
+<title>Module</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="54,-24 0,-24 0,0 54,0 54,-24"/>
+<text text-anchor="middle" x="27" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Module</text>
+</g>
+<!-- Submodule -->
+<g id="node2" class="node">
+<title>Submodule</title>
+<polygon fill="#5bc0de" stroke="#5bc0de" points="139.5,-24 72.5,-24 72.5,0 139.5,0 139.5,-24"/>
+<text text-anchor="middle" x="106" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Submodule</text>
+</g>
+<!-- Subroutine -->
+<g id="node3" class="node">
+<title>Subroutine</title>
+<polygon fill="#d9534f" stroke="#d9534f" points="222,-24 158,-24 158,0 222,0 222,-24"/>
+<text text-anchor="middle" x="190" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Subroutine</text>
+</g>
+<!-- Function -->
+<g id="node4" class="node">
+<title>Function</title>
+<polygon fill="#d94e8f" stroke="#d94e8f" points="294,-24 240,-24 240,0 294,0 294,-24"/>
+<text text-anchor="middle" x="267" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Function</text>
+</g>
+<!-- Program -->
+<g id="node5" class="node">
+<title>Program</title>
+<polygon fill="#f0ad4e" stroke="#f0ad4e" points="366,-24 312,-24 312,0 366,0 366,-24"/>
+<text text-anchor="middle" x="339" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">Program</text>
+</g>
+<!-- This Page&#39;s Entity -->
+<g id="node6" class="node">
+<title>This Page&#39;s Entity</title>
+<polygon fill="none" stroke="black" points="481.5,-24 384.5,-24 384.5,0 481.5,0 481.5,-24"/>
+<text text-anchor="middle" x="433" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50">This Page&#39;s Entity</text>
+</g>
+</g>
+</svg>
+
+<p>Solid arrows point from a submodule to the (sub)module which it is
+descended from. Dashed arrows point from a module or program unit to 
+modules which it uses.
+</p>
+ </div>
+            </div>
+          </div>
+        </div>
+            </li>
+        </ul>
+      </div>
+    </div>
+
+      <br>
+
+
+
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+
+      <hr>
+    </div> <!-- /container -->
+    <footer>
+      <div class="container">
+        <div class="row justify-content-between">
+          <div class="col">
+            <p>
+              EDIpack2.0
+              &copy; 2025 
+</p>
+          </div>
+          <div class="col">
+            <p class="text-end">
+              Documentation generated by
+              <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
+ on 2025-03-24T16:12:36.937243+0100             </p>
+          </div>
+        </div>
+        <br>
+      </div> <!-- /container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>    
+
+    <!-- MathJax JavaScript
+             ================================================== -->
+             <!-- Placed at the end of the document so the pages load faster -->
+        <script type="text/x-mathjax-config">
+          MathJax.Hub.Config({
+          TeX: { extensions: ['AMSmath.js','AMSsymbols.js','noErrors.js','noUndefined.js'], equationNumbers: { autoNumber: 'AMS' } },
+          jax: ['input/TeX','input/MathML','output/HTML-CSS'],
+          extensions: ['tex2jax.js','mml2jax.js','MathMenu.js','MathZoom.js']
+          });
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+          <script src="../tipuesearch/tipuesearch_content.js"></script>
+          <script src="../tipuesearch/tipuesearch_set.js"></script>
+          <script src="../tipuesearch/tipuesearch.js"></script>
+
+  </body>
+</html>

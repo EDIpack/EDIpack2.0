@@ -1,4 +1,4 @@
-MODULE COMMON
+MODULE EDIPACK2_C_COMMON
   USE EDIPACK2
   USE SCIFOR
   USE ISO_C_BINDING
@@ -79,4 +79,4 @@ contains
     end select
   end function get_ed_mode_c
 
-END MODULE COMMON
+END MODULE EDIPACK2_C_COMMON

@@ -1,3 +1,11 @@
+e2i_aux_funx.rst
+e2i_bath_fit.rst
+e2i_bath.rst
+e2i_bath_replica.rst
+e2i_bath_user.rst
+e2i_io.rst
+e2i_main.rst
+e2i_vars_global.rst
 ed_aux_funx.rst
 ed_bath_aux.rst
 ed_bath_dim.rst
@@ -40,10 +48,12 @@ ed_hamiltonian_superc_common.rst
 ed_hamiltonian_superc_direct_hxv.rst
 ed_hamiltonian_superc.rst
 ed_hamiltonian_superc_stored_hxv.rst
-edi2py_bindings.rst
 ed_input_vars.rst
 ed_io.rst
+edipack2_c_common.rst
+edipack2_c.rst
 edipack2.rst
+edipack2ineq.rst
 ed_main.rst
 ed_observables.rst
 ed_observables_nonsu2.rst

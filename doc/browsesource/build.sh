@@ -90,11 +90,21 @@ for ifile in *.html; do
   #if there's no link
   awk '/<title>ED/ {flag=2; print; next} flag == 2 {flag--; print; next} flag == 1 {gsub(/#c061cb/, "#2980b9"); flag=0} 1' $ifile > $ifile.new
   mv $ifile.new $ifile
+done
+
+#edipack2ineq in consistent blue. Use both regex
+for ifile in *.html; do
   #if there's link
-  awk '/<title>module~edi2py/ {print; next_line=1; next} next_line {gsub(/#c061cb/, "#2980b9"); next_line=0} 1' $ifile > $ifile.new
+  awk '/title="E2I/ {print; next_line=1; next} next_line {gsub(/#c061cb/, "#2980b9"); next_line=0} 1' $ifile > $ifile.new
   mv $ifile.new $ifile
   #if there's no link
-  awk '/<title>module~edi2py/ {flag=2; print; next} flag == 2 {flag--; print; next} flag == 1 {gsub(/#c061cb/, "#2980b9"); flag=0} 1' $ifile > $ifile.new
+  awk '/title="E2I/ {flag=2; print; next} flag == 2 {flag--; print; next} flag == 1 {gsub(/#c061cb/, "#2980b9"); flag=0} 1' $ifile > $ifile.new
+  mv $ifile.new $ifile
+  #if there's link
+  awk '/<title>E2I/ {print; next_line=1; next} next_line {gsub(/#c061cb/, "#2980b9"); next_line=0} 1' $ifile > $ifile.new
+  mv $ifile.new $ifile
+  #if there's no link
+  awk '/<title>E2I/ {flag=2; print; next} flag == 2 {flag--; print; next} flag == 1 {gsub(/#c061cb/, "#2980b9"); flag=0} 1' $ifile > $ifile.new
   mv $ifile.new $ifile
 done
 
@@ -113,10 +123,17 @@ for ifile in *.html; do
   #if there's no link
   awk '/<title>scifor/ {flag=2; print; next} flag == 2 {flag--; print; next} flag == 1 {gsub(/#c061cb/, "#26a269"); flag=0} 1' $ifile > $ifile.new
   mv $ifile.new $ifile
+  #if there's link
+  awk '/<title>SCIFOR/ {print; next_line=1; next} next_line {gsub(/#c061cb/, "#26a269"); next_line=0} 1' $ifile > $ifile.new
+  mv $ifile.new $ifile
+  #if there's no link
+  awk '/<title>SCIFOR/ {flag=2; print; next} flag == 2 {flag--; print; next} flag == 1 {gsub(/#c061cb/, "#26a269"); flag=0} 1' $ifile > $ifile.new
+  mv $ifile.new $ifile
 done
 
 #make scifortran links work:
 for ifile in *.html; do
+  #SF modules
   awk '
   {
       print;
@@ -129,6 +146,7 @@ for ifile in *.html; do
       }
   }' $ifile > $ifile.new
   mv $ifile.new $ifile
+  #scifor
   awk '
   {
       print;
@@ -136,6 +154,19 @@ for ifile in *.html; do
           id_value = arr[1];
       }
       if (match($0, /<title>scifor<\/title>/, arr)) {
+          mytitle = arr[1];
+          print "<g id=a_" id_value "><a xlink:href=\"https://scifortran.github.io/SciFortran/index.html\" xlink:title=\"" mytitle "\">";
+      }
+  }' $ifile > $ifile.new
+  mv $ifile.new $ifile
+  #SCIFOR
+  awk '
+  {
+      print;
+      if (match($0, /<g id="([^"]+)"/, arr)) {
+          id_value = arr[1];
+      }
+      if (match($0, /<title>SCIFOR<\/title>/, arr)) {
           mytitle = arr[1];
           print "<g id=a_" id_value "><a xlink:href=\"https://scifortran.github.io/SciFortran/index.html\" xlink:title=\"" mytitle "\">";
       }
@@ -155,17 +186,17 @@ rm list2
 
 
 #generate .rst
+
+current_branch=$(git rev-parse --abbrev-ref HEAD)
+
 for file in $(cat list); do
   name=$(echo $file | sed -e "s/\.rst//g")
   name_upper=$(echo $name | tr '[:lower:]' '[:upper:]' | sed -e "s/HXV/HxV/g")
   relativepath=$(find ../../ -type f -name "*${name_upper}.*90" | awk -Fsrc '{print $2}')
-  if [ $name == "edi2py_bindings" ]; then
-    relativepath=$(find ../../ -type f -name "*edi2py.*90" | awk -Fsrc '{print $2}')  
-  fi
   if [ $name == "ed_version" ]; then
     relativepath=$(find ../../ -type f -name "*revision.in" | awk -Fsrc '{print $2}')  
   fi
-  githubpath="https://github.com/EDIpack/EDIpack2.0/tree/master/src${relativepath}"
+  githubpath="https://github.com/EDIpack/EDIpack2.0/tree/${current_branch}/src${relativepath}"
   echo $name_upper > module/$file
   echo "=====================================" >> module/$file
   echo " " >> module/$file
