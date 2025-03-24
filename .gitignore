@@ -9,6 +9,7 @@ cmake_install.cmake
 test/bin
 *build*
 .archive/
+src/singlesite/ED_VERSION.f90
 src/ED_VERSION.f90
 .DS_Store
 *~

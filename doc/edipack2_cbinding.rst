@@ -24,5 +24,5 @@ EDIPACK2C_ .
 
 
 
-.. _EDIPACK2C: https://github.com/EDIpack/EDIpack2.0/tree/detach_rdmft/c_bindings   
+.. _EDIPACK2C: https://github.com/EDIpack/EDIpack2.0/tree/master/src/c_bindings   
 .. _EDIpy2: https://github.com/edipack/EDIpy2.0

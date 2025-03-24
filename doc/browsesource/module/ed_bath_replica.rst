@@ -6,5 +6,5 @@ ED_BATH_REPLICA
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/master/src/ED_BATH/ED_BATH_REPLICA.f90>`_ for :f:mod:`ed_bath_replica` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/detach_rdmft/src/singlesite/ED_BATH/ED_BATH_REPLICA.f90>`_ for :f:mod:`ed_bath_replica` on GitHub
  
