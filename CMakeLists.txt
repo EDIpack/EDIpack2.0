@@ -66,6 +66,12 @@ $ export PKG_CONFIG_PATH=<path_to_scifor_dir>/etc:$PKG_CONFIG_PATH")
 ENDIF()
 INCLUDE_DIRECTORIES(BEFORE ${SCIFOR_INCLUDE_DIRS})
 
+#message(STATUS "SCIFOR_FOUND: ${SCIFOR_FOUND}")
+#message(STATUS "SCIFOR_LIBRARIES: ${SCIFOR_LIBRARIES}")
+#message(STATUS "SCIFOR_LDFLAGS: ${SCIFOR_LDFLAGS}")
+#message(STATUS "SCIFOR_LIBS: ${SCIFOR_LIBS}")
+#message(STATUS "SCIFOR_LINK_LIBRARIES: ${SCIFOR_LINK_LIBRARIES}")
+
 
 ############################################################
 # Configure Fortran Compiler Main options
@@ -261,8 +267,11 @@ IF(WITH_INEQ)
   target_compile_definitions(${EDI_C} PRIVATE _WINEQ)
 ENDIF()
 TARGET_LINK_LIBRARIES(${EDI_C} PRIVATE ${EDI})
-TARGET_LINK_LIBRARIES(${EDI_C} PRIVATE ${SCIFOR_LINK_LIBRARIES})
+TARGET_LINK_LIBRARIES(${EDI_C} PRIVATE ${SCIFOR_LDFLAGS})
 
+#_LINK_LIBRARIES seems to not include absolute paths. This created a bug because
+#if scalapack is not found blas and lapack are not linked. Using _LDFLAGS fixes it.
+#TARGET_LINK_LIBRARIES(${EDI_C} PRIVATE ${SCIFOR_LINK_LIBRARIES})
 
 
 ############################################################
