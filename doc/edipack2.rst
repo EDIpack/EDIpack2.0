@@ -43,18 +43,13 @@ This part of the library includes a set of modules which contain
 variables or procedures serving the rest of the code. 
 The set includes:
 
-:f:mod:`ED_INPUT_VARS` which defines global input variables and input
-read method.
+:f:mod:`ED_INPUT_VARS` which defines global input variables and input read method.
 
-:f:mod:`ED_VARS_GLOBAL` containing global shared
-variables and classes, such as the key class  :f:type:`effective_bath`
-which gathers the different bath components according to value of :f:var:`bath_type` and :f:var:`ed_mode`.
+:f:mod:`ED_VARS_GLOBAL` containing global shared variables and classes,such as the key class  :f:type:`effective_bath` which gathers the different bath components according to value of :f:var:`bath_type` and :f:var:`ed_mode`.
 
-:f:mod:`ED_AUX_FUNX`  defines procedures which are used throughout the
-   code.
-   
-:f:mod:`ED_SETUP`  which handles global memory (de)allocation and the evaluation
-of the dimensions of the symmetry sectors.
+:f:mod:`ED_AUX_FUNX`  defining procedures which are used throughout the code.
+
+:f:mod:`ED_SETUP`  which handles global memory (de)allocation and the evaluation of the dimensions of the symmetry sectors.
 
 
 
