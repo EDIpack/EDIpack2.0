@@ -9,4 +9,7 @@ inequivalent impurity. Where possible the optimization is parallel
 with respect to the impurities. See the module :f:mod:`ED_BATH_FIT`
 for further information about the fit for a single impurity.   
 
+.. preferred-crossrefs::
+   :sf_linalg/operator(.x.): f/sf_sparse_array_csr/operator(.x.)
+
 .. f:automodule::   e2i_bath_fit

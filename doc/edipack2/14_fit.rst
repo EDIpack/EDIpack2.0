@@ -25,4 +25,7 @@ discretized bath parameters.
 
 The minimization with respect to :math:`\vec{b}` is performed using conjugate gradient algorithm. 
 
+.. preferred-crossrefs::
+   :sf_linalg/operator(.x.): f/sf_sparse_array_csc/operator(.x.)
+
 .. f:automodule::   ed_bath_fit

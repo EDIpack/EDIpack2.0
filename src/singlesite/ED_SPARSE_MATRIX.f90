@@ -447,8 +447,8 @@ contains
   !PURPOSE: dump a sparse matrix into a regular 2dim array
   !+------------------------------------------------------------------+
   subroutine sp_dump_matrix_csr_d(sparse,matrix)
-    type(sparse_matrix_csr),intent(in)   :: sparse !
-    real(8),dimension(:,:),intent(inout) :: matrix !dense matrix corresponding to :f:var:`sparse` having the same type. 
+    type(sparse_matrix_csr),intent(in)   :: sparse !sparse matrix to dump
+    real(8),dimension(:,:),intent(inout) :: matrix !dense matrix having the same type of the sparse one
     integer                              :: i,j,Ndim1,Ndim2
     !
 #ifdef _DEBUG
