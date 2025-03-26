@@ -1,4 +1,5 @@
 MODULE ED_CHI_FUNCTIONS
+  !:synopsis: Routines for susceptibilities calculation
   USE SF_CONSTANTS, only:one,xi,zero,pi
   USE SF_TIMER  
   USE SF_IOTOOLS, only: str,free_unit,reg,free_units,txtfy,to_lower,splot

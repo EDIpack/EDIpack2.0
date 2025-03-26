@@ -1,4 +1,5 @@
 MODULE ED_GREENS_FUNCTIONS
+  !:synopsis: Routines for Green's functions calculation
   USE SF_CONSTANTS, only:one,xi,zero,pi
   USE SF_TIMER
   USE SF_ARRAYS, only:arange

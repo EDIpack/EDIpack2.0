@@ -1,5 +1,6 @@
 ! > BUILD STORED SPARSE HAMILTONIAN of the SECTOR
 MODULE ED_HAMILTONIAN_SUPERC_STORED_HxV
+  !:synopsis: Routines for sparse matrix-vector product, :code:`SUPERC` case
   USE ED_HAMILTONIAN_SUPERC_COMMON
   implicit none
   private

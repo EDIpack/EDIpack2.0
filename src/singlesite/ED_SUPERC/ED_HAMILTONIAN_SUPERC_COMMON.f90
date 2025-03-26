@@ -1,4 +1,5 @@
 MODULE ED_HAMILTONIAN_SUPERC_COMMON
+  !:synopsis: Common variables for Hamiltonian construction, :code:`SUPERC` case
   USE SF_MISC,      only: assert_shape
   USE SF_CONSTANTS, only: zero
   USE SF_LINALG,    only: kronecker_product,zeye

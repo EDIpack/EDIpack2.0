@@ -1,4 +1,5 @@
 MODULE ED_CHI_PAIR
+  !:synopsis: Routines for pair susceptibility calculation, :code:`NORMAL` case
   !Evaluates the impurity pair susceptibility.
   !
   USE SF_CONSTANTS, only:one,xi,zero,pi

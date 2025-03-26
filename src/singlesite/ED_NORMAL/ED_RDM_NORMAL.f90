@@ -1,4 +1,5 @@
 MODULE ED_RDM_NORMAL
+  !:synopsis: Routines for Reduced Density Matrix, :code:`NORMAL` case
   USE SF_CONSTANTS, only:zero,pi,xi
   USE SF_IOTOOLS, only:free_unit,reg,txtfy
   USE SF_ARRAYS, only: arange

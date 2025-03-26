@@ -1,4 +1,5 @@
 MODULE ED_CHI_SPIN
+  !:synopsis: Routines for spin susceptibility calculation, :code:`NORMAL` case
   !Evaluates the impurity spin-spin susceptibility.
   !
   USE SF_CONSTANTS, only:one,xi,zero,pi

@@ -1,5 +1,5 @@
 MODULE ED_SETUP
-  !:synopsis: Sets up and cleans the solution environment
+  !:synopsis: Routines for solver environment initialization and finalization
   !Contains procedures to set up the Exact Diagonalization calculation, executing all internal consistency checks and allocation of the global memory.
   !
   USE ED_INPUT_VARS

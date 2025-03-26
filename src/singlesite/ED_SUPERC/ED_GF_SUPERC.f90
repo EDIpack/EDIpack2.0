@@ -1,4 +1,5 @@
 MODULE ED_GF_SUPERC
+  !:synopsis: Routines for Green's functions calculation, :code:`SUPERC` case
   USE SF_CONSTANTS, only:one,xi,zero,pi
   USE SF_TIMER
   USE SF_IOTOOLS, only: str,reg,txtfy, save_array, to_lower

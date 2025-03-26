@@ -1,4 +1,5 @@
 MODULE ED_DIAG
+  !:synopsis: Fock space ED-Lanczos diagonalization routines
   USE ED_INPUT_VARS
   USE ED_DIAG_NORMAL
   USE ED_DIAG_SUPERC

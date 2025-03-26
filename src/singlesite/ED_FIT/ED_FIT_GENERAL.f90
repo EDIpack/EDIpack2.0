@@ -18,6 +18,7 @@
 ! Dweiss      : normal
 !
 MODULE ED_FIT_GENERAL
+!:synopsis: Routines for bath fitting, :code:`GENERAL` case
   USE ED_FIT_COMMON
   USE SF_SPIN, only: pauli_sigma_z
   USE SF_LINALG, only: kron, diag, trace

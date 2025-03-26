@@ -1,4 +1,5 @@
 MODULE ED_GF_NONSU2
+!:synopsis: Routines for Green's function calculation, :code:`NONSU2` case
   USE SF_CONSTANTS, only:one,xi,zero,pi
   USE SF_TIMER  
   USE SF_IOTOOLS, only: str,reg,txtfy,to_lower

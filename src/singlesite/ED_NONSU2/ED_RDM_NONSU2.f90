@@ -1,4 +1,5 @@
 MODULE ED_RDM_NONSU2
+!:synopsis: Routines for Reduced Density Matrix calculation, :code:`NONSU2` case
   USE SF_CONSTANTS, only:zero,pi,xi
   USE SF_IOTOOLS, only:free_unit,reg,txtfy
   USE SF_ARRAYS, only: arange

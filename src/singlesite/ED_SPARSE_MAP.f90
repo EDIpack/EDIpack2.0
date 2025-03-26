@@ -1,4 +1,5 @@
 MODULE ED_SPARSE_MAP
+  !:synopsis: Routines and types for bath-impurity sparse maps
   USE SF_IOTOOLS, only: str,free_unit
   USE ED_INPUT_VARS
 !#ifdef _MPI

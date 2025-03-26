@@ -1,4 +1,5 @@
 MODULE ED_OBSERVABLES_NORMAL
+  !:synopsis: Routines for observable calculation, :code:`NORMAL` case
   !This module calculates a series of observables, and stores them in aptly named plain-text files. :f:var:`ed_mode` = :code:`normal`
   USE SF_CONSTANTS, only:zero,pi,xi
   USE SF_IOTOOLS, only:free_unit,reg,txtfy

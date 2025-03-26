@@ -1,4 +1,5 @@
 MODULE ED_BATH
+  !:synopsis: Routines for bath creation and manipulation
   !Contains routines for setting, accessing, manipulating and clearing 
   !the bath of the Impurity problem.
   USE ED_BATH_AUX

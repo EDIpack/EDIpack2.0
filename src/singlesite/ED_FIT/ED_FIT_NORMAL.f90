@@ -1,4 +1,5 @@
 MODULE ED_FIT_NORMAL
+!:synopsis: Routines for bath fitting, :code:`NORMAL` case
   USE ED_FIT_COMMON
 
   implicit none

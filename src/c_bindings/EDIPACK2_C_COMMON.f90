@@ -1,4 +1,5 @@
 MODULE EDIPACK2_C_COMMON
+!:synopsis: Fortran-C bindings: common routines and variables
   USE EDIPACK2
   USE SCIFOR
   USE ISO_C_BINDING

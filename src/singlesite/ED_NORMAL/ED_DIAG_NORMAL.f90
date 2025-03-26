@@ -3,6 +3,7 @@
 !|{ImpUP1,...,ImpUPN},BathUP>|{ImpDW1,...,ImpDWN},BathDW>
 !########################################################################
 module ED_DIAG_NORMAL
+  !:synopsis: Routines for Hamiltonian diagonalization, :code:`NORMAL` case
   USE SF_CONSTANTS
   USE SF_LINALG, only: eigh
   USE SF_TIMER,  only: start_timer,stop_timer,eta

@@ -1,4 +1,5 @@
 MODULE ED_FIT_HYBRID
+!:synopsis: Routines for bath fitting, :code:`HYBRID` case
   USE ED_FIT_COMMON
 
   implicit none

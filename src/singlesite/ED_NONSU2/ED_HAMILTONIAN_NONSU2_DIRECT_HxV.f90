@@ -1,5 +1,6 @@
 ! > SPARSE MAT-VEC DIRECT ON-THE-FLY PRODUCT 
 MODULE ED_HAMILTONIAN_NONSU2_DIRECT_HxV
+!:synopsis: Routines for direct matrix-vector product, :code:`NONSU2` case
   USE ED_HAMILTONIAN_NONSU2_COMMON
   implicit none
   private

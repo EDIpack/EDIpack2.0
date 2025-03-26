@@ -1,4 +1,5 @@
 MODULE ED_BATH_AUX
+  !:synopsis: Auxiliary routines for bath creation and manipulation
   !Implements a number of auxiliary procedures used in the bath handling
   !
   USE SF_CONSTANTS, only: zero

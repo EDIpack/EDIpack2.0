@@ -1,4 +1,5 @@
 MODULE ED_HAMILTONIAN_NONSU2_COMMON
+!:synopsis: Common variables and types for Hamiltonian construction, :code:`NONSU2` case
   USE SF_MISC,    only: assert_shape
   USE SF_CONSTANTS,only:zero
   USE SF_SP_LINALG, only: sp_lanc_tridiag

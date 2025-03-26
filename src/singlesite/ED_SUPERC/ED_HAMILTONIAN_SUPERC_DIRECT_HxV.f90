@@ -1,5 +1,6 @@
 ! > SPARSE MAT-VEC DIRECT ON-THE-FLY PRODUCT 
 MODULE ED_HAMILTONIAN_SUPERC_DIRECT_HxV
+  !:synopsis: Routines for direct matrix-vector product, :code:`SUPERC` case
   USE ED_HAMILTONIAN_SUPERC_COMMON
   implicit none
   private

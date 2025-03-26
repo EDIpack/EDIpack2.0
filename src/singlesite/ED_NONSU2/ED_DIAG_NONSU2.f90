@@ -3,6 +3,7 @@
 !|{ImpUP1,...,ImpUPN},BathUP>|{ImpDW1,...,ImpDWN},BathDW>
 !########################################################################
 module ED_DIAG_NONSU2
+!:synopsis: Routines for ED/Lanczos, :code:`NONSU2` case
   USE SF_CONSTANTS
   USE SF_LINALG, only: eigh
   USE SF_TIMER,  only: start_timer,stop_timer,eta

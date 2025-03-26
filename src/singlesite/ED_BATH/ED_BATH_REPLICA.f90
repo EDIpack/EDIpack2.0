@@ -1,5 +1,5 @@
 MODULE ED_BATH_REPLICA
-  !:synopsis: Replica bath construction and manipulation routines, inequivalent sites version
+  !:synopsis: Routines for replica bath manipulation
   !In these module we implement the functions to set the matrix basis :math:`\{ \hat{O}_i \}_{i=1,\dots,N_{sym}}` and the initial variational parameters :math:`\vec{\lambda}` used to decompose each local bath hamiltonian for the  :f:var:`replica` and :f:var:`general` bath types. Note that the two bath types share the very same matrix basis, yet for consistency we provide distinct interfaces to the two for each procedure.    
   !
   USE SF_CONSTANTS, only: zero

@@ -1,6 +1,6 @@
 MODULE EDIPACK2_C
-  !
-  ! A Fortran-C interface module for EDIpack2+EDIpack2ineq built around `ISO_C_BINDING`
+  !:synopsis: Fortran-C bindings: main module
+  !A Fortran-C interface module for EDIpack2+EDIpack2ineq built around `ISO_C_BINDING`
   !
   USE EDIPACK2_C_COMMON
   USE ISO_C_BINDING

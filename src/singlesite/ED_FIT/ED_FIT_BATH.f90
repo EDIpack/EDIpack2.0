@@ -1,4 +1,5 @@
 MODULE ED_BATH_FIT
+!:synopsis: Routines for bath fitting
 !Contains routines that fit the Impurity model bath
   USE SF_CONSTANTS
   USE SF_OPTIMIZE, only:fmin_cg,fmin_cgplus,fmin_cgminimize

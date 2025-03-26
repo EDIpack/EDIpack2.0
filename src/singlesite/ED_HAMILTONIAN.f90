@@ -1,4 +1,5 @@
 MODULE ED_HAMILTONIAN
+  !:synopsis: Routines for Fock space Hamiltonian construction
   USE ED_HAMILTONIAN_NORMAL
   USE ED_HAMILTONIAN_SUPERC
   USE ED_HAMILTONIAN_NONSU2

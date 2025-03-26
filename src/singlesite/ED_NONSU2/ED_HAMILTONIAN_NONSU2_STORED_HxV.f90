@@ -1,5 +1,6 @@
 ! > BUILD STORED SPARSE HAMILTONIAN of the SECTOR
 MODULE ED_HAMILTONIAN_NONSU2_STORED_HxV
+!:synopsis: Routines for sparese matrix-vector product, :code:`NONSU2` case
   USE ED_HAMILTONIAN_NONSU2_COMMON
   implicit none
   private

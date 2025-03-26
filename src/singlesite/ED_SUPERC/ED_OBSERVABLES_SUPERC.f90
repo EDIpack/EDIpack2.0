@@ -1,4 +1,5 @@
 MODULE ED_OBSERVABLES_SUPERC
+  !:synopsis: Routines for direct observables calculation, :code:`SUPERC` case
   USE SF_CONSTANTS, only:zero,pi,xi
   USE SF_IOTOOLS, only:free_unit,reg,txtfy
   USE SF_ARRAYS, only: arange

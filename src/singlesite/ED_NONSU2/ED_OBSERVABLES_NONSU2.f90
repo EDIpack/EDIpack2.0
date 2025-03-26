@@ -1,4 +1,5 @@
 MODULE ED_OBSERVABLES_NONSU2
+!:synopsis: Routines for observables calculation, :code:`NONSU2` case
   !This module calculates a series of observables, and stores them in aptly named plain-text files. :f:var:`ed_mode` = :code:`nonsu2`
   USE SF_CONSTANTS, only:zero,pi,xi
   USE SF_IOTOOLS, only:free_unit,reg,txtfy

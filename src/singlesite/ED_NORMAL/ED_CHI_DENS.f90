@@ -1,4 +1,5 @@
 MODULE ED_CHI_DENS
+  !:synopsis: Routines for susceptibility calculation, :code:`NORMAL` case
   !Evaluates the impurity density susceptibility.
   !
   USE SF_CONSTANTS, only:one,xi,zero,pi

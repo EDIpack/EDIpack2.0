@@ -1,4 +1,5 @@
 MODULE ED_FIT_COMMON
+!:synopsis: Common variables and types for bath fitting
   USE SF_CONSTANTS
   USE SF_OPTIMIZE, only:fmin_cg,fmin_cgplus,fmin_cgminimize
   USE SF_LINALG,   only:eye,zeye,inv,inv_her,operator(.x.)

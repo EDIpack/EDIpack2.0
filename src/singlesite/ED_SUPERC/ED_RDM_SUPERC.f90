@@ -1,4 +1,5 @@
 MODULE ED_RDM_SUPERC
+  !:synopsis: Routines for Reduced Density Matrix, :code:`SUPERC` case
   USE SF_CONSTANTS, only:zero,pi,xi
   USE SF_IOTOOLS, only:free_unit,reg,txtfy
   USE SF_ARRAYS, only: arange

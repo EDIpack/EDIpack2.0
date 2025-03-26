@@ -1,4 +1,5 @@
 MODULE ED_HAMILTONIAN_NORMAL_COMMON
+  !:synopsis: Common variables for Hamiltonian construction, :code:`NORMAL` case
   !Global variables related to sector Hamiltonian construction. It  contains the :f:func:`vector_transpose_mpi` implementing the  MPI :code:`Allv-2-Allv` parallel matrix transposition.
   !
   USE SF_MISC,    only: assert_shape

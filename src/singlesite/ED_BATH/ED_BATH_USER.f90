@@ -1,4 +1,5 @@
 MODULE ED_BATH_USER
+  !:synopsis: Routines for bath symmetrization
   !Implements functions the user can use to enforce specific symmetry operations on the bath array.
   !
   USE SF_CONSTANTS, only: zero

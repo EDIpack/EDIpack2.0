@@ -1,5 +1,5 @@
 MODULE ED_BATH_FUNCTIONS
-  !:synopsis: Impurity Green's and Hybridization functions
+  !:synopsis: Routines for impurity Weiss field and hybridization functions
   !A comprehensive set of procedures to evaluate the non-interacting impurity Green's functions :math:`\hat{G}^{\rm And}` and hybridizations :math:`\hat{F}^{\rm And}` in the complex frequency domain given the :f:var:`effective_bath` instance.
   !
   USE SF_CONSTANTS, only: zero

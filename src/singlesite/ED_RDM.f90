@@ -1,4 +1,5 @@
 MODULE ED_RDM
+  !:synopsis: Routines for Reduced Density Matrix calculation
   USE ED_INPUT_VARS
   USE ED_VARS_GLOBAL
   USE ED_EIGENSPACE

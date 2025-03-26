@@ -1,4 +1,5 @@
 MODULE ED_CHI_EXCT
+  !:synopsis: Routines for excitonic susceptibility calculation, :code:`NORMAL` case
   !Evaluates the impurity excitonc susceptibility.
   !
   USE SF_CONSTANTS, only:one,xi,zero,pi

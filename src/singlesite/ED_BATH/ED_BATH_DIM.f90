@@ -1,4 +1,5 @@
 MODULE ED_BATH_DIM
+  !:synopsis: Routines for bath dimension checks
   !Returns or check the dimensions to which the user should allocate the bath array.
   !
   USE SF_CONSTANTS, only: zero
