@@ -21,7 +21,9 @@ sys.path.insert(0, os.path.abspath('./utils'))
 
 import sphinx_rtd_theme
 import sphinxfortran_ng
-
+from sphinx.transforms import SphinxTransform
+from docutils import nodes
+from sphinx.application import Sphinx
 
 # -- Project information -----------------------------------------------------
 
@@ -282,6 +284,25 @@ epub_title = project
 # A list of files that should not be packed into the epub file.
 epub_exclude_files = ['search.html']
 
+
+# Fix quotes
+class FixQuotesTransform(SphinxTransform):
+    """Custom Sphinx transform to replace curly quotes with straight quotes."""
+    default_priority = 750  # Run after smartquotes
+
+    def apply(self):
+        for node in self.document.traverse(nodes.Text):
+            if isinstance(node, nodes.Text):
+                node.parent.replace(node, nodes.Text(
+                    node.astext()
+                    .replace("“", '"')
+                    .replace("”", '"')
+                    .replace("‘", "'")
+                    .replace("’", "'")
+                ))
+
+
 #workaround: use mathjax on all pages
 def setup(app):
+    app.add_transform(FixQuotesTransform)
     app.set_html_assets_policy('always')
