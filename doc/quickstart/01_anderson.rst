@@ -3,6 +3,9 @@
 Solving a Single Impurity Anderson model
 =============================================
 
+.. preferred-crossrefs::
+   :ed_solve: f/ed_main/ed_solve
+
 In this section we use the methods in |edipack2|  to solve a simple
 example of Anderson quantum impurity problem.
 

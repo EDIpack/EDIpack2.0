@@ -117,6 +117,9 @@ inequivalent site.
 :ref:`Bath Optimization <e2i_fit>`
 =================================================================
 
+.. preferred-crossrefs::
+   :ed_chi2_fitgf: f/e2i_bath_fit/ed_chi2_fitgf
+
 The module :f:mod:`E2I_BATH_FIT` contains the extensions of the
 generic function :f:func:`ed_chi2_fitgf` to perform 
 multiple independent minimizations for all inequivalent sites.  

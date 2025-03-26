@@ -3,6 +3,9 @@
 Impurity Problem Solver Routines 
 ====================================
 
+.. preferred-crossrefs::
+   :ed_solve: f/ed_main/ed_solve
+
 The module :f:mod:`ED_MAIN` contains the procedures that initializes,
 launch and finalize the **EDIpack2** solver for the quantum impurity
 problem.

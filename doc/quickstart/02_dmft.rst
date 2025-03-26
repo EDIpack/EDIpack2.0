@@ -3,6 +3,14 @@
 Solving Dynamical Mean-Field Theory with |edipack2|
 ===========================================================
 
+.. preferred-crossrefs::
+   :ed_init_solver: f/ed_main/ed_init_solver
+   :ed_solve: f/ed_main/ed_solve
+   :ed_get_sigma: f/ed_io/ed_get_sigma
+   :ed_chi2_fitgf: f/ed_bath_fit/ed_chi2_fitgf
+
+
+
 In this section we take a step further to show how to integrate the
 |edipack2| as a solver for Dynamical Mean-Field Theory calculations. 
 Specifically, here we discuss the step-by-step implementation of a Fortran program (see

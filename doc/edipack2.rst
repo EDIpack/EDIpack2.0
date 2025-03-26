@@ -295,6 +295,8 @@ frequency domain.
 :ref:`Bath Optimization <fit>`
 =================================================================
 
+.. preferred-crossrefs::
+   :ed_chi2_fitgf: f/ed_bath_fit/ed_chi2_fitgf
 
 In  this module we provide to the user a generic function
 :f:func:`ed_chi2_fitgf` performing the minimization of a user provided
