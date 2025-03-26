@@ -61,28 +61,28 @@ MODULE ED_BATH_REPLICA
 
 
   interface allocate_Hgeneral
-     ! A clone of :f:var:`allocate_Hreplica`
+     ! A clone of :f:var:`allocate_hreplica` for the :code:`GENERAL` bath
      module procedure :: allocate_Hreplica
   end interface allocate_Hgeneral
 
   interface deallocate_Hgeneral
-     ! A clone of :f:var:`deallocate_Hreplica`
+     ! A clone of :f:var:`deallocate_hreplica` for the :code:`GENERAL` bath
      module procedure :: deallocate_Hreplica
   end interface deallocate_Hgeneral
 
 
   interface save_Hgeneral
-     ! A clone of :f:var:`save_Hreplica`
+     ! A clone of :f:var:`save_hreplica` for the :code:`GENERAL` bath
      module procedure :: save_Hreplica
   end interface save_Hgeneral
 
   interface read_Hgeneral
-     ! A clone of :f:var:`read_Hreplica`
+     ! A clone of :f:var:`read_hreplica` for the :code:`GENERAL` bath
      module procedure :: read_Hreplica
   end interface read_Hgeneral
 
   interface set_Hgeneral
-     ! A clone of :f:var:`set_Hreplica`
+     ! A clone of :f:var:`set_hreplica` for the :code:`GENERAL` bath
      module procedure :: init_Hreplica_symmetries_d5
      module procedure :: init_Hreplica_symmetries_d3
      module procedure :: init_Hreplica_symmetries_legacy
@@ -90,31 +90,31 @@ MODULE ED_BATH_REPLICA
 
 
   interface set_linit_Hgeneral
-     ! A clone of :f:var:`set_linit_Hreplica`
+     ! A clone of :f:var:`set_linit_hreplica` for the :code:`GENERAL` bath
      module procedure :: set_linit_Hreplica
   end interface set_linit_Hgeneral
 
 
   interface set_hsym_Hgeneral
-     ! A clone of :f:var:`set_hsym_Hreplica`
+     ! A clone of :f:var:`set_hsym_hreplica` for the :code:`GENERAL` bath
      module procedure :: set_hsym_Hreplica
   end interface set_hsym_Hgeneral
 
 
   interface build_Hgeneral
-     ! A clone of :f:var:`build_Hreplica`
+     ! A clone of :f:var:`build_hreplica` for the :code:`GENERAL` bath
      module procedure :: build_Hreplica
   end interface build_Hgeneral
 
 
   interface print_Hgeneral
-     ! A clone of :f:var:`print_Hreplica`
+     ! A clone of :f:var:`print_hreplica` for the :code:`GENERAL` bath
      module procedure :: print_Hreplica
   end interface print_Hgeneral
 
 
   interface Hgeneral_mask
-     ! A clone of :f:var:`Hreplica_mask`
+     ! A clone of :f:func:`hreplica_mask` for the :code:`GENERAL` bath
      module procedure :: Hreplica_mask
   end interface Hgeneral_mask
 
@@ -486,14 +486,14 @@ contains
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
-    real(8),dimension(:),optional                             :: lvec   !the input vector of bath parameters
+    real(8),dimension(:),optional                             :: lvec   !The input vector of bath parameters
     real(8),dimension(:),allocatable                          :: lambda
     integer                                                   :: isym,nsym
-    complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: H
+    complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: H !The replica matrix
     !
     if(.not.Hb%status)stop "ERROR build_Hreplica: Hb.basis is not setup"
     !
-    Nsym = Hb%Nsym !==size(Hb%basis)
+    Nsym = Hb%Nsym ! == size(Hb%basis)
     allocate(lambda(Nsym))
     lambda=1d0
     if(present(lvec))then
@@ -511,11 +511,12 @@ contains
 
 
   subroutine print_Hreplica(H,file)
+  !Prints the replica Hamiltonian to a file or to standard output
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: H
-    character(len=*),optional                                 :: file
+    complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: H !The matrix to print
+    character(len=*),optional                                 :: file !Filename
     integer                                                   :: iorb,jorb,ispin,jspin,Nso,unit
     !
     unit=LOGfile
@@ -554,13 +555,18 @@ contains
 
 
   function Hreplica_mask(wdiag,uplo) result(Hmask)
+! Creates a logical matrix :f:var:`Hmask` which is :code:`True` where the bath replica matrix
+! is nonzero. If :f:var:`wdiag` is :code:`True` the major diagonal is set to :code:`True` -
+!If :f:var:`uplo` is :code:`True` only the upper triangular part is kept, the rest
+! is set to :code:`False`
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb,Nbath
 #endif
-    logical,optional                                          :: wdiag,uplo
+    logical,optional                                          :: wdiag !Flag to set the major diagonal to :code:`True`
+    logical,optional                                          :: uplo !Flag to only set the upper triangular matrix
     logical                                                   :: wdiag_,uplo_
     complex(8),dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb) :: H
-    logical,dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb)    :: Hmask
+    logical,dimension(Nnambu*Nspin,Nnambu*Nspin,Norb,Norb)    :: Hmask !The resulting logical matrix
     integer                                                   :: iorb,jorb,ispin,jspin,io,jo
     !
     wdiag_=.false.;if(present(wdiag))wdiag_=wdiag
