@@ -100,6 +100,7 @@ source_suffix = '.rst'
 
 
 fortran_src=[os.path.abspath('../src/singlesite/*.f90'),
+                 os.path.abspath('../src/singlesite/revision.in'),
                  os.path.abspath('../src/singlesite/ED_IO/*.f90'),
                  os.path.abspath('../src/singlesite/ED_BATH/*.f90'),
                  os.path.abspath('../src/singlesite/ED_FIT/*.f90'),
