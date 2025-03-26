@@ -6,7 +6,7 @@ Inequivalent Impurities Bath
 The module :f:mod:`E2I_BATH` wraps the bath procedures extending the
 functionalities of |edipack2| to the inequivalent impurities case.
 
-.. f:automodule::   ed_bath
+.. f:automodule::   e2i_bath
    :hide-output: True
 
 		 
