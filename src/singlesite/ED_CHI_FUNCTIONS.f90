@@ -31,18 +31,18 @@ contains
 
 
   subroutine buildChi_impurity()
-#if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
-#endif
     ! 
     ! Build the quantum impurity electrons Susceptibilities :math:`\hat{\chi}` calling the correct procedure according to the value of :f:var:`ed_mode`.
     ! Write the results on file.
     !
-    ! * :code:`normal` : :f:func:`build_chi_spin_normal`, :f:func:`build_chi_dens_normal`, :f:func:`build_chi_pair_normal`, :f:func:`build_chi_exct_normal`
+    ! * :code:`normal` : :f:func:`build_spinChi_normal`, :f:func:`build_densChi_normal`, :f:func:`build_pairChi_normal`, :f:func:`build_exctChi_normal`
     ! * :code:`superc` : unavailable
     ! * :code:`nonsu2` : unavailable
     !
     !
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
 #ifdef _DEBUG
     if(any([chispin_flag,chidens_flag,chipair_flag,chiexct_flag]))&
          write(Logfile,"(A)")"DEBUG buildChi_impurity: build susceptibilities Chi"
@@ -90,12 +90,13 @@ contains
   !+------------------------------------------------------------------+
 
   function get_spinChi(zeta,axis) result(self)
+  !Returns the spin susceptibility for a provided values array
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    complex(8),dimension(:),intent(in)         :: zeta
-    character(len=*),optional                  :: axis
-    complex(8),dimension(Norb,Norb,size(zeta)) :: self
+    complex(8),dimension(:),intent(in)         :: zeta !Array of frequencies or imaginary times
+    character(len=*),optional                  :: axis !Axis: can be :code:`m` for Matsubara, :code:`r` for real, :code:`t` for imaginary time
+    complex(8),dimension(Norb,Norb,size(zeta)) :: self !The susceptibility matrix
     character(len=1)                           :: axis_
     axis_ = 'm' ; if(present(axis))axis_ = axis(1:1)
     select case(ed_mode)
@@ -106,12 +107,13 @@ contains
 
 
   function get_densChi(zeta,axis) result(self)
+  !Returns the charge susceptibility for a provided values array
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    complex(8),dimension(:),intent(in)         :: zeta
-    character(len=*),optional                  :: axis
-    complex(8),dimension(Norb,Norb,size(zeta)) :: self
+    complex(8),dimension(:),intent(in)         :: zeta !Array of frequencies or imaginary times
+    character(len=*),optional                  :: axis !Axis: can be :code:`m` for Matsubara, :code:`r` for real, :code:`t` for imaginary time
+    complex(8),dimension(Norb,Norb,size(zeta)) :: self !The susceptibility matrix
     character(len=1)                           :: axis_
     axis_ = 'm' ; if(present(axis))axis_ = axis(1:1)
     select case(ed_mode)
@@ -122,12 +124,13 @@ contains
 
 
   function get_pairChi(zeta,axis) result(self)
+  !Returns the pair susceptibility for a provided values array
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    complex(8),dimension(:),intent(in)         :: zeta
-    character(len=*),optional                  :: axis
-    complex(8),dimension(Norb,Norb,size(zeta)) :: self
+    complex(8),dimension(:),intent(in)         :: zeta !Array of frequencies or imaginary times
+    character(len=*),optional                  :: axis !Axis: can be :code:`m` for Matsubara, :code:`r` for real, :code:`t` for imaginary time
+    complex(8),dimension(Norb,Norb,size(zeta)) :: self !The susceptibility matrix
     character(len=1)                           :: axis_
     axis_ = 'm' ; if(present(axis))axis_ = axis(1:1)
     select case(ed_mode)
@@ -138,12 +141,13 @@ contains
 
 
   function get_exctChi(zeta,axis) result(self)
+  !Returns the excitonic susceptibility for a provided values array
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    complex(8),dimension(:),intent(in)           :: zeta
-    character(len=*),optional                    :: axis
-    complex(8),dimension(3,Norb,Norb,size(zeta)) :: self
+    complex(8),dimension(:),intent(in)           :: zeta !Array of frequencies or imaginary times
+    character(len=*),optional                    :: axis !Axis: can be :code:`m` for Matsubara, :code:`r` for real, :code:`t` for imaginary time
+    complex(8),dimension(3,Norb,Norb,size(zeta)) :: self !The susceptibility matrix
     character(len=1)                             :: axis_
     axis_ = 'm' ; if(present(axis))axis_ = axis(1:1)
     select case(ed_mode)
@@ -163,13 +167,13 @@ contains
   !                    PRINT FUNCTIONS
   !+------------------------------------------------------------------+
   subroutine print_spinChimatrix(file)
-#if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
-#endif
     !This subroutine prints weights and poles of the impurity spin susceptibility function by calling :f:func:`write_GFmatrix`. These are stored
     !in a file named :code:`"file"//str(ed_file_suffix)//.restart"` taking into account the value of the global variable :f:var:`ed_file_suffix` ,
     !which is :code:`"_ineq_Nineq"` padded with 4 zeros in the case of inequivalent sites, as per documentation
     !
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     character(len=*),optional :: file !filename prefix (default :code:`gfmatrix`)
     character(len=256)        :: file_
     if(.not.allocated(spinChiMatrix))stop "ED_PRINT_SPINCHIMATRIX ERROR: spinChimatrix not allocated!"
@@ -179,13 +183,13 @@ contains
 
 
   subroutine print_densChimatrix(file)
-#if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
-#endif
     !This subroutine prints weights and poles of the impurity charge density susceptibility function by calling :f:func:`write_GFmatrix`. These are stored
     !in a file named :code:`"file"//str(ed_file_suffix)//.restart"` taking into account the value of the global variable :f:var:`ed_file_suffix` ,
     !which is :code:`"_ineq_Nineq"` padded with 4 zeros in the case of inequivalent sites, as per documentation
     !
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     character(len=*),optional :: file !filename prefix (default :code:`gfmatrix`)
     character(len=256)        :: file_
     if(.not.allocated(densChiMatrix))stop "ED_PRINT_DENSCHIMATRIX ERROR: densChimatrix not allocated!"
@@ -195,13 +199,13 @@ contains
 
 
   subroutine print_pairChimatrix(file)
-#if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
-#endif
     !This subroutine prints weights and poles of the impurity pair susceptibility function by calling :f:func:`write_GFmatrix`. These are stored
     !in a file named :code:`"file"//str(ed_file_suffix)//.restart"` taking into account the value of the global variable :f:var:`ed_file_suffix` ,
     !which is :code:`"_ineq_Nineq"` padded with 4 zeros in the case of inequivalent sites, as per documentation
     !
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     character(len=*),optional :: file !filename prefix (default :code:`gfmatrix`)
     character(len=256)        :: file_
     if(.not.allocated(pairChiMatrix))stop "ED_PRINT_PAIRCHIMATRIX ERROR: pairChimatrix not allocated!"
@@ -211,13 +215,13 @@ contains
 
 
   subroutine print_exctChimatrix(file)
-#if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
-#endif
     !This subroutine prints weights and poles of the impurity exciton susceptibilities function by calling :f:func:`write_GFmatrix`. These are stored
     !in a file named :code:`"file"//str(ed_file_suffix)//.restart"` taking into account the value of the global variable :f:var:`ed_file_suffix` ,
     !which is :code:`"_ineq_Nineq"` padded with 4 zeros in the case of inequivalent sites, as per documentation
     !
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
     character(len=*),optional :: file !filename prefix (default :code:`gfmatrix`)
     character(len=256)        :: file_
     if(.not.allocated(exctChiMatrix))stop "ED_PRINT_EXCTCHIMATRIX ERROR: exctChimatrix not allocated!"

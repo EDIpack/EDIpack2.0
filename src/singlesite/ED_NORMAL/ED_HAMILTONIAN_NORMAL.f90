@@ -314,20 +314,11 @@ contains
     !
     ! Returns the parameters :math:`\vec{\alpha}` and :math:`\vec{\beta}` , respectively :f:var:`alanc` and :f:var:`blanc` , of the partial tridiagonalization of the sector Hamiltonian on a Krylov basis with starting vector :f:var:`vvinit`.
     !
-    ! Input:
-    !  * :f:var:`isector`
-    !  * :f:var:`vvinit`
-    !
-    ! Output:
-    !  * :f:var:`alanc` corresponding to :math:`\vec{\alpha}`
-    !  * :f:var:`blanc` corresponding to :math:`\vec{\beta}`
-    !  * :f:var:`norm2` the norm of the input vector  :math:`\langle {\rm vvinit}|{\rm vvinit}\rangle` 
-    !
-    integer                            :: isector !current sector index
-    real(8),dimension(:)               :: vvinit  !input vector for the construction of the tridiagonal or Krylov basis
-    real(8),dimension(:),allocatable   :: alanc !:math:`\vec{\alpha}` or diagonal parameters of the tridiagonal basis.
-    real(8),dimension(:),allocatable   :: blanc !:math:`\vec{\beta}` or sub-/over-diagonal parameters of the tridiagonal basis.
-    real(8)                            :: norm2 !norm of the input vector :f:var:`vvinit`
+    integer                            :: isector !Current sector index
+    real(8),dimension(:)               :: vvinit  !Input vector for the construction of the tridiagonal or Krylov basis
+    real(8),dimension(:),allocatable   :: alanc !:math:`\vec{\alpha}` or diagonal parameters of the tridiagonal basis
+    real(8),dimension(:),allocatable   :: blanc !:math:`\vec{\beta}` or sub-/over-diagonal parameters of the tridiagonal basis
+    real(8)                            :: norm2 !Norm of the input vector  :math:`\langle {\rm vvinit}|{\rm vvinit}\rangle`
     !
     real(8),dimension(:),allocatable   :: vvloc
     integer                            :: vecDim

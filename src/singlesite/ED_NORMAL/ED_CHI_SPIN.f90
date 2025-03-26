@@ -46,14 +46,12 @@ contains
   ! reduction for both values of isign in the same call.
   !+------------------------------------------------------------------+
   subroutine build_spinChi_normal()
+    ! Evaluates the impurity Spin susceptibility :math:`\chi^z=\langle T_\tau S^z_a(\tau) S^z_b\rangle` in the Matsubara :math:`i\omega_n` and Real :math:`\omega` frequency axis as well as imaginary time :math:`\tau`. 
+    ! As for the Green's function, the off-diagonal component of the the susceptibility is determined using an algebraic manipulation to ensure use of Hermitian operator in the dynamical Lanczos. 
+    !
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    !
-    ! Evaluates the impurity Spin susceptibility :math:`\chi^z=\langle T_\tau S^z_a(\tau) S^z_b\rangle` in the Matsubara :math:`i\omega_n` and Real :math:`\omega` frequency axis as well as imaginary time :math:`\tau`.
-    !
-    ! As for the Green's function, the off-diagonal component of the the susceptibility is determined using an algebraic manipulation to ensure use of Hermitian operator in the dynamical Lanczos. 
-    !
     write(LOGfile,"(A)")"Get spin Chi:"
     if(MPIMASTER)call start_timer(unit=LOGfile)
     !
@@ -239,15 +237,14 @@ contains
 
 
   function get_spinChi_normal(zeta,axis) result(Chi)
+    ! Reconstructs the system impurity electrons Green's functions using :f:var:`impgmatrix` to retrieve weights and poles.
+    !
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    !
-    ! Reconstructs the system impurity electrons Green's functions using :f:var:`impgmatrix` to retrieve weights and poles.
-    !
-    complex(8),dimension(:),intent(in)         :: zeta
-    character(len=*),optional                  :: axis
-    complex(8),dimension(Norb,Norb,size(zeta)) :: Chi
+    complex(8),dimension(:),intent(in)         :: zeta !Array of frequencies or imaginary times
+    character(len=*),optional                  :: axis !Axis: can be :code:`m` for Matsubara, :code:`r` for real, :code:`t` for imaginary time
+    complex(8),dimension(Norb,Norb,size(zeta)) :: Chi  !Spin susceptibility matrix
     integer                                    :: iorb,jorb,i
     character(len=1)                           :: axis_
     !
