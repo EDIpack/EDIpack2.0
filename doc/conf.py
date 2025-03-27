@@ -72,7 +72,7 @@ intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
     'numpy': ('https://numpy.org/doc/stable/', None),
     'scifor': ('https://scifortran.github.io/SciFortran/', None),
-    'openmpi': ('https://docs.open-mpi.org/en/v5.0.x/', None),
+#    'openmpi': ('https://docs.open-mpi.org/en/v5.0.x/', None),
 }
 
 # Enable auto-generation of ToC

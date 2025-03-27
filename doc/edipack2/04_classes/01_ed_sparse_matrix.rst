@@ -4,10 +4,10 @@ Sparse Matrices
 =======================
 
 Implements sparse matrices data structures as dedicated CSR matrices
-:f:var:`sparse_matrix_csr`.
-Each instance of :f:var:`sparse_matrix_csr` corresponds to a rank-1
+:f:type:`sparse_matrix_csr`.
+Each instance of :f:type:`sparse_matrix_csr` corresponds to a rank-1
 array of a tuple of dynamically reallocated arrays,
-:f:var:`sparse_row_csr`: 
+:f:type:`sparse_row_csr`: 
 one array store the columns indices and one array store the values of
 the non-zero elements of a given matrix. 
 
