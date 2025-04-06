@@ -1,5 +1,5 @@
 #TO BE CHANGED BY USER:
-EXE=test_program
+EXE=hm_bethe
 CC=g++
 PLAT=gnu
 DIREXE=.
