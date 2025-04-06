@@ -6,7 +6,7 @@
 #include <cmath>
 #include <cstring>
 #include <mpi.h>
-#include <edipack2_cbinding.h>  // Include your header file
+#include <edipack2_cbinding.h>
 
 
 using namespace std;
