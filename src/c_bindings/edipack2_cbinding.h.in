@@ -1,0 +1,484 @@
+#ifndef EDIPACK2_CBINDING
+#define EDIPACK2_CBINDING
+
+#include <stdint.h>
+#include <complex.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+extern int has_ineq;
+extern int Ltau;
+extern int Lreal;
+extern double Jp;
+extern double dmft_error;
+extern double Uloc[5];
+extern bool ed_twin;
+extern bool ed_total_ud;
+extern int Nspin;
+extern double Jx;
+extern int Norb;
+extern double xmu;
+extern int Nbath;
+extern double nread;
+extern int Nsuccess;
+extern double xmax;
+extern int Nph;
+extern double sb_field;
+extern double Ust;
+extern double Jh;
+extern double wfin;
+extern int Lmats;
+extern double wini;
+extern int Lfit;
+extern double beta;
+extern int Lpos;
+extern int Nloop;
+extern double eps;
+extern double xmin;
+
+extern int has_ineq;
+extern int Ltau;
+extern int Lreal;
+extern double Jp;
+extern double dmft_error;
+extern double Uloc[5];
+extern bool ed_twin;
+extern bool ed_total_ud;
+extern int Nspin;
+extern double Jx;
+extern int Norb;
+extern double xmu;
+extern int Nbath;
+extern double nread;
+extern int Nsuccess;
+extern double xmax;
+extern int Nph;
+extern double sb_field;
+extern double Ust;
+extern double Jh;
+extern double wfin;
+extern int Lmats;
+extern double wini;
+extern int Lfit;
+extern double beta;
+extern int Lpos;
+extern int Nloop;
+extern double eps;
+extern double xmin;
+
+void read_input(char *instr);
+
+void ed_set_Hloc_single_N2(std::complex<double> *Hloc, 
+                           int64_t *d
+                           );
+void ed_set_Hloc_single_N4(std::complex<double> *Hloc, 
+                           int64_t *d
+                           );
+void ed_set_Hloc_lattice_N2(std::complex<double> *Hloc,
+                            int64_t *d,
+                            int Nlat
+                            );
+void ed_set_Hloc_lattice_N3(std::complex<double> *Hloc,
+                            int64_t *d,
+                            int Nlat
+                            );
+void ed_set_Hloc_lattice_N5(std::complex<double> *Hloc, 
+                            int64_t *d, 
+                            int Nlat
+                            );
+
+int  get_bath_dimension(void);
+
+void search_variable(double *var,
+                    double *tmp, 
+                    int64_t *converged
+                    );
+
+void init_Hreplica_symmetries_d5(std::complex<double> *Hvec, 
+                                 int64_t *d_hvec, 
+                                 double *lambdavec, 
+                                 int64_t *d_lambdavec
+                                 );
+void init_Hreplica_symmetries_d3(std::complex<double> *Hvec, 
+                                 int64_t *d_hvec, 
+                                 double *lambdavec, 
+                                 int64_t *d_lambdavec
+                                 );
+void init_Hgeneral_symmetries_d5(std::complex<double> *Hvec, 
+                                 int64_t *d_hvec, 
+                                 double *lambdavec, 
+                                 int64_t *d_lambdavec
+                                 );
+void init_Hgeneral_symmetries_d3(std::complex<double> *Hvec, 
+                                 int64_t *d_hvec, 
+                                 double *lambdavec, 
+                                 int64_t *d_lambdavec
+                                 );
+
+void init_Hreplica_symmetries_lattice_d5(std::complex<double> *Hvec, 
+                                         int64_t *d_hvec, 
+                                         double *lambdavec, 
+                                         int64_t *d_lambdavec
+                                         );
+void init_Hreplica_symmetries_lattice_d3(std::complex<double> *Hvec, 
+                                         int64_t *d_hvec, 
+                                         double *lambdavec, 
+                                         int64_t *d_lambdavec
+                                         );
+void init_Hgeneral_symmetries_lattice_d5(std::complex<double> *Hvec, 
+                                         int64_t *d_hvec, 
+                                         double *lambdavec, 
+                                         int64_t *d_lambdavec
+                                         );
+void init_Hgeneral_symmetries_lattice_d3(std::complex<double> *Hvec, 
+                                         int64_t *d_hvec, 
+                                         double *lambdavec, 
+                                         int64_t *d_lambdavec
+                                         );
+
+void break_symmetry_bath_site(double *bath, 
+                              int64_t *dim_bath, 
+                              double field, 
+                              double sgn, 
+                              int sav
+                              );
+void break_symmetry_bath_ineq(double *bath, 
+                              int64_t *dim_bath, 
+                              double field, 
+                              double sgn, 
+                              int sav
+                              );
+
+void spin_symmetrize_bath_site(double *bath, 
+                               int64_t *dim_bath, 
+                               int sav
+                               );
+void spin_symmetrize_bath_ineq(double *bath, 
+                               int64_t *dim_bath, 
+                               int sav
+                               );
+
+void orb_symmetrize_bath_site(double *bath, 
+                              int64_t *dim_bath, 
+                              int orb1, 
+                              int orb2, 
+                              int sav
+                              );
+void orb_symmetrize_bath_ineq(double *bath, 
+                              int64_t *dim_bath, 
+                              int orb1, 
+                              int orb2, 
+                              int sav
+                              );
+
+void orb_equality_bath_site(double *bath, 
+                            int64_t *dim_bath, 
+                            int indx, 
+                            int sav
+                            );
+void orb_equality_bath_ineq(double *bath, 
+                            int64_t *dim_bath, 
+                            int indx, 
+                            int sav
+                            );
+
+void ph_symmetrize_bath_site(double *bath, 
+                             int64_t *dim_bath, 
+                             int sav
+                             );
+void ph_symmetrize_bath_ineq(double *bath, 
+                             int64_t *dim_bath, 
+                             int sav
+                             );
+
+void save_array_as_bath_site(double *bath, 
+                             int64_t *dim_bath
+                             );
+void save_array_as_bath_ineq(double *bath, 
+                             int64_t *dim_bath
+                             );
+
+void chi2_fitgf_single_normal_n3(std::complex<double> *g, 
+                                int64_t *dim_g, 
+                                double *bath, 
+                                int64_t *dim_bath, 
+                                int ispin, 
+                                int iorb, 
+                                int fmpi
+                                );
+void chi2_fitgf_single_normal_n5(std::complex<double> *g, 
+                                int64_t *dim_g, 
+                                double *bath, 
+                                int64_t *dim_bath, 
+                                int ispin, 
+                                int iorb, 
+                                int fmpi
+                                );
+                                
+void chi2_fitgf_single_superc_n3(std::complex<double> *g, 
+                                 int64_t *dim_g, 
+                                 std::complex<double> *f, 
+                                 int64_t *dim_f, 
+                                 double *bath, 
+                                 int64_t *dim_bath, 
+                                 int ispin, 
+                                 int iorb, 
+                                 int fmpi
+                                 );
+void chi2_fitgf_single_superc_n5(std::complex<double> *g, 
+                                 int64_t *dim_g, 
+                                 std::complex<double> *f, 
+                                 int64_t *dim_f, 
+                                 double *bath, 
+                                 int64_t *dim_bath, 
+                                 int ispin, 
+                                 int iorb, 
+                                 int fmpi
+                                 );
+
+void chi2_fitgf_lattice_normal_n3(std::complex<double> *g, 
+                                int64_t *dim_g, 
+                                double *bath, 
+                                int64_t *dim_bath, 
+                                int ispin, 
+                                int iorb, 
+                                int fmpi
+                                );
+void chi2_fitgf_lattice_normal_n4(std::complex<double> *g, 
+                                int64_t *dim_g, 
+                                double *bath, 
+                                int64_t *dim_bath, 
+                                int ispin, 
+                                int iorb, 
+                                int fmpi
+                                );
+void chi2_fitgf_lattice_normal_n6(std::complex<double> *g, 
+                                int64_t *dim_g, 
+                                double *bath, 
+                                int64_t *dim_bath, 
+                                int ispin, 
+                                int iorb, 
+                                int fmpi
+                                );
+
+void chi2_fitgf_lattice_superc_n3(std::complex<double> *g, 
+                                 int64_t *dim_g, 
+                                 std::complex<double> *f, 
+                                 int64_t *dim_f, 
+                                 double *bath, 
+                                 int64_t *dim_bath, 
+                                 int ispin, 
+                                 int iorb, 
+                                 int fmpi
+                                 );
+void chi2_fitgf_lattice_superc_n4(std::complex<double> *g, 
+                                 int64_t *dim_g, 
+                                 std::complex<double> *f, 
+                                 int64_t *dim_f, 
+                                 double *bath, 
+                                 int64_t *dim_bath, 
+                                 int ispin, 
+                                 int iorb, 
+                                 int fmpi
+                                 );
+void chi2_fitgf_lattice_superc_n6(std::complex<double> *g, 
+                                 int64_t *dim_g, 
+                                 std::complex<double> *f, 
+                                 int64_t *dim_f, 
+                                 double *bath, 
+                                 int64_t *dim_bath, 
+                                 int ispin, 
+                                 int iorb, 
+                                 int fmpi
+                                 );
+                                 
+                                 
+void ed_get_dens_n1(std::complex<double> *self);
+void ed_get_dens_n2(std::complex<double> *self, int Nlat);
+
+void ed_get_mag_n2(std::complex<double> *self);
+void ed_get_mag_n3(std::complex<double> *self, int Nlat);
+
+void ed_get_docc_n1(std::complex<double> *self);
+void ed_get_docc_n2(std::complex<double> *self, int Nlat);
+
+void ed_get_phisc_n2(std::complex<double> *self);
+void ed_get_phisc_n3(std::complex<double> *self, int Nlat);
+
+void ed_get_eimp_n1(std::complex<double> *self);
+void ed_get_eimp_n2(std::complex<double> *self, int Nlat);
+
+void get_sigma_site_n3(std::complex<double> *self, 
+                       int axis, 
+                       int typ, 
+                       std::complex<double> *zeta, 
+                       int dz, 
+                       int zflag
+                       );
+void get_sigma_site_n5(std::complex<double> *self, 
+                       int axis, 
+                       int typ, 
+                       std::complex<double> *zeta, 
+                       int dz, 
+                       int zflag
+                       );
+                       
+void get_sigma_lattice_n3(std::complex<double> *self, 
+                          int Nineq, 
+                          int axis, 
+                          int typ, 
+                          std::complex<double> *zeta, 
+                          int dz, 
+                          int zflag
+                          );
+void get_sigma_lattice_n4(std::complex<double> *self, 
+                          int Nineq, 
+                          int axis, 
+                          int typ, 
+                          std::complex<double> *zeta, 
+                          int dz, 
+                          int zflag
+                          );
+void get_sigma_lattice_n6(std::complex<double> *self, 
+                          int Nineq, 
+                          int axis, 
+                          int typ, 
+                          std::complex<double> *zeta, 
+                          int dz, 
+                          int zflag
+                          );
+
+void get_gimp_site_n3(std::complex<double> *gimp, 
+                       int axis, 
+                       int typ, 
+                       std::complex<double> *zeta, 
+                       int dz, 
+                       int zflag
+                       );
+void get_gimp_site_n5(std::complex<double> *gimp, 
+                       int axis, 
+                       int typ, 
+                       std::complex<double> *zeta, 
+                       int dz, 
+                       int zflag
+                       );
+                       
+void get_gimp_lattice_n3(std::complex<double> *gimp, 
+                          int Nineq, 
+                          int axis, 
+                          int typ, 
+                          std::complex<double> *zeta, 
+                          int dz, 
+                          int zflag
+                          );
+void get_gimp_lattice_n4(std::complex<double> *gimp, 
+                          int Nineq, 
+                          int axis, 
+                          int typ, 
+                          std::complex<double> *zeta, 
+                          int dz, 
+                          int zflag
+                          );
+void get_gimp_lattice_n6(std::complex<double> *gimp, 
+                          int Nineq, 
+                          int axis, 
+                          int typ, 
+                          std::complex<double> *zeta, 
+                          int dz, 
+                          int zflag
+                          );
+
+void get_g0and_n3(std::complex<double> *warray, 
+                  int64_t *dim_warray, 
+                  double *bath, 
+                  int *dim_bath, 
+                  std::complex<double> *G0and, 
+                  int64_t *dim_g0and, 
+                  char *axis, 
+                  char *typ
+                  );
+void get_g0and_n5(int64_t *dim_warray, 
+                  double *bath, 
+                  int *dim_bath, 
+                  std::complex<double> *G0and, 
+                  int64_t *dim_g0and, 
+                  char *axis, 
+                  char *typ
+                  );
+                  
+void get_delta_n3(std::complex<double> *warray, 
+                  int64_t *dim_warray, 
+                  double *bath, 
+                  int *dim_bath, 
+                  std::complex<double> *Delta, 
+                  int64_t *dim_delta, 
+                  char *axis, 
+                  char *typ
+                  );
+void get_delta_n5(std::complex<double> *warray, 
+                  int64_t *dim_warray, 
+                  double *bath, 
+                  int *dim_bath, 
+                  std::complex<double> *Delta, 
+                  int64_t *dim_delta, 
+                  char *axis, 
+                  char *typ
+                  );
+
+void ed_get_spinchi(std::complex<double> *self, 
+                    std::complex<double> *zeta, 
+                    int dim_zeta, 
+                    int zetaflag, 
+                    char *axis, 
+                    int Nsites, 
+                    int latticeflag
+                    );
+void ed_get_denschi(std::complex<double> *self, 
+                    std::complex<double> *zeta, 
+                    int dim_zeta, 
+                    int zetaflag, 
+                    char *axis, 
+                    int Nsites, 
+                    int latticeflag
+                    );
+void ed_get_pairchi(std::complex<double> *self, 
+                    std::complex<double> *zeta, 
+                    int dim_zeta, 
+                    int zetaflag, 
+                    char *axis, 
+                    int Nsites, 
+                    int latticeflag
+                    );
+void ed_get_exctchi(std::complex<double> *self, 
+                    std::complex<double> *zeta, 
+                    int dim_zeta, 
+                    int zetaflag, 
+                    char *axis, 
+                    int Nsites, 
+                    int latticeflag
+                    );
+
+void init_solver_site(double *bath, int64_t *dim_bath);
+void init_solver_ineq(double *bath, int64_t *dim_bath);
+
+void solve_site(double *bath, 
+                int64_t *dim_bath, 
+                int flag_gf, 
+                int flag_mpi
+                );
+void solve_ineq(double *bath, 
+                int64_t *dim_bath, 
+                int mpi_lanc, 
+                int flag_gf
+                );
+
+
+void finalize_solver(@WITH_INEQ_HEADER@);
+
+
+#ifdef __cplusplus
+}
+#endif
+#endif
