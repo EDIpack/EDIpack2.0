@@ -1,6 +1,6 @@
 #TO BE CHANGED BY USER:
 EXE=hm_bethe
-CC=g++
+CC=mpic++
 PLAT=gnu
 DIREXE=.
 
