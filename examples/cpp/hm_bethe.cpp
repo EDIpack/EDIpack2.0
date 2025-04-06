@@ -52,11 +52,11 @@ string bold_red(const string& s) { return "\033[1;31m" + s + "\033[0m"; }
 
 
 // Check convergence
-bool check_convergence(const complex<double>* Xnew, int dim_Xnew, double eps, int N1, int N2, MPI_Comm comm) {
-    static complex<double>* Xold = nullptr;
-    static int Xold_size = 0;
+bool check_convergence(const vector<complex<double>>& Xnew, double eps, int N1, int N2, MPI_Comm comm) {
+    static std::vector<std::complex<double>> Xold;
     static int success = 0;
     static int check = 1;
+    
     bool convergence = false;
     int rank;
     MPI_Comm_rank(comm, &rank);
@@ -65,23 +65,21 @@ bool check_convergence(const complex<double>* Xnew, int dim_Xnew, double eps, in
     if (master) {
     
       // Allocate and zero Xold if needed
-      if (Xold == nullptr || Xold_size != dim_Xnew) {
-          delete[] Xold;
-          Xold = new complex<double>[dim_Xnew];
-          fill(Xold, Xold + dim_Xnew, complex<double>(0.0, 0.0));
-          Xold_size = dim_Xnew;
+      int Msum = Xnew.size();
+      if (Xold.size() != Msum) {
+          Xold.assign(Msum, std::complex<double>(0.0, 0.0));
       }
 
       double M = 0.0, S = 0.0;
-      for (int i = 0; i < dim_Xnew; ++i) {
-          M += abs(Xnew[i] - Xold[i]);
-          S += abs(Xnew[i]);
+      for (int i = 0; i < Msum; ++i) {
+          M += std::abs(Xnew[i] - Xold[i]);
+          S += std::abs(Xnew[i]);
       }
 
       double err = M / S;
 
       // Update Xold
-      memcpy(Xold, Xnew, dim_Xnew * sizeof(complex<double>));
+      Xold = Xnew;
 
       ofstream fout("error.err", ios::app);
       fout << setw(5) << check << scientific << setprecision(7) << " " << err << "\n";
@@ -146,9 +144,10 @@ int main(int argc, char* argv[]) {
     bool converged = false;
     int64_t d[4] = {Nspin,Nspin,Norb,Norb};
     int total_size = d[0] * d[1] * d[2] * d[3];
+    int64_t delta_dim[5] = {Nspin,Nspin,Norb,Norb,Lmats};
     int total_size_n5 = total_size * Lmats;
     
-    complex<double>* wm = new complex<double>[Lmats];
+    vector<complex<double>> wm(Lmats);
     complex<double> zeta = 0.0;
     vector<double> Ebands, Dbands;
     
@@ -156,12 +155,12 @@ int main(int argc, char* argv[]) {
     int64_t bath_dim[1] = {Nb};
 
     // Solver-specific arrays
-    complex<double>* Hloc = new complex<double>[total_size];
-    complex<double>* Gimp_mats = new complex<double>[total_size_n5];
-    complex<double>* Self_mats = new complex<double>[total_size_n5];
-    complex<double>* Gloc_mats = new complex<double>[total_size_n5];
-    complex<double>* Delta = new complex<double>[total_size_n5];
-    int64_t delta_dim[5] = {Nspin,Nspin,Norb,Norb,Lmats};
+    vector<complex<double>> Hloc(total_size);
+    vector<complex<double>> Gimp_mats(total_size_n5);
+    vector<complex<double>> Self_mats(total_size_n5);
+    vector<complex<double>> Gloc_mats(total_size_n5);
+    vector<complex<double>> Delta(total_size_n5);
+
 
     // Initialize arrays
     
@@ -173,8 +172,8 @@ int main(int argc, char* argv[]) {
       wm[i] = complex<double>(0.0, pi / ::beta * (2* i + 1));
     }
     
-    double* Bath = new double[Nb];
-    double* Bath_prev = new double[Nb];
+    vector<double> Bath(Nb);
+    vector<double> Bath_prev(Nb);
     
  
     for (int i = 0; i < Lmats; ++i) {
@@ -187,16 +186,16 @@ int main(int argc, char* argv[]) {
     
     // Initialize solver
     
-    ed_set_Hloc_single_N4(Hloc, d);
-    init_solver_site(Bath, bath_dim);
+    ed_set_Hloc_single_N4(Hloc.data(), d);
+    init_solver_site(Bath.data(), bath_dim);
 
     // DMFT loop
     while (iloop < Nloop && !converged) {    
 
-      solve_site(Bath, bath_dim, 1, 1);      
+      solve_site(Bath.data(), bath_dim, 1, 1);      
 
-      get_gimp_site_n5(Gimp_mats, 0, 0, wm, Lmats, 0);
-      get_sigma_site_n5(Self_mats, 0, 0, wm, Lmats, 0);
+      get_gimp_site_n5(Gimp_mats.data(), 0, 0, wm.data(), Lmats, 0);
+      get_sigma_site_n5(Self_mats.data(), 0, 0, wm.data(), Lmats, 0);
       
 
       for (int i = 0; i < Lmats; ++i) {
@@ -214,13 +213,13 @@ int main(int argc, char* argv[]) {
       
       Bath_prev = Bath;
       
-      chi2_fitgf_single_normal_n5(Delta, delta_dim, Bath, bath_dim, 1, 0, 1);
+      chi2_fitgf_single_normal_n5(Delta.data(), delta_dim, Bath.data(), bath_dim, 1, 0, 1);
       
       for (int i = 0; i <Nb; ++i) {
           Bath[i] = wmixing * Bath[i] + (1.0-wmixing) * Bath_prev[i];
       }
       
-      converged = check_convergence(Delta, Lmats, dmft_error, Nsuccess, Nloop, comm);  
+      converged = check_convergence(Delta, dmft_error, Nsuccess, Nloop, comm);  
     }
     
     // Finalize MPI
