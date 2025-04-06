@@ -11,10 +11,6 @@
 using namespace std;
 
 
-
-// Assuming the library functions are already included
-// and available for use.
-
 // linspace: Linearly spaced values
 vector<double> linspace(double start, double end, int num) {
     vector<double> values(num);
@@ -48,11 +44,13 @@ vector<double> dens_bethe(const vector<double>& energies, double W, double de) {
     return dos;
 }
 
-
+// Text colors
 string bold_green(const string& s) { return "\033[1;32m" + s + "\033[0m"; }
 string bold_yellow(const string& s) { return "\033[1;33m" + s + "\033[0m"; }
 string bold_red(const string& s) { return "\033[1;31m" + s + "\033[0m"; }
 
+
+// Check convergence
 bool check_convergence(const complex<double>* Xnew, int dim_Xnew, double eps, int N1, int N2) {
     static complex<double>* Xold = nullptr;
     static int Xold_size = 0;
@@ -132,22 +130,18 @@ int main() {
     double pi = 3.14159265358979323846264338327950288419716939937510;
     bool converged = false;
     int iloop = 0;
-
-
     vector<double> Ebands, Dbands;
+    double de = 2*Wband/Le;
     complex<double>* wm = new complex<double>[Lmats];
+    int64_t d[4] = {Nspin,Nspin,Norb,Norb};
     
     Ebands = linspace(-Wband,Wband,Le);
-    double de = 2*Wband/Le;
     Dbands = dens_bethe(Ebands,Wband,de);
 
     // Initialize frequency arrays
     for (int i = 0; i < Lmats; i++) {
       wm[i] = complex<double>(0.0, pi / ::beta * (2* i + 1));
     }
-   
-    
-    int64_t d[4] = {Nspin,Nspin,Norb,Norb};
     
     // Calculate total size of the flattened array
     int total_size = d[0] * d[1] * d[2] * d[3];
