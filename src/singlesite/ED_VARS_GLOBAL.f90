@@ -15,6 +15,21 @@ MODULE ED_VARS_GLOBAL
 #endif
   implicit none
 
+  type coulomb_matrix_element
+     ! One two-body operator
+     integer,dimension(2)  :: cd_i           ! Spin, orbital of first operator (dagger)
+     integer,dimension(2)  :: cd_j           ! Spin, orbital of second operator (dagger)
+     integer,dimension(2)  :: c_k            ! Spin, orbital of third operator
+     integer,dimension(2)  :: c_l            ! Spin, orbital of fourth operator
+     real(8)               :: U              ! Interaction coefficient
+     logical               :: exists=.false. ! Flag to signify existence of the :math:`U_{ijkl}c^{\dagger}_{i}c^{\dagger}_{j}c_{k}c_{l}` operator
+  end type coulomb_matrix_element
+  
+  type coulomb_matrix
+     ! List of two-body operators
+     type(coulomb_matrix_element),dimension(:),allocatable   :: oplist
+     logical                                                 :: status=.false.
+  end type coulomb_matrix
 
   type effective_bath_component
      ! Effective bath component for the replica/general bath. Each istance of this type defines the parameters :math:`\vec{\lambda}` and the amplitudes :math:`\vec{V}`. The first is used to decompose the Hamiltonian of each element of the bath :math:`H_p=\sum_{i=1}^{N_{basis}} \lambda_i(p) O_i`, the latter describes the hopping from/to the impurity.
@@ -242,6 +257,11 @@ MODULE ED_VARS_GLOBAL
   character(len=10)                                  :: ineq_site_suffix="_ineq"
   integer                                            :: site_indx_padding=4
   logical                                            :: offdiag_gf_flag=.false.
+
+
+  !File suffixes for printing fine tuning.
+  !=========================================================
+  type(coulomb_matrix)                ::  CoulombMatrix ! normal-ordered coefficients
 
 
   !This is the internal Mpi Communicator and variables.
