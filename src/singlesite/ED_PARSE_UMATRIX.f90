@@ -62,10 +62,9 @@ contains
     !Parse lines
     do iline=1,flen
        read(unit_umatrix,*) o1,s1,o2,s2,o3,s3,o4,s4,coulombmatrix%oplist(iline)%U
-       if(max(o1, o2, o3, o4)>Norb) stop "read_umatrix_file: at line"//str(iline)//" too many orbitals" 
-       if(min(o1, o2, o3, o4) <  1) stop "read_umatrix_file: at line"//str(iline)//"orbital index < 1" 
-       if(min(o1, o2, o3, o4) <  1) stop "read_umatrix_file: at line"//str(iline)//"orbital index < 1" 
-       if (any(( [s1, s2, s3, s4] /= "u" ) .AND. ( [s1, s2, s3, s4] /= "d" ))) stop "read_umatrix_file: at line"//str(iline)//"spin index malformed" 
+       if(max(o1, o2, o3, o4)>Norb) stop "read_umatrix_file: at line "//str(iline)//" too many orbitals" 
+       if(min(o1, o2, o3, o4) <  1) stop "read_umatrix_file: at line "//str(iline)//" orbital index < 1" 
+       if (any(( [s1, s2, s3, s4] /= "u" ) .AND. ( [s1, s2, s3, s4] /= "d" ))) stop "read_umatrix_file: at line "//str(iline)//" spin index malformed" 
        coulombmatrix%oplist(iline)%cd_i = [o1, merge(1, 2, s1 == "u")]
        coulombmatrix%oplist(iline)%cd_j = [o2, merge(1, 2, s2 == "u")]
        coulombmatrix%oplist(iline)%c_k  = [o3, merge(1, 2, s3 == "u")]
