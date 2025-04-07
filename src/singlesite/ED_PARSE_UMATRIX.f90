@@ -73,8 +73,8 @@ contains
                                              str(coulombmatrix%oplist(iline)%U)//&
                                            ' cdg_['//str(o1)//str(s1)//']'&
                                            ' cdg_['//str(o2)//str(s2)//']'&
-                                           ' cdg_['//str(o3)//str(s3)//']'&
-                                           ' cdg_['//str(o4)//str(s4)//']'
+                                           ' c_['//str(o3)//str(s3)//']'&
+                                           ' c_['//str(o4)//str(s4)//']'
     enddo
     !
     close(unit_umatrix)
