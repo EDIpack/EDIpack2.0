@@ -32,23 +32,23 @@
      ! density-density interaction: same orbital, opposite spins:
      !  = \sum_\a U_\a*(n_{\a,up}*n_{\a,dw})
      do iorb=1,Norb
-        htmp = htmp + Uloc(iorb)*Nup(iorb)*Ndw(iorb)
+        htmp = htmp + Uloc_internal(iorb)*Nup(iorb)*Ndw(iorb)
      enddo
      if(Norb>1)then
         !density-density interaction: different orbitals, opposite spins:
         ! =   U'   *     sum_{i/=j} [ n_{i,up}*n_{j,dw} + n_{j,up}*n_{i,dw} ]
-        ! =  (Uloc-2*Jh)*sum_{i/=j} [ n_{i,up}*n_{j,dw} + n_{j,up}*n_{i,dw} ]
+        ! =  (Uloc_internal-2*Jh_internal(iorb,jorb))*sum_{i/=j} [ n_{i,up}*n_{j,dw} + n_{j,up}*n_{i,dw} ]
         do iorb=1,Norb
            do jorb=iorb+1,Norb
-              htmp = htmp + Ust*(Nup(iorb)*Ndw(jorb) + Nup(jorb)*Ndw(iorb))
+              htmp = htmp + Ust_internal(iorb,jorb)*(Nup(iorb)*Ndw(jorb) + Nup(jorb)*Ndw(iorb))
            enddo
         enddo
         !density-density interaction: different orbitals, parallel spins
         ! = \sum_{i<j}    U''     *[ n_{i,up}*n_{j,up} + n_{i,dw}*n_{j,dw} ]
-        ! = \sum_{i<j} (Uloc-3*Jh)*[ n_{i,up}*n_{j,up} + n_{i,dw}*n_{j,dw} ]
+        ! = \sum_{i<j} (Uloc_internal-3*Jh_internal(iorb,jorb))*[ n_{i,up}*n_{j,up} + n_{i,dw}*n_{j,dw} ]
         do iorb=1,Norb
            do jorb=iorb+1,Norb
-              htmp = htmp + (Ust-Jh)*(Nup(iorb)*Nup(jorb) + Ndw(iorb)*Ndw(jorb))
+              htmp = htmp + (Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))*(Nup(iorb)*Nup(jorb) + Ndw(iorb)*Ndw(jorb))
            enddo
         enddo
      endif
@@ -56,13 +56,13 @@
      !sum up the contributions of hartree terms:
      if(hfmode)then
         do iorb=1,Norb
-           htmp = htmp - 0.5d0*Uloc(iorb)*(Nup(iorb)+Ndw(iorb)) + 0.25d0*uloc(iorb)
+           htmp = htmp - 0.5d0*Uloc_internal(iorb)*(Nup(iorb)+Ndw(iorb)) + 0.25d0*Uloc_internal(iorb)
         enddo
         if(Norb>1)then
            do iorb=1,Norb
               do jorb=iorb+1,Norb
-                 htmp=htmp-0.5d0*Ust*(Nup(iorb)+Ndw(iorb)+Nup(jorb)+Ndw(jorb))+0.25d0*Ust
-                 htmp=htmp-0.5d0*(Ust-Jh)*(Nup(iorb)+Ndw(iorb)+Nup(jorb)+Ndw(jorb))+0.25d0*(Ust-Jh)
+                 htmp=htmp-0.5d0*Ust_internal(iorb,jorb)*(Nup(iorb)+Ndw(iorb)+Nup(jorb)+Ndw(jorb))+0.25d0*Ust_internal(iorb,jorb)
+                 htmp=htmp-0.5d0*(Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))*(Nup(iorb)+Ndw(iorb)+Nup(jorb)+Ndw(jorb))+0.25d0*(Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))
               enddo
            enddo
         endif
