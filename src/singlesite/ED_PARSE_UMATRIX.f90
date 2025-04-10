@@ -159,12 +159,15 @@ contains
         if(line%cd_i(2)/=line%cd_j(2))then          !c_dag spin are opposite: It is either Uloc or Ust
           if(line%cd_i(1)==line%cd_j(1))then        !It is Uloc
             Uloc_internal(line%cd_i(1)) = Uloc_internal(line%cd_i(1)) + line%U
+            return
           else    !It is Ust
             Ust_internal(line%cd_i(1),line%cd_j(1)) = Ust_internal(line%cd_i(1),line%cd_j(1)) + line%U
+            return
           endif
         else
           if(line%cd_i(1)/=line%cd_j(1))then        !It is Ust - Jh. Store this coefficient in Jh for now. Will need to do Jh = Ust - this in the end.
             Jh_internal(line%cd_i(1),line%cd_j(1)) = Jh_internal(line%cd_i(1),line%cd_j(1)) + line%U
+            return
           endif
         endif
       endif
