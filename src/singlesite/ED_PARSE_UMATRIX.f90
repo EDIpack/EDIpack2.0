@@ -85,7 +85,7 @@ contains
   
   
   
-  !subroutine c_cgd_order
+  subroutine parse_umatrix_line(line)
   !This funcion switches the second and third elements of the coulomb matrix applying
   !commutation relations. If the resulting series of operators is of the type that would
   !couple to Uloc, Ust, Ust-Jh, Jx, Jp, store the resulting coefficient in the appropriate
@@ -95,16 +95,53 @@ contains
   !If a Coulomb matrix element comes along that would be inconsistent with the previously
   !determined value of Uloc, Ust, Ust-Jh, Jx, Jp then set the previously determined coeff
   !to zero and add this to the list of "everything_else".
-  
-  
-  !end subroutine c_cdg_order
-  
-  
-  !subroutine update_interaction_params
-  
-  
-  !end subroutine update_interaction_params
+  type(coulomb_matrix_element)        :: line
+  character(len=10)                   :: operator_type
+  integer,dimension(2)                :: dummy
 
+  !First: order the two creation operators so that they
+  !are set in an increasing order of (first) spin and (second) orbital from left to right
+  !
+  !spin
+  if (line%cd_i(2) > line%cd_j(2)) then
+    dummy = line%cd_i
+    line%cd_i = line%cd_j
+    line%cd_j = dummy
+    line%U    = -1.0*line%U
+  !orbital
+  elseif (line%cd_i(1) > line%cd_j(1)) then
+    dummy = line%cd_i
+    line%cd_i = line%cd_j
+    line%cd_j = dummy
+    line%U    = -1.0*line%U
+  endif
+  !
+  !Second: order the two annihilation operators so that they
+  !are set in an increasing order of (first) spin and (second) orbital from left to right
+  !
+  !spin
+  if (line%c_i(2) > line%c_j(2)) then
+    dummy = line%c_i
+    line%c_i = line%c_j
+    line%c_j = dummy
+    line%U    = -1.0*line%U
+  !orbital
+  elseif (line%c_i(1) > line%c_j(1)) then
+    dummy = line%c_i
+    line%c_i = line%c_j
+    line%c_j = dummy
+    line%U    = -1.0*line%U
+  endif
+  !
+  !Third: multiply U by (-1) because operators will always be applied from left to right
+  !as c->cdg->c->cdg, so second and third element are to be swapped
+  
+  
+  
+  
+  end subroutine parse_umatrix_line
+  
+  
 
 
 end module ED_PARSE_UMATRIX
