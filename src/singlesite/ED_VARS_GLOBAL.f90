@@ -169,6 +169,7 @@ MODULE ED_VARS_GLOBAL
   !local part of the Hamiltonian
   !=========================================================
   complex(8),dimension(:,:,:,:),allocatable          :: impHloc           !local hamiltonian
+  complex(8),dimension(:,:,:,:),allocatable          :: mfHloc            !additional mean-field terms
 
 
 
@@ -199,7 +200,13 @@ MODULE ED_VARS_GLOBAL
   real(8)                                            :: zeta_function
   real(8)                                            :: gs_energy
 
-
+  !Interaction coefficients used internally
+  !=========================================================
+  real(8),allocatable,dimension(:)                     :: Uloc_internal ! [Norb]
+  real(8),allocatable,dimension(:,:)                   :: Ust_internal  ! [Norb,Norb]
+  real(8),allocatable,dimension(:,:)                   :: Jh_internal   ! [Norb,Norb]
+  real(8),allocatable,dimension(:,:)                   :: Jx_internal   ! [Norb,Norb]
+  real(8),allocatable,dimension(:,:)                   :: Jp_internal   ! [Norb,Norb]
 
 
   !Green's functions

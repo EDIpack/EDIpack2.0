@@ -18,7 +18,7 @@
      !
      !    S-E: J  [c^+_b_dw c_a_dw] [c^+_a_up c_b_up]
      !    S-E: J  [c^+_{jorb} c_{iorb}]_dw [c^+_iorb c_jorb]_up
-     if(Norb>1.AND.Jx/=0d0)then
+     if(Norb>1.AND.Jx_internal(iorb,jorb)/=0d0)then
         do iorb=1,Norb
            do jorb=1,Norb
               Jcondition=(&
@@ -34,7 +34,7 @@
                  call c(jorb,mup,k3,sg3)  !UP
                  call cdg(iorb,k3,k4,sg4) !UP
                  jup=binary_search(Hsector%H(1)%map,k4)
-                 htmp = Jx*sg1*sg2*sg3*sg4
+                 htmp = Jx_internal(iorb,jorb)*sg1*sg2*sg3*sg4
                  j = jup + (jdw-1)*DimUp
                  !
                  select case(MpiStatus)
@@ -52,7 +52,7 @@
      ! PAIR-HOPPING (P-H) TERMS
      !    P-H: J c^+_iorb_up c^+_iorb_dw   c_jorb_dw   c_jorb_up  (i.ne.j) 
      !    P-H: J c^+_{iorb}  c^+_{iorb+Ns} c_{jorb+Ns} c_{jorb}
-     if(Norb>1.AND.Jp/=0d0)then
+     if(Norb>1.AND.Jp_internal(iorb,jorb)/=0d0)then
         do iorb=1,Norb
            do jorb=1,Norb
               Jcondition=(&
@@ -67,7 +67,7 @@
                  call c(jorb,mup,k3,sg3)       !c_jorb_up
                  call cdg(iorb,k3,k4,sg4)      !c^+_iorb_up
                  jup = binary_search(Hsector%H(1)%map,k4)
-                 htmp = Jp*sg1*sg2*sg3*sg4
+                 htmp = Jp_internal(iorb,jorb)*sg1*sg2*sg3*sg4
                  j = jup + (jdw-1)*DimUp
                  !
                  select case(MpiStatus)

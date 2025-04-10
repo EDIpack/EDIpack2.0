@@ -122,6 +122,13 @@ MODULE ED_INPUT_VARS
   ! :Default ed_twin:`F`
   !
   logical                                                            :: ed_twin_
+  
+  logical(c_bool),bind(c, name="ed_read_umatrix")                    :: ed_read_umatrix   !
+  !Flag to enable ( :code:`T` ) or not (:code:`F` ) reading the two-body terms from an external file
+  !defined by :f:var:`ed_umatrix_file`
+  ! :Default ed_read_umatrix:`F`
+  !
+  logical                                                            :: ed_read_umatrix_
 
   !==========================================!
   ! These variables are not bound to c types ! 
@@ -481,8 +488,12 @@ MODULE ED_INPUT_VARS
   ! :Default Bfile:`hbasis[.used/restart]`
   !
   character(len=100)                                           :: HLOCfile   !
-  !File read the input local H 
+  !File to read the input local H from
   ! :Default HLOCfile:`inputHLOC.in`
+  !
+  character(len=100)                                           :: UmatrixFile !
+  !File read the list of two-body operators from 
+  ! :Default HLOCfile:`umatrix[.used/restart]`
   !
   character(len=100)                                           :: SectorFile !
   !File where to retrieve/store the sectors contributing to the spectrum 
@@ -608,6 +619,8 @@ contains
     ed_total_ud = ed_total_ud_
     call parse_input_variable(ed_twin_,"ED_TWIN",INPUTunit,default=.false.,comment="flag to reduce (T) or not (F,default) the number of visited sector using twin symmetry.")
     ed_twin = ed_twin_
+    call parse_input_variable(ed_read_umatrix_,"ED_READ_UMATRIX",INPUTunit,default=.false.,comment="flag to read (T) or not (F,default) the two-body operators from an external file.")
+    ed_read_umatrix = ed_read_umatrix_
     call parse_input_variable(ed_obs_all,"ED_OBS_ALL",INPUTunit,default=.true.,comment="flag to print observables for every loop.")
     !
     !
@@ -691,6 +704,7 @@ contains
     call parse_input_variable(Hfile,"Hfile",INPUTunit,default="hamiltonian",comment="File where to retrieve/store the bath parameters.")
     call parse_input_variable(Bfile,"Bfile",INPUTunit,default="hbasis",comment="File where to retrieve/store the H bath matrix basis.")
     call parse_input_variable(HLOCfile,"HLOCfile",INPUTunit,default="inputHLOC.in",comment="File read the input local H.")
+    call parse_input_variable(HLOCfile,"UmatrixFile",INPUTunit,default="umatrix",comment="File read the two-body operator list from.")
     call parse_input_variable(print_input_vars,"PRINT_INPUT_VARS",INPUTunit,default=.true.,comment="Flag to toggle console printing of input variables list")
     call parse_input_variable(LOGfile,"LOGFILE",INPUTunit,default=6,comment="LOG unit.")
 
@@ -770,6 +784,8 @@ contains
     !any change to the variable is immediately copied into the list... (if you delete .ed it won't be printed out)
     call substring_delete(Hfile,".restart")
     call substring_delete(Hfile,".ed")
+    call substring_delete(UmatrixFile,".restart")
+    call substring_delete(UmatrixFile,".ed")
   end subroutine ed_read_input
 
   subroutine ed_update_input(name,vals)

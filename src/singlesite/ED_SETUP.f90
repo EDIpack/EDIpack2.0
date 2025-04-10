@@ -300,6 +300,51 @@ contains
        niter=nloop/3
     endif
     !
+    !ALLOCATE AND SET interaction coefficient matrices
+    if(.not. ed_read_umatrix)then
+      if(Norb > 5)STOP "ed_read_umatrix = F: max 5 orbitals allowed"
+      if(.not.allocated(Uloc_internal))then
+        allocate(Uloc_internal(Norb))
+        Uloc_internal = Uloc
+      else
+        call assert_shape(Uloc_internal,[Norb],"init_ed_structure","impHloc")
+      endif
+      if(.not.allocated(Ust_internal))then
+        allocate(Ust_internal(Norb,Norb))
+        Ust_internal = Ust
+      else
+        call assert_shape(Ust_internal,[Norb,Norb],"init_ed_structure","impHloc")
+      endif
+      if(.not.allocated(Jh_internal))then
+        allocate(Jh_internal(Norb,Norb))
+        Jh_internal = Jh
+      else
+        call assert_shape(Jh_internal,[Norb,Norb],"init_ed_structure","impHloc")
+      endif
+      if(.not.allocated(Jx_internal))then
+        allocate(Jx_internal(Norb,Norb))
+        Jx_internal = Jx
+      else
+        call assert_shape(Jx_internal,[Norb,Norb],"init_ed_structure","impHloc")
+      endif
+      if(.not.allocated(Jp_internal))then
+        allocate(Jp_internal(Norb,Norb))
+        Jp_internal = Jp
+      else
+        call assert_shape(Jp_internal,[Norb,Norb],"init_ed_structure","impHloc")
+      endif
+    else
+      STOP "Read umatrix not implemented yet"
+    endif
+    
+    !ALLOCATE impHloc
+    if(.not.allocated(mfHloc))then
+       allocate(mfHloc(Nspin,Nspin,Norb,Norb))
+       impHloc=zero
+    else
+       call assert_shape(mfHloc,[Nspin,Nspin,Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    !
     !ALLOCATE impHloc
     if(.not.allocated(impHloc))then
        allocate(impHloc(Nspin,Nspin,Norb,Norb))
@@ -391,6 +436,12 @@ contains
     if(allocated(sectors_mask))deallocate(sectors_mask)
     if(allocated(neigen_sector))deallocate(neigen_sector)
     if(allocated(impHloc))deallocate(impHloc)
+    if(allocated(mfHloc))deallocate(mfHloc)
+    if(allocated(Uloc_internal))deallocate(Uloc_internal)
+    if(allocated(Ust_internal))deallocate(Ust_internal)
+    if(allocated(Jh_internal))deallocate(Jh_internal)
+    if(allocated(Jx_internal))deallocate(Jx_internal)
+    if(allocated(Jp_internal))deallocate(Jp_internal)
 
     if(allocated(ed_dens))deallocate(ed_dens)
     if(allocated(ed_docc))deallocate(ed_docc)

@@ -30,6 +30,8 @@ contains
   
   subroutine read_umatrix_file(ufile)
     !This subroutine reads the interaction Hamiltonian from a user-specified file.
+    !It would make sense for the elements to be ordered in this way:
+    !cdg_s cdg_sprime c_s c_sprime.
     character(len=*) :: ufile  !File containing a properly formatted interaction Hamiltonian
     logical          :: master=.true.,ufile_exists, verbose
     integer          :: iline,flen,unit_umatrix,rank
@@ -83,10 +85,19 @@ contains
   
   
   
-  !subroutine normal_order
+  !subroutine c_cgd_order
+  !This funcion switches the second and third elements of the coulomb matrix applying
+  !commutation relations. If the resulting series of operators is of the type that would
+  !couple to Uloc, Ust, Ust-Jh, Jx, Jp, store the resulting coefficient in the appropriate
+  !matrix .
+  !If some mean-field terms result from the anticommutation, store them in a mean-field 
+  !matrix to be added along with impHloc at Fock space H creation time.
+  !If a Coulomb matrix element comes along that would be inconsistent with the previously
+  !determined value of Uloc, Ust, Ust-Jh, Jx, Jp then set the previously determined coeff
+  !to zero and add this to the list of "everything_else".
   
   
-  !end subroutine normal_order
+  !end subroutine c_cdg_order
   
   
   !subroutine update_interaction_params
