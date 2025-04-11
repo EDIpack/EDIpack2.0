@@ -30,11 +30,7 @@ MODULE ED_VARS_GLOBAL
      real(8)               :: U              ! Interaction coefficient
   end type coulomb_matrix_element
   
-  type twobo
-     ! Linked list of two-body operators that don't fit in Hubbard-Kanamori form
-     type(coulomb_matrix_element)      :: op                !The operator
-     type(twobo), pointer              :: next => null()    !Pointer to the next member of the list
-  end type twobo
+
 
 
 !######## Effective bath #######!
@@ -277,7 +273,7 @@ MODULE ED_VARS_GLOBAL
 
   !File suffixes for printing fine tuning.
   !=========================================================
-  type(twobo),pointer                 ::  coulomb_sundry => null()
+  type(coulomb_matrix_element),dimension(:),allocatable  ::  coulomb_sundry
 
 
   !This is the internal Mpi Communicator and variables.
@@ -346,63 +342,6 @@ contains
 #endif
   end subroutine ed_del_MpiComm
   !=========================================================
-
-
-  ! Procedure to create a new 2-body operator with a given value
-  function create_twobo(val) result(new_twobo)
-      type(coulomb_matrix_element), intent(in)   :: val
-      type(twobo), pointer                       :: new_twobo
-
-      allocate(new_twobo)
-      new_twobo%op = val
-      new_twobo%next => null()  ! Set the next pointer to null initially
-  end function create_twobo
-
-  ! Procedure to push a value onto the stack (LIFO)
-  subroutine push(head, val)
-      type(twobo), pointer                       :: head
-      type(coulomb_matrix_element), intent(in)   :: val
-      type(twobo), pointer                       :: new_twobo
-
-      new_twobo => create_twobo(val)
-      ! Add the new twobo to the top of the stack (beginning of the list)
-      new_twobo%next => head
-      head => new_twobo
-  end subroutine push
-
-  ! Procedure to pop the top value from the stack (LIFO)
-  function pop(head) result(popped_value)
-      type(twobo), pointer            :: head
-      type(coulomb_matrix_element)    :: popped_value
-      type(twobo), pointer            :: temp_twobo
-
-      if (associated(head)) then
-          popped_value = head%op
-          temp_twobo => head
-          head => head%next
-          deallocate(temp_twobo)  ! Free the memory of the popped twobo
-      else
-          print *, "Stack is empty, nothing to pop."
-          popped_value%cd_i = 1
-          popped_value%cd_j = 1
-          popped_value%c_k  = 1
-          popped_value%c_l  = 1
-          popped_value%U    = 0.0
-      end if
-  end function pop
-
-  ! Procedure to print the stack (LIFO order)
-  subroutine print_stack(head)
-      type(twobo), pointer :: head
-      type(twobo), pointer :: current
-
-      current => head
-      print *, "Stack contents (LIFO order):"
-      do while (associated(current))
-          print *, current%op
-          current => current%next
-      end do
-  end subroutine print_stack
 
 
 

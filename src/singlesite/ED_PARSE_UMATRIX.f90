@@ -75,7 +75,6 @@ contains
   end subroutine read_umatrix_file
   
   
-  
   subroutine parse_umatrix_line(line)
     !This funcion switches the second and third elements of the coulomb matrix applying
     !commutation relations. If the resulting series of operators is of the type that would
@@ -159,15 +158,29 @@ contains
     !Sixth: is it spin-flip or pair-hopping?
     
     !Seventh: if it is none of the above, put this into coulomb_everything_else
-          
+    call grow_sundry_array(line)
       
-    
-    
-    
     
   end subroutine parse_umatrix_line
   
+
+  subroutine grow_sundry_array(new_element)
+    type(coulomb_matrix_element),intent(in)                 :: new_element
+		type(coulomb_matrix_element),dimension(:),allocatable   :: temp
+		integer                                                 :: dim_old
+
+    if(.not.allocated(coulomb_sundry))then
+      allocate(coulomb_sundry(1))
+      coulomb_sundry(1) = new_element
+    else     
+      dim_old = size(coulomb_sundry)
+      allocate(temp(dim_old+1))
+		  temp(1:dim_old) = coulomb_sundry
+      temp(dim_old+1) = new_element
+		  call move_alloc(temp,coulomb_sundry)
+		endif
   
+  end subroutine grow_sundry_array    
 
 
 end module ED_PARSE_UMATRIX
