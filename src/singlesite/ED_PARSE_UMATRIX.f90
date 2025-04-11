@@ -68,7 +68,13 @@ contains
                                            ' cd_['//str(o2)//str(s2)//']'&
                                            ' c_['//str(o3)//str(s3)//']'&
                                            ' c_['//str(o4)//str(s4)//']'
+      call parse_umatrix_line(opline)
     enddo
+    !
+    !Here we need to operate on the various Uloc, Ust, Jh, Jx, Jp matrices
+    !-Uloc needs the 1/2 to be dealt with
+    !-Ust, Jh, Jx, Jp have to keep in mind that the summations are constrained jorb > iorb
+    !-Jh needs to be rescaled, because the user has inputted Ust - Jh in the umatrix file
     !
     close(unit_umatrix)
     !
@@ -155,9 +161,11 @@ contains
       endif
     endif
     !
-    !Sixth: is it spin-flip or pair-hopping?
+    !Sixth: is it spin-flip?
     
-    !Seventh: if it is none of the above, put this into coulomb_everything_else
+    !Seventh: is it pair-hopping?
+    
+    !Eight: if it is none of the above, put this into coulomb_everything_else
     call grow_sundry_array(line)
       
     
