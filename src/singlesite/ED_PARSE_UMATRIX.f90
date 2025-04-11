@@ -75,6 +75,7 @@ contains
     !-Uloc needs the 1/2 to be dealt with
     !-Ust, Jh, Jx, Jp have to keep in mind that the summations are constrained jorb > iorb
     !-Jh needs to be rescaled, because the user has inputted Ust - Jh in the umatrix file
+    !-Remember to add mfHloc to the hamiltonian constructor!
     !
     close(unit_umatrix)
     !
