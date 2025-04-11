@@ -7,6 +7,7 @@ MODULE ED_SETUP
   USE ED_AUX_FUNX
   USE ED_SECTOR
   USE SF_TIMER
+  USE SF_PARSE_INPUT, only: delete_input
   USE SF_IOTOOLS, only:free_unit,reg,file_length
   USE SF_MISC, only: assert_shape
 #ifdef _MPI
@@ -399,6 +400,7 @@ contains
     if(allocated(ed_dens_dw))deallocate(ed_dens_dw)
     if(allocated(ed_mag))deallocate(ed_mag)
     if(allocated(spin_field))deallocate(spin_field)
+    call delete_input
   end subroutine delete_ed_structure
 
 
