@@ -38,7 +38,6 @@ contains
     !
     real(8),dimension(:,:),optional                :: Hmat !optional dense matrix
     integer                                        :: isector
-    integer                                        :: o1,o2,o3,o4,s1,s2,s3,s4
     real(8),dimension(:,:),allocatable             :: Htmp_up,Htmp_dw,Hrdx,Hmat_tmp
     real(8),dimension(:,:),allocatable             :: Htmp_ph,Htmp_eph_e,Htmp_eph_ph
     integer,dimension(2*Ns_Ud)                     :: Indices    ![2-2*Norb]

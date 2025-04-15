@@ -1,12 +1,12 @@
-  !We build the transposed H_non_local here (symmetric)
-  !to comply with the MPI decomposition of the matrix.
-  !A better MPI handling might be necessary here...
-  do i=MpiIstart,MpiIend
-     iup = iup_index(i,DimUp)
-     idw = idw_index(i,DimUp)
+  do i=1,Nloc
+     i_el = mod(i-1,DimUp*MpiQdw) + 1
+     iph = (i-1)/(DimUp*MpiQdw) + 1
      !
-     mup = Hsector%H(1)%map(iup)
-     mdw = Hsector%H(2)%map(idw)
+     iup = iup_index(i_el+mpiIshift,DimUp)
+     idw = idw_index(i_el+mpiIshift,DimUp)
+     !
+     mup = Hsector%H(1)%map(jup)
+     mdw = Hsector%H(2)%map(jdw)
      !
      nup = bdecomp(mup,Ns)
      ndw = bdecomp(mdw,Ns)
@@ -93,14 +93,10 @@
            jdw=binary_search(Hsector%H(2)%map,p_dw_new)
            jup=binary_search(Hsector%H(1)%map,p_up_new)
            htmp = coulomb_sundry(iline)%U * sg1 * sg2 * sg3 * sg4
-           j = jup + (jdw-1)*DimUp
            !
-           select case(MpiStatus)
-           case (.true.)
-              call sp_insert_element(MpiComm,spH0nd,htmp,i,j)
-           case (.false.)
-              call sp_insert_element(spH0nd,htmp,i,j)
-           end select
+           j = jup + (jdw-1)*DimUp + (iph-1)*DimUp*MpiQdw
+           !
+           Hv(j) = Hv(j) + htmp*vt(i)
           !
          enddo
       endif
