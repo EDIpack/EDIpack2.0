@@ -83,7 +83,7 @@ contains
   
   
   subroutine parse_umatrix_line(line)
-    !This funcion switches the second and third elements of the coulomb matrix applying
+    !This subroutine switches the second and third elements of the coulomb matrix applying
     !commutation relations. If the resulting series of operators is of the type that would
     !couple to Uloc, Ust, Ust-Jh, Jx, Jp, store the resulting coefficient in the appropriate
     !matrix .

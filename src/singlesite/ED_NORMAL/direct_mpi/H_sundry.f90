@@ -61,7 +61,7 @@
              if (spinvec_dag(2)==1)then
                call cdg(orbvec_dag(2), p_up_old, p_up_new, sg2, Jcondition)   !last annihilation operator
              elseif (spinvec_dag(2)==2)then
-               call cdg(orbvec_dag(2), p_dw_old, p_dw_old, sg2, Jcondition)   !last annihilation operator
+               call cdg(orbvec_dag(2), p_dw_old, p_dw_new, sg2, Jcondition)   !last annihilation operator
              endif
              if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
            endif
