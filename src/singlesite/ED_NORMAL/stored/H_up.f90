@@ -8,13 +8,13 @@
      do iorb=1,Norb
         do jorb=1,Norb
            Jcondition = &
-                (impHloc(1,1,iorb,jorb)/=zero) .AND. &
+                (impHloc(1,1,iorb,jorb)+mfHloc(1,1,iorb,jorb))/=zero .AND. &
                 (Nup(jorb)==1) .AND. (Nup(iorb)==0)
            if (Jcondition) then
               call c(jorb,mup,k1,sg1)
               call cdg(iorb,k1,k2,sg2)
               iup = binary_search(Hsector%H(1)%map,k2)
-              htmp = impHloc(1,1,iorb,jorb)*sg1*sg2
+              htmp = (impHloc(1,1,iorb,jorb)+mfHloc(1,1,iorb,jorb))*sg1*sg2
               !
               call sp_insert_element(spH0ups(1),htmp,iup,jup)
               !
