@@ -104,9 +104,12 @@ contains
     bath_tmp=0d0
     do ilat = 1+MPI_ID,Nsites,MPI_SIZE
        if(ed_verbose>1)write(Logfile,"(A)")"Start Chi**2 fit for site:"//str(ilat)
+       !
+       call ed_set_suffix(ilat)
+       !
        bath_tmp(ilat,:)=bath(ilat,:)
+       !
        call ed_set_Hloc(Hloc_ineq(ilat,:,:,:,:))
-       ed_file_suffix=reg(ineq_site_suffix)//str(ilat,site_indx_padding)
        !
        if(present(ispin))then
           call ed_chi2_fitgf(fg(ilat,:,:,:,:,:),bath_tmp(ilat,:),ispin=ispin_,fmpi=.false.)
@@ -180,9 +183,10 @@ contains
     bath_tmp=0d0
     do ilat = 1+MPI_ID,Nsites,MPI_SIZE
        if(ed_verbose>1)write(Logfile,"(A)")"Start Chi**2 fit for site:"//str(ilat)
+       call ed_set_suffix(ilat)
+       !
        bath_tmp(ilat,:)=bath(ilat,:)
        call ed_set_Hloc(Hloc_ineq(ilat,:,:,:,:))
-       ed_file_suffix=reg(ineq_site_suffix)//str(ilat,site_indx_padding)
        !
        if(present(ispin))then
           call ed_chi2_fitgf(fg(ilat,:,:,:,:,:),bath_tmp(ilat,:),ispin=ispin_,fmpi=.false.)
@@ -253,9 +257,10 @@ contains
     bath_tmp=0d0
     do ilat = 1+MPI_ID,Nsites,MPI_SIZE
        if(ed_verbose>1)write(Logfile,"(A)")"Start Chi**2 fit for site:"//str(ilat)
+       call ed_set_suffix(ilat)
+       !
        bath_tmp(ilat,:)=bath(ilat,:)
        call ed_set_Hloc(Hloc_ineq(ilat,:,:,:,:))
-       ed_file_suffix=reg(ineq_site_suffix)//str(ilat,site_indx_padding)
        !
        if(present(ispin))then
           call ed_chi2_fitgf(fg(ilat,:,:,:,:,:),bath_tmp(ilat,:),ispin=ispin_,fmpi=.false.)
@@ -343,9 +348,10 @@ contains
     !
     do ilat= 1 + MPI_ID, Nsites, MPI_SIZE
        write(Logfile,"(A)")"ed_fit_bath_sites_superc: Start Chi**2 fit for site:"//str(ilat)
+       call ed_set_suffix(ilat)
+       !
        bath_tmp(ilat,:) = bath(ilat,:)
        call ed_set_Hloc(Hloc_ineq(ilat,:,:,:,:))
-       ed_file_suffix=reg(ineq_site_suffix)//str(ilat,site_indx_padding)
        !
        if(present(ispin))then
           call ed_chi2_fitgf(fg(1,ilat,:,:,:,:,:),fg(2,ilat,:,:,:,:,:),bath_tmp(ilat,:),ispin_,fmpi=.false.)
@@ -424,9 +430,11 @@ contains
     !
     do ilat= 1 + MPI_ID, Nsites, MPI_SIZE
        write(Logfile,"(A)")"ed_fit_bath_sites_superc: Start Chi**2 fit for site:"//str(ilat)
+       !
+       call ed_set_suffix(ilat)
+       !
        bath_tmp(ilat,:) = bath(ilat,:)
        call ed_set_Hloc(Hloc_ineq(ilat,:,:,:,:))
-       ed_file_suffix=reg(ineq_site_suffix)//str(ilat,site_indx_padding)
        !
        if(present(ispin))then
           call ed_chi2_fitgf(fg(1,ilat,:,:,:,:,:),fg(2,ilat,:,:,:,:,:),bath_tmp(ilat,:),ispin_,fmpi=.false.)
@@ -503,9 +511,10 @@ contains
     !
     do ilat= 1 + MPI_ID, Nsites, MPI_SIZE
        write(Logfile,"(A)")"ed_fit_bath_sites_superc: Start Chi**2 fit for site:"//str(ilat)
+       call ed_set_suffix(ilat)
+       !
        bath_tmp(ilat,:) = bath(ilat,:)
        call ed_set_Hloc(Hloc_ineq(ilat,:,:,:,:))
-       ed_file_suffix=reg(ineq_site_suffix)//str(ilat,site_indx_padding)
        !
        if(present(ispin))then
           call ed_chi2_fitgf(fg(1,ilat,:,:,:,:,:),fg(2,ilat,:,:,:,:,:),bath_tmp(ilat,:),ispin_,fmpi=.false.)

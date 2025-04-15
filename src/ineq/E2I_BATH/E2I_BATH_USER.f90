@@ -144,19 +144,19 @@ contains
   ! - given a dmft bath pull/push the nonsu2 components
   !+-------------------------------------------------------------------+
   subroutine break_symmetry_bath_lattice(bath_,field,sign,save)
-    real(8),dimension(:,:) :: bath_
-    real(8)                :: field
-    real(8)                :: sign
-    logical,optional       :: save
-    logical                :: save_
-    integer                :: Nsites,ilat
+    real(8),dimension(:,:)           :: bath_
+    real(8)                          :: field
+    real(8),dimension(size(bath_,1)) :: sign
+    logical,optional                 :: save
+    logical                          :: save_
+    integer                          :: Nsites,ilat
     save_=.true.;if(present(save))save_=save
     Nsites=size(bath_,1)
     do ilat=1,Nsites
-       ed_file_suffix=reg(ineq_site_suffix)//reg(str(ilat,site_indx_padding))
-       call ed_break_symmetry_bath(bath_(ilat,:),field,sign,save_)
+       call ed_set_suffix(ilat)
+       call ed_break_symmetry_bath(bath_(ilat,:),field,sign(ilat),save_)
     enddo
-    ed_file_suffix=""
+    call ed_reset_suffix
   end subroutine break_symmetry_bath_lattice
 
 
@@ -171,10 +171,10 @@ contains
     save_=.true.;if(present(save))save_=save
     Nsites=size(bath_,1)
     do ilat=1,Nsites
-       ed_file_suffix=reg(ineq_site_suffix)//reg(str(ilat,site_indx_padding))
+       call ed_set_suffix(ilat)
        call ed_spin_symmetrize_bath(bath_(ilat,:),save_)
     enddo
-    ed_file_suffix=""
+    call ed_reset_suffix
   end subroutine spin_symmetrize_bath_lattice
 
 
@@ -190,10 +190,10 @@ contains
     save_=.true.;if(present(save))save_=save
     Nsites=size(bath_,1)
     do ilat=1,Nsites
-       ed_file_suffix=reg(ineq_site_suffix)//reg(str(ilat,site_indx_padding))
+       call ed_set_suffix(ilat)
        call ed_orb_symmetrize_bath(bath_(ilat,:),save_)
     enddo
-    ed_file_suffix=""
+    call ed_reset_suffix
   end subroutine orb_symmetrize_bath_lattice
 
   subroutine orb_symmetrize_bath_lattice_o1o2(bath_,orb1,orb2,save)
@@ -206,10 +206,10 @@ contains
     save_=.true.;if(present(save))save_=save
     Nsites=size(bath_,1)
     do ilat=1,Nsites
-       ed_file_suffix=reg(ineq_site_suffix)//reg(str(ilat,site_indx_padding))
+       call ed_set_suffix(ilat)
        call ed_orb_symmetrize_bath(bath_(ilat,:),orb1,orb2,save_)
     enddo
-    ed_file_suffix=""
+    call ed_reset_suffix
   end subroutine orb_symmetrize_bath_lattice_o1o2
 
   !---------------------------------------------------------!
@@ -228,10 +228,10 @@ contains
     save_=.true.;if(present(save))save_=save
     Nsites=size(bath_,1)
     do ilat=1,Nsites
-       ed_file_suffix=reg(ineq_site_suffix)//reg(str(ilat,site_indx_padding))
+       call ed_set_suffix(ilat)
        call ed_orb_equality_bath(bath_(ilat,:),indx_,save_)
     enddo
-    ed_file_suffix=""
+    call ed_reset_suffix
   end subroutine orb_equality_bath_lattice
 
 
@@ -248,10 +248,10 @@ contains
     save_=.true.;if(present(save))save_=save
     Nsites=size(bath_,1)
     do ilat=1,Nsites
-       ed_file_suffix=reg(ineq_site_suffix)//reg(str(ilat,site_indx_padding))
+       call ed_set_suffix(ilat)
        call ed_ph_symmetrize_bath(bath_(ilat,:),save_)
     enddo
-    ed_file_suffix=""
+    call ed_reset_suffix
   end subroutine ph_symmetrize_bath_lattice
 
   !---------------------------------------------------------!
@@ -266,10 +266,10 @@ contains
     save_=.true.;if(present(save))save_=save
     Nsites=size(bath_,1)
     do ilat=1,Nsites
-       ed_file_suffix=reg(ineq_site_suffix)//reg(str(ilat,site_indx_padding))
+       call ed_set_suffix(ilat)
        call ed_ph_trans_bath(bath_(ilat,:),save_)
     enddo
-    ed_file_suffix=""
+    call ed_reset_suffix
   end subroutine ph_trans_bath_lattice
 
   !---------------------------------------------------------!
@@ -282,10 +282,10 @@ contains
     save_=.true.;if(present(save))save_=save
     Nsites=size(bath_,1)
     do ilat=1,Nsites
-       ed_file_suffix=reg(ineq_site_suffix)//reg(str(ilat,site_indx_padding))
+       call ed_set_suffix(ilat)
        call ed_enforce_normal_bath(bath_(ilat,:),save_)
     enddo
-    ed_file_suffix=""
+    call ed_reset_suffix
   end subroutine enforce_normal_bath_lattice
 
 
@@ -300,10 +300,10 @@ contains
     integer                :: Nsites,ilat
     Nsites=size(bath_,1)
     do ilat=1,Nsites
-       ed_file_suffix=reg(ineq_site_suffix)//reg(str(ilat,site_indx_padding))
+       call ed_set_suffix(ilat)
        call ed_save_array_as_bath(bath_(ilat,:))
     enddo
-    ed_file_suffix=""
+    call ed_reset_suffix
   end subroutine save_array_as_bath_lattice
 
 

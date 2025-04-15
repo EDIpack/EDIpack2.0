@@ -10,9 +10,6 @@ subroutine ed_get_sigma_site_n3(self,axis,type,z)
   character(len=1)                            :: type_
   complex(8),dimension(:),allocatable         :: z_
   complex(8),dimension(:,:,:,:,:),allocatable :: gf
-#ifdef _DEBUG
-  if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_Sigma_n2"
-#endif
   !
   axis_='m';if(present(axis))axis_=trim(axis)
   type_='n';if(present(type))type_=trim(type)
@@ -64,9 +61,6 @@ subroutine ed_get_sigma_site_n5(self,axis,type,z)
   character(len=1)                              :: axis_
   character(len=1)                              :: type_
   complex(8),dimension(:),allocatable           :: z_
-#ifdef _DEBUG
-  if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_Sigma_n4"
-#endif
   !
   axis_='m';if(present(axis))axis_=trim(axis)
   type_='n';if(present(type))type_=trim(type)
