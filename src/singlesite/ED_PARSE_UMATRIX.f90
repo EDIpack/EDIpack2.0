@@ -1,6 +1,7 @@
 MODULE ED_PARSE_UMATRIX
   !:synopsis: Routines and types for bath-impurity sparse maps
   USE SF_IOTOOLS, only: str,free_unit,file_length,to_lower,txtfy
+  USE ED_AUX_FUNX, only: print_hloc
   USE ED_VARS_GLOBAL
   USE ED_INPUT_VARS
   implicit none
@@ -90,46 +91,86 @@ contains
     !
     close(unit_umatrix)
     !    
-    if(ed_verbose>2)write(LOGfile,"(A)")str(nops)//" two-body operators parsed."
-    write(LOGfile,"(A)")'Interaction coefficients:'
+    if(ed_verbose>2)then
+      write(LOGfile,"(A)")str(nops)//" two-body operators parsed."
+      write(LOGfile,"(A)")'Interaction coefficients:'
+      write(LOGfile,"(A)")''
+    endif
     !
     !Here we need to operate on the various Uloc, Ust, Jh, Jx, Jp matrices
     !-the Hubbard terms are passed with an 1/2, but if the user made things
     !correctly they already have the two nup/ndw and ndw/nup terms. So nothing to do here.
-    write(LOGfile,"(A)")'ULOC:'
-    write(LOGfile,"(90(F15.9,1X))") (Uloc_internal(iorb),iorb=1,Norb)
+    if(ed_verbose>2)then
+      write(LOGfile,"(A)")'ULOC:'
+      write(LOGfile,"(90(F15.9,1X))") (Uloc_internal(iorb),iorb=1,Norb)
+      write(LOGfile,"(A)")''
+    endif
     !
     !-Ust is symmetric with respect to orbital exchange: the elements we got should be ordered
     !in increasing orbital order. So the matrix should be upper triangular. In the routine that
     !creates Hloc, it does nup*ndw + ndw*nup, so here we divide by 2.0
     Ust_internal = (Ust_internal + transpose(Ust_internal))/2.0
-    write(LOGfile,"(A)")'UST:'
-    do iorb=1,Norb
-      write(LOGfile,"(90(F15.9,1X))") (Ust_internal(iorb,jorb),jorb=1,Norb)
-    enddo
+    if(ed_verbose>2)then
+      write(LOGfile,"(A)")'UST:'
+      do iorb=1,Norb
+        write(LOGfile,"(90(F15.9,1X))") (Ust_internal(iorb,jorb),jorb=1,Norb)
+      enddo
+      write(LOGfile,"(A)")''
+    endif
 
     !-Jh needs to be rescaled. First, it also is symmetric w.r.t. orbital exchange.
     !Then, the coefficient of the terms in the H constructor is actually Ust-Jh. 
     !So, if the user passed this as Jh, we need to recast it as Ust - what the user passed
     Jh_internal = (Jh_internal + transpose(Jh_internal))/2.0
     Jh_internal = Ust_internal - Jh_internal
-    write(LOGfile,"(A)")'JH:'
-    do iorb=1,Norb
-      write(LOGfile,"(90(F15.9,1X))") (Jh_internal(iorb,jorb),jorb=1,Norb)
-    enddo
+    if(ed_verbose>2)then
+      write(LOGfile,"(A)")'JH:'
+      do iorb=1,Norb
+        write(LOGfile,"(90(F15.9,1X))") (Jh_internal(iorb,jorb),jorb=1,Norb)
+      enddo
+      write(LOGfile,"(A)")''
+    endif
     
     !Jx and Jp have a summation that goes from 1 to Norb for both orbital indices, so no change there
-    write(LOGfile,"(A)")'JX:'
-    do iorb=1,Norb
-      write(LOGfile,"(90(F15.9,1X))") (Jx_internal(iorb,jorb),jorb=1,Norb)
-    enddo
-    write(LOGfile,"(A)")'JP:'
-    do iorb=1,Norb
-      write(LOGfile,"(90(F15.9,1X))") (Jp_internal(iorb,jorb),jorb=1,Norb)
-    enddo
+    if(ed_verbose>2)then
+      write(LOGfile,"(A)")'JX:'
+      do iorb=1,Norb
+        write(LOGfile,"(90(F15.9,1X))") (Jx_internal(iorb,jorb),jorb=1,Norb)
+      enddo
+      write(LOGfile,"(A)")'JP:'
+      do iorb=1,Norb
+        write(LOGfile,"(90(F15.9,1X))") (Jp_internal(iorb,jorb),jorb=1,Norb)
+      enddo
+      write(LOGfile,"(A)")''
+    endif
+    
+     !Print mean-field terms
+     if(ed_verbose>2)then
+      write(LOGfile,"(A)")'Mean-field terms'
+      call print_hloc(mfHloc)
+     endif
     
     !Is there anything else?
-    if(allocated(coulomb_sundry))write(LOGfile,"(A)")'There are '//str(size(coulomb_sundry))//' sundry terms.'
+    if(ed_verbose>2 .and. allocated(coulomb_sundry))then
+      write(LOGfile,"(A)")'There are '//str(size(coulomb_sundry))//' sundry terms.'
+      do iline=1,size(coulomb_sundry)
+         o1 = coulomb_sundry(iline)%cd_i(1)
+         o2 = coulomb_sundry(iline)%cd_j(1)
+         o3 = coulomb_sundry(iline)%c_k(1)
+         o4 = coulomb_sundry(iline)%c_l(1)
+         s1 = merge("u", "d", coulomb_sundry(iline)%cd_i(2)==1)
+         s1 = merge("u", "d", coulomb_sundry(iline)%cd_j(2)==1)
+         s1 = merge("u", "d", coulomb_sundry(iline)%c_k(2)==1)
+         s1 = merge("u", "d", coulomb_sundry(iline)%c_l(2)==1)
+         write(dummy, '(F10.6)') coulomb_sundry(iline)%U
+         write(LOGfile,"(A)")'Sundry operator '//txtfy(iline,3)//':     '//&
+                                            dummy//&
+                                          ' cd_['//str(o1)//str(s1)//']'//&
+                                          ' c_['//str(o2)//str(s2)//']'//&
+                                          ' cd_['//str(o3)//str(s3)//']'//&
+                                          ' c_['//str(o4)//str(s4)//']'
+      enddo 
+    endif
     !
     !
   end subroutine read_umatrix_file
