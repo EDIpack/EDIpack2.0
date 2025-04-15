@@ -56,6 +56,7 @@
         do iorb=1,Norb
            do jorb=1,Norb
               Jcondition=(&
+                   (iorb/=jorb).AND.&
                    (nup(jorb)==1).AND.&
                    (ndw(jorb)==1).AND.&
                    (ndw(iorb)==0).AND.&

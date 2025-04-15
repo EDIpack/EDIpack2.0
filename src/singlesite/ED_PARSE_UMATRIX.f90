@@ -95,7 +95,7 @@ contains
     type(coulomb_matrix_element)        :: line
     character(len=10)                   :: operator_type
     integer,dimension(2)                :: dummy
-    
+    !
     !First: order the two creation operators so that they
     !are set in an increasing order of (first) spin and (second) orbital from left to right
     !
@@ -130,19 +130,21 @@ contains
       line%U    = -1.0*line%U
     endif
     !
-    !
     !Third: are the indices of the swapped operators the same? If so, there is a mean-field
     !term coming out of the anticommutator
+    !
     if(all((line%cd_j==line%c_k)))then
       mfHloc(line%cd_i(2),line%c_k(2),line%cd_i(1),line%c_k(1)) = mfHloc(line%cd_i(2),line%c_k(2),line%cd_i(1),line%c_k(1)) + line%U
     endif  
     !
     !Fourth: multiply U by (-1) because operators will always be applied from right to left
     !as c->cd->c->cd, so second and third element are to be swapped
+    !
     line%U = -1.0 * line%U
     !
     !Fifth: look at the four-operator term. Does it look like any of the ones we would put 
     !in an Hubbard-Kanamori density-density interaction?
+    !
     if(line%cd_i(1)==line%c_k(1))then          !c_dag c: First two operators form a density
       if(line%cd_j(1)==line%c_l(1))then        !c_dag c: Second two operators form a density
         if(line%cd_i(2)/=line%cd_j(2))then          !c_dag spin are opposite: It is either Uloc or Ust
@@ -162,11 +164,32 @@ contains
       endif
     endif
     !
-    !Sixth: is it spin-flip?
-    
+    !Sixth: is it spin-exchange?
+    !S-E: -J c^+_a_up c^+_b_dw c_b_up c_a_dw (i.ne.j)
+    !
+    if(line%cd_i(1) /= line%cd_j(1) .and.& !iorb != jorb
+       line%cd_i(1) /= line%c_k(1)  .and.& 
+       line%cd_i(2) == line%c_k(2)  .and.&
+       line%cd_j(1) /= line%c_l(1)  .and.&
+       line%cd_j(2) == line%c_l(2))  then         
+       Jx_internal(line%cd_i(1),line%cd_j(1)) = Jx_internal(line%cd_i(1),line%cd_j(1)) - line%U
+       return
+    end
+    !
     !Seventh: is it pair-hopping?
-    
+    !P-H: -J c^+_iorb_up c^+_iorb_dw   c_jorb_up  c_jorb_dw (i.ne.j)
+    !
+    if(line%cd_i(1) /= line%c_k(1)  .and.& !iorb != jorb
+       line%cd_i(1) == line%cd_j(1) .and.& 
+       line%cd_i(2) /= line%cd_j(2) .and.&
+       line%c_k(1)  == line%c_l(1)  .and.&
+       line%c_k(2)  /= line%c_l(2))  then          
+       Jx_internal(line%cd_i(1),line%cd_j(1)) = Jp_internal(line%cd_i(1),line%cd_j(1)) - line%U
+       return
+    end
+    !
     !Eight: if it is none of the above, put this into coulomb_everything_else
+    !
     call grow_sundry_array(line)
       
     
