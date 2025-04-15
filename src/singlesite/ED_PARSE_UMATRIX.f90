@@ -20,7 +20,7 @@ contains
     character(len=10)             :: dummy
     type(coulomb_matrix_element)  :: opline
     logical                       :: master=.true.,ufile_exists, verbose, preamble
-    integer                       :: iline,flen,unit_umatrix,rank, nops
+    integer                       :: iline,flen,unit_umatrix,rank, nops, iorb, jorb
     integer                       :: o1, o2, o3, o4
     character(len=1)              :: s1, s2, s3, s4
     !
@@ -88,26 +88,49 @@ contains
         endif
     enddo
     !
+    close(unit_umatrix)
+    !    
     if(ed_verbose>2)write(LOGfile,"(A)")str(nops)//" two-body operators parsed."
+    write(LOGfile,"(A)")'Interaction coefficients:'
     !
     !Here we need to operate on the various Uloc, Ust, Jh, Jx, Jp matrices
     !-the Hubbard terms are passed with an 1/2, but if the user made things
     !correctly they already have the two nup/ndw and ndw/nup terms. So nothing to do here.
+    write(LOGfile,"(A)")'ULOC:'
+    write(LOGfile,"(90(F15.9,1X))") (Uloc_internal(iorb),iorb=1,Norb)
     !
-    !-Ust is symmetric with respect to orbital exchange:
-    !Ust_internal = Ust_internal + transpose(Ust_internal)
-    !
-    !-Jh needs to be rescaled. First, it also is symmetric w.r.t. orbital exchange
-    Jh_internal = Jh_internal + transpose(Jh_internal)
-    !
-    !Then, the coefficient of the terms in the H constructor is actually Ust-Jh. So, if the user passed
-    !this as Jh, we need to recast it as Ust - what the user passed
-    !
+    !-Ust is symmetric with respect to orbital exchange: the elements we got should be ordered
+    !in increasing orbital order. So the matrix should be upper triangular. In the routine that
+    !creates Hloc, it does nup*ndw + ndw*nup, so here we divide by 2.0
+    Ust_internal = (Ust_internal + transpose(Ust_internal))/2.0
+    write(LOGfile,"(A)")'UST:'
+    do iorb=1,Norb
+      write(LOGfile,"(90(F15.9,1X))") (Ust_internal(iorb,jorb),jorb=1,Norb)
+    enddo
+
+    !-Jh needs to be rescaled. First, it also is symmetric w.r.t. orbital exchange.
+    !Then, the coefficient of the terms in the H constructor is actually Ust-Jh. 
+    !So, if the user passed this as Jh, we need to recast it as Ust - what the user passed
+    Jh_internal = (Jh_internal + transpose(Jh_internal))/2.0
     Jh_internal = Ust_internal - Jh_internal
-    !
+    write(LOGfile,"(A)")'JH:'
+    do iorb=1,Norb
+      write(LOGfile,"(90(F15.9,1X))") (Jh_internal(iorb,jorb),jorb=1,Norb)
+    enddo
+    
     !Jx and Jp have a summation that goes from 1 to Norb for both orbital indices, so no change there
+    write(LOGfile,"(A)")'JX:'
+    do iorb=1,Norb
+      write(LOGfile,"(90(F15.9,1X))") (Jx_internal(iorb,jorb),jorb=1,Norb)
+    enddo
+    write(LOGfile,"(A)")'JP:'
+    do iorb=1,Norb
+      write(LOGfile,"(90(F15.9,1X))") (Jp_internal(iorb,jorb),jorb=1,Norb)
+    enddo
+    
+    !Is there anything else?
+    if(allocated(coulomb_sundry))write(LOGfile,"(A)")'There are '//str(size(coulomb_sundry))//' sundry terms.'
     !
-    close(unit_umatrix)
     !
   end subroutine read_umatrix_file
   
@@ -135,14 +158,15 @@ contains
     !First: order the two creation operators so that they
     !are set in an increasing order of (first) spin and (second) orbital from left to right
     !
-    !spin
-    if (line%cd_i(2) > line%cd_j(2)) then
+    !orbital
+    if (line%cd_i(1) > line%cd_j(1)) then
       dummy = line%cd_i
-      line%cd_i = line%cd_j
+     line%cd_i = line%cd_j
       line%cd_j = dummy
       line%U    = -1.0*line%U
-    !orbital
-    elseif (line%cd_i(1) > line%cd_j(1)) then
+    endif
+    !spin (overrides orbital)
+    if (line%cd_i(2) > line%cd_j(2)) then
       dummy = line%cd_i
       line%cd_i = line%cd_j
       line%cd_j = dummy
@@ -152,14 +176,15 @@ contains
     !Second: order the two annihilation operators so that they
     !are set in an increasing order of (first) spin and (second) orbital from left to right
     !
-    !spin
-    if (line%c_k(2) > line%c_l(2)) then
+    !orbital
+    if (line%c_k(1) > line%c_l(1)) then
       dummy = line%c_k
       line%c_k = line%c_l
       line%c_l = dummy
       line%U    = -1.0*line%U
-    !orbital
-    elseif (line%c_k(1) > line%c_l(1)) then
+    endif
+    !spin (overrides orbital)
+    if (line%c_k(2) > line%c_l(2)) then
       dummy = line%c_k
       line%c_k = line%c_l
       line%c_l = dummy
@@ -208,7 +233,7 @@ contains
        line%cd_i(2) == line%c_k(2)  .and.&
        line%cd_j(1) /= line%c_l(1)  .and.&
        line%cd_j(2) == line%c_l(2))  then         
-       Jx_internal(line%cd_i(1),line%cd_j(1)) = Jx_internal(line%cd_i(1),line%cd_j(1)) - line%U
+       Jx_internal(line%cd_i(1),line%c_k(1)) = Jx_internal(line%cd_i(1),line%c_k(1)) - line%U
        return
     endif
     !
@@ -220,7 +245,7 @@ contains
        line%cd_i(2) /= line%cd_j(2) .and.&
        line%c_k(1)  == line%c_l(1)  .and.&
        line%c_k(2)  /= line%c_l(2))  then          
-       Jp_internal(line%cd_i(1),line%cd_j(1)) = Jp_internal(line%cd_i(1),line%cd_j(1)) - line%U
+       Jp_internal(line%cd_i(1),line%c_k(1)) = Jp_internal(line%cd_i(1),line%c_k(1)) - line%U
        return
     endif
     !
