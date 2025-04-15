@@ -125,7 +125,7 @@ MODULE ED_INPUT_VARS
   
   logical(c_bool),bind(c, name="ed_read_umatrix")                    :: ed_read_umatrix   !
   !Flag to enable ( :code:`T` ) or not (:code:`F` ) reading the two-body terms from an external file
-  !defined by :f:var:`ed_umatrix_file`
+  !defined by :f:var:`umatrix_file`
   ! :Default ed_read_umatrix:`F`
   !
   logical                                                            :: ed_read_umatrix_
@@ -514,7 +514,7 @@ MODULE ED_INPUT_VARS
   !
   !THIS IS JUST A RELOCATED GLOBAL VARIABLE
   character(len=200)                                 :: ed_input_file=""    !Name of input file
-  character(len=200)                                 :: ed_umatrix_file=""  !Name of two-body operator file
+  character(len=200)                                 :: umatrix_file=""  !Name of two-body operator file
 
 
 contains
@@ -705,7 +705,7 @@ contains
     call parse_input_variable(Hfile,"Hfile",INPUTunit,default="hamiltonian",comment="File where to retrieve/store the bath parameters.")
     call parse_input_variable(Bfile,"Bfile",INPUTunit,default="hbasis",comment="File where to retrieve/store the H bath matrix basis.")
     call parse_input_variable(HLOCfile,"HLOCfile",INPUTunit,default="inputHLOC.in",comment="File read the input local H.")
-    call parse_input_variable(HLOCfile,"UmatrixFile",INPUTunit,default="umatrix",comment="File read the two-body operator list from.")
+    call parse_input_variable(umatrix_file,"umatrix_file",INPUTunit,default="umatrix",comment="File read the two-body operator list from.")
     call parse_input_variable(print_input_vars,"PRINT_INPUT_VARS",INPUTunit,default=.true.,comment="Flag to toggle console printing of input variables list")
     call parse_input_variable(LOGfile,"LOGFILE",INPUTunit,default=6,comment="LOG unit.")
 
@@ -785,8 +785,8 @@ contains
     !any change to the variable is immediately copied into the list... (if you delete .ed it won't be printed out)
     call substring_delete(Hfile,".restart")
     call substring_delete(Hfile,".ed")
-    call substring_delete(UmatrixFile,".restart")
-    call substring_delete(UmatrixFile,".ed")
+    call substring_delete(umatrix_file,".restart")
+    call substring_delete(umatrix_file,".ed")
   end subroutine ed_read_input
 
   subroutine ed_update_input(name,vals)

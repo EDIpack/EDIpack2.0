@@ -301,6 +301,22 @@ contains
        niter=nloop/3
     endif
     !
+    !ALLOCATE impHloc
+    if(.not.allocated(mfHloc))then
+       allocate(mfHloc(Nspin,Nspin,Norb,Norb))
+       mfHloc=zero
+    else
+       call assert_shape(mfHloc,[Nspin,Nspin,Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    !
+    !ALLOCATE impHloc
+    if(.not.allocated(impHloc))then
+       allocate(impHloc(Nspin,Nspin,Norb,Norb))
+       impHloc=zero
+    else
+       call assert_shape(impHloc,[Nspin,Nspin,Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    !
     !ALLOCATE AND SET interaction coefficient matrices
     if(.not.allocated(Uloc_internal))then
       allocate(Uloc_internal(Norb))
@@ -341,29 +357,36 @@ contains
       Jx_internal = Jx
       Jp_internal = Jp
     else
-      call read_umatrix_file(ed_umatrix_file)
+      call read_umatrix_file(umatrix_file)
       !set Hubbard-Kanamori input parameters to zero
       Uloc = zero
       Ust = zero
       Jh = zero
       Jx = zero
       Jp = zero
-    endif
-    
-    !ALLOCATE impHloc
-    if(.not.allocated(mfHloc))then
-       allocate(mfHloc(Nspin,Nspin,Norb,Norb))
-       mfHloc=zero
-    else
-       call assert_shape(mfHloc,[Nspin,Nspin,Norb,Norb],"init_ed_structure","impHloc")
-    endif
-    !
-    !ALLOCATE impHloc
-    if(.not.allocated(impHloc))then
-       allocate(impHloc(Nspin,Nspin,Norb,Norb))
-       impHloc=zero
-    else
-       call assert_shape(impHloc,[Nspin,Nspin,Norb,Norb],"init_ed_structure","impHloc")
+      if(ed_verbose>2)then
+        write(LOGfile,"(A)")'Interaction coefficients:'
+        write(LOGfile,"(A)")'ULOC:'
+        write(LOGfile,"(90(F15.9,1X))") (Uloc_internal(iorb),iorb=1,Norb)
+        write(LOGfile,"(A)")'UST:'
+        do iorb=1,Norb
+          write(LOGfile,"(90(F15.9,1X))") (Ust_internal(iorb,jorb),jorb=1,Norb)
+        enddo
+        write(LOGfile,"(A)")'JH:'
+        do iorb=1,Norb
+          write(LOGfile,"(90(F15.9,1X))") (Jh_internal(iorb,jorb),jorb=1,Norb)
+        enddo
+        write(LOGfile,"(A)")'JX:'
+        do iorb=1,Norb
+          write(LOGfile,"(90(F15.9,1X))") (Jx_internal(iorb,jorb),jorb=1,Norb)
+        enddo
+        write(LOGfile,"(A)")'JP:'
+        do iorb=1,Norb
+          write(LOGfile,"(90(F15.9,1X))") (Jp_internal(iorb,jorb),jorb=1,Norb)
+        enddo
+        if(allocated(coulomb_sundry))write(LOGfile,"(A)")'There are '//str(size(coulomb_sundry))//' sundry terms.'
+      endif     
+      STOP
     endif
     !
     if(ed_mode=="superc")then

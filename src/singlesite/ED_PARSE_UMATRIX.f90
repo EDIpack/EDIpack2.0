@@ -1,11 +1,12 @@
 MODULE ED_PARSE_UMATRIX
   !:synopsis: Routines and types for bath-impurity sparse maps
-  USE SF_IOTOOLS, only: str,free_unit,file_length
+  USE SF_IOTOOLS, only: str,free_unit,file_length,to_lower
   USE ED_VARS_GLOBAL
   USE ED_INPUT_VARS
   implicit none
   private
- 
+  
+  public :: read_umatrix_file
  
 contains
 
@@ -16,25 +17,23 @@ contains
     !It would make sense for the elements to be ordered in this way:
     !cd_s cd_sprime c_s c_sprime.
     character(len=*)              :: ufile  !File containing a properly formatted interaction Hamiltonian
+    character(len=10)             :: dummy
     type(coulomb_matrix_element)  :: opline
-    logical                       :: master=.true.,ufile_exists, verbose
-    integer                       :: iline,flen,unit_umatrix,rank, ispin
+    logical                       :: master=.true.,ufile_exists, verbose, preamble
+    integer                       :: iline,flen,unit_umatrix,rank, nops
     integer                       :: o1, o2, o3, o4
     character(len=1)              :: s1, s2, s3, s4
     !
-#ifdef _DEBUG
-    if(ed_verbose>2)write(Logfile,"(A,A)")"DEBUG ed_read_input: read input from",trim(INPUTunit)
-#endif
 #ifdef _MPI    
     if(check_MPI())then
        master=get_Master_MPI()
        rank  =get_Rank_MPI()
     endif
 #endif
-    inquire(file=str(ufile),exist=ufile_exists)
-    if(.not.ufile_exists)stop "read_dmft_bath ERROR: indicated file does not exist" !#FIXME: change this to make it default back to Uloc&co.
-    if(ed_verbose>2)write(LOGfile,"(A)")'Reading interaction Hamiltonian from file '//str(ufile)
-    if(ed_verbose>2)write(LOGfile,"(A)")'There are '//str(flen)//' two-body operators.'
+    inquire(file=trim(ufile)//".restart",exist=ufile_exists)
+    if(.not.ufile_exists)stop "read_umatrix_file ERROR: indicated file does not exist" !#FIXME: change this to make it default back to Uloc&co.
+    if(ed_verbose>2)write(LOGfile,"(A)")'Reading interaction Hamiltonian from file '//trim(ufile)//".restart"
+    flen = file_length(trim(ufile)//".restart",verbose=ed_verbose>2)
     !
     !Set internal interaction coefficient matrices to zero
     mfHloc        = zero
@@ -44,17 +43,27 @@ contains
     Jx_internal   = zero
     Jp_internal   = zero
     !
-    flen = file_length(str(ufile),verbose=ed_verbose>2)
     !
-    !
-    open(free_unit(unit_umatrix),file=str(ufile))
+    open(free_unit(unit_umatrix),file=trim(ufile)//".restart")
     !
     !Take care of the comment in the preamble:
-    read(unit_umatrix,*)
+    preamble = .true.
+    do while(preamble)
+      read(unit_umatrix,*) dummy
+      if(trim(dummy)/="#" .and. trim(dummy)/="!" .and. trim(dummy)/="%")then
+        preamble = .false.
+        read(dummy, *) o1
+      endif
+    enddo
+    !
+    if(o1/=Norb)STOP "Wrong number of orbitals in umatrix file header"
     !
     !Parse lines
-    do iline=1,flen
-       read(unit_umatrix,*) o1, s1, o2, s2, o3, s3, o4, s4, opline%U
+    nops = 0
+    do iline=2,flen
+       read(unit_umatrix,*) dummy, s1, o2, s2, o3, s3, o4, s4, opline%U
+       if(trim(dummy)=="#" .or. trim(dummy)=="!" .or. trim(dummy)=="%" )cycle
+       read(dummy, *) o1
        if(max(o1, o2, o3, o4)>Norb) stop "read_umatrix_file: at line "//str(iline)//" too many orbitals" 
        if(min(o1, o2, o3, o4) <  1) stop "read_umatrix_file: at line "//str(iline)//" orbital index < 1" 
        if (any(( [s1, s2, s3, s4] /= "u" ) .AND. ( [s1, s2, s3, s4] /= "d" ))) stop "read_umatrix_file: at line "//str(iline)//" spin index malformed" 
@@ -69,7 +78,10 @@ contains
                                            ' c_['//str(o3)//str(s3)//']'&
                                            ' c_['//str(o4)//str(s4)//']'
       call parse_umatrix_line(opline)
+      nops = nops + 1
     enddo
+    !
+    if(ed_verbose>2)write(LOGfile,"(A)")str(nops)//" two-body operators parsed."
     !
     !Here we need to operate on the various Uloc, Ust, Jh, Jx, Jp matrices
     !-the Hubbard terms are passed with an 1/2. So we multiply by 2
@@ -101,6 +113,9 @@ contains
     type(coulomb_matrix_element)        :: line
     character(len=10)                   :: operator_type
     integer,dimension(2)                :: dummy
+    !
+    !Zero: onsistently with w2dynamics, 1/2 prefactor is applied by the code
+    line%U = line%U * 0.5d0
     !
     !First: order the two creation operators so that they
     !are set in an increasing order of (first) spin and (second) orbital from left to right
@@ -190,7 +205,7 @@ contains
        line%cd_i(2) /= line%cd_j(2) .and.&
        line%c_k(1)  == line%c_l(1)  .and.&
        line%c_k(2)  /= line%c_l(2))  then          
-       Jx_internal(line%cd_i(1),line%cd_j(1)) = Jp_internal(line%cd_i(1),line%cd_j(1)) - line%U
+       Jp_internal(line%cd_i(1),line%cd_j(1)) = Jp_internal(line%cd_i(1),line%cd_j(1)) - line%U
        return
     endif
     !
