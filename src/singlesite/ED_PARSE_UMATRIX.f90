@@ -174,7 +174,7 @@ contains
        line%cd_j(2) == line%c_l(2))  then         
        Jx_internal(line%cd_i(1),line%cd_j(1)) = Jx_internal(line%cd_i(1),line%cd_j(1)) - line%U
        return
-    end
+    endif
     !
     !Seventh: is it pair-hopping?
     !P-H: -J c^+_iorb_up c^+_iorb_dw   c_jorb_up  c_jorb_dw (i.ne.j)
@@ -186,7 +186,7 @@ contains
        line%c_k(2)  /= line%c_l(2))  then          
        Jx_internal(line%cd_i(1),line%cd_j(1)) = Jp_internal(line%cd_i(1),line%cd_j(1)) - line%U
        return
-    end
+    endif
     !
     !Eight: if it is none of the above, put this into coulomb_everything_else
     !
@@ -200,7 +200,7 @@ contains
     type(coulomb_matrix_element),intent(in)                 :: new_element
 		type(coulomb_matrix_element),dimension(:),allocatable   :: temp
 		integer                                                 :: dim_old
-
+    !
     if(.not.allocated(coulomb_sundry))then
       allocate(coulomb_sundry(1))
       coulomb_sundry(1) = new_element
@@ -211,7 +211,7 @@ contains
       temp(dim_old+1) = new_element
 		  call move_alloc(temp,coulomb_sundry)
 		endif
-  
+    !
   end subroutine grow_sundry_array    
 
 

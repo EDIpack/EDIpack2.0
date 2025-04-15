@@ -39,6 +39,7 @@ MODULE ED_HAMILTONIAN_NORMAL_COMMON
   real(8)                                   :: htmp,htmpup,htmpdw
   logical                                   :: Jcondition
   integer                                   :: Nfoo
+  integer                                   :: iline
   real(8),dimension(:,:,:),allocatable      :: diag_hybr ![Nspin,Norb,Nbath]
   real(8),dimension(:,:,:),allocatable      :: bath_diag ![Nspin,Norb/1,Nbath]
 
