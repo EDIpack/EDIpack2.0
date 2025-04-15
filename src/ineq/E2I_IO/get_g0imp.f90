@@ -21,9 +21,6 @@ subroutine ed_get_g0imp_lattice_n3(self,bath,axis,type,z)
      MPI_SIZE   = get_Size_MPI()
   endif
 #endif
-#ifdef _DEBUG
-  if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_G0imp_lattice_n3"
-#endif
   !
   axis_='m';if(present(axis))axis_=trim(axis)
   type_='n';if(present(type))type_=trim(type)
@@ -91,9 +88,6 @@ subroutine ed_get_g0imp_lattice_n4(self,bath,axis,type,z)
      MPI_SIZE   = get_Size_MPI()
   endif
 #endif
-#ifdef _DEBUG
-  if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_g0imp_lattice_n3"
-#endif
   !
   axis_='m';if(present(axis))axis_=trim(axis)
   type_='n';if(present(type))type_=trim(type)
@@ -158,9 +152,6 @@ subroutine ed_get_g0imp_lattice_n6(self,bath,axis,type,z)
      MPI_ID     = get_Rank_MPI()
      MPI_SIZE   = get_Size_MPI()
   endif
-#endif
-#ifdef _DEBUG
-  if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_G0imp_lattice_n3"
 #endif
   !
   axis_='m';if(present(axis))axis_=trim(axis)

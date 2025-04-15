@@ -42,7 +42,7 @@ subroutine break_symmetry_bath_ineq_c(bath,dim_bath,field,sgn,sav) bind(c, name=
   integer(c_int64_t)                                :: dim_bath(2)
   real(c_double),dimension(dim_bath(1),dim_bath(2)) :: bath
   real(c_double),value                              :: field
-  real(c_double),value                              :: sgn
+  real(c_double),dimension(dim_bath(1))             :: sgn
   integer(c_int),value                              :: sav
   call ed_break_symmetry_bath(bath,field,sgn,i2l(sav))
 end subroutine break_symmetry_bath_ineq_c

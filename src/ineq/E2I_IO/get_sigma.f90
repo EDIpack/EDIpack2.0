@@ -21,9 +21,6 @@ subroutine ed_get_sigma_lattice_n3(self,nlat,axis,type,z)
      MPI_SIZE   = get_Size_MPI()
   endif
 #endif
-#ifdef _DEBUG
-  if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_Sigma_lattice_n3"
-#endif
   !
   axis_='m';if(present(axis))axis_=trim(axis)
   type_='n';if(present(type))type_=trim(type)
@@ -100,9 +97,6 @@ subroutine ed_get_sigma_lattice_n4(self,nlat,axis,type,z)
      MPI_SIZE   = get_Size_MPI()
   endif
 #endif
-#ifdef _DEBUG
-  if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_Sigma_lattice_n4"
-#endif
   !
   axis_='m';if(present(axis))axis_=trim(axis)
   type_='n';if(present(type))type_=trim(type)
@@ -177,10 +171,6 @@ subroutine ed_get_sigma_lattice_n6(self,nlat,axis,type,z)
      MPI_SIZE   = get_Size_MPI()
   endif
 #endif
-#ifdef _DEBUG
-  if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_Sigma_lattice_n6"
-#endif
-  !
   axis_='m';if(present(axis))axis_=trim(axis)
   type_='n';if(present(type))type_=trim(type)
   call allocate_grids
