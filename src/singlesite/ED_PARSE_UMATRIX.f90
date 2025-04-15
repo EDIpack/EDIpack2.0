@@ -1,6 +1,6 @@
 MODULE ED_PARSE_UMATRIX
   !:synopsis: Routines and types for bath-impurity sparse maps
-  USE SF_IOTOOLS, only: str,free_unit,file_length,to_lower
+  USE SF_IOTOOLS, only: str,free_unit,file_length,to_lower,txtfy
   USE ED_VARS_GLOBAL
   USE ED_INPUT_VARS
   implicit none
@@ -33,7 +33,7 @@ contains
     inquire(file=trim(ufile)//".restart",exist=ufile_exists)
     if(.not.ufile_exists)stop "read_umatrix_file ERROR: indicated file does not exist" !#FIXME: change this to make it default back to Uloc&co.
     if(ed_verbose>2)write(LOGfile,"(A)")'Reading interaction Hamiltonian from file '//trim(ufile)//".restart"
-    flen = file_length(trim(ufile)//".restart",verbose=ed_verbose>2)
+    flen = file_length(trim(ufile)//".restart",verbose=ed_verbose>2,incl_comments=.true.)
     !
     !Set internal interaction coefficient matrices to zero
     mfHloc        = zero
@@ -60,39 +60,51 @@ contains
     !
     !Parse lines
     nops = 0
-    do iline=2,flen
+    do iline=2,flen-1
        read(unit_umatrix,*) dummy, s1, o2, s2, o3, s3, o4, s4, opline%U
-       if(trim(dummy)=="#" .or. trim(dummy)=="!" .or. trim(dummy)=="%" )cycle
-       read(dummy, *) o1
-       if(max(o1, o2, o3, o4)>Norb) stop "read_umatrix_file: at line "//str(iline)//" too many orbitals" 
-       if(min(o1, o2, o3, o4) <  1) stop "read_umatrix_file: at line "//str(iline)//" orbital index < 1" 
-       if (any(( [s1, s2, s3, s4] /= "u" ) .AND. ( [s1, s2, s3, s4] /= "d" ))) stop "read_umatrix_file: at line "//str(iline)//" spin index malformed" 
-       opline%cd_i = [o1, merge(1, 2, s1 == "u")]
-       opline%cd_j = [o2, merge(1, 2, s2 == "u")]
-       opline%c_k  = [o3, merge(1, 2, s3 == "u")]
-       opline%c_l  = [o4, merge(1, 2, s4 == "u")]
-       if(ed_verbose>4)write(LOGfile,"(A)")'Two-body operator '//str(iline)//' '//&
-                                             str(opline%U)//&
-                                           ' cd_['//str(o1)//str(s1)//']'&
-                                           ' cd_['//str(o2)//str(s2)//']'&
-                                           ' c_['//str(o3)//str(s3)//']'&
-                                           ' c_['//str(o4)//str(s4)//']'
-      call parse_umatrix_line(opline)
-      nops = nops + 1
+       dummy=trim(dummy)
+       if((dummy(1:1)=="#") .or. (dummy(1:1)=="!") .or. (dummy(1:1)=="%") ) then
+        cycle
+       else
+         nops = nops + 1
+         read(dummy, *) o1
+         if(max(o1, o2, o3, o4)>Norb) stop "read_umatrix_file: at line "//str(iline)//" too many orbitals" 
+         if(min(o1, o2, o3, o4) <  1) stop "read_umatrix_file: at line "//str(iline)//" orbital index < 1" 
+         if (any(( [s1, s2, s3, s4] /= "u" ) .AND. ( [s1, s2, s3, s4] /= "d" ))) stop "read_umatrix_file: at line "//str(iline)//" spin index malformed" 
+         opline%cd_i = [o1, merge(1, 2, s1 == "u")]
+         opline%cd_j = [o2, merge(1, 2, s2 == "u")]
+         opline%c_k  = [o3, merge(1, 2, s3 == "u")]
+         opline%c_l  = [o4, merge(1, 2, s4 == "u")]
+         if(ed_verbose>4)then
+           write(dummy, '(F10.6)') opline%U 
+           write(LOGfile,"(A)")'Two-body operator '//txtfy(nops,3)//':     '//&
+                                                    dummy//&
+                                                  ' cd_['//str(o1)//str(s1)//']'//&
+                                                  ' cd_['//str(o2)//str(s2)//']'//&
+                                                  ' c_['//str(o3)//str(s3)//']'//&
+                                                  ' c_['//str(o4)//str(s4)//']'
+         endif
+         call parse_umatrix_line(opline)
+        endif
     enddo
     !
     if(ed_verbose>2)write(LOGfile,"(A)")str(nops)//" two-body operators parsed."
     !
     !Here we need to operate on the various Uloc, Ust, Jh, Jx, Jp matrices
-    !-the Hubbard terms are passed with an 1/2. So we multiply by 2
-    Uloc_internal = 2* Uloc_internal
+    !-the Hubbard terms are passed with an 1/2, but if the user made things
+    !correctly they already have the two nup/ndw and ndw/nup terms. So nothing to do here.
+    !
     !-Ust is symmetric with respect to orbital exchange:
-    Ust_internal = Ust_internal + transpose(Ust_internal)
+    !Ust_internal = Ust_internal + transpose(Ust_internal)
+    !
     !-Jh needs to be rescaled. First, it also is symmetric w.r.t. orbital exchange
     Jh_internal = Jh_internal + transpose(Jh_internal)
+    !
     !Then, the coefficient of the terms in the H constructor is actually Ust-Jh. So, if the user passed
     !this as Jh, we need to recast it as Ust - what the user passed
+    !
     Jh_internal = Ust_internal - Jh_internal
+    !
     !Jx and Jp have a summation that goes from 1 to Norb for both orbital indices, so no change there
     !
     close(unit_umatrix)
@@ -114,8 +126,11 @@ contains
     character(len=10)                   :: operator_type
     integer,dimension(2)                :: dummy
     !
-    !Zero: onsistently with w2dynamics, 1/2 prefactor is applied by the code
-    line%U = line%U * 0.5d0
+    !Zero: onsistently with w2dynamics, 1/2 prefactor is applied by the code.
+    !It is also multiplied by -1, because the line in the w2dynamics file is the following:
+    ![i j k l U_ijkl], but the operator is defined as cd_i cd_j U_ijkl c_l c_k.
+    !Note that l and k are inverted.
+    line%U = -0.5d0 * line%U
     !
     !First: order the two creation operators so that they
     !are set in an increasing order of (first) spin and (second) orbital from left to right
