@@ -18,7 +18,7 @@ contains
     character(len=*)              :: ufile  !File containing a properly formatted interaction Hamiltonian
     type(coulomb_matrix_element)  :: opline
     logical                       :: master=.true.,ufile_exists, verbose
-    integer                       :: iline,flen,unit_umatrix,rank
+    integer                       :: iline,flen,unit_umatrix,rank, ispin
     integer                       :: o1, o2, o3, o4
     character(len=1)              :: s1, s2, s3, s4
     !
@@ -72,10 +72,16 @@ contains
     enddo
     !
     !Here we need to operate on the various Uloc, Ust, Jh, Jx, Jp matrices
-    !-Uloc needs the 1/2 to be dealt with
-    !-Ust, Jh, Jx, Jp have to keep in mind that the summations are constrained jorb > iorb
-    !-Jh needs to be rescaled, because the user has inputted Ust - Jh in the umatrix file
-    !-Remember to add mfHloc to the hamiltonian constructor!
+    !-the Hubbard terms are passed with an 1/2. So we multiply by 2
+    Uloc_internal = 2* Uloc_internal
+    !-Ust is symmetric with respect to orbital exchange:
+    Ust_internal = Ust_internal + transpose(Ust_internal)
+    !-Jh needs to be rescaled. First, it also is symmetric w.r.t. orbital exchange
+    Jh_internal = Jh_internal + transpose(Jh_internal)
+    !Then, the coefficient of the terms in the H constructor is actually Ust-Jh. So, if the user passed
+    !this as Jh, we need to recast it as Ust - what the user passed
+    Jh_internal = Ust_internal - Jh_internal
+    !Jx and Jp have a summation that goes from 1 to Norb for both orbital indices, so no change there
     !
     close(unit_umatrix)
     !
