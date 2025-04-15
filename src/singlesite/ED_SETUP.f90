@@ -5,6 +5,7 @@ MODULE ED_SETUP
   USE ED_INPUT_VARS
   USE ED_VARS_GLOBAL
   USE ED_AUX_FUNX
+  USE ED_PARSE_UMATRIX
   USE ED_SECTOR
   USE SF_TIMER
   USE SF_PARSE_INPUT, only: delete_input
@@ -301,46 +302,58 @@ contains
     endif
     !
     !ALLOCATE AND SET interaction coefficient matrices
+    if(.not.allocated(Uloc_internal))then
+      allocate(Uloc_internal(Norb))
+      Uloc_internal = zero
+    else
+      call assert_shape(Uloc_internal,[Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Ust_internal))then
+      allocate(Ust_internal(Norb,Norb))
+      Ust_internal = zero
+    else
+      call assert_shape(Ust_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Jh_internal))then
+      allocate(Jh_internal(Norb,Norb))
+      Jh_internal = zero
+    else
+      call assert_shape(Jh_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Jx_internal))then
+      allocate(Jx_internal(Norb,Norb))
+      Jx_internal = zero
+    else
+      call assert_shape(Jx_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Jp_internal))then
+      allocate(Jp_internal(Norb,Norb))
+      Jp_internal = zero
+    else
+      call assert_shape(Jp_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    !
     if(.not. ed_read_umatrix)then
       if(Norb > 5)STOP "ed_read_umatrix = F: max 5 orbitals allowed"
-      if(.not.allocated(Uloc_internal))then
-        allocate(Uloc_internal(Norb))
-        Uloc_internal = Uloc
-      else
-        call assert_shape(Uloc_internal,[Norb],"init_ed_structure","impHloc")
-      endif
-      if(.not.allocated(Ust_internal))then
-        allocate(Ust_internal(Norb,Norb))
-        Ust_internal = Ust
-      else
-        call assert_shape(Ust_internal,[Norb,Norb],"init_ed_structure","impHloc")
-      endif
-      if(.not.allocated(Jh_internal))then
-        allocate(Jh_internal(Norb,Norb))
-        Jh_internal = Jh
-      else
-        call assert_shape(Jh_internal,[Norb,Norb],"init_ed_structure","impHloc")
-      endif
-      if(.not.allocated(Jx_internal))then
-        allocate(Jx_internal(Norb,Norb))
-        Jx_internal = Jx
-      else
-        call assert_shape(Jx_internal,[Norb,Norb],"init_ed_structure","impHloc")
-      endif
-      if(.not.allocated(Jp_internal))then
-        allocate(Jp_internal(Norb,Norb))
-        Jp_internal = Jp
-      else
-        call assert_shape(Jp_internal,[Norb,Norb],"init_ed_structure","impHloc")
-      endif
+      Uloc_internal = Uloc
+      Ust_internal = Ust
+      Jh_internal = Jh
+      Jx_internal = Jx
+      Jp_internal = Jp
     else
-      STOP "Read umatrix not implemented yet"
+      call read_umatrix_file(ed_umatrix_file)
+      !set Hubbard-Kanamori input parameters to zero
+      Uloc = zero
+      Ust = zero
+      Jh = zero
+      Jx = zero
+      Jp = zero
     endif
     
     !ALLOCATE impHloc
     if(.not.allocated(mfHloc))then
        allocate(mfHloc(Nspin,Nspin,Norb,Norb))
-       impHloc=zero
+       mfHloc=zero
     else
        call assert_shape(mfHloc,[Nspin,Nspin,Norb,Norb],"init_ed_structure","impHloc")
     endif

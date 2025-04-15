@@ -513,7 +513,8 @@ MODULE ED_INPUT_VARS
   ! :Default print_input_vars:`T`
   !
   !THIS IS JUST A RELOCATED GLOBAL VARIABLE
-  character(len=200)                                 :: ed_input_file=""  !Name of input file
+  character(len=200)                                 :: ed_input_file=""    !Name of input file
+  character(len=200)                                 :: ed_umatrix_file=""  !Name of two-body operator file
 
 
 contains
