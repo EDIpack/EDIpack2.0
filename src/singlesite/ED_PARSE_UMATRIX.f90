@@ -146,7 +146,7 @@ contains
     
      !Print mean-field terms
      if(ed_verbose>2)then
-      write(LOGfile,"(A)")'Mean-field terms'
+      write(LOGfile,"(A)")'Mean-field terms from anticommutators:'
       call print_hloc(mfHloc)
      endif
     
