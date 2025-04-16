@@ -14,7 +14,7 @@
      ! SPIN-EXCHANGE (S-E) TERMS
      !    S-E: J c^+_iorb_up c^+_jorb_dw c_iorb_dw c_jorb_up  (i.ne.j) 
      !    S-E: J c^+_{iorb} c^+_{jorb+Ns} c_{iorb+Ns} c_{jorb}
-     if(Norb>1.AND.Jx_internal(iorb,jorb)/=0d0)then
+     if(Norb>1.AND.any((Jx_internal/=0d0)))then
         do iorb=1,Norb
            do jorb=1,Norb
               Jcondition=(&
@@ -43,7 +43,7 @@
      ! PAIR-HOPPING (P-H) TERMS
      !    P-H: J c^+_iorb_up c^+_iorb_dw   c_jorb_dw   c_jorb_up  (i.ne.j) 
      !    P-H: J c^+_{iorb}  c^+_{iorb+Ns} c_{jorb+Ns} c_{jorb}
-     if(Norb>1.AND.Jp_internal(iorb,jorb)/=0d0)then
+     if(Norb>1.AND.any((Jp_internal/=0d0)))then
         do iorb=1,Norb
            do jorb=1,Norb
               Jcondition=(&

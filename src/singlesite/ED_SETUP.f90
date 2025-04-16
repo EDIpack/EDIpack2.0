@@ -350,13 +350,14 @@ contains
     endif
     !
     if(.not. ed_read_umatrix)then
-      if(Norb > 5)STOP "ed_read_umatrix = F: max 5 orbitals allowed"
+      if(Norb > 5)STOP "ED_READ_UMATRIX = F: max 5 orbitals allowed"
       Uloc_internal = Uloc
       Ust_internal = Ust
       Jh_internal = Jh
       Jx_internal = Jx
       Jp_internal = Jp
     else
+      if(.not. ED_TOTAL_UD) STOP "ED_TOTAL_UD = F and ED_READ_UMATRIX = T are incompatible"
       call read_umatrix_file(umatrix_file)
       !set Hubbard-Kanamori input parameters to zero
       Uloc = zero
