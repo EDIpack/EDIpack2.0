@@ -17,7 +17,7 @@
      do iorb=1,Norb
         htmp = htmp + (impHloc(1,1,iorb,iorb) + mfHloc(1,1,iorb,iorb))*Nup(iorb)
         htmp = htmp + impHloc(Nspin,Nspin,iorb,iorb)*Ndw(iorb)
-        if(Nspin>1) htmp = htmp + mfHloc(Nspin,Nspin,iorb,iorb)*Ndw(iorb)
+        htmp = htmp + mfHloc(2,2,iorb,iorb)*Ndw(iorb)
         htmp = htmp - xmu*(Nup(iorb)+Ndw(iorb))
      enddo
      if(any(spin_field(:,3)/=0d0))then

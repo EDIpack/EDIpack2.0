@@ -12,7 +12,7 @@
         do iorb=1,Norb
            do jorb=1,Norb
               Jcondition = &
-                   ((impHloc(Nspin,Nspin,iorb,jorb)+mfHloc(Nspin,Nspin,iorb,jorb))/=zero) .AND. &
+                   ((impHloc(Nspin,Nspin,iorb,jorb)+mfHloc(2,2,iorb,jorb))/=zero) .AND. &
                    (ndw(jorb)==1) .AND. (ndw(iorb)==0)
               if (Jcondition) then
                  call c(jorb,mdw,k1,sg1)
@@ -21,7 +21,7 @@
                  idw = jdw
                  i   = iup + (idw-1)*DimDw
                  htmp = impHloc(Nspin,Nspin,iorb,jorb)*sg1*sg2
-                 if(Nspin > 1 )htmp = htmp + mfHloc(Nspin,Nspin,iorb,jorb)*sg1*sg2
+                 htmp = htmp + mfHloc(2,2,iorb,jorb)*sg1*sg2
                  !
                  Hvt(i) = Hvt(i) + htmp*vt(j)
                  !

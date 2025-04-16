@@ -303,10 +303,10 @@ contains
     !
     !ALLOCATE impHloc
     if(.not.allocated(mfHloc))then
-       allocate(mfHloc(Nspin,Nspin,Norb,Norb))
+       allocate(mfHloc(2,2,Norb,Norb)) !Anticommutator terms, always resolved by spin
        mfHloc=zero
     else
-       call assert_shape(mfHloc,[Nspin,Nspin,Norb,Norb],"init_ed_structure","impHloc")
+       call assert_shape(mfHloc,[2,2,Norb,Norb],"init_ed_structure","impHloc")
     endif
     !
     !ALLOCATE impHloc
