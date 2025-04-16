@@ -637,12 +637,14 @@ contains
   subroutine write_obs_info()
     integer :: unit,iorb,jorb,ispin
     !Parameters used:
-    !unit = free_unit()
-    !open(unit,file="parameters_info.ed")
-    !write(unit,"(A1,90(A14,1X))")"#","1xmu","2beta",&
-    !     (reg(txtfy(2+iorb))//"U_"//reg(txtfy(iorb)),iorb=1,Norb),&
-    !     reg(txtfy(2+Norb+1))//"U'",reg(txtfy(2+Norb+2))//"Jh"
-    !close(unit)
+    if(.not.ed_read_umatrix)then
+      unit = free_unit()
+      open(unit,file="parameters_info.ed")
+      write(unit,"(A1,90(A14,1X))")"#","1xmu","2beta",&
+           (reg(txtfy(2+iorb))//"U_"//reg(txtfy(iorb)),iorb=1,Norb),&
+           reg(txtfy(2+Norb+1))//"U'",reg(txtfy(2+Norb+2))//"Jh"
+      close(unit)
+    endif
     !
     !Generic observables 
     unit = free_unit()
@@ -702,10 +704,12 @@ contains
     integer :: unit,iorb,jorb,ispin
     !
     !Parameters used:
-    !unit = free_unit()
-    !open(unit,file="parameters_last"//reg(ed_file_suffix)//".ed")
-    !write(unit,"(90F15.9)")xmu,beta,(uloc(iorb),iorb=1,Norb),Ust,Jh,Jx,Jp
-    !close(unit)
+    if(.not.ed_read_umatrix)then
+      unit = free_unit()
+      open(unit,file="parameters_last"//reg(ed_file_suffix)//".ed")
+      write(unit,"(90F15.9)")xmu,beta,(uloc(iorb),iorb=1,Norb),Ust,Jh,Jx,Jp
+      close(unit)
+    endif
     !
     !Generic observables 
     unit = free_unit()
@@ -753,10 +757,12 @@ contains
        close(unit)
        !
        !
-       !unit = free_unit()
-       !open(unit,file="Occupation_prob"//reg(ed_file_suffix)//".ed")
-       !write(unit,"(125F15.9)")Uloc(1),Prob,sum(Prob)
-       !close(unit)
+       if(.not.ed_read_umatrix)then
+         unit = free_unit()
+         open(unit,file="Occupation_prob"//reg(ed_file_suffix)//".ed")
+         write(unit,"(125F15.9)")Uloc(1),Prob,sum(Prob)
+         close(unit)
+       endif
        !
        !N_ph probability:
        open(unit,file="Nph_probability"//reg(ed_file_suffix)//".ed")
