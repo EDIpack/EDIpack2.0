@@ -18,7 +18,7 @@
      !
      !    S-E: J  [c^+_b_dw c_a_dw] [c^+_a_up c_b_up]
      !    S-E: J  [c^+_{jorb} c_{iorb}]_dw [c^+_iorb c_jorb]_up
-     if(Norb>1.AND.Jx_internal(iorb,jorb)/=0d0)then
+     if(Norb>1.AND.any((Jx_internal/=0d0)))then
         do iorb=1,Norb
            do jorb=1,Norb
               Jcondition=(&
@@ -52,7 +52,7 @@
      ! PAIR-HOPPING (P-H) TERMS
      !    P-H: J c^+_iorb_up c^+_iorb_dw   c_jorb_dw   c_jorb_up  (i.ne.j) 
      !    P-H: J c^+_{iorb}  c^+_{iorb+Ns} c_{jorb+Ns} c_{jorb}
-     if(Norb>1.AND.Jp_internal(iorb,jorb)/=0d0)then
+     if(Norb>1.AND.any((Jp_internal/=0d0)))then
         do iorb=1,Norb
            do jorb=1,Norb
               Jcondition=(&

@@ -33,6 +33,9 @@ contains
     integer,dimension(Ns_Ud,Ns_Orb)                :: Nups,Ndws       ![1,Ns]-[Norb,1+Nbath]
     integer,dimension(Ns)                          :: Nup,Ndw
     real(8),dimension(Nspin,Nspin,Norb,Norb,Nbath) :: Hbath_tmp
+    logical                                        :: nonloc_condition
+    !
+    nonloc_condition = Norb>1.AND.(any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0) .OR. allocated(coulomb_sundry)))
     !
     if(.not.Hsector%status)stop "directMatVec_cc ERROR: Hsector NOT allocated"
     isector=Hsector%index
@@ -103,7 +106,7 @@ contains
     end if
     !
     !NON-LOCAL HAMILTONIAN PART: H_non_loc*vin = vout
-    if(Norb>1.AND.(Jx/=0d0.OR.Jp/=0d0))then
+    if(nonloc_condition)then
        include "direct/HxV_non_local.f90"
     endif
     !NON-LOCAL HAMILTONIAN TERMS

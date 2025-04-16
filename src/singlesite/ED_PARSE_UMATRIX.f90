@@ -33,7 +33,7 @@ contains
 #endif
     inquire(file=trim(ufile)//".restart",exist=ufile_exists)
     if(.not.ufile_exists)stop "read_umatrix_file ERROR: indicated file does not exist" !#FIXME: change this to make it default back to Uloc&co.
-    if(ed_verbose>2)write(LOGfile,"(A)")'Reading interaction Hamiltonian from file '//trim(ufile)//".restart"
+    if(ed_verbose>0)write(LOGfile,"(A)")'Reading interaction Hamiltonian from file '//trim(ufile)//".restart"
     !
     !Set internal interaction coefficient matrices to zero
     mfHloc        = zero

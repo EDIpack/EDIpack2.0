@@ -34,4 +34,4 @@
 2 u 2 d 1 u 1 d 1.0
 
 #SUNDRY: this becomes a mean-field operator minus n*n (=n)
-1 u 1 u 1 u 1 u 1.0
+#1 u 1 u 1 u 1 u 1.0
