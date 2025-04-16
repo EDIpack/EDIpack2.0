@@ -172,7 +172,8 @@ contains
                                           ' c_['//str(o2)//str(s2)//']'//&
                                           ' cd_['//str(o3)//str(s3)//']'//&
                                           ' c_['//str(o4)//str(s4)//']'
-      enddo 
+      enddo
+      write(LOGfile,"(A)")''
     endif
     !
     !
