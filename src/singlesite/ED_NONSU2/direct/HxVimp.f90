@@ -3,8 +3,9 @@
   htmp = htmp - xmu*(sum(nup)+sum(ndw))
   !
   do iorb=1,Norb
-     htmp = htmp + impHloc(1,1,iorb,iorb)*nup(iorb)
-     htmp = htmp + impHloc(Nspin,Nspin,iorb,iorb)*ndw(iorb)
+      htmp = htmp + (impHloc(1,1,iorb,iorb) + mfHloc(1,1,iorb,iorb))*nup(iorb)
+      htmp = htmp + (impHloc(Nspin,Nspin,iorb,iorb) + mfHloc(Nspin,Nspin,iorb,iorb))*ndw(iorb)
+      if(Nspin>1)htmp = htmp + mfHloc(Nspin,Nspin,iorb,iorb)*ndw(iorb)
   enddo
   !
   i = j
@@ -16,26 +17,29 @@
      do jorb=1,Norb
         !UP
         Jcondition = &
-             (impHloc(1,1,iorb,jorb)/=zero) .AND. &
-             (ib(jorb)==1) .AND. (ib(iorb)==0)
+          (impHloc(1,1,iorb,jorb)/=zero .OR. &
+           mfHloc(1,1,iorb,jorb)/=zero).AND. &
+          (ib(jorb)==1) .AND. (ib(iorb)==0)
         if (Jcondition) then
            call c(jorb,m,k1,sg1)
            call cdg(iorb,k1,k2,sg2)
            i = binary_search(Hsector%H(1)%map,k2)
-           htmp = impHloc(1,1,iorb,jorb)*sg1*sg2
+           htmp = conjg(impHloc(1,1,iorb,jorb)+mfHloc(1,1,iorb,jorb))*sg1*sg2
            !
            hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
         endif
         !DW
-        Jcondition = &
-             (impHloc(Nspin,Nspin,iorb,jorb)/=zero) .AND. &
-             (ib(jorb+Ns)==1) .AND. (ib(iorb+Ns)==0)
+       Jcondition = &
+            (impHloc(Nspin,Nspin,iorb,jorb)/=zero .OR. &
+             mfHloc(Nspin,Nspin,iorb,jorb)/=zero).AND. &
+            (ib(jorb+Ns)==1) .AND. (ib(iorb+Ns)==0)
         if (Jcondition) then
            call c(jorb+Ns,m,k1,sg1)
            call cdg(iorb+Ns,k1,k2,sg2)
            i = binary_search(Hsector%H(1)%map,k2)
-           htmp = impHloc(Nspin,Nspin,iorb,jorb)*sg1*sg2
+           htmp = conjg(impHloc(Nspin,Nspin,iorb,jorb))*sg1*sg2
+           if(Nspin > 1) htmp = htmp + conjg(mfHloc(Nspin,Nspin,iorb,jorb))*sg1*sg2
            !
            hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
@@ -51,13 +55,14 @@
            ialfa = iorb + (ispin-1)*Ns
            ibeta = jorb + (jspin-1)*Ns
            Jcondition=&
-                (impHloc(ispin,jspin,iorb,jorb)/=zero) .AND. &
-                (ib(ibeta)==1) .AND. (ib(ialfa)==0)
+               ((impHloc(ispin,jspin,iorb,jorb)/=zero .OR. &
+                 mfHloc(ispin,jspin,iorb,jorb)/=zero) .AND. &
+               (ib(ibeta)==1) .AND. (ib(ialfa)==0))
            if(Jcondition)then
               call c(ibeta,m,k1,sg1)
               call cdg(ialfa,k1,k2,sg2)
               i = binary_search(Hsector%H(1)%map,k2)
-              htmp = impHloc(ispin,jspin,iorb,jorb)*sg1*sg2
+              htmp = conjg(impHloc(ispin,jspin,iorb,jorb)+mfHloc(ispin,jspin,iorb,jorb))*sg1*sg2
               !
               hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
               !

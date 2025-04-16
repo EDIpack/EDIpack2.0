@@ -19,7 +19,8 @@
                     idw = binary_search(Hsector%H(2)%map,k2)
                     iup = jup
                     i   = iup + (idw-1)*DimUp + (iph-1)*DimUp*DimDw
-                    htmp = (impHloc(Nspin,Nspin,iorb,jorb)+mfHloc(Nspin,Nspin,iorb,jorb))*sg1*sg2
+                    htmp = impHloc(Nspin,Nspin,iorb,jorb)*sg1*sg2
+                    if(Nspin>1) htmp = htmp + mfHloc(Nspin,Nspin,iorb,jorb)*sg1*sg2
                     !
                     Hv(i) = Hv(i) + htmp*vin(j)
                     !

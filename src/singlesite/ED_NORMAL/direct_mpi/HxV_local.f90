@@ -16,7 +16,8 @@
      if(any(mfHloc(1,2,:,:)/=0d0) .or.any(mfHloc(2,1,:,:)/=0d0))STOP "mfHloc cannot have spin-mixing in NORMAL mode"
      do iorb=1,Norb
         htmp = htmp + (impHloc(1,1,iorb,iorb) + mfHloc(1,1,iorb,iorb))*Nup(iorb)
-        htmp = htmp + (impHloc(Nspin,Nspin,iorb,iorb) + mfHloc(Nspin,Nspin,iorb,iorb))*Ndw(iorb)
+        htmp = htmp + impHloc(Nspin,Nspin,iorb,iorb)*Ndw(iorb)
+        if(Nspin>1) htmp = htmp + mfHloc(Nspin,Nspin,iorb,iorb)*Ndw(iorb)
         htmp = htmp - xmu*(Nup(iorb)+Ndw(iorb))
      enddo
      if(any(spin_field(:,3)/=0d0))then
