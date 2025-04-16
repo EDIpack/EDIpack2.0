@@ -18,10 +18,10 @@ contains
     !It would make sense for the elements to be ordered in this way:
     !cd_s cd_sprime c_s c_sprime.
     character(len=*)              :: ufile  !File containing a properly formatted interaction Hamiltonian
-    character(len=10)             :: dummy
+    character(len=300)            :: dummy
     type(coulomb_matrix_element)  :: opline
     logical                       :: master=.true.,ufile_exists, verbose, preamble
-    integer                       :: iline,flen,unit_umatrix,rank, nops, iorb, jorb
+    integer                       :: iline,flen,unit_umatrix,rank, nops, iorb, jorb, ierr
     integer                       :: o1, o2, o3, o4
     character(len=1)              :: s1, s2, s3, s4
     !
@@ -34,7 +34,6 @@ contains
     inquire(file=trim(ufile)//".restart",exist=ufile_exists)
     if(.not.ufile_exists)stop "read_umatrix_file ERROR: indicated file does not exist" !#FIXME: change this to make it default back to Uloc&co.
     if(ed_verbose>2)write(LOGfile,"(A)")'Reading interaction Hamiltonian from file '//trim(ufile)//".restart"
-    flen = file_length(trim(ufile)//".restart",verbose=ed_verbose>2,incl_comments=.true.)
     !
     !Set internal interaction coefficient matrices to zero
     mfHloc        = zero
@@ -61,29 +60,32 @@ contains
     !
     !Parse lines
     nops = 0
-    do iline=2,flen-1
-       read(unit_umatrix,*) dummy, s1, o2, s2, o3, s3, o4, s4, opline%U
-       dummy=trim(dummy)
-       if((dummy(1:1)=="#") .or. (dummy(1:1)=="!") .or. (dummy(1:1)=="%") ) then
-        cycle
-       else
-         nops = nops + 1
-         read(dummy, *) o1
-         if(max(o1, o2, o3, o4)>Norb) stop "read_umatrix_file: at line "//str(iline)//" too many orbitals" 
-         if(min(o1, o2, o3, o4) <  1) stop "read_umatrix_file: at line "//str(iline)//" orbital index < 1" 
-         if (any(( [s1, s2, s3, s4] /= "u" ) .AND. ( [s1, s2, s3, s4] /= "d" ))) stop "read_umatrix_file: at line "//str(iline)//" spin index malformed" 
-         opline%cd_i = [o1, merge(1, 2, s1 == "u")]
-         opline%cd_j = [o2, merge(1, 2, s2 == "u")]
-         opline%c_k  = [o3, merge(1, 2, s3 == "u")]
-         opline%c_l  = [o4, merge(1, 2, s4 == "u")]
-         if(ed_verbose>4)then
-           write(dummy, '(F10.6)') opline%U 
-           write(LOGfile,"(A)")'Two-body operator '//txtfy(nops,3)//':     '//&
-                                                    dummy//&
-                                                  ' cd_['//str(o1)//str(s1)//']'//&
-                                                  ' cd_['//str(o2)//str(s2)//']'//&
-                                                  ' c_['//str(o3)//str(s3)//']'//&
-                                                  ' c_['//str(o4)//str(s4)//']'
+    do
+         read(unit_umatrix, '(A)', iostat=ierr) dummy
+         if (ierr /= 0) then
+            exit  ! end-of-file error
+         else
+           read(dummy, *, iostat=ierr) o1, s1, o2, s2, o3, s3, o4, s4, opline%U
+           if (ierr /= 0) then
+               cycle  ! not a valid data line
+           else
+             nops = nops + 1
+             if(max(o1, o2, o3, o4)>Norb) stop "read_umatrix_file: at line "//str(iline)//" too many orbitals" 
+             if(min(o1, o2, o3, o4) <  1) stop "read_umatrix_file: at line "//str(iline)//" orbital index < 1" 
+             if (any(( [s1, s2, s3, s4] /= "u" ) .AND. ( [s1, s2, s3, s4] /= "d" ))) stop "read_umatrix_file: at line "//str(iline)//" spin index malformed" 
+             opline%cd_i = [o1, merge(1, 2, s1 == "u")]
+             opline%cd_j = [o2, merge(1, 2, s2 == "u")]
+             opline%c_k  = [o3, merge(1, 2, s3 == "u")]
+             opline%c_l  = [o4, merge(1, 2, s4 == "u")]
+             if(ed_verbose>4)then
+               write(dummy, '(F10.6)') opline%U 
+               write(LOGfile,"(A)")'Two-body operator '//txtfy(nops,3)//':     '//&
+                                                        trim(dummy)//&
+                                                      ' cd_['//str(o1)//str(s1)//']'//&
+                                                      ' cd_['//str(o2)//str(s2)//']'//&
+                                                      ' c_['//str(o3)//str(s3)//']'//&
+                                                      ' c_['//str(o4)//str(s4)//']'
+           endif
          endif
          call parse_umatrix_line(opline)
         endif
@@ -164,7 +166,7 @@ contains
          s1 = merge("u", "d", coulomb_sundry(iline)%c_l(2)==1)
          write(dummy, '(F10.6)') coulomb_sundry(iline)%U
          write(LOGfile,"(A)")'Sundry operator '//txtfy(iline,3)//':     '//&
-                                            dummy//&
+                                            trim(dummy)//&
                                           ' cd_['//str(o1)//str(s1)//']'//&
                                           ' c_['//str(o2)//str(s2)//']'//&
                                           ' cd_['//str(o3)//str(s3)//']'//&
