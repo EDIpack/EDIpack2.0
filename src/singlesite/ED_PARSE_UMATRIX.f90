@@ -267,26 +267,28 @@ contains
     endif
     !
     !Sixth: is it spin-exchange?
-    !S-E: -J c^+_a_up c^+_b_dw c_b_up c_a_dw (i.ne.j)
+    !S-E: -J c^+_a_up c_a_dw c^+_b_dw c_b_up (i.ne.j)
+    !Note that the sign change was already done at step 0
     !
     if(line%cd_i(1) /= line%cd_j(1) .and.& !iorb != jorb
        line%cd_i(1) /= line%c_k(1)  .and.& 
        line%cd_i(2) == line%c_k(2)  .and.&
        line%cd_j(1) /= line%c_l(1)  .and.&
        line%cd_j(2) == line%c_l(2))  then         
-       Jx_internal(line%cd_i(1),line%c_k(1)) = Jx_internal(line%cd_i(1),line%c_k(1)) - line%U
+       Jx_internal(line%cd_i(1),line%c_k(1)) = Jx_internal(line%cd_i(1),line%c_k(1)) + line%U
        return
     endif
     !
     !Seventh: is it pair-hopping?
-    !P-H: -J c^+_iorb_up c^+_iorb_dw   c_jorb_up  c_jorb_dw (i.ne.j)
+    !P-H: -J c^+_iorb_up c_jorb_up c^+_iorb_dw  c_jorb_dw (i.ne.j)
+    !Note that the sign change was already done at step 0
     !
     if(line%cd_i(1) /= line%c_k(1)  .and.& !iorb != jorb
        line%cd_i(1) == line%cd_j(1) .and.& 
        line%cd_i(2) /= line%cd_j(2) .and.&
        line%c_k(1)  == line%c_l(1)  .and.&
        line%c_k(2)  /= line%c_l(2))  then          
-       Jp_internal(line%cd_i(1),line%c_k(1)) = Jp_internal(line%cd_i(1),line%c_k(1)) - line%U
+       Jp_internal(line%cd_i(1),line%c_k(1)) = Jp_internal(line%cd_i(1),line%c_k(1)) + line%U
        return
     endif
     !
