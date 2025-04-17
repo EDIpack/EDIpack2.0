@@ -144,12 +144,6 @@
        !
        if(j/=0)hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
        !
-       select case(MpiStatus)
-       case (.true.)
-          call sp_insert_element(MpiComm,spH0,htmp,i,j)
-       case (.false.)
-          call sp_insert_element(spH0,htmp,i,j)
-       end select
       !
      enddo
   endif
