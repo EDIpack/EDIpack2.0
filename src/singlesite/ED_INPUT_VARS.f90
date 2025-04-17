@@ -514,8 +514,9 @@ MODULE ED_INPUT_VARS
   !
   !THIS IS JUST A RELOCATED GLOBAL VARIABLE
   character(len=200)                                 :: ed_input_file=""    !Name of input file
-  character(len=200)                                 :: umatrix_file=""  !Name of two-body operator file
-
+  character(len=200)                                 :: umatrix_file=""     !
+  !Name of two-body operator file
+  ! :Default umatrix_file:`umatrix`
 
 contains
 

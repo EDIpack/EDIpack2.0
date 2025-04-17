@@ -1,7 +1,6 @@
 MODULE ED_PARSE_UMATRIX
   !:synopsis: Routines and types for bath-impurity sparse maps
   USE SF_IOTOOLS, only: str,free_unit,file_length,to_lower,txtfy
-  USE ED_AUX_FUNX, only: print_hloc
   USE ED_VARS_GLOBAL
   USE ED_INPUT_VARS
   implicit none
@@ -15,13 +14,24 @@ contains
   
   subroutine read_umatrix_file(ufile)
     !This subroutine reads the interaction Hamiltonian from a user-specified file.
-    !It would make sense for the elements to be ordered in this way:
-    !cd_s cd_sprime c_s c_sprime.
+    !Empty and commented lines are ignored. Each two-body operator is then parsed
+    !to recognize whether it is of the form :f:var:`ULOC`, :f:var:`UST`, :f:var:`JH`,
+    !:f:var:`JX`, :f:var:`JP`. If so, those coefficients are populated. If not, the
+    !operator is saved in a dynamically allocated "sundry" array.
+    !Since EDIpack applies operators from right to left as 
+    !:math:`c\rightarrow c^{\dagger} \rightarrow c \rightarrow c^{\dagger}`
+    !the read two-body operators need to be properly ordered. If mean-field terms arise
+    !from the anticommutation, these are stored in an array :f:var:`mfHloc` of dimension
+    ![:code:`2`, :code:`2`, :f:var:`Norb`, :f:var:`Norb`], which will be added to
+    !:f:var:`impHloc` upon Fock space H construction.
+    !If :f:var:`ED_VERBOSE` > :code:`3`, this routine will print extensive information
+    !about the read file(s) and the type of the operators therein contained.
+    !
     character(len=*)              :: ufile  !File containing a properly formatted interaction Hamiltonian
     character(len=300)            :: dummy
     type(coulomb_matrix_element)  :: opline
     logical                       :: master=.true.,ufile_exists, verbose, preamble
-    integer                       :: iline,flen,unit_umatrix,rank, nops, iorb, jorb, ierr
+    integer                       :: iline,flen,unit_umatrix,rank, nops, ispin, jspin, iorb, jorb, ierr
     integer                       :: o1, o2, o3, o4
     character(len=1)              :: s1, s2, s3, s4
     !
@@ -150,7 +160,17 @@ contains
      !Print mean-field terms
      if(ed_verbose>3)then
       write(LOGfile,"(A)")'Mean-field terms from anticommutators:'
-      call print_hloc(mfHloc)
+        do ispin=1,2
+           do iorb=1,Norb
+              write(LOGfile,"(100(A1,F8.4,A1,F8.4,A1,2x))")&
+                   (&
+                   (&
+                   '(',dreal(mfHloc(ispin,jspin,iorb,jorb)),',',dimag(mfHloc(ispin,jspin,iorb,jorb)),')',&
+                   jorb =1,Norb),&
+                   jspin=1,Nspin)
+           enddo
+        enddo
+      write(LOGfile,"(A)")''
      endif
     
     !Is there anything else?

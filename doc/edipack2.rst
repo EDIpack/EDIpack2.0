@@ -51,6 +51,8 @@ The set includes:
 
 :f:mod:`ED_SETUP`  which handles global memory (de)allocation and the evaluation of the dimensions of the symmetry sectors.
 
+:f:mod:`ED_PARSE_UMATRIX`  which describes how a custom interaction Hamiltonian can be initialized.
+
 
 
 .. toctree::
