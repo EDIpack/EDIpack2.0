@@ -13,25 +13,27 @@
 2 d 1 u 2 d 1 u 10.0
 2 u 1 d 2 u 1 d 10.0
 
-#UST-JH (density-density)
+#UST-JH (no subtraction)
 1 u 2 u 1 u 2 u 10.0
 2 d 1 d 2 d 1 d 10.0
 2 u 1 u 2 u 1 u 10.0
 1 d 2 d 1 d 2 d 10.0
 
-#JH, JX, JP (Jh couples to previous block)
-1 d 1 u 2 d 2 u 1.0
-1 d 2 d 2 d 1 d 1.0
-1 d 2 u 2 d 1 u 1.0
-1 u 1 d 2 u 2 d 1.0
-1 u 2 d 2 u 1 d 1.0
+#UST-JH (subtracts to the block before)
 1 u 2 u 2 u 1 u 1.0
-2 d 1 d 1 d 2 d 1.0
-2 d 1 u 1 d 2 u 1.0
-2 d 2 u 1 d 1 u 1.0
-2 u 1 d 1 u 2 d 1.0
 2 u 1 u 1 u 2 u 1.0
-2 u 2 d 1 u 1 d 1.0
+1 d 2 d 2 d 1 d 1.0
+2 d 1 d 1 d 2 d 1.0
+
+#JX, JP
+#1 d 1 u 2 d 2 u 1.0
+#1 d 2 u 2 d 1 u 1.0
+#1 u 1 d 2 u 2 d 1.0
+#1 u 2 d 2 u 1 d 1.0
+#2 d 1 u 1 d 2 u 1.0
+#2 d 2 u 1 d 1 u 1.0
+#2 u 1 d 1 u 2 d 1.0
+#2 u 2 d 1 u 1 d 1.0
 
 #SUNDRY: this becomes a mean-field operator minus n*n (=n)
 1 u 1 u 1 u 1 u 1.0
