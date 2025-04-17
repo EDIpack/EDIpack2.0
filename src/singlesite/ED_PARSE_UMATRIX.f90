@@ -31,9 +31,9 @@ contains
        rank  =get_Rank_MPI()
     endif
 #endif
-    inquire(file=trim(ufile)//".restart",exist=ufile_exists)
+    inquire(file=trim(ufile)//reg(ed_file_suffix)//".restart",exist=ufile_exists)
     if(.not.ufile_exists)stop "read_umatrix_file ERROR: indicated file does not exist" !#FIXME: change this to make it default back to Uloc&co.
-    if(ed_verbose>0)write(LOGfile,"(A)")'Reading interaction Hamiltonian from file '//trim(ufile)//".restart"
+    if(ed_verbose>0)write(LOGfile,"(A)")'Reading interaction Hamiltonian from file '//trim(ufile)//reg(ed_file_suffix)//".restart"
     !
     !Set internal interaction coefficient matrices to zero
     mfHloc        = zero
@@ -44,7 +44,7 @@ contains
     Jp_internal   = zero
     !
     !
-    open(free_unit(unit_umatrix),file=trim(ufile)//".restart")
+    open(free_unit(unit_umatrix),file=trim(ufile)//reg(ed_file_suffix)//".restart")
     !
     !Take care of the comment in the preamble:
     preamble = .true.
