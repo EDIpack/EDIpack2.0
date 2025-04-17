@@ -44,9 +44,10 @@ contains
     integer,dimension(Ns_Ud,Ns_Orb)                :: Nups,Ndws  ![1,Ns]-[Norb,1+Nbath]
     integer,dimension(Ns)                          :: Nup,Ndw    ![Ns]
     real(8),dimension(Nspin,Nspin,Norb,Norb,Nbath) :: Hbath_tmp
-    logical                                        :: nonloc_condition
+    logical                                        :: nonloc_condition, sundry_condition
     !
-    nonloc_condition = Norb>1.AND.(any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0)) .OR. allocated(coulomb_sundry))
+    nonloc_condition = (Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0))))
+    sundry_condition = allocated(coulomb_sundry)
     !
 #ifdef _DEBUG
     if(ed_verbose>2)write(Logfile,"(A)")"DEBUG ed_buildH_main NORMAL: build H"
@@ -153,7 +154,7 @@ contains
     endif
     !
     !NON-LOCAL HAMILTONIAN TERMS
-    if(allocated(coulomb_sundry))then
+    if(sundry_condition)then
 #ifdef _DEBUG
        if(ed_verbose>3)write(Logfile,"(A)")"DEBUG ed_buildH_NORMAL: stored/user_defined_non_HK_terms"
 #endif
@@ -501,9 +502,10 @@ contains
     real(8),dimension(Nloc) :: Hv   !output vector (required by Arpack/Lanczos) :math:`\vec{w}`
     real(8)                 :: val
     integer                 :: i,iup,idw,j,jup,jdw,jj,i_el,j_el
-    logical                 :: nonloc_condition
+    logical                 :: nonloc_condition, sundry_condition
     !
-    nonloc_condition = Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0)) .OR. allocated(coulomb_sundry))
+    nonloc_condition = (Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0))))
+    sundry_condition = allocated(coulomb_sundry)
     !
     Hv=0d0
     !
@@ -579,7 +581,7 @@ contains
     enddo
     !
     !Non-Local:
-    if(nonloc_condition)then
+    if(nonloc_condition.or.sundry_condition)then
        do i = 1,Nloc
           iph = (i-1)/(DimUp*DimDw) + 1
           i_el = mod(i-1,DimUp*DimDw) + 1
@@ -696,6 +698,10 @@ contains
     integer                          :: i_el,j_el,i_start,i_end
     !local MPI
     integer                          :: irank
+    logical                          :: nonloc_condition, sundry_condition
+    !
+    nonloc_condition = (Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0))))
+    sundry_condition = allocated(coulomb_sundry)
     !
     ! if(MpiComm==Mpi_Comm_Null)return
     ! if(MpiComm==MPI_UNDEFINED)stop "spMatVec_mpi_cc ERROR: MpiComm = MPI_UNDEFINED"
@@ -787,7 +793,7 @@ contains
     end if
     !
     !Non-Local:
-    if(Norb>1.AND.(Jx/=0d0.OR.Jp/=0d0))then
+    if(nonloc_condition.or.sundry_condition)then
        N = 0
        call AllReduce_MPI(MpiComm,Nloc,N)
        ! 
