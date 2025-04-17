@@ -44,10 +44,11 @@ contains
     integer,dimension(Ns_Ud,Ns_Orb)                :: Nups,Ndws  ![1,Ns]-[Norb,1+Nbath]
     integer,dimension(Ns)                          :: Nup,Ndw    ![Ns]
     real(8),dimension(Nspin,Nspin,Norb,Norb,Nbath) :: Hbath_tmp
-    logical                                        :: nonloc_condition, sundry_condition
+    logical                                        :: nonloc_condition, sundry_condition, either_condition
     !
     nonloc_condition = (Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0))))
     sundry_condition = allocated(coulomb_sundry)
+    either_condition = nonloc_condition .OR. sundry_condition
     !
 #ifdef _DEBUG
     if(ed_verbose>2)write(Logfile,"(A)")"DEBUG ed_buildH_main NORMAL: build H"
@@ -117,19 +118,19 @@ contains
           call sp_init_matrix(MpiComm,spH0e_eph,DimUp*DimDw)
        endif
        !
-       if(nonloc_condition)then
+       if(either_condition)then
           call sp_set_mpi_matrix(MpiComm,spH0nd,mpiIstart,mpiIend,mpiIshift)
           call sp_init_matrix(MpiComm,spH0nd,DimUp*DimDw)
        endif
     else
        call sp_init_matrix(spH0d,DimUp*DimDw)
        if(DimPh>1) call sp_init_matrix(spH0e_eph,DimUp*DimDw)
-       if(nonloc_condition)call sp_init_matrix(spH0nd,DimUp*DimDw)
+       if(either_condition)call sp_init_matrix(spH0nd,DimUp*DimDw)
     endif
 #else
     call sp_init_matrix(spH0d,DimUp*DimDw)
     if(DimPh>1) call sp_init_matrix(spH0e_eph,DimUp*DimDw)
-    if(nonloc_condition)call sp_init_matrix(spH0nd,DimUp*DimDw)
+    if(either_condition)call sp_init_matrix(spH0nd,DimUp*DimDw)
 #endif
     call sp_init_matrix(spH0dws(1),DimDw)
     call sp_init_matrix(spH0ups(1),DimUp)
@@ -204,7 +205,7 @@ contains
        call sp_dump_matrix(spH0d,Hmat_tmp)
 #endif
        !
-       if(nonloc_condition)then
+       if(either_condition)then
           allocate(Hrdx(DimUp*DimDw,DimUp*DimDw));Hrdx=0d0
 #ifdef _MPI
           if(MpiStatus)then
@@ -502,10 +503,11 @@ contains
     real(8),dimension(Nloc) :: Hv   !output vector (required by Arpack/Lanczos) :math:`\vec{w}`
     real(8)                 :: val
     integer                 :: i,iup,idw,j,jup,jdw,jj,i_el,j_el
-    logical                 :: nonloc_condition, sundry_condition
+    logical                 :: nonloc_condition, sundry_condition, either_condition
     !
     nonloc_condition = (Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0))))
     sundry_condition = allocated(coulomb_sundry)
+    either_condition = nonloc_condition .OR. sundry_condition
     !
     Hv=0d0
     !
@@ -581,7 +583,7 @@ contains
     enddo
     !
     !Non-Local:
-    if(nonloc_condition.or.sundry_condition)then
+    if(either_condition)then
        do i = 1,Nloc
           iph = (i-1)/(DimUp*DimDw) + 1
           i_el = mod(i-1,DimUp*DimDw) + 1
@@ -698,10 +700,11 @@ contains
     integer                          :: i_el,j_el,i_start,i_end
     !local MPI
     integer                          :: irank
-    logical                          :: nonloc_condition, sundry_condition
+    logical                          :: nonloc_condition, sundry_condition, either_condition
     !
     nonloc_condition = (Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0))))
     sundry_condition = allocated(coulomb_sundry)
+    either_condition = nonloc_condition .OR. sundry_condition
     !
     ! if(MpiComm==Mpi_Comm_Null)return
     ! if(MpiComm==MPI_UNDEFINED)stop "spMatVec_mpi_cc ERROR: MpiComm = MPI_UNDEFINED"
@@ -793,7 +796,7 @@ contains
     end if
     !
     !Non-Local:
-    if(nonloc_condition.or.sundry_condition)then
+    if(either_condition)then
        N = 0
        call AllReduce_MPI(MpiComm,Nloc,N)
        ! 

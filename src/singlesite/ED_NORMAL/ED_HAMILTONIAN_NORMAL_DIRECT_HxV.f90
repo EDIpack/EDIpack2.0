@@ -33,10 +33,11 @@ contains
     integer,dimension(Ns_Ud,Ns_Orb)                :: Nups,Ndws       ![1,Ns]-[Norb,1+Nbath]
     integer,dimension(Ns)                          :: Nup,Ndw
     real(8),dimension(Nspin,Nspin,Norb,Norb,Nbath) :: Hbath_tmp
-    logical                                        :: nonloc_condition, sundry_condition
+    logical                                        :: nonloc_condition, sundry_condition, either_condition
     !
     nonloc_condition = (Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0))))
     sundry_condition = allocated(coulomb_sundry)
+    either_condition = nonloc_condition .OR. sundry_condition
     !
     if(.not.Hsector%status)stop "directMatVec_cc ERROR: Hsector NOT allocated"
     isector=Hsector%index
@@ -235,10 +236,11 @@ contains
     real(8),dimension(Nspin,Nspin,Norb,Norb,Nbath) :: Hbath_tmp
     !
     integer                                        :: i_start,i_end
-    logical                                        :: nonloc_condition, sundry_condition
+    logical                                        :: nonloc_condition, sundry_condition, either_condition
     !
     nonloc_condition = (Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0))))
     sundry_condition = allocated(coulomb_sundry)
+    either_condition = nonloc_condition .OR. sundry_condition
     !
     if(.not.Hsector%status)stop "directMatVec_cc ERROR: Hsector NOT allocated"
     isector=Hsector%index
