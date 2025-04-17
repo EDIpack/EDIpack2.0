@@ -25,8 +25,8 @@ Each umatrix file needs to have the following format:
 
 :f:var:`NORB` is the number of orbitals. Empty lines and lines starting with :code:`#,%,!` are ignored.
 The indices :code:`i,j,k,l` are of the form :code:`o s` where :code:`o` is an integer number for the 
-orbital index (starting from 1, maximum :f:var:`NORB` ) and :code:`s` is :code:`"u"` for :math:`\uparrow`
-spin and :code:`"d"` for :math:`\downarrow` spin. Each line of the file represents an operator of this form
+orbital index (starting from 1, maximum :f:var:`NORB` ) and :code:`s` is :code:`u` for :math:`\uparrow`
+spin and :code:`d` for :math:`\downarrow` spin. Each line of the file represents an operator of this form
 
 .. math::
     \frac{1}{2}\sum_{i,j,k,l} c^{\dagger}_i c^{\dagger}_j U_{ijkl} c_l c_k
