@@ -87,7 +87,7 @@ contains
              opline%cd_j = [o2, merge(1, 2, s2 == "u")]
              opline%c_k  = [o3, merge(1, 2, s3 == "u")]
              opline%c_l  = [o4, merge(1, 2, s4 == "u")]
-             if(ed_verbose>3)then
+             if(ed_verbose>2)then
                write(dummy, '(F10.6)') opline%U 
                write(LOGfile,"(A)")'Two-body operator '//txtfy(nops,3)//':     '//&
                                                         trim(dummy)//&
@@ -100,11 +100,11 @@ contains
          call parse_umatrix_line(opline)
         endif
     enddo
-    if(ed_verbose>2)write(LOGfile,"(A)")str(nops)//" two-body operators parsed."
+    if(ed_verbose>1)write(LOGfile,"(A)")str(nops)//" two-body operators parsed."
     !
     close(unit_umatrix)
     !    
-    if(ed_verbose>3)then
+    if(ed_verbose>2)then
       write(LOGfile,"(A)")''
       write(LOGfile,"(A)")'Interaction coefficients:'
       write(LOGfile,"(A)")''
@@ -113,7 +113,7 @@ contains
     !Here we need to operate on the various Uloc, Ust, Jh, Jx, Jp matrices
     !-the Hubbard terms are passed with an 1/2, but if the user made things
     !correctly they already have the two nup/ndw and ndw/nup terms. So nothing to do here.
-    if(ed_verbose>3)then
+    if(ed_verbose>2)then
       write(LOGfile,"(A)")'ULOC:'
       write(LOGfile,"(90(F15.9,1X))") (Uloc_internal(iorb),iorb=1,Norb)
       write(LOGfile,"(A)")''
@@ -123,7 +123,7 @@ contains
     !in increasing orbital order. So the matrix should be upper triangular. In the routine that
     !creates Hloc, it does nup*ndw + ndw*nup, so here we divide by 2.0
     Ust_internal = (Ust_internal + transpose(Ust_internal))/2.0
-    if(ed_verbose>3)then
+    if(ed_verbose>2)then
       write(LOGfile,"(A)")'UST:'
       do iorb=1,Norb
         write(LOGfile,"(90(F15.9,1X))") (Ust_internal(iorb,jorb),jorb=1,Norb)
@@ -136,7 +136,7 @@ contains
     !So, if the user passed this as Jh, we need to recast it as Ust - what the user passed
     Jh_internal = (Jh_internal + transpose(Jh_internal))/2.0
     Jh_internal = Ust_internal - Jh_internal
-    if(ed_verbose>3)then
+    if(ed_verbose>2)then
       write(LOGfile,"(A)")'JH:'
       do iorb=1,Norb
         write(LOGfile,"(90(F15.9,1X))") (Jh_internal(iorb,jorb),jorb=1,Norb)
@@ -145,7 +145,7 @@ contains
     endif
     
     !Jx and Jp have a summation that goes from 1 to Norb for both orbital indices, so no change there
-    if(ed_verbose>3)then
+    if(ed_verbose>2)then
       write(LOGfile,"(A)")'JX:'
       do iorb=1,Norb
         write(LOGfile,"(90(F15.9,1X))") (Jx_internal(iorb,jorb),jorb=1,Norb)
@@ -158,7 +158,7 @@ contains
     endif
     
      !Print mean-field terms
-     if(ed_verbose>3)then
+     if(ed_verbose>2)then
       write(LOGfile,"(A)")'Mean-field terms from anticommutators:'
         do ispin=1,2
            do iorb=1,Norb
@@ -174,7 +174,7 @@ contains
      endif
     
     !Is there anything else?
-    if(ed_verbose>3 .and. allocated(coulomb_sundry))then
+    if(ed_verbose>2 .and. allocated(coulomb_sundry))then
       write(LOGfile,"(A)")'There are '//str(size(coulomb_sundry))//' sundry terms.'
       do iline=1,size(coulomb_sundry)
          o1 = coulomb_sundry(iline)%cd_i(1)
