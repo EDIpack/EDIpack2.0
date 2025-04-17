@@ -70,7 +70,7 @@
 
             <li class="list-inline-item" id="statements"><i class="fa fa-list-ol"></i>
               <a data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true"
-                 title=" 1.2% of total for modules and submodules.">361 statements</a>
+                 title=" 1.2% of total for modules and submodules.">372 statements</a>
             </li>
 
             <li class="list-inline-item" id="source-file">
@@ -137,9 +137,9 @@
             <li class="list-group-item">
               <ul class="list-inline">
                   <li class="list-inline-item"><a href='http://fortranwiki.org/fortran/show/iso_c_binding'>iso_c_binding</a></li>
+                  <li class="list-inline-item">SF_VERSION</li>
                   <li class="list-inline-item">SF_IOTOOLS</li>
                   <li class="list-inline-item"><a href='ed_version.html'>ED_VERSION</a></li>
-                  <li class="list-inline-item">SF_VERSION</li>
                   <li class="list-inline-item">SF_PARSE_INPUT</li>
               </ul>
             </li>
@@ -310,11 +310,13 @@ modules which it uses.
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <table class="graph">
-<tr><td class="root" rowspan="203">ED_INPUT_VARS</td><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/atomic_j.html">atomic_j</a></td></tr>
+<tr><td class="root" rowspan="245">ED_INPUT_VARS</td><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/atomic_j.html">atomic_j</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/atomic_soc.html">atomic_SOC</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/delta_bath_array_general~2.html">delta_bath_array_general</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/atomic_soc_rotation.html">atomic_SOC_rotation</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/delta_bath_array_general.html">delta_bath_array_general</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/delta_bath_array_hybrid~2.html">delta_bath_array_hybrid</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
@@ -358,71 +360,109 @@ modules which it uses.
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#337AB7"><a href="../module/ed_fit_common.html">ED_FIT_COMMON</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dens_n0~2.html">ed_get_dens_n0</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dens_n0.html">ed_get_dens_n0</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dens_n1~4.html">ed_get_dens_n1</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dens_n1~3.html">ed_get_dens_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_denschi_site_n3~2.html">ed_get_densChi_site_n3</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_denschi_site_n3.html">ed_get_densChi_site_n3</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dimp_lattice_n2~2.html">ed_get_dimp_lattice_n2</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dimp_site_n1~2.html">ed_get_dimp_site_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_docc_n0~2.html">ed_get_docc_n0</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_docc_n0.html">ed_get_docc_n0</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_docc_n1~4.html">ed_get_docc_n1</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_docc_n1.html">ed_get_docc_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_doubles_n1.html">ed_get_doubles_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_doubles_n2~2.html">ed_get_doubles_n2</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dph_n0.html">ed_get_dph_n0</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dph_n1~2.html">ed_get_dph_n1</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dse_n0.html">ed_get_dse_n0</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dse_n1~2.html">ed_get_dse_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dund_n0.html">ed_get_dund_n0</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dust_n0.html">ed_get_dust_n0</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_ehartree_n0~2.html">ed_get_ehartree_n0</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_dust_n1~2.html">ed_get_dust_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_eimp_n1~2.html">ed_get_eimp_n1</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_ehartree_n0.html">ed_get_ehartree_n0</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_eint_n0~2.html">ed_get_eint_n0</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_ehartree_n1.html">ed_get_ehartree_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_eknot_n0~2.html">ed_get_eknot_n0</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_eimp_n1.html">ed_get_eimp_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_epot_n0~2.html">ed_get_epot_n0</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_eimp_n2.html">ed_get_eimp_n2</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_exctchi_site_n3~2.html">ed_get_exctChi_site_n3</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_eint_n0.html">ed_get_eint_n0</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_g0imp_site_n3~2.html">ed_get_g0imp_site_n3</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_eint_n1.html">ed_get_eint_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_g0imp_site_n5~2.html">ed_get_g0imp_site_n5</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_eknot_n0.html">ed_get_eknot_n0</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_gimp_site_n3~2.html">ed_get_gimp_site_n3</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_eknot_n1.html">ed_get_eknot_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_gimp_site_n5~2.html">ed_get_gimp_site_n5</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_epot_n0.html">ed_get_epot_n0</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_imp_info~2.html">ed_get_imp_info</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_epot_n1.html">ed_get_epot_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_mag_n0~2.html">ed_get_mag_n0</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_exctchi_site_n3.html">ed_get_exctChi_site_n3</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_mag_n1~4.html">ed_get_mag_n1</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_g0imp_lattice_n3~2.html">ed_get_g0imp_lattice_n3</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_mag_n2~4.html">ed_get_mag_n2</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_g0imp_lattice_n4~2.html">ed_get_g0imp_lattice_n4</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_pairchi_site_n3~2.html">ed_get_pairChi_site_n3</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_g0imp_lattice_n6~2.html">ed_get_g0imp_lattice_n6</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_phisc_n0~2.html">ed_get_phisc_n0</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_g0imp_site_n3.html">ed_get_g0imp_site_n3</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_g0imp_site_n5.html">ed_get_g0imp_site_n5</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_gimp_lattice_n3~2.html">ed_get_gimp_lattice_n3</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_gimp_lattice_n4~2.html">ed_get_gimp_lattice_n4</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_gimp_lattice_n6~2.html">ed_get_gimp_lattice_n6</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_gimp_site_n3.html">ed_get_gimp_site_n3</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_gimp_site_n5.html">ed_get_gimp_site_n5</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_imp_info.html">ed_get_imp_info</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_mag_n0.html">ed_get_mag_n0</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_mag_n1.html">ed_get_mag_n1</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_mag_n2.html">ed_get_mag_n2</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_pairchi_site_n3.html">ed_get_pairChi_site_n3</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_phisc_n0.html">ed_get_phisc_n0</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_phisc_n1~3.html">ed_get_phisc_n1</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_phisc_n2~2.html">ed_get_phisc_n2</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_phisc_n2.html">ed_get_phisc_n2</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_quantum_soc_operators_single.html">ed_get_quantum_SOC_operators_single</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_sigma_lattice_n3~2.html">ed_get_sigma_lattice_n3</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_sigma_lattice_n4~2.html">ed_get_sigma_lattice_n4</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_sigma_lattice_n6~2.html">ed_get_sigma_lattice_n6</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_sigma_site_n3.html">ed_get_sigma_site_n3</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_sigma_site_n5.html">ed_get_sigma_site_n5</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_spinchi_site_n3~2.html">ed_get_spinChi_site_n3</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/ed_get_spinchi_site_n3.html">ed_get_spinChi_site_n3</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#337AB7"><a href="../module/ed_gf_nonsu2.html">ED_GF_NONSU2</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
@@ -452,6 +492,8 @@ modules which it uses.
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#337AB7"><a href="../module/ed_observables_superc.html">ED_OBSERVABLES_SUPERC</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#337AB7"><a href="../module/ed_parse_umatrix.html">ED_PARSE_UMATRIX</a></td></tr>
+<tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#337AB7"><a href="../module/ed_rdm.html">ED_RDM</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#337AB7"><a href="../module/ed_rdm_nonsu2.html">ED_RDM_NONSU2</a></td></tr>
@@ -474,25 +516,25 @@ modules which it uses.
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/f0and_bath_array_hyrege~2.html">f0and_bath_array_hyrege</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/f0and_bath_array_normal~2.html">f0and_bath_array_normal</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/f0and_bath_array_normal.html">f0and_bath_array_normal</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/fdelta_bath_array_general~2.html">fdelta_bath_array_general</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/fdelta_bath_array_general.html">fdelta_bath_array_general</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/fdelta_bath_array_hybrid~2.html">fdelta_bath_array_hybrid</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/fdelta_bath_array_hybrid.html">fdelta_bath_array_hybrid</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/fdelta_bath_array_normal.html">fdelta_bath_array_normal</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/fdelta_bath_array_replica~2.html">fdelta_bath_array_replica</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/fdelta_bath_array_replica.html">fdelta_bath_array_replica</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/g0and_bath_array_hyrege~2.html">g0and_bath_array_hyrege</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/g0and_bath_array_normal.html">g0and_bath_array_normal</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/g0and_bath_array_normal~2.html">g0and_bath_array_normal</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/get_density_matrix_n2.html">get_density_matrix_n2</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/get_density_matrix_n4.html">get_density_matrix_n4</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
-<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/get_rdm_single~2.html">get_rdm_single</a></td></tr>
+<tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d9534f"><a href="../proc/get_rdm_single.html">get_rdm_single</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
 <tr><td rowspan="2" class="triangle-left"></td><td class="dashedBottom">w</td><td rowspan="2" class="node" bgcolor="#d94e8f"><a href="../proc/invf0_bath_array_hyrege~2.html">invf0_bath_array_hyrege</a></td></tr>
 <tr><td class="dashedTop">w</td></tr>
@@ -618,7 +660,7 @@ modules which it uses.
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-03-24T16:12:36.937243+0100             </p>
+ on 2025-04-17T18:30:55.121225+0200             </p>
           </div>
         </div>
         <br>
