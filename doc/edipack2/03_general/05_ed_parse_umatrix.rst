@@ -58,17 +58,11 @@ What follows is an example for a Hubbard-Kanamori interaction corresponding to t
    2 d 1 u 2 d 1 u 10.0
    2 u 1 d 2 u 1 d 10.0
    
-   #UST-JH (no subtraction)
-   1 u 2 u 1 u 2 u 10.0
-   2 d 1 d 2 d 1 d 10.0
-   2 u 1 u 2 u 1 u 10.0
-   1 d 2 d 1 d 2 d 10.0
-   
-   #UST-JH (subtracts to the block before)
-   1 u 2 u 2 u 1 u 1.0
-   2 u 1 u 1 u 2 u 1.0
-   1 d 2 d 2 d 1 d 1.0
-   2 d 1 d 1 d 2 d 1.0
+   #UST-JH 
+   1 u 2 u 1 u 2 u 9.0
+   2 d 1 d 2 d 1 d 9.0
+   2 u 1 u 2 u 1 u 9.0
+   1 d 2 d 1 d 2 d 9.0
    
    #JX, JP
    1 d 1 u 2 d 2 u 1.0
