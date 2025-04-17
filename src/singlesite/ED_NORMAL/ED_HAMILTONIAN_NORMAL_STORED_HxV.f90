@@ -46,7 +46,7 @@ contains
     real(8),dimension(Nspin,Nspin,Norb,Norb,Nbath) :: Hbath_tmp
     logical                                        :: nonloc_condition
     !
-    nonloc_condition = Norb>1.AND.(any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0) .OR. allocated(coulomb_sundry)))
+    nonloc_condition = Norb>1.AND.(any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0)) .OR. allocated(coulomb_sundry))
     !
 #ifdef _DEBUG
     if(ed_verbose>2)write(Logfile,"(A)")"DEBUG ed_buildH_main NORMAL: build H"
@@ -503,7 +503,7 @@ contains
     integer                 :: i,iup,idw,j,jup,jdw,jj,i_el,j_el
     logical                 :: nonloc_condition
     !
-    nonloc_condition = Norb>1.AND.(any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0) .OR. allocated(coulomb_sundry)))
+    nonloc_condition = Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0)) .OR. allocated(coulomb_sundry))
     !
     Hv=0d0
     !
