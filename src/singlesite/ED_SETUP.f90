@@ -442,6 +442,7 @@ contains
     if(allocated(Jh_internal))deallocate(Jh_internal)
     if(allocated(Jx_internal))deallocate(Jx_internal)
     if(allocated(Jp_internal))deallocate(Jp_internal)
+    if(allocated(coulomb_sundry))deallocate(coulomb_sundry)
 
     if(allocated(ed_dens))deallocate(ed_dens)
     if(allocated(ed_docc))deallocate(ed_docc)
