@@ -70,9 +70,9 @@
            if(Jcondition)then 
              p_up_old = p_up_new
              p_dw_old = p_dw_new
-             if (spinvec(2)==1)then
+             if (spinvec(1)==1)then
                call c(orbvec(1), p_up_old ,p_up_new ,sg3 ,Jcondition)  !last annihilation operator
-             elseif (spinvec(2)==2)then
+             elseif (spinvec(1)==2)then
                call c(orbvec(1), p_dw_old ,p_dw_new ,sg3 ,Jcondition)  !last annihilation operator
              endif
              if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
@@ -82,9 +82,9 @@
            if(Jcondition)then 
              p_up_old = p_up_new
              p_dw_old = p_dw_new
-             if (spinvec(2)==1)then
+             if (spinvec_dag(1)==1)then
                call cdg(orbvec(1), p_up_old ,p_up_new ,sg4 ,Jcondition)  !last annihilation operator
-             elseif (spinvec(2)==2)then
+             elseif (spinvec_dag(1)==2)then
                call cdg(orbvec(1), p_dw_old ,p_dw_new ,sg4 ,Jcondition)  !last annihilation operator
              endif
              if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
@@ -96,7 +96,7 @@
            !
            i = iup + (idw-1)*DimUp + (iph-1)*DimUp*MpiQdw
            !
-           Hv(j) = Hv(j) + htmp*vin(i)
+           Hv(j) = Hv(j) + htmp*vt(i)
           !
          enddo
       endif
