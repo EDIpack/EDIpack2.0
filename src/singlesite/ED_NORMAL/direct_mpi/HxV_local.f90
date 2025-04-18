@@ -62,8 +62,8 @@
         if(Norb>1)then
            do iorb=1,Norb
               do jorb=iorb+1,Norb
-                 htmp=htmp-0.5d0*Ust_internal(iorb,jorb)*(Nup(iorb)+Ndw(iorb)+Nup(jorb)+Ndw(jorb))+0.25d0*Ust_internal(iorb,jorb)
-                 htmp=htmp-0.5d0*(Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))*(Nup(iorb)+Ndw(iorb)+Nup(jorb)+Ndw(jorb))+0.25d0*(Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))
+                 htmp=htmp-0.5d0*Ust_internal(iorb,jorb)*(Nup(iorb)+Ndw(iorb)+Nup(jorb)+Ndw(jorb))+0.5d0*Ust_internal(iorb,jorb)
+                 htmp=htmp-0.5d0*(Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))*(Nup(iorb)+Ndw(iorb)+Nup(jorb)+Ndw(jorb))+0.5d0*(Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))
               enddo
            enddo
         endif
