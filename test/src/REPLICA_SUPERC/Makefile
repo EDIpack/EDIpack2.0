@@ -6,8 +6,8 @@
 EXE=ed_replica_superc
 FC=mpif90
 PLAT=gnu
-TSTBIN=../../../bin/REPLICA/SUPERC
-OBJS=../../ASSERTING.o
+TSTBIN=../../bin/REPLICA/SUPERC
+OBJS=../ASSERTING.o
 
 #NO NEED TO CHANGE DOWN HERE, only expert mode.
 #########################################################################
@@ -34,13 +34,13 @@ endif
 
 all: FLAG:=${FFLAG} ${FPPFLAG}
 all:
-	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../../ ${GLOB_INC} ${GLOB_LIB}
+	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
 
 debug: FLAG:=${DFLAG} ${FPPFLAG}
 debug:
-	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../../ ${GLOB_INC} ${GLOB_LIB}
+	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
 clean: 

@@ -1,8 +1,8 @@
-EXE=ed_general_nonsu2
+EXE=ed_replica_nonsu2
 FC=mpif90
 PLAT=gnu
-TSTBIN=../../../bin/GENERAL/NONSU2
-OBJS=../../ASSERTING.o
+TSTBIN=../../bin/REPLICA/NONSU2
+OBJS=../ASSERTING.o
 
 #NO NEED TO CHANGE DOWN HERE, only expert mode.
 #########################################################################
@@ -24,24 +24,23 @@ FPPFLAG =-cpp -D_MPI
 endif
 
 
-
 ##$ Extends the implicit support of the Makefile to .f90 files
 .SUFFIXES: .f90 .o
 
 all: FLAG:=${FFLAG} ${FPPFLAG}
 all:
-	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../../ ${GLOB_INC} ${GLOB_LIB}
+	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
 
 debug: FLAG:=${DFLAG} ${FPPFLAG}
 debug:
-	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../../ ${GLOB_INC} ${GLOB_LIB}
+	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
 
 clean: 
-	@echo "Cleaning bath:GENERAL mode:NONSU2"
+	@echo "Cleaning bath:REPLICA mode:NONSU2"
 	@rm -rf *.mod *.o *~
 	@rm -fv  $(TSTBIN)/$(EXE)
 

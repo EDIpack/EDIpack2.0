@@ -13,8 +13,10 @@ OBJS=ASSERTING.o
 all: $(OBJS) NORMAL REPLICA GENERAL # HYBRID
 
 
-NORMAL REPLICA GENERAL: #HYBRID
-	make -C ./BATH_$@
+NORMAL REPLICA GENERAL: 
+	make -C ./$@_NORMAL
+	make -C ./$@_SUPERC
+	make -C ./$@_NONSU2
 
 .f90.o:
 	$(FC) $(FFLAGS) -c $< ${GLOB_INC}

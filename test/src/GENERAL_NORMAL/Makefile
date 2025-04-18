@@ -1,8 +1,8 @@
 EXE=ed_general_normal
 FC=mpif90
 PLAT=gnu
-TSTBIN=../../../bin/GENERAL/NORMAL
-OBJS=../../ASSERTING.o
+TSTBIN=../../bin/GENERAL/NORMAL
+OBJS=../ASSERTING.o
 
 #NO NEED TO CHANGE DOWN HERE, only expert mode.
 #########################################################################
@@ -29,13 +29,13 @@ endif
 
 all: FLAG:=${FFLAG} ${FPPFLAG}
 all:
-	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../../ ${GLOB_INC} ${GLOB_LIB}
+	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
 
 debug: FLAG:=${DFLAG} ${FPPFLAG}
 debug:
-	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../../ ${GLOB_INC} ${GLOB_LIB}
+	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
 

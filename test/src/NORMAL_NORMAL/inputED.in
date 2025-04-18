@@ -28,6 +28,7 @@
  ED_DIAG_TYPE=lanc                             !flag to select the diagonalization type: 'lanc' for Lanczos/Davidson, 'full' for Full diagonalization method
  ED_FINITE_TEMP=F                              !flag to select finite temperature method. note that if T then lanc_nstates_total must be > 1
  ED_TWIN=F                                     !flag to reduce (T) or not (F,default) the number of visited sector using twin symmetry.
+ ED_READ_UMATRIX=F                             !flag to read (T) or not (F,default) the two-body operators from an external file.
  ED_SECTORS=F                                  !flag to reduce sector scan for the spectrum to specific sectors +/- ed_sectors_shift.
  ED_SECTORS_SHIFT=1                            !shift to ed_sectors
  ED_SPARSE_H=T                                 !flag to select  storage of sparse matrix H (mem--, cpu++) if TRUE, or direct on-the-fly H*v product (mem++, cpu--) if FALSE

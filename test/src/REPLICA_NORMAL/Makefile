@@ -1,8 +1,13 @@
-EXE=ed_replica_nonsu2
+#TO BE CHANGED BY USER:
+#$ DRIVER NAME without .f90 extension
+#$ COMPILER: suppprted compilers are ifort, gnu >v4.7 or use mpif90
+#$ PLATFORM: supported platform are intel, gnu
+#$ EXECUTABLE TARGET DIRECTORY (default if $HOME/.bin in the PATH)
+EXE=ed_replica_normal
 FC=mpif90
 PLAT=gnu
-TSTBIN=../../../bin/REPLICA/NONSU2
-OBJS=../../ASSERTING.o
+TSTBIN=../../bin/REPLICA/NORMAL
+OBJS=../ASSERTING.o
 
 #NO NEED TO CHANGE DOWN HERE, only expert mode.
 #########################################################################
@@ -29,18 +34,18 @@ endif
 
 all: FLAG:=${FFLAG} ${FPPFLAG}
 all:
-	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../../ ${GLOB_INC} ${GLOB_LIB}
+	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
 
 debug: FLAG:=${DFLAG} ${FPPFLAG}
 debug:
-	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../../ ${GLOB_INC} ${GLOB_LIB}
+	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check $(TSTBIN)/
 	@cp *.in    $(TSTBIN)/
 
 clean: 
-	@echo "Cleaning bath:REPLICA mode:NONSU2"
+	@echo "Cleaning bath:REPLICA mode:NORMAL"
 	@rm -rf *.mod *.o *~
 	@rm -fv  $(TSTBIN)/$(EXE)
 
