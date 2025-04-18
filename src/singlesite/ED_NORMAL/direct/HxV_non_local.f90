@@ -11,9 +11,12 @@
      nup = bdecomp(mup,Ns)
      ndw = bdecomp(mdw,Ns)
      !
-     ! SPIN-EXCHANGE (S-E) and PAIR-HOPPING TERMS
-     !    S-E: J c^+_iorb_up c^+_jorb_dw c_iorb_dw c_jorb_up  (i.ne.j) 
+     ! SPIN-EXCHANGE (S-E) TERMS
+     !    S-E: J c^+_a_up c^+_b_dw c_a_dw c_b_up
      !    S-E: J c^+_{iorb} c^+_{jorb+Ns} c_{iorb+Ns} c_{jorb}
+     !
+     !    S-E: J  [c^+_b_dw c_a_dw] [c^+_a_up c_b_up]
+     !    S-E: J  [c^+_{jorb} c_{iorb}]_dw [c^+_iorb c_jorb]_up
      if(Norb>1.AND.any((Jx_internal/=0d0)))then
         do iorb=1,Norb
            do jorb=1,Norb
@@ -33,7 +36,7 @@
                  htmp = Jx_internal(iorb,jorb)*sg1*sg2*sg3*sg4
                  i = iup + (idw-1)*dimup + (iph-1)*DimUp*DimDw
                  !
-                 Hv(i) = Hv(i) + htmp*vin(j)
+                 Hv(j) = Hv(j) + htmp*vt(i)
                  !
               endif
            enddo
@@ -61,7 +64,7 @@
                  htmp = Jp_internal(iorb,jorb)*sg1*sg2*sg3*sg4
                  i = iup + (idw-1)*dimup + (iph-1)*DimUp*DimDw
                  !
-                 Hv(i) = Hv(i) + htmp*vin(j)
+                 Hv(j) = Hv(j) + htmp*vt(i)
                  !
               endif
            enddo

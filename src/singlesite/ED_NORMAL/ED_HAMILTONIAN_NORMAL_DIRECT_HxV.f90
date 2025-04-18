@@ -340,7 +340,7 @@ contains
        !
        include "direct_mpi/HxV_non_local.f90"
        !
-       deallocate(Vt)
+       deallocate(vt)
     endif
     !NON-LOCAL HAMILTONIAN PART: H_non_loc*vin = vout
     if(sundry_condition)then

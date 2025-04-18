@@ -1,9 +1,9 @@
-  do i=1,Nloc
-     i_el = mod(i-1,DimUp*MpiQdw) + 1
-     iph = (i-1)/(DimUp*MpiQdw) + 1
+  do j=1,Nloc
+     j_el = mod(j-1,DimUp*MpiQdw) + 1
+     iph = (j-1)/(DimUp*MpiQdw) + 1
      !
-     iup = iup_index(i_el+mpiIshift,DimUp)
-     idw = idw_index(i_el+mpiIshift,DimUp)
+     jup = iup_index(j_el+mpiIshift,DimUp)
+     jdw = idw_index(j_el+mpiIshift,DimUp)
      !
      mup = Hsector%H(1)%map(jup)
      mdw = Hsector%H(2)%map(jdw)
@@ -90,13 +90,13 @@
              if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
            endif
            !
-           jdw=binary_search(Hsector%H(2)%map,p_dw_new)
-           jup=binary_search(Hsector%H(1)%map,p_up_new)
+           idw=binary_search(Hsector%H(2)%map,p_dw_new)
+           iup=binary_search(Hsector%H(1)%map,p_up_new)
            htmp = coulomb_sundry(iline)%U * sg1 * sg2 * sg3 * sg4
            !
-           j = jup + (jdw-1)*DimUp + (iph-1)*DimUp*MpiQdw
+           i = iup + (idw-1)*DimUp + (iph-1)*DimUp*MpiQdw
            !
-           Hv(j) = Hv(j) + htmp*vt(i)
+           Hv(j) = Hv(j) + htmp*vin(i)
           !
          enddo
       endif
