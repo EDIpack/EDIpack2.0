@@ -9,7 +9,7 @@
   enddo
   !
   i = j
-  hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(i)
+  hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
   !
   !Off-diagonal elements, i.e. non-local part
   !1. same spin:
@@ -26,7 +26,7 @@
            i = binary_search(Hsector%H(1)%map,k2)
            htmp = conjg(impHloc(1,1,iorb,jorb)+mfHloc(1,1,iorb,jorb))*sg1*sg2
            !
-           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
+           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
            !
         endif
         !DW
@@ -41,7 +41,7 @@
            htmp = conjg(impHloc(Nspin,Nspin,iorb,jorb))*sg1*sg2
            htmp = htmp + conjg(mfHloc(2,2,iorb,jorb))*sg1*sg2
            !
-           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
+           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
            !
         endif
      enddo
@@ -64,7 +64,7 @@
               i = binary_search(Hsector%H(1)%map,k2)
               htmp = conjg(impHloc(ispin,jspin,iorb,jorb)+mfHloc(ispin,jspin,iorb,jorb))*sg1*sg2
               !
-              hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
+              hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
               !
            endif
            !
