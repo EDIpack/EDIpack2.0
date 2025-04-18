@@ -7,11 +7,11 @@
   !
   if(iph<DimPh)then !bdg
      j = i_el + (iph  )*DimEl
-     Hv(j-MpiIshift) = Hv(j-MpiIshift) + htmp*vin(i)*sqrt(dble(iph))
+     Hv(i-MpiIshift) = Hv(i-MpiIshift) + htmp*vin(j)*sqrt(dble(iph))
   endif
   if(iph>1)then !b
      j = i_el + (iph-2)*DimEl
-     Hv(j-MpiIshift) = Hv(j-MpiIshift) + htmp*vin(i)*sqrt(dble(iph-1))
+     Hv(i-MpiIshift) = Hv(i-MpiIshift) + htmp*vin(j)*sqrt(dble(iph-1))
   endif
   !
   ! Off-Diagonal terms: Sum_iorb,jorb g_iorb,jorb cdg_iorb*c_jorb*(bdg+b)
@@ -29,11 +29,11 @@
            !
            if(iph<DimPh)then !bdg
               j     = j_el + (iph)*DimEl
-              hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)*sqrt(dble(iph))
+              hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)*sqrt(dble(iph))
            endif
            if(iph>1)then !b
               j     = j_el + (iph-2)*DimEl
-              hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)*sqrt(dble(iph-1))
+              hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)*sqrt(dble(iph-1))
            endif
         endif
      enddo
@@ -53,11 +53,11 @@
            !
            if(iph<DimPh)then !bdg
               j     = j_el + (iph)*DimEl
-              hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)*sqrt(dble(iph))
+              hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)*sqrt(dble(iph))
            endif
            if(iph>1)then !b
               j     = j_el + (iph-2)*DimEl
-              hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)*sqrt(dble(iph-1))
+              hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)*sqrt(dble(iph-1))
            endif
         endif
         !              

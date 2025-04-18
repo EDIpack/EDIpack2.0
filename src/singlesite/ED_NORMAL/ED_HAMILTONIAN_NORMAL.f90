@@ -211,6 +211,10 @@ contains
     ! The sector is deleted, all the dimensions and MPI splitting variables are reset to zero. All the sparse matrices are deallocated having gone out of scope. The abstract interface pointer :f:var:`spHtimesV_p` for the matrix-vector product is nullified. 
     !
     integer :: iud,ierr,i
+    logical :: nonloc_condition
+    
+    nonloc_condition = (Norb>1 .AND. ( any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0)) ) ) .OR. allocated(coulomb_sundry)
+    
 #ifdef _DEBUG
     if(ed_verbose>2)write(Logfile,"(A)")"DEBUG delete_Hv_sector_NORMAL: delete H*v info"
 #endif
@@ -226,16 +230,16 @@ contains
     if(MpiStatus)then
        call sp_delete_matrix(MpiComm,spH0d)
        if(DimPh>1)call sp_delete_matrix(MpiComm,spH0e_eph)
-       if((Norb>1.AND.(Jx/=0d0.OR.Jp/=0d0)))call sp_delete_matrix(MpiComm,spH0nd)
+       if(nonloc_condition)call sp_delete_matrix(MpiComm,spH0nd)
     else
        call sp_delete_matrix(spH0d)
        if(DimPh>1)call sp_delete_matrix(spH0e_eph)
-       if((Norb>1.AND.(Jx/=0d0.OR.Jp/=0d0)))call sp_delete_matrix(spH0nd)
+       if(nonloc_condition)call sp_delete_matrix(spH0nd)
     endif
 #else
     call sp_delete_matrix(spH0d)
     if(DimPh>1)call sp_delete_matrix(spH0e_eph)
-    if((Norb>1.AND.(Jx/=0d0.OR.Jp/=0d0)))call sp_delete_matrix(spH0nd)
+    if(nonloc_condition)call sp_delete_matrix(spH0nd)
 #endif
     do iud=1,Ns_Ud
        call sp_delete_matrix(spH0ups(iud))

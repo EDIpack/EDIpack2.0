@@ -6,5 +6,5 @@ ED_BATH
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/detach_rdmft/src/singlesite/ED_BATH/ED_BATH.f90>`_ for :f:mod:`ed_bath` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/parse_umatrix/src/singlesite/ED_BATH/ED_BATH.f90>`_ for :f:mod:`ed_bath` on GitHub
  

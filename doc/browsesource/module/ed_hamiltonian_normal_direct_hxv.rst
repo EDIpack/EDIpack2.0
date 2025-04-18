@@ -6,5 +6,5 @@ ED_HAMILTONIAN_NORMAL_DIRECT_HxV
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/detach_rdmft/src/singlesite/ED_NORMAL/ED_HAMILTONIAN_NORMAL_DIRECT_HxV.f90>`_ for :f:mod:`ed_hamiltonian_normal_direct_hxv` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/parse_umatrix/src/singlesite/ED_NORMAL/ED_HAMILTONIAN_NORMAL_DIRECT_HxV.f90>`_ for :f:mod:`ed_hamiltonian_normal_direct_hxv` on GitHub
  

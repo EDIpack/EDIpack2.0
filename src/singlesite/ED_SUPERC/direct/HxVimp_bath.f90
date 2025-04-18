@@ -10,7 +10,7 @@
            j_el = binary_search(Hsector%H(1)%map,k2)
            j    = j_el + (iph-1)*DimEl
            htmp = diag_hybr(1,iorb,kp)*sg1*sg2
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
         endif
         if( (diag_hybr(1,iorb,kp)/=0d0) .AND. (ib(iorb)==0) .AND. (ib(ms)==1) )then
            call c(ms,m,k1,sg1)
@@ -18,7 +18,7 @@
            j_el = binary_search(Hsector%H(1)%map,k2)
            j    = j_el + (iph-1)*DimEl
            htmp = diag_hybr(1,iorb,kp)*sg1*sg2
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
         endif
         !
         !IMP DW <--> BATH DW
@@ -28,7 +28,7 @@
            j_el = binary_search(Hsector%H(1)%map,k2)
            j    = j_el + (iph-1)*DimEl
            htmp = diag_hybr(Nspin,iorb,kp)*sg1*sg2
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
         endif
         if( (diag_hybr(Nspin,iorb,kp)/=0d0) .AND. (ib(iorb+Ns)==0) .AND. (ib(ms+Ns)==1) )then
            call c(ms+Ns,m,k1,sg1)
@@ -36,7 +36,7 @@
            j_el = binary_search(Hsector%H(1)%map,k2)
            j    = j_el + (iph-1)*DimEl
            htmp = diag_hybr(Nspin,iorb,kp)*sg1*sg2
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
         endif
      enddo
   enddo

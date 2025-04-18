@@ -15,6 +15,26 @@ MODULE ED_VARS_GLOBAL
 #endif
   implicit none
 
+!======================!
+!        TYPES         !
+!======================!
+
+!######## Two-body operators #######!
+
+  type coulomb_matrix_element
+     ! One two-body operator
+     integer,dimension(2)  :: cd_i           ! Spin, orbital of first operator (dagger)
+     integer,dimension(2)  :: cd_j           ! Spin, orbital of second operator (dagger)
+     integer,dimension(2)  :: c_k            ! Spin, orbital of third operator
+     integer,dimension(2)  :: c_l            ! Spin, orbital of fourth operator
+     real(8)               :: U              ! Interaction coefficient
+  end type coulomb_matrix_element
+  
+
+
+
+!######## Effective bath #######!
+
 
   type effective_bath_component
      ! Effective bath component for the replica/general bath. Each istance of this type defines the parameters :math:`\vec{\lambda}` and the amplitudes :math:`\vec{V}`. The first is used to decompose the Hamiltonian of each element of the bath :math:`H_p=\sum_{i=1}^{N_{basis}} \lambda_i(p) O_i`, the latter describes the hopping from/to the impurity.
@@ -154,6 +174,7 @@ MODULE ED_VARS_GLOBAL
   !local part of the Hamiltonian
   !=========================================================
   complex(8),dimension(:,:,:,:),allocatable          :: impHloc           !local hamiltonian
+  complex(8),dimension(:,:,:,:),allocatable          :: mfHloc            !additional mean-field terms
 
 
 
@@ -184,7 +205,13 @@ MODULE ED_VARS_GLOBAL
   real(8)                                            :: zeta_function
   real(8)                                            :: gs_energy
 
-
+  !Interaction coefficients used internally
+  !=========================================================
+  real(8),allocatable,dimension(:)                     :: Uloc_internal ! [Norb]
+  real(8),allocatable,dimension(:,:)                   :: Ust_internal  ! [Norb,Norb]
+  real(8),allocatable,dimension(:,:)                   :: Jh_internal   ! [Norb,Norb]
+  real(8),allocatable,dimension(:,:)                   :: Jx_internal   ! [Norb,Norb]
+  real(8),allocatable,dimension(:,:)                   :: Jp_internal   ! [Norb,Norb]
 
 
   !Green's functions
@@ -242,6 +269,11 @@ MODULE ED_VARS_GLOBAL
   character(len=10)                                  :: ineq_site_suffix="_ineq"
   integer                                            :: site_indx_padding=4
   logical                                            :: offdiag_gf_flag=.false.
+
+
+  !File suffixes for printing fine tuning.
+  !=========================================================
+  type(coulomb_matrix_element),dimension(:),allocatable  ::  coulomb_sundry
 
 
   !This is the internal Mpi Communicator and variables.
@@ -310,7 +342,6 @@ contains
 #endif
   end subroutine ed_del_MpiComm
   !=========================================================
-
 
 
 

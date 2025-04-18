@@ -59,6 +59,7 @@ ed_observables.rst
 ed_observables_nonsu2.rst
 ed_observables_normal.rst
 ed_observables_superc.rst
+ed_parse_umatrix.rst
 ed_rdm.rst
 ed_rdm_nonsu2.rst
 ed_rdm_normal.rst

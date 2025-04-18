@@ -11,7 +11,7 @@
      enddo
      !
      j=i
-     hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(j)
+     hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
      !
   case ("replica","general")
      htmp=zero
@@ -24,7 +24,7 @@
      enddo
      !
      j=i
-     hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(j)
+     hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
      !
      !off-diagonal elements
      do kp=1,Nbath
@@ -43,7 +43,7 @@
                  j    = j_el + (iph-1)*DimEl
                  htmp = conjg(hbath_tmp(1,1,iorb,jorb,kp))*sg1*sg2
                  !
-                 hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+                 hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
                  !
               endif
               !DW
@@ -60,7 +60,7 @@
                  !hbat_tmp written in Nambu repr
                  htmp = (hbath_tmp(Nnambu*Nspin,Nnambu*Nspin,iorb,jorb,kp))*sg1*sg2
                  !
-                 hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+                 hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
                  !
               endif
            enddo
@@ -85,7 +85,7 @@
               j    = j_el + (iph-1)*DimEl
               htmp = one*dmft_bath%d(1,iorb,kp)*sg1*sg2
               !
-              hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+              hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
               !
            endif
            !\Delta_l cdg_{\up,ms} cdg_{\dw,ms}
@@ -96,7 +96,7 @@
               j    = j_el + (iph-1)*DimEl
               htmp = one*dmft_bath%d(1,iorb,kp)*sg1*sg2 !
               !
-              hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+              hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
               !
            endif
         enddo
@@ -122,7 +122,7 @@
                  j    = j_el + (iph-1)*DimEl
                  htmp=conjg(hbath_tmp(1,Nnambu,iorb,jorb,kp))*sg1*sg2
                  !
-                 hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+                 hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
                  !
               endif
               !DW-UP \Delta_l c_{\dw,a} c_{\up,b}
@@ -138,7 +138,7 @@
                  j    = j_el + (iph-1)*DimEl
                  htmp=conjg(hbath_tmp(Nnambu,1,iorb,jorb,kp))*sg1*sg2
                  !
-                 hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+                 hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
                  !
               endif
               !

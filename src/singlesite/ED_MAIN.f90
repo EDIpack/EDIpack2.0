@@ -92,7 +92,12 @@ contains
     if(check_MPI())call ed_set_MpiComm()
 #endif
     !
-    write(LOGfile,"(A)")"INIT SOLVER FOR "//trim(ed_file_suffix)
+    if (ed_file_suffix == "") then
+      write(LOGfile,"(A)")"INIT SOLVER"
+    else
+      write(LOGfile,"(A)")"INIT SOLVER FOR "//trim(ed_file_suffix)
+    end if
+    
     !
     !Init ED Structure & memory
     if(isetup)call init_ed_structure() 

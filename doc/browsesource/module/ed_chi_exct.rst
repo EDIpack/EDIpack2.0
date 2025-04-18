@@ -6,5 +6,5 @@ ED_CHI_EXCT
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/detach_rdmft/src/singlesite/ED_NORMAL/ED_CHI_EXCT.f90>`_ for :f:mod:`ed_chi_exct` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/parse_umatrix/src/singlesite/ED_NORMAL/ED_CHI_EXCT.f90>`_ for :f:mod:`ed_chi_exct` on GitHub
  

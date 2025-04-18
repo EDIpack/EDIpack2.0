@@ -11,7 +11,7 @@
      enddo
      !
      i = j
-     hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(i)
+     hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
      !
   case("replica","general")
      htmp=zero
@@ -24,7 +24,7 @@
      enddo
      !
      i = j
-     hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(i)
+     hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
      !
      !off-diagonal elements
      !1. same spin:
@@ -43,7 +43,7 @@
                  i = binary_search(Hsector%H(1)%map,k2)
                  htmp = hbath_tmp(1,1,iorb,jorb,kp)*sg1*sg2
                  !
-                 hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
+                 hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
                  !
               endif
               !DW
@@ -58,7 +58,7 @@
                  i = binary_search(Hsector%H(1)%map,k2)
                  htmp = hbath_tmp(Nspin,Nspin,iorb,jorb,kp)*sg1*sg2
                  !
-                 hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
+                 hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
                  !
               endif
            enddo
@@ -82,7 +82,7 @@
                     i = binary_search(Hsector%H(1)%map,k2)
                     htmp = hbath_tmp(ispin,jspin,iorb,jorb,kp)*sg1*sg2
                     !
-                    hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
+                    hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
                     !
                  endif
               enddo

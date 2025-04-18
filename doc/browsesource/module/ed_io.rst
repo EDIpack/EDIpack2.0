@@ -6,5 +6,5 @@ ED_IO
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/detach_rdmft/src/singlesite/ED_IO/ED_IO.f90>`_ for :f:mod:`ed_io` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/parse_umatrix/src/singlesite/ED_IO/ED_IO.f90>`_ for :f:mod:`ed_io` on GitHub
  

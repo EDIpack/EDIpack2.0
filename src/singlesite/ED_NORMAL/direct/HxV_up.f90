@@ -11,7 +11,7 @@
            do iorb=1,Norb
               do jorb=1,Norb
                  Jcondition = &
-                      (impHloc(1,1,iorb,jorb)/=zero) .AND. &
+                      ((impHloc(1,1,iorb,jorb)+mfHloc(1,1,iorb,jorb))/=zero) .AND. &
                       (nup(jorb)==1) .AND. (nup(iorb)==0)
                  if (Jcondition) then
                     call c(jorb,mup,k1,sg1)
@@ -19,7 +19,7 @@
                     iup  = binary_search(Hsector%H(1)%map,k2)
                     idw  = jdw 
                     i    = iup + (idw-1)*DimUp + (iph-1)*DimUp*DimDw
-                    htmp = impHloc(1,1,iorb,jorb)*sg1*sg2
+                    htmp = (impHloc(1,1,iorb,jorb)+mfHloc(1,1,iorb,jorb))*sg1*sg2
                     !
                     Hv(i) = Hv(i) + htmp*vin(j)
                     !

@@ -10,8 +10,9 @@
      !> H_Imp: Diagonal Elements, i.e. local part
      htmp = zero
      do iorb=1,Norb
-        htmp = htmp + impHloc(1,1,iorb,iorb)*nup(iorb)
-        htmp = htmp + impHloc(Nspin,Nspin,iorb,iorb)*ndw(iorb)
+        htmp = htmp + (impHloc(1,1,iorb,iorb) + mfHloc(1,1,iorb,iorb))*nup(iorb)
+        htmp = htmp + (impHloc(Nspin,Nspin,iorb,iorb))*ndw(iorb)
+        htmp = htmp + (mfHloc(2,2,iorb,iorb))*ndw(iorb) !Needed because these terms come from the anticommutator
         htmp = htmp - xmu*(nup(iorb)+ndw(iorb))
      enddo
      !
@@ -31,14 +32,15 @@
            !occupation 0 and 1, as required by this if Jcondition:
            !UP
            Jcondition = &
-                (impHloc(1,1,iorb,jorb)/=zero) .AND. &
-                (ib(jorb)==1)                  .AND. &
+                (impHloc(1,1,iorb,jorb)/=zero .OR. &
+                 mfHloc(1,1,iorb,jorb)/=zero) .AND. &
+                (ib(jorb)==1)                 .AND. &
                 (ib(iorb)==0)
            if (Jcondition) then
               call c(jorb,m,k1,sg1)
               call cdg(iorb,k1,k2,sg2)
               j    = binary_search(Hsector%H(1)%map,k2)
-              htmp = conjg(impHloc(1,1,iorb,jorb))*sg1*sg2
+              htmp = conjg(impHloc(1,1,iorb,jorb)+mfHloc(1,1,iorb,jorb))*sg1*sg2
               !
               select case(MpiStatus)
               case (.true.)
@@ -50,14 +52,16 @@
            endif
            !DW: 
            Jcondition = &
-                (impHloc(Nspin,Nspin,iorb,jorb)/=zero) .AND. &
-                (ib(jorb+Ns)==1)                       .AND. &
+                (impHloc(Nspin,Nspin,iorb,jorb)/=zero  .OR. &
+                 mfHloc(2,2,iorb,jorb)/=zero) .AND. &
+                (ib(jorb+Ns)==1)                      .AND. &
                 (ib(iorb+Ns)==0)
            if (Jcondition) then
               call c(jorb+Ns,m,k1,sg1)
               call cdg(iorb+Ns,k1,k2,sg2)
               j    = binary_search(Hsector%H(1)%map,k2)
               htmp = conjg(impHloc(Nspin,Nspin,iorb,jorb))*sg1*sg2
+              htmp = htmp + conjg(mfHloc(2,2,iorb,jorb))*sg1*sg2  !Needed because these terms come from the anticommutator
               !
               select case(MpiStatus)
               case (.true.)

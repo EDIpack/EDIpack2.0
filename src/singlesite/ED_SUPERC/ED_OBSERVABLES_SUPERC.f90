@@ -324,7 +324,7 @@ contains
     write(LOGfile,"(A,10f18.12,f18.12,A)")"dens"//reg(ed_file_suffix)//"=",(dens(iorb),iorb=1,Norb),sum(dens)
     write(LOGfile,"(A,10f18.12,A)")    "docc"//reg(ed_file_suffix)//"=",(docc(iorb),iorb=1,Norb)
     write(LOGfile,"(A,20f18.12,A)")    "phiAB "//reg(ed_file_suffix)//"=",((phiscAB(iorb,jorb),iorb=1,Norb),jorb=1,Norb)
-    write(LOGfile,"(A,20f18.12,A)")     " | phiAA*Uloc ",(abs(uloc(iorb))*phisc(iorb),iorb=1,Norb)
+    write(LOGfile,"(A,20f18.12,A)")     " | phiAA*Uloc ",(abs(Uloc_internal(iorb))*phisc(iorb),iorb=1,Norb)
     if(Nspin==2)then
        write(LOGfile,"(A,10f18.12,A)")    "magZ"//reg(ed_file_suffix)//"=",(magz(iorb),iorb=1,Norb)
     endif
@@ -476,7 +476,7 @@ contains
              !Euloc=\sum=i U_i*(n_u*n_d)_i
              !ed_Epot = ed_Epot + dot_product(uloc,nup*ndw)*gs_weight
              do iorb=1,Norb
-                ed_Epot = ed_Epot + Uloc(iorb)*nup(iorb)*ndw(iorb)*gs_weight
+                ed_Epot = ed_Epot + Uloc_internal(iorb)*nup(iorb)*ndw(iorb)*gs_weight
              enddo
              !
              !DENSITY-DENSITY INTERACTION: DIFFERENT ORBITALS, OPPOSITE SPINS
@@ -485,7 +485,7 @@ contains
              if(Norb>1)then
                 do iorb=1,Norb
                    do jorb=iorb+1,Norb
-                      ed_Epot = ed_Epot + Ust*(nup(iorb)*ndw(jorb) + nup(jorb)*ndw(iorb))*gs_weight
+                      ed_Epot = ed_Epot + Ust_internal(iorb,jorb)*(nup(iorb)*ndw(jorb) + nup(jorb)*ndw(iorb))*gs_weight
                       ed_Dust = ed_Dust + (nup(iorb)*ndw(jorb) + nup(jorb)*ndw(iorb))*gs_weight
                    enddo
                 enddo
@@ -498,7 +498,7 @@ contains
              if(Norb>1)then
                 do iorb=1,Norb
                    do jorb=iorb+1,Norb
-                      ed_Epot = ed_Epot + (Ust-Jh)*(nup(iorb)*nup(jorb) + ndw(iorb)*ndw(jorb))*gs_weight
+                      ed_Epot = ed_Epot + (Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))*(nup(iorb)*nup(jorb) + ndw(iorb)*ndw(jorb))*gs_weight
                       ed_Dund = ed_Dund + (nup(iorb)*nup(jorb) + ndw(iorb)*ndw(jorb))*gs_weight
                    enddo
                 enddo
@@ -506,7 +506,7 @@ contains
              !
              !SPIN-EXCHANGE (S-E) TERMS
              !S-E: Jh *( c^+_iorb_up c^+_jorb_dw c_iorb_dw c_jorb_up )  (i.ne.j) 
-             if(Norb>1.AND.(Jx/=0d0.OR.Jp/=0d0))then
+             if(Norb>1.AND.(any((Jx_internal/=0d0)).OR.any((Jp_internal/=0d0))))then
                 do iorb=1,Norb
                    do jorb=1,Norb
                       Jcondition=((iorb/=jorb).AND.&
@@ -521,7 +521,7 @@ contains
                          call cdg(iorb,k3,k4,sg4)
                          j_el=binary_search(sectorI%H(1)%map,k4)
                          j   = j_el + (iph-1)*sectorI%DimEl
-                         ed_Epot = ed_Epot + Jx*sg1*sg2*sg3*sg4*v_state(i)*conjg(v_state(j))*peso
+                         ed_Epot = ed_Epot + Jx_internal(iorb,jorb)*sg1*sg2*sg3*sg4*v_state(i)*conjg(v_state(j))*peso
                          ed_Dse  = ed_Dse  + sg1*sg2*sg3*sg4*v_state(i)*conjg(v_state(j))*peso
                       endif
                    enddo
@@ -532,7 +532,7 @@ contains
              !PAIR-HOPPING (P-H) TERMS
              !P-H: J c^+_iorb_up c^+_iorb_dw   c_jorb_dw   c_jorb_up  (i.ne.j) 
              !P-H: J c^+_{iorb}  c^+_{iorb+Ns} c_{jorb+Ns} c_{jorb}
-             if(Norb>1.AND.(Jx/=0d0.OR.Jp/=0d0))then
+             if(Norb>1.AND.(any((Jx_internal/=0d0)).OR.any((Jp_internal/=0d0))))then
                 do iorb=1,Norb
                    do jorb=1,Norb
                       Jcondition=((iorb/=jorb).AND.&
@@ -547,7 +547,7 @@ contains
                          call cdg(iorb,k3,k4,sg4)
                          j_el=binary_search(sectorI%H(1)%map,k4)
                          j   = j_el + (iph-1)*sectorI%DimEl
-                         ed_Epot = ed_Epot + Jp*sg1*sg2*sg3*sg4*v_state(i)*conjg(v_state(j))*peso
+                         ed_Epot = ed_Epot + Jp_internal(iorb,jorb)*sg1*sg2*sg3*sg4*v_state(i)*conjg(v_state(j))*peso
                          ed_Dph  = ed_Dph  + sg1*sg2*sg3*sg4*v_state(i)*conjg(v_state(j))*peso
                       endif
                    enddo
@@ -558,13 +558,13 @@ contains
              !HARTREE-TERMS CONTRIBUTION:
              if(hfmode)then               
                 do iorb=1,Norb
-                   ed_Ehartree=ed_Ehartree - 0.5d0*uloc(iorb)*(nup(iorb)+ndw(iorb))*gs_weight + 0.25d0*uloc(iorb)*gs_weight
+                   ed_Ehartree=ed_Ehartree - 0.5d0*Uloc_internal(iorb)*(nup(iorb)+ndw(iorb))*gs_weight + 0.25d0*Uloc_internal(iorb)*gs_weight
                 enddo
                 if(Norb>1)then
                    do iorb=1,Norb
                       do jorb=iorb+1,Norb
-                         ed_Ehartree=ed_Ehartree - 0.5d0*Ust*(nup(iorb)+ndw(iorb)+nup(jorb)+ndw(jorb))*gs_weight + 0.5d0*Ust*gs_weight
-                         ed_Ehartree=ed_Ehartree - 0.5d0*(Ust-Jh)*(nup(iorb)+ndw(iorb)+nup(jorb)+ndw(jorb))*gs_weight + 0.5d0*(Ust-Jh)*gs_weight
+                         ed_Ehartree=ed_Ehartree - 0.5d0*Ust_internal(iorb,jorb)*(nup(iorb)+ndw(iorb)+nup(jorb)+ndw(jorb))*gs_weight + 0.5d0*Ust_internal(iorb,jorb)*gs_weight
+                         ed_Ehartree=ed_Ehartree - 0.5d0*(Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))*(nup(iorb)+ndw(iorb)+nup(jorb)+ndw(jorb))*gs_weight + 0.5d0*(Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))*gs_weight
                       enddo
                    enddo
                 endif
@@ -637,12 +637,14 @@ contains
   subroutine write_obs_info()
     integer :: unit,iorb,jorb,ispin
     !Parameters used:
-    unit = free_unit()
-    open(unit,file="parameters_info.ed")
-    write(unit,"(A1,90(A14,1X))")"#","1xmu","2beta",&
-         (reg(txtfy(2+iorb))//"U_"//reg(txtfy(iorb)),iorb=1,Norb),&
-         reg(txtfy(2+Norb+1))//"U'",reg(txtfy(2+Norb+2))//"Jh"
-    close(unit)
+    if(.not.ed_read_umatrix)then
+      unit = free_unit()
+      open(unit,file="parameters_info.ed")
+      write(unit,"(A1,90(A14,1X))")"#","1xmu","2beta",&
+           (reg(txtfy(2+iorb))//"U_"//reg(txtfy(iorb)),iorb=1,Norb),&
+           reg(txtfy(2+Norb+1))//"U'",reg(txtfy(2+Norb+2))//"Jh"
+      close(unit)
+    endif
     !
     !Generic observables 
     unit = free_unit()
@@ -702,10 +704,12 @@ contains
     integer :: unit,iorb,jorb,ispin
     !
     !Parameters used:
-    unit = free_unit()
-    open(unit,file="parameters_last"//reg(ed_file_suffix)//".ed")
-    write(unit,"(90F15.9)")xmu,beta,(uloc(iorb),iorb=1,Norb),Ust,Jh,Jx,Jp
-    close(unit)
+    if(.not.ed_read_umatrix)then
+      unit = free_unit()
+      open(unit,file="parameters_last"//reg(ed_file_suffix)//".ed")
+      write(unit,"(90F15.9)")xmu,beta,(uloc(iorb),iorb=1,Norb),Ust,Jh,Jx,Jp
+      close(unit)
+    endif
     !
     !Generic observables 
     unit = free_unit()
@@ -753,10 +757,12 @@ contains
        close(unit)
        !
        !
-       unit = free_unit()
-       open(unit,file="Occupation_prob"//reg(ed_file_suffix)//".ed")
-       write(unit,"(125F15.9)")Uloc(1),Prob,sum(Prob)
-       close(unit)
+       if(.not.ed_read_umatrix)then
+         unit = free_unit()
+         open(unit,file="Occupation_prob"//reg(ed_file_suffix)//".ed")
+         write(unit,"(125F15.9)")Uloc(1),Prob,sum(Prob)
+         close(unit)
+       endif
        !
        !N_ph probability:
        open(unit,file="Nph_probability"//reg(ed_file_suffix)//".ed")

@@ -5,6 +5,7 @@ MODULE ED_SETUP
   USE ED_INPUT_VARS
   USE ED_VARS_GLOBAL
   USE ED_AUX_FUNX
+  USE ED_PARSE_UMATRIX
   USE ED_SECTOR
   USE SF_TIMER
   USE SF_PARSE_INPUT, only: delete_input
@@ -35,7 +36,7 @@ contains
     !
     if(Lfit>Lmats)Lfit=Lmats
     if(Nspin>2)stop "ED ERROR: Nspin > 2 is currently not supported"
-    if(Norb>5)stop "ED ERROR: Norb > 5 is currently not supported"
+    if(Norb>5 .and. .not.ed_read_umatrix)stop "ED ERROR: Norb > 5 is supported only by providing a umatrix file"
     !
     if(.not.ed_total_ud)then
        if(bath_type=="hybrid")stop "ED ERROR: ed_total_ud=F can not be used with bath_type=hybrid"
@@ -301,11 +302,69 @@ contains
     endif
     !
     !ALLOCATE impHloc
+    if(.not.allocated(mfHloc))then
+       allocate(mfHloc(2,2,Norb,Norb)) !Anticommutator terms, always resolved by spin
+       mfHloc=zero
+    else
+       call assert_shape(mfHloc,[2,2,Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    !
+    !ALLOCATE impHloc
     if(.not.allocated(impHloc))then
        allocate(impHloc(Nspin,Nspin,Norb,Norb))
        impHloc=zero
     else
        call assert_shape(impHloc,[Nspin,Nspin,Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    !
+    !ALLOCATE AND SET interaction coefficient matrices
+    if(.not.allocated(Uloc_internal))then
+      allocate(Uloc_internal(Norb))
+      Uloc_internal = zero
+    else
+      call assert_shape(Uloc_internal,[Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Ust_internal))then
+      allocate(Ust_internal(Norb,Norb))
+      Ust_internal = zero
+    else
+      call assert_shape(Ust_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Jh_internal))then
+      allocate(Jh_internal(Norb,Norb))
+      Jh_internal = zero
+    else
+      call assert_shape(Jh_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Jx_internal))then
+      allocate(Jx_internal(Norb,Norb))
+      Jx_internal = zero
+    else
+      call assert_shape(Jx_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Jp_internal))then
+      allocate(Jp_internal(Norb,Norb))
+      Jp_internal = zero
+    else
+      call assert_shape(Jp_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    !
+    if(.not. ed_read_umatrix)then
+      if(Norb > 5)STOP "ED_READ_UMATRIX = F: max 5 orbitals allowed"
+      Uloc_internal = Uloc
+      Ust_internal = Ust
+      Jh_internal = Jh
+      Jx_internal = Jx
+      Jp_internal = Jp
+    else
+      if(.not. ED_TOTAL_UD) STOP "ED_TOTAL_UD = F and ED_READ_UMATRIX = T are incompatible"
+      call read_umatrix_file(umatrix_file)
+      !set Hubbard-Kanamori input parameters to zero
+      Uloc = zero
+      Ust = zero
+      Jh = zero
+      Jx = zero
+      Jp = zero
     endif
     !
     if(ed_mode=="superc")then
@@ -391,6 +450,13 @@ contains
     if(allocated(sectors_mask))deallocate(sectors_mask)
     if(allocated(neigen_sector))deallocate(neigen_sector)
     if(allocated(impHloc))deallocate(impHloc)
+    if(allocated(mfHloc))deallocate(mfHloc)
+    if(allocated(Uloc_internal))deallocate(Uloc_internal)
+    if(allocated(Ust_internal))deallocate(Ust_internal)
+    if(allocated(Jh_internal))deallocate(Jh_internal)
+    if(allocated(Jx_internal))deallocate(Jx_internal)
+    if(allocated(Jp_internal))deallocate(Jp_internal)
+    if(allocated(coulomb_sundry))deallocate(coulomb_sundry)
 
     if(allocated(ed_dens))deallocate(ed_dens)
     if(allocated(ed_docc))deallocate(ed_docc)

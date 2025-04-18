@@ -34,11 +34,15 @@ MODULE ED_HAMILTONIAN_NORMAL_COMMON
   integer                                   :: impi
   integer                                   :: iorb,jorb,ispin,jspin,ibath
   integer                                   :: kp,k1,k2,k3,k4
+  integer                                   :: p_dw_new, p_dw_old, p_up_new, p_up_old
   integer                                   :: ialfa,ibeta,indx
   real(8)                                   :: sg1,sg2,sg3,sg4
   real(8)                                   :: htmp,htmpup,htmpdw
   logical                                   :: Jcondition
   integer                                   :: Nfoo
+  integer                                   :: spinchange,icount
+  integer                                   :: iline
+  integer,dimension(2)                      :: orbvec, orbvec_dag, spinvec, spinvec_dag
   real(8),dimension(:,:,:),allocatable      :: diag_hybr ![Nspin,Norb,Nbath]
   real(8),dimension(:,:,:),allocatable      :: bath_diag ![Nspin,Norb/1,Nbath]
 
