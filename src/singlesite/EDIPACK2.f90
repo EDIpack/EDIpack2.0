@@ -36,6 +36,8 @@ MODULE EDIPACK2
        LOGfile       , &
        ed_mode       , &
        ed_verbose    , &
+       ed_read_umatrix,&
+       ed_sparse_H,&
        ed_hw_bath    , &
        ed_input_file ,&
        lanc_nstates_total ,&

@@ -50,9 +50,18 @@ program ed_normal_normal
   if(Nspin/=1 )stop "Wrong setup from input file: Nspin/=1"
   Nso=Nspin*Norb
   Nmomenta=4
+  !
   !Allocate Weiss Field:
   allocate(Weiss(1,Nspin,Nspin,Norb,Norb,Lmats))
   allocate(Smats(Nspin,Nspin,Norb,Norb,Lmats))
+  !
+  allocate(dens(Norb),dens_(Norb))
+  allocate(docc(Norb),docc_(Norb))
+  allocate(energy(8),energy_(8))
+  allocate(imp(2),imp_(2))
+  allocate(Wlist(size(Smats,5)))  
+  allocate(Smats11mom(Nmomenta),Smats11mom_(Nmomenta))
+  Wlist = pi/beta*(2*arange(1,Lmats)-1)
   !
   !
   allocate(Hloc(Nspin,Nspin,Norb,Norb))
@@ -70,90 +79,84 @@ program ed_normal_normal
   !
   Nb=ed_get_bath_dimension()
   allocate(Bath(Nb))
-  call ed_init_solver(bath)
   !
   !
-  !set Hloc
-  call ed_set_Hloc(hloc)
-  !
-  !Solve the IMPURITY PROBLEM
-  call ed_solve(bath)
-  call ed_get_sigma(Smats,axis="m",type="n")
-  !
-  !
-  ! Check observables
-  allocate(dens(Norb),dens_(Norb))
-  allocate(docc(Norb),docc_(Norb))
-  allocate(energy(8),energy_(8))
-  allocate(imp(2),imp_(2))
-  allocate(Wlist(size(Smats,5)))
-  allocate(Smats11mom(Nmomenta),Smats11mom_(Nmomenta))
-  write(*,*) ""
-  write(*,*) "ED_MODE = NORMAL   |   BATH_TYPE = NORMAL"
-  write(*,*) "Checking..."
-  unit =free_unit()
-  unit_=free_unit()
+  !SPARSE + HK
+  call run_test(.true.,.false.)
+  
+  ! !SPARSE + UMATRIX
+  ! call run_test(.true.,.true.)
 
-  ! density
-  call ed_get_dens(dens)
-  open(unit_,file="dens_last.check")
-  read(unit_,*) dens_(:)
-  close(unit_)
-  call assert(dens,dens_,"dens(:)")
-  !
-  !docc
-  call ed_get_docc(docc)
-  open(unit_,file="docc_last.check")
-  read(unit_,*) docc_(:)
-  close(unit_)
-  call assert(docc,docc_,"docc(:)")
-  !
-  !energies
-  open(unit,file="energy_last.ed")
-  read(unit,*) energy(:)
-  close(unit)
-  open(unit_,file="energy_last.check")
-  read(unit_,*) energy_(:)
-  close(unit_)
-  call assert(energy,energy_,"energy(:)")
-  !
-  !impurity info
-  call ed_get_imp_info(imp)
-  open(unit_,file="imp_last.check")
-  read(unit_,*) imp_(:)
-  close(unit_)
-  call assert(imp,imp_,"imp(:)")
-  !
-  !Self-Energy
-  open(unit,file="impSigma_l11_s1_iw.ed")
-  do iw=1,size(Smats,5)
-     read(unit,*) Wlist(iw), Im, Re
-  enddo
-  close(unit)
-  ! Get momenta
-  do i=1,Nmomenta
-     call compute_momentum(Wlist,Smats(1,1,1,1,:),i,Smats11mom(i))
-  enddo
-  ! Write new momenta
-  open(unit_,file="impSigma_l11_s1_iw.momenta.new")
-  do i=1,Nmomenta
-     write(unit_,*) i, Smats11mom(i)
-  enddo
-  close(unit_)
-  !Read check momenta
-  open(unit_,file="impSigma_l11_s1_iw.momenta.check")
-  do i=1,Nmomenta
-     read(unit_,*) iw, Smats11mom_(i)
-  end do
-  close(unit_)
-  call assert(Smats11mom/Smats11mom_,dble(ones(Nmomenta)),"Sigma_matsubara_l11(:)",tol=1.0d-8)
+  ! !DIRECT + HK
+  ! call run_test(.false.,.false.)
 
-
+  ! !DIRECT + UMATRIX
+  ! call run_test(.false.,.true.)
+  
+  
   call finalize_MPI()
 
 
 
 contains
+
+
+  subroutine run_test(sparse,umatrix)
+    logical :: sparse,umatrix
+    ! ED_SPARSE_H    =sparse
+    ! ED_READ_UMATRIX=umatrix
+    ! LOGFILE=100
+    ! if(sparse)LOGFILE=LOGFILE+10
+    ! if(umatrix)LOGFILE=LOGFILE+1
+    call ed_init_solver(bath)
+    call ed_set_Hloc(hloc)
+    write(*,*) ""
+    write(*,*) "ED_MODE = NORMAL   |   BATH_TYPE = NORMAL"
+    write(*,*) "SPARSE_H= "//str(sparse)//"        |   Umatrix = "//str(umatrix)
+    write(*,*) "Checking..."
+    call ed_solve(bath)
+    call test_results()
+    call ed_finalize_solver()
+  end subroutine run_test
+
+
+
+  
+
+  subroutine test_results()
+    !
+    !get ED
+    call ed_get_sigma(Smats,axis="m",type="n")
+    call ed_get_dens(dens)
+    call ed_get_docc(docc)
+    call ed_get_eimp(energy(1:4))
+    call ed_get_doubles(energy(5:8))
+    call ed_get_imp_info(imp)   
+    do i=1,Nmomenta
+       call compute_momentum(Wlist,Smats(1,1,1,1,:),i,Smats11mom(i))
+    enddo
+    !
+    call read_array("dens_last.check",dens_)
+    call read_array("docc_last.check",docc_)
+    call read_array("energy_last.check",energy_)
+    call read_array("imp_last.check",imp_)
+    print*,imp
+    print*,imp_
+    call read_array("impSigma_l11_s1_iw.momenta.check",Smats11mom_)
+    !
+    !
+    call assert(dens,dens_,"dens(:)")
+    call assert(docc,docc_,"docc(:)")
+    call assert(energy,energy_,"energy(:)")
+    call assert(imp,imp_,"imp(:)")
+    call assert(Smats11mom/Smats11mom_,dble(ones(Nmomenta)),"Sigma_matsubara_l11(:)",tol=1.0d-8)
+    !
+  end subroutine test_results
+
+
+
+
+
 
 
   function so2j_index(ispin,iorb) result(isporb)
@@ -219,7 +222,7 @@ contains
   end subroutine compute_momentum
 
 
-end program ed_normal_normal
+end program
 
 
 

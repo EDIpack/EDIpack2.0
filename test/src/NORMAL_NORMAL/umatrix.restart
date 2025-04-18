@@ -1,0 +1,36 @@
+# w2dyn-written: <Kan: U=100 U'=10 J=1>
+2 BANDS
+
+#ULOC
+1 d 1 u 1 d 1 u 2d0
+1 u 1 d 1 u 1 d 2d0
+2 d 2 u 2 d 2 u 2d0
+2 u 2 d 2 u 2 d 2d0
+
+#UST
+1 d 2 u 1 d 2 u 1.5d0
+1 u 2 d 1 u 2 d 1.5d0
+2 d 1 u 2 d 1 u 1.5d0
+2 u 1 d 2 u 1 d 1.5d0
+
+#UST-JH (no subtraction)
+1 u 2 u 1 u 2 u 1.5d0
+2 d 1 d 2 d 1 d 1.5d0
+2 u 1 u 2 u 1 u 1.5d0
+1 d 2 d 1 d 2 d 1.5d0
+
+#UST-JH (subtracts to the block before)
+1 u 2 u 2 u 1 u 0.25d0
+2 u 1 u 1 u 2 u 0.25d0
+1 d 2 d 2 d 1 d 0.25d0
+2 d 1 d 1 d 2 d 0.25d0
+
+#JX, JP
+1 d 1 u 2 d 2 u 0.25d0
+1 d 2 u 2 d 1 u 0.25d0
+1 u 1 d 2 u 2 d 0.25d0
+1 u 2 d 2 u 1 d 0.25d0
+2 d 1 u 1 d 2 u 0.25d0
+2 d 2 u 1 d 1 u 0.25d0
+2 u 1 d 1 u 2 d 0.25d0
+2 u 2 d 1 u 1 d 0.25d0

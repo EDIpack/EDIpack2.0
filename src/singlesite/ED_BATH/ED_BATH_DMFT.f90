@@ -289,6 +289,7 @@ contains
     if(IOfile)then
        call read_dmft_bath(used=.false.)
     endif
+    
   end subroutine init_dmft_bath
 
 
@@ -331,7 +332,8 @@ contains
     if(dmft_bath%status)call deallocate_dmft_bath()
     call allocate_dmft_bath()
     !
-    flen = file_length(str(file),verbose=ed_verbose>2)
+    flen = file_length(file,verbose=ed_verbose>2)
+    if(flen==0)stop "Can not read file "//str(file)
     !
     open(free_unit(unit),file=str(file))
     !

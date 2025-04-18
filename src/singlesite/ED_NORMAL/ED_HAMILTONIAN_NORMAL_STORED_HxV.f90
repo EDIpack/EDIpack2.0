@@ -804,7 +804,7 @@ contains
        call allgather_vector_MPI(MpiComm,v,vt)
        !
        do i=1,Nloc
-          iph = (i-1)/(DimUp*MpiQdw) + 1
+          iph  = (i-1)/(DimUp*MpiQdw)  + 1
           i_el = mod(i-1,DimUp*MpiQdw) + 1
           matmul: do j_el=1,spH0nd%row(i_el)%Size
              val = spH0nd%row(i_el)%dvals(j_el)
