@@ -39,7 +39,7 @@
   endif
   !
   i = j
-  hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(i)
+  hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
   !
   !
   ! SPIN-EXCHANGE (S-E) and PAIR-HOPPING TERMS
@@ -62,7 +62,7 @@
               i=binary_search(Hsector%H(1)%map,k4)
               htmp = one*Jx_internal(iorb,jorb)*sg1*sg2*sg3*sg4
               !
-              if(i/=0)hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
+              if(i/=0)hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
               !
            endif
         enddo
@@ -89,7 +89,7 @@
               i=binary_search(Hsector%H(1)%map,k4)
               htmp = one*Jp_internal(iorb,jorb)*sg1*sg2*sg3*sg4
               !
-              if(i/=0)hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
+              if(i/=0)hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
               !
            endif
         enddo
@@ -138,7 +138,7 @@
        i=binary_search(Hsector%H(1)%map,k4)
        htmp = one*coulomb_sundry(iline)%U*sg1*sg2*sg3*sg4
        !
-       if(i/=0)hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
+       if(i/=0)hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
       !
      enddo
   endif

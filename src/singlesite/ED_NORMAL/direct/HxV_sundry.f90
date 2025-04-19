@@ -5,8 +5,8 @@
      jup = iup_index(j_el,DimUp)
      jdw = idw_index(j_el,DimUp)
      !
-     mup = Hsector%H(1)%map(iup)
-     mdw = Hsector%H(2)%map(idw)
+     mup = Hsector%H(1)%map(jup)
+     mdw = Hsector%H(2)%map(jdw)
      !
      nup = bdecomp(mup,Ns)
      ndw = bdecomp(mdw,Ns)
@@ -70,9 +70,9 @@
            if(Jcondition)then 
              p_up_old = p_up_new
              p_dw_old = p_dw_new
-             if (spinvec(2)==1)then
+             if (spinvec(1)==1)then
                call c(orbvec(1), p_up_old ,p_up_new ,sg3 ,Jcondition)  !last annihilation operator
-             elseif (spinvec(2)==2)then
+             elseif (spinvec(1)==2)then
                call c(orbvec(1), p_dw_old ,p_dw_new ,sg3 ,Jcondition)  !last annihilation operator
              endif
              if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
@@ -82,21 +82,21 @@
            if(Jcondition)then 
              p_up_old = p_up_new
              p_dw_old = p_dw_new
-             if (spinvec(2)==1)then
+             if (spinvec_dag(1)==1)then
                call cdg(orbvec(1), p_up_old ,p_up_new ,sg4 ,Jcondition)  !last annihilation operator
-             elseif (spinvec(2)==2)then
+             elseif (spinvec_dag(1)==2)then
                call cdg(orbvec(1), p_dw_old ,p_dw_new ,sg4 ,Jcondition)  !last annihilation operator
              endif
              if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
            endif
            !
-           jdw=binary_search(Hsector%H(2)%map,p_dw_new)
-           jup=binary_search(Hsector%H(1)%map,p_up_new)
+           idw=binary_search(Hsector%H(2)%map,p_dw_new)
+           iup=binary_search(Hsector%H(1)%map,p_up_new)
            htmp = coulomb_sundry(iline)%U * sg1 * sg2 * sg3 * sg4
            !
            i = iup + (idw-1)*dimup + (iph-1)*DimUp*DimDw
            !
-           Hv(i) = Hv(i) + htmp*vin(j)
+           Hv(j) = Hv(j) + htmp*vt(i)
           !
          enddo
       endif

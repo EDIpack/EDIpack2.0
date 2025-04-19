@@ -27,7 +27,7 @@
            j    = j_el + (iph-1)*DimEl
            htmp = conjg(impHloc(1,1,iorb,jorb)+mfHloc(1,1,iorb,jorb))*sg1*sg2
            !
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
         endif
         !DW
@@ -44,7 +44,7 @@
            htmp = conjg(impHloc(Nspin,Nspin,iorb,jorb))*sg1*sg2
            htmp = htmp + conjg(mfHloc(2,2,iorb,jorb))*sg1*sg2
            !
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
         endif
      enddo
@@ -62,7 +62,7 @@
            j    = j_el + (iph-1)*DimEl
            htmp=one*pair_field(iorb)*sg1*sg2
            !
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
         endif
         !
@@ -74,7 +74,7 @@
            j    = j_el + (iph-1)*DimEl
            htmp=one*pair_field(iorb)*sg1*sg2 !
            !
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
         endif
      enddo

@@ -39,7 +39,7 @@
   endif
   !
   j = i
-  hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+  hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
   !
 
 
@@ -64,7 +64,7 @@
               j    = j_el + (iph-1)*DimEl
               htmp = one*Jx_internal(iorb,jorb)*sg1*sg2*sg3*sg4
               !
-              if(j/=0)hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+              if(j/=0)hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
               !
            endif
         enddo
@@ -92,7 +92,7 @@
               j    = j_el + (iph-1)*DimEl
               htmp = one*Jp_internal(iorb,jorb)*sg1*sg2*sg3*sg4
               !
-              if(j/=0)hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+              if(j/=0)hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
               !
            endif
         enddo
@@ -142,7 +142,7 @@
        j    = j_el + (iph-1)*DimEl
        htmp = one*coulomb_sundry(iline)%U *sg1*sg2*sg3*sg4
        !
-       if(j/=0)hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+       if(j/=0)hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
        !
       !
      enddo

@@ -331,28 +331,21 @@ contains
     end if
     !
     !NON-LOCAL HAMILTONIAN PART: H_non_loc*vin = vout
-    if(nonloc_condition)then
+    if(either_condition)then
        N = 0
        call AllReduce_MPI(MpiComm,Nloc,N)
        !
        allocate(vt(N)) ; vt = 0d0
        call allgather_vector_MPI(MpiComm,vin,vt)
        !
-       include "direct_mpi/HxV_non_local.f90"
+       if(nonloc_condition)then
+         include "direct_mpi/HxV_non_local.f90"
+       endif
+       if(sundry_condition)then
+         include "direct_mpi/HxV_sundry.f90"
+       endif
        !
-       deallocate(Vt)
-    endif
-    !NON-LOCAL HAMILTONIAN PART: H_non_loc*vin = vout
-    if(sundry_condition)then
-       N = 0
-       call AllReduce_MPI(MpiComm,Nloc,N)
-       !
-       allocate(vt(N)) ; vt = 0d0
-       call allgather_vector_MPI(MpiComm,vin,vt)
-       !
-       include "direct_mpi/HxV_sundry.f90"
-       !
-       deallocate(Vt)
+       deallocate(vt)
     endif
     !-----------------------------------------------!
     !
