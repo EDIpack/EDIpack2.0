@@ -25,7 +25,7 @@
            call cdg(iorb,k1,k2,sg2)
            j_el = binary_search(Hsector%H(1)%map,k2)
            j    = j_el + (iph-1)*DimEl
-           htmp = conjg(impHloc(1,1,iorb,jorb)+mfHloc(1,1,iorb,jorb))*sg1*sg2
+           htmp = (impHloc(1,1,iorb,jorb)+mfHloc(1,1,iorb,jorb))*sg1*sg2
            !
            hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
@@ -41,8 +41,8 @@
            call cdg(iorb+Ns,k1,k2,sg2)
            j_el = binary_search(Hsector%H(1)%map,k2)
            j    = j_el + (iph-1)*DimEl
-           htmp = conjg(impHloc(Nspin,Nspin,iorb,jorb))*sg1*sg2
-           htmp = htmp + conjg(mfHloc(2,2,iorb,jorb))*sg1*sg2
+           htmp = impHloc(Nspin,Nspin,iorb,jorb)*sg1*sg2
+           htmp = htmp + mfHloc(2,2,iorb,jorb)*sg1*sg2
            !
            hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
