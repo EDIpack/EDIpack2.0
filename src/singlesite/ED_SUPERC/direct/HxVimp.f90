@@ -1,11 +1,11 @@
   !Diagonal Elements, i.e. local part
   htmp = zero
-  htmp = htmp - xmu*(sum(nup)+sum(ndw))
   !
   do iorb=1,Norb
     htmp = htmp + (impHloc(1,1,iorb,iorb) + mfHloc(1,1,iorb,iorb))*nup(iorb)
     htmp = htmp + impHloc(Nspin,Nspin,iorb,iorb)*ndw(iorb)
-    htmp = htmp + mfHloc(2,2,iorb,iorb) * ndw(iorb)
+    htmp = htmp + mfHloc(2,2,iorb,iorb) * ndw(iorb)!Needed because these terms come from the anticommutator
+    htmp = htmp - xmu*(nup(iorb)+ndw(iorb))
   enddo
   !
   hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(i)

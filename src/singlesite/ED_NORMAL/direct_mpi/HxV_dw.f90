@@ -50,7 +50,7 @@
                        i   = iup + (idw-1)*DimDw
                        htmp = hbath_tmp(Nspin,Nspin,iorb,jorb,kp)*sg1*sg2
                        !
-                       hvt(i) = hvt(i) + htmp*vt(j)
+                       Hvt(i) = Hvt(i) + htmp*vt(j)
                        !
                     endif
                  enddo
@@ -107,10 +107,10 @@
                     i   = iup + (idw-1)*DimDw
                     !
                     htmp = exc_field(1)*sg1*sg2
-                    Hv(i) = Hv(i) + htmp*vin(j)
+                    Hvt(i) = Hvt(i) + htmp*vt(j)
                     !
                     htmp = -exc_field(4)*sg1*sg2
-                    Hv(i) = Hv(i) + htmp*vin(j)
+                    Hvt(i) = Hvt(i) + htmp*vt(j)
                  endif
               enddo
            enddo

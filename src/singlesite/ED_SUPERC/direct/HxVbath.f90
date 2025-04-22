@@ -10,8 +10,7 @@
         enddo
      enddo
      !
-     j=i
-     hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
+     hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(i)
      !
   case ("replica","general")
      htmp=zero
@@ -23,8 +22,7 @@
         enddo
      enddo
      !
-     j=i
-     hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
+     hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(i)
      !
      !off-diagonal elements
      do kp=1,Nbath
