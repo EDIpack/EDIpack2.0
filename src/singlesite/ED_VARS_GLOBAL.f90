@@ -233,11 +233,14 @@ MODULE ED_VARS_GLOBAL
   !Local energies and generalized double occupancies
   !PRIVATE (now public but accessible thru routines)
   !=========================================================
+  real(8),dimension(:),allocatable                   :: ed_evals
   real(8),dimension(:),allocatable                   :: ed_dens
-  real(8),dimension(:),allocatable                   :: ed_dens_up,ed_dens_dw
+  real(8),dimension(:),allocatable                   :: ed_dens_up
+  real(8),dimension(:),allocatable                   :: ed_dens_dw
   real(8),dimension(:),allocatable                   :: ed_docc
   real(8),dimension(:,:),allocatable                 :: ed_phisc
   real(8),dimension(:,:),allocatable                 :: ed_mag
+  real(8),dimension(:,:,:),allocatable               :: ed_exct ![1:4,Norb,Norb]
   real(8),dimension(:),allocatable                   :: ed_imp_info
   real(8)                                            :: ed_Ekin
   real(8)                                            :: ed_Epot

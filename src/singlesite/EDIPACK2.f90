@@ -96,6 +96,7 @@ MODULE EDIPACK2
        ed_get_exctChi         , &       
        ed_get_dens            , &
        ed_get_phi             , &
+       ed_get_exct            , &
        ed_get_mag             , &
        ed_get_docc            , &
        ed_get_eimp            , &
@@ -104,6 +105,7 @@ MODULE EDIPACK2
        ed_get_ehartree        , &
        ed_get_eknot           , &
        ed_get_doubles         , &
+       ed_get_evals           , &
        ed_get_imp_info        , &
        ed_get_nsectors        , &
        ed_get_neigen_sector   , &

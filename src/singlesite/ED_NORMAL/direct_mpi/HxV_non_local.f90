@@ -1,12 +1,12 @@
-  do j=1,Nloc
-     j_el = mod(j-1,DimUp*MpiQdw) + 1
-     iph = (j-1)/(DimUp*MpiQdw) + 1
+  do j=1,Nloc                   !DimUp*MpiQdw*DimPh.
+     j_el = mod(j-1,DimUp*MpiQdw) + 1 !strip the phonon first
+     iph = (j-1)/(DimUp*MpiQdw) + 1   !get phonon index
      !
      jup = iup_index(j_el+mpiIshift,DimUp)
      jdw = idw_index(j_el+mpiIshift,DimUp)
      !
-     mup = Hsector%H(1)%map(iup)
-     mdw = Hsector%H(2)%map(idw)
+     mup = Hsector%H(1)%map(jup)
+     mdw = Hsector%H(2)%map(jdw)
      !
      nup = bdecomp(mup,Ns)
      ndw = bdecomp(mdw,Ns)

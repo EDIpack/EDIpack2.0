@@ -92,6 +92,7 @@ module ED_EIGENSPACE
   !
   public :: es_return_sector       !get the sector of a state       !checked
   public :: es_return_energy       !get the energy of a state       !checked
+  public :: es_return_evals        !get the eigenvalues list
   !subroutine
   public :: es_return_dvector      !get the vector of a state       !checked
   public :: es_return_cvector      !get the vector of a state       !checked
@@ -619,6 +620,26 @@ contains        !some routine to perform simple operation on the lists
     if(associated(c))nullify(c)
   end function es_return_energy
 
+
+
+
+
+  subroutine es_return_evals(space,evals)
+    !
+    ! Returns the list of eigen-energies of the indicated :f:var:`sparse_estate` in the list. 
+    !
+    type(sparse_espace),intent(in)   :: space
+    real(8),dimension(:),allocatable :: evals
+    integer                          :: i
+    if(allocated(evals))deallocate(evals)
+    if(.not.space%status) stop "es_return_evals: space%stauts=F, not allocated"
+    if(space%size==0)stop "es_return_evals: space%size=0"
+    allocate(evals(space%size))
+    do i=1,space%size
+       evals(i) = es_return_energy(space,i)
+    enddo
+  end subroutine es_return_evals
+  
 
 
   !+------------------------------------------------------------------+

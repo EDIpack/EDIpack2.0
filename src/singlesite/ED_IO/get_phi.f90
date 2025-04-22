@@ -1,6 +1,6 @@
 subroutine ed_get_phisc_n0(self,iorb,jorb)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   real(8)          :: self ! :math:`\phi` value or array of values
   integer,optional :: iorb ! first orbital index
