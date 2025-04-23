@@ -491,9 +491,9 @@ MODULE ED_INPUT_VARS
   !File to read the input local H from
   ! :Default HLOCfile:`inputHLOC.in`
   !
-  character(len=100)                                           :: UmatrixFile !
-  !File read the list of two-body operators from 
-  ! :Default HLOCfile:`umatrix[.used/restart]`
+  character(len=100)                                           :: Umatrix_File !
+  !File containing the list of two-body operators
+  ! :Default umatrix_file:`umatrix[.used/restart]`
   !
   character(len=100)                                           :: SectorFile !
   !File where to retrieve/store the sectors contributing to the spectrum 
@@ -514,9 +514,6 @@ MODULE ED_INPUT_VARS
   !
   !THIS IS JUST A RELOCATED GLOBAL VARIABLE
   character(len=200)                                 :: ed_input_file=""    !Name of input file
-  character(len=200)                                 :: umatrix_file=""     !
-  !Name of two-body operator file
-  ! :Default umatrix_file:`umatrix`
 
 contains
 

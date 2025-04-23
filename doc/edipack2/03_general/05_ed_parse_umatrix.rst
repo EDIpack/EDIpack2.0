@@ -14,6 +14,10 @@ the :code:`.restart` suffix. When doing a real-space DMFT simulation, the prefix
 :code:`_ineqXXXX.restart` , where :code:`XXXX` is a 4-digit incresing number corresponding to the index of 
 the inequivalent site.
 
+After the interaction terms have been set in either way, a properly formatted file 
+called :f:var:`UMATRIX_FILE` :code:`.used` 
+will be generated containing the list of all two-body operators.
+
 Each umatrix file needs to have the following format:
 
 .. code-block:: text
@@ -64,17 +68,18 @@ What follows is an example for a Hubbard-Kanamori interaction corresponding to t
    2 u 1 u 2 u 1 u 9.0
    1 d 2 d 1 d 2 d 9.0
    
-   #JX, JP
-   1 d 1 u 2 d 2 u 1.0
-   1 d 2 u 2 d 1 u 1.0
-   1 u 1 d 2 u 2 d 1.0
-   1 u 2 d 2 u 1 d 1.0
-   2 d 1 u 1 d 2 u 1.0
-   2 d 2 u 1 d 1 u 1.0
-   2 u 1 d 1 u 2 d 1.0
-   2 u 2 d 1 u 1 d 1.0
-
+   #JX
+   1 d 2 u 2 d 1 u 3.0
+   1 u 2 d 2 u 1 d 3.0
+   2 d 1 u 1 d 2 u 3.0
+   2 u 1 d 1 u 2 d 3.0
+   
+   #JP
+   1 d 1 u 2 d 2 u 4.0
+   1 u 1 d 2 u 2 d 4.0
+   2 d 2 u 1 d 1 u 4.0
+   2 u 2 d 1 u 1 d 4.0
 
 
 .. f:automodule::   ed_parse_umatrix
-   :members: read_umatrix_file
+   :members: read_umatrix_file, save_umatrix_file
