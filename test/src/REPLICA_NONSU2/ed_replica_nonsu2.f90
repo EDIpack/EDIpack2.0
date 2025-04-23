@@ -1,4 +1,4 @@
-program ed_replica_normal
+program ed_replica_nonsu2
   USE EDIPACK2
   USE SCIFOR
   USE MPI

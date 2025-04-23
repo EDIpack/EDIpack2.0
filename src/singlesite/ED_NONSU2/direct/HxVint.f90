@@ -38,8 +38,7 @@
      endif
   endif
   !
-  i = j
-  hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+  hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(j)
   !
   !
   ! SPIN-EXCHANGE (S-E) and PAIR-HOPPING TERMS
@@ -62,7 +61,7 @@
               i=binary_search(Hsector%H(1)%map,k4)
               htmp = one*Jx_internal(iorb,jorb)*sg1*sg2*sg3*sg4
               !
-              if(i/=0)hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+              hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
               !
            endif
         enddo
@@ -89,56 +88,56 @@
               i=binary_search(Hsector%H(1)%map,k4)
               htmp = one*Jp_internal(iorb,jorb)*sg1*sg2*sg3*sg4
               !
-              if(i/=0)hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+              hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
               !
            endif
         enddo
      enddo
   endif
-  
- !Sundry Coulomb terms
- if(allocated(coulomb_sundry))then
-    do iline=1,size(coulomb_sundry)
-       orbvec_dag  = [coulomb_sundry(iline)%cd_i(1), coulomb_sundry(iline)%cd_j(1)]
-       orbvec      = [coulomb_sundry(iline)%c_k(1),  coulomb_sundry(iline)%c_l(1) ]
-       spinvec_dag = [coulomb_sundry(iline)%cd_i(2), coulomb_sundry(iline)%cd_j(2)]
-       spinvec     = [coulomb_sundry(iline)%c_k(2),  coulomb_sundry(iline)%c_l(2) ]
-       
-      
-       !- we need to operate on either m_up or m_dw depending on the spins
-       !- the operators need to be applied from right to left as c -> cd -> c -> cd to be consistent with the
-       !  density terms originating from the anticommutation relations that are included in mfHloc
-       
-       Jcondition=.true. !Start applying operators
-       !
-       !last annihilation operator
-       if(Jcondition)then 
-         call c(orbvec(2) + Ns * (spinvec(2)-1), m ,k1 ,sg1 ,Jcondition)  !last annihilation operator
-         if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
-       endif
-       !
-       !last creation operator
-       if(Jcondition)then 
+
+  !Sundry Coulomb terms
+  if(allocated(coulomb_sundry))then
+     do iline=1,size(coulomb_sundry)
+        orbvec_dag  = [coulomb_sundry(iline)%cd_i(1), coulomb_sundry(iline)%cd_j(1)]
+        orbvec      = [coulomb_sundry(iline)%c_k(1),  coulomb_sundry(iline)%c_l(1) ]
+        spinvec_dag = [coulomb_sundry(iline)%cd_i(2), coulomb_sundry(iline)%cd_j(2)]
+        spinvec     = [coulomb_sundry(iline)%c_k(2),  coulomb_sundry(iline)%c_l(2) ]
+
+
+        !- we need to operate on either m_up or m_dw depending on the spins
+        !- the operators need to be applied from right to left as c -> cd -> c -> cd to be consistent with the
+        !  density terms originating from the anticommutation relations that are included in mfHloc
+
+        Jcondition=.true. !Start applying operators
+        !
+        !last annihilation operator
+        if(Jcondition)then 
+           call c(orbvec(2) + Ns * (spinvec(2)-1), m ,k1 ,sg1 ,Jcondition)  !last annihilation operator
+           if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
+        endif
+        !
+        !last creation operator
+        if(Jcondition)then 
            call cdg(orbvec_dag(2) + Ns * (spinvec_dag(2)-1), k1, k2, sg2, Jcondition)   !last annihilation operator
-         if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
-       endif
-       !
-       !first annihilation operator
-       if(Jcondition)then 
-         call c(orbvec(1) + Ns * (spinvec(1)-1), k2 ,k3 ,sg3 ,Jcondition)  !last annihilation operator
-         if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
-       endif
-       !
-       !last creation operator
-       if(Jcondition)then 
+           if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
+        endif
+        !
+        !first annihilation operator
+        if(Jcondition)then 
+           call c(orbvec(1) + Ns * (spinvec(1)-1), k2 ,k3 ,sg3 ,Jcondition)  !last annihilation operator
+           if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
+        endif
+        !
+        !last creation operator
+        if(Jcondition)then 
            call cdg(orbvec_dag(1) + Ns * (spinvec_dag(1)-1), k3, k4, sg4, Jcondition)   !last annihilation operator
-         if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
-       endif
-       !
-       i=binary_search(Hsector%H(1)%map,k4)
-       htmp = one*coulomb_sundry(iline)%U*sg1*sg2*sg3*sg4
-       !
-       if(i/=0)hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
-      !
+           if (.not. Jcondition) cycle                 !this gives zero, no hamiltonian element added
+        endif
+        !
+        i=binary_search(Hsector%H(1)%map,k4)
+        htmp = one*coulomb_sundry(iline)%U*sg1*sg2*sg3*sg4
+        !
+        hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+        !
      enddo
   endif
