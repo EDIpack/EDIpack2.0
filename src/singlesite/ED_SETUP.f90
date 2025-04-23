@@ -11,6 +11,7 @@ MODULE ED_SETUP
   USE SF_PARSE_INPUT, only: delete_input
   USE SF_IOTOOLS, only:free_unit,reg,file_length
   USE SF_MISC, only: assert_shape
+  USE SF_LINALG, only: eye
 #ifdef _MPI
   USE MPI
   USE SF_MPI
@@ -352,10 +353,10 @@ contains
     if(.not. ed_read_umatrix)then
       if(Norb > 5)STOP "ED_READ_UMATRIX = F: max 5 orbitals allowed"
       Uloc_internal = Uloc
-      Ust_internal = Ust
-      Jh_internal = Jh
-      Jx_internal = Jx
-      Jp_internal = Jp
+      Ust_internal = Ust - Ust*eye(Norb)
+      Jh_internal = Jh - Jh*eye(Norb)
+      Jx_internal = Jx - Jx*eye(Norb)
+      Jp_internal = Jp - Jp*eye(Norb)
     else
       if(.not. ED_TOTAL_UD) STOP "ED_TOTAL_UD = F and ED_READ_UMATRIX = T are incompatible"
       call read_umatrix_file(umatrix_file)
@@ -366,6 +367,7 @@ contains
       Jx = zero
       Jp = zero
     endif
+    call save_umatrix_file()
     !
     if(ed_mode=="superc")then
        allocate(impGmatrix(2*Nspin,2*Nspin,Norb,Norb))

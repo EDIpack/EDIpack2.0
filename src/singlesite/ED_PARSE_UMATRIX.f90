@@ -7,9 +7,95 @@ MODULE ED_PARSE_UMATRIX
   private
   
   public :: read_umatrix_file
+  public :: save_umatrix_file
  
 contains
 
+
+  subroutine save_umatrix_file(ufile)
+    !This subroutine saves the currently used interaction Hamiltonian into a file. It takes
+    !the elements from the internal :f:var:`Uloc`, :f:var:`Ust`, :f:var:`Jh`, :f:var:`Jx`,
+    !:f:var:`Jp` and sundry terms
+    character(len=*),optional     :: ufile  !File to which the interaction operators are saved. Default :code:`umatrix.used`
+    character(len=256)            :: outfile 
+    integer                       :: iline,flen,unit_umatrix,rank, nops, ispin, jspin, iorb, jorb, ierr
+    real(8)                       :: dummyU
+    integer                       :: o1, o2, o3, o4
+    character(len=1)              :: s1, s2, s3, s4
+    
+    outfile=trim(umatrix_file)//reg(ed_file_suffix)//".used"
+    if(present(ufile))outfile=trim(ufile)
+    
+    unit_umatrix = free_unit()
+    
+    open(unit_umatrix,file=outfile)
+      write(unit_umatrix, '(A)') "#Interaction two-body operators"
+      write(unit_umatrix, '(I0,1X,A)') Norb, "BANDS"
+      !First: write the Uloc terms
+      do iorb = 1, Norb
+        if(Uloc_internal(iorb)/=0)then
+          write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'u', iorb, 'd', iorb, 'u', iorb, 'd', Uloc_internal(iorb)
+          write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'd', iorb, 'u', iorb, 'd', iorb, 'u', Uloc_internal(iorb)
+        endif
+      enddo
+      !Second: write the Ust terms
+      do iorb = 1, Norb
+        do jorb = 1,Norb
+          if(Ust_internal(iorb,jorb)/=0.0)then
+            write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'd', jorb, 'u', iorb, 'd', jorb, 'u', Ust_internal(iorb,jorb)
+            write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'u', jorb, 'd', iorb, 'u', jorb, 'd', Ust_internal(iorb,jorb)
+          endif
+        enddo
+      enddo
+      !Third: write the Ust-Jh terms
+      do iorb = 1, Norb
+        do jorb = 1,Norb
+          if(Ust_internal(iorb,jorb)/=0.0)then
+            write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'u', jorb, 'u', iorb, 'u', jorb, 'u', Ust_internal(iorb,jorb) - Jh_internal(iorb,jorb)
+            write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'd', jorb, 'd', iorb, 'd', jorb, 'd', Ust_internal(iorb,jorb) - Jh_internal(iorb,jorb)
+          endif
+        enddo
+      enddo
+      !Fourth: write the Jx terms
+      do iorb = 1, Norb
+        do jorb = 1,Norb
+          if(Ust_internal(iorb,jorb)/=0.0)then
+            write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'd', jorb, 'u', jorb, 'd', iorb, 'u', Jx_internal(iorb,jorb)
+            write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'u', jorb, 'd', jorb, 'u', iorb, 'd', Jx_internal(iorb,jorb)
+          endif
+        enddo
+      enddo
+      !Fifth: write the Jp terms
+      do iorb = 1, Norb
+        do jorb = 1,Norb
+          if(Ust_internal(iorb,jorb)/=0.0)then
+            write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'd', iorb, 'u', jorb, 'd', jorb, 'u', Jp_internal(iorb,jorb)
+            write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'u', iorb, 'd', jorb, 'u', jorb, 'd', Jp_internal(iorb,jorb)
+          endif
+        enddo
+      enddo
+      !Sixth: write sundry terms
+      if(allocated(coulomb_sundry))then
+        do iline=1,size(coulomb_sundry)
+           o1 = coulomb_sundry(iline)%cd_i(1)
+           o2 = coulomb_sundry(iline)%cd_j(1)
+           o3 = coulomb_sundry(iline)%c_k(1)
+           o4 = coulomb_sundry(iline)%c_l(1)
+           s1 = merge("u", "d", coulomb_sundry(iline)%cd_i(2)==1)
+           s2 = merge("u", "d", coulomb_sundry(iline)%cd_j(2)==1)
+           s3 = merge("u", "d", coulomb_sundry(iline)%c_k(2)==1)
+           s4 = merge("u", "d", coulomb_sundry(iline)%c_l(2)==1)
+           dummyU = coulomb_sundry(iline)%U
+           !Don't forget the anticommutator!
+           if(all((coulomb_sundry(iline)%cd_j==coulomb_sundry(iline)%c_k)))then
+             dummyU = dummyU + dummyU
+           endif             
+           write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') o1, s1, o2, s2, o3, s3, o4, s4, dummyU 
+        enddo
+      endif   
+    close(unit_umatrix)
+  
+  end subroutine save_umatrix_file
 
   
   subroutine read_umatrix_file(ufile)
@@ -60,7 +146,7 @@ contains
     preamble = .true.
     do while(preamble)
       read(unit_umatrix,*) dummy
-      if(trim(dummy)/="#" .and. trim(dummy)/="!" .and. trim(dummy)/="%")then
+      if(dummy(1:1)/="#" .and. dummy(1:1)/="!" .and. dummy(1:1)/="%")then
         preamble = .false.
         read(dummy, *) o1
       endif
@@ -182,9 +268,9 @@ contains
          o3 = coulomb_sundry(iline)%c_k(1)
          o4 = coulomb_sundry(iline)%c_l(1)
          s1 = merge("u", "d", coulomb_sundry(iline)%cd_i(2)==1)
-         s1 = merge("u", "d", coulomb_sundry(iline)%cd_j(2)==1)
-         s1 = merge("u", "d", coulomb_sundry(iline)%c_k(2)==1)
-         s1 = merge("u", "d", coulomb_sundry(iline)%c_l(2)==1)
+         s2 = merge("u", "d", coulomb_sundry(iline)%cd_j(2)==1)
+         s3 = merge("u", "d", coulomb_sundry(iline)%c_k(2)==1)
+         s4 = merge("u", "d", coulomb_sundry(iline)%c_l(2)==1)
          write(dummy, '(F10.6)') coulomb_sundry(iline)%U
          write(LOGfile,"(A)")'Sundry operator '//txtfy(iline,3)//':     '//&
                                             trim(dummy)//&

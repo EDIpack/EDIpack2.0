@@ -64,17 +64,18 @@ What follows is an example for a Hubbard-Kanamori interaction corresponding to t
    2 u 1 u 2 u 1 u 9.0
    1 d 2 d 1 d 2 d 9.0
    
-   #JX, JP
-   1 d 1 u 2 d 2 u 1.0
-   1 d 2 u 2 d 1 u 1.0
-   1 u 1 d 2 u 2 d 1.0
-   1 u 2 d 2 u 1 d 1.0
-   2 d 1 u 1 d 2 u 1.0
-   2 d 2 u 1 d 1 u 1.0
-   2 u 1 d 1 u 2 d 1.0
-   2 u 2 d 1 u 1 d 1.0
-
+   #JX
+   1 d 2 u 2 d 1 u 3.0
+   1 u 2 d 2 u 1 d 3.0
+   2 d 1 u 1 d 2 u 3.0
+   2 u 1 d 1 u 2 d 3.0
+   
+   #JP
+   1 d 1 u 2 d 2 u 4.0
+   1 u 1 d 2 u 2 d 4.0
+   2 d 2 u 1 d 1 u 4.0
+   2 u 2 d 1 u 1 d 4.0
 
 
 .. f:automodule::   ed_parse_umatrix
-   :members: read_umatrix_file
+   :members: read_umatrix_file, save_umatrix_file
