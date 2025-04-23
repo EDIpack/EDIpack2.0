@@ -50,7 +50,7 @@ contains
       !Third: write the Ust-Jh terms
       do iorb = 1, Norb
         do jorb = 1,Norb
-          if(Ust_internal(iorb,jorb)/=0.0)then
+          if(Jh_internal(iorb,jorb)/=0.0)then
             write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'u', jorb, 'u', iorb, 'u', jorb, 'u', Ust_internal(iorb,jorb) - Jh_internal(iorb,jorb)
             write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'd', jorb, 'd', iorb, 'd', jorb, 'd', Ust_internal(iorb,jorb) - Jh_internal(iorb,jorb)
           endif
@@ -59,7 +59,7 @@ contains
       !Fourth: write the Jx terms
       do iorb = 1, Norb
         do jorb = 1,Norb
-          if(Ust_internal(iorb,jorb)/=0.0)then
+          if(Jx_internal(iorb,jorb)/=0.0)then
             write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'd', jorb, 'u', jorb, 'd', iorb, 'u', Jx_internal(iorb,jorb)
             write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'u', jorb, 'd', jorb, 'u', iorb, 'd', Jx_internal(iorb,jorb)
           endif
@@ -68,7 +68,7 @@ contains
       !Fifth: write the Jp terms
       do iorb = 1, Norb
         do jorb = 1,Norb
-          if(Ust_internal(iorb,jorb)/=0.0)then
+          if(Jp_internal(iorb,jorb)/=0.0)then
             write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'd', iorb, 'u', jorb, 'd', jorb, 'u', Jp_internal(iorb,jorb)
             write(unit_umatrix, '(4(I0,1X,A,1X),ES21.12)') iorb, 'u', iorb, 'd', jorb, 'u', jorb, 'd', Jp_internal(iorb,jorb)
           endif
