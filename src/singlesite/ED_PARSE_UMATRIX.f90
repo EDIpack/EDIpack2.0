@@ -8,8 +8,52 @@ MODULE ED_PARSE_UMATRIX
   
   public :: read_umatrix_file
   public :: save_umatrix_file
+  public :: inspect_uparams
  
 contains
+
+  subroutine inspect_uparams(which_param, coeffmatrix, ioflag, ierrflag)
+    !This subroutine gives/takes the values of the internal coefficient matrices.
+    integer                           :: which_param, ioflag, i, ierrflag
+    real(8),dimension(Norb,Norb)      :: coeffmatrix
+    
+    if(.not. allocated(Uloc_internal))then
+      ierrflag = 1
+      return
+    endif
+    
+    if(ioflag==0)then    !input: take the value from coeffmatrix
+      select case(which_param)
+        case(0);        !Uloc
+          Uloc_internal = [(coeffmatrix(i, i), i = 1, Norb)]
+        case(1);        !Ust
+          Ust_internal = coeffmatrix
+        case(2);        !Jh
+          Jh_internal = coeffmatrix
+        case(3);        !Jx
+          Jx_internal = coeffmatrix
+        case(4);        !Jp
+          Jp_internal = coeffmatrix
+        end select
+    else
+      select case(which_param)
+        case(0);        !Uloc
+          coeffmatrix = zero
+          do i=1,Norb
+            coeffmatrix(i, i) = Uloc_internal(i)
+          enddo
+        case(1);        !Ust
+          coeffmatrix = Ust_internal
+        case(2);        !Jh
+          coeffmatrix = Jh_internal
+        case(3);        !Jx
+          coeffmatrix = Jx_internal
+        case(4);        !Jp
+          coeffmatrix = Jp_internal
+      end select
+    endif
+  
+  end subroutine inspect_uparams
 
 
   subroutine save_umatrix_file(ufile)
