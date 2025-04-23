@@ -14,6 +14,10 @@ the :code:`.restart` suffix. When doing a real-space DMFT simulation, the prefix
 :code:`_ineqXXXX.restart` , where :code:`XXXX` is a 4-digit incresing number corresponding to the index of 
 the inequivalent site.
 
+After the interaction terms have been set in either way, a properly formatted file 
+called :f:var:`UMATRIX_FILE` :code:`.used` 
+will be generated containing the list of all two-body operators.
+
 Each umatrix file needs to have the following format:
 
 .. code-block:: text

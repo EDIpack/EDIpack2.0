@@ -14,9 +14,9 @@ contains
 
   subroutine save_umatrix_file(ufile)
     !This subroutine saves the currently used interaction Hamiltonian into a file. It takes
-    !the elements from the internal :f:var:`Uloc`, :f:var:`Ust`, :f:var:`Jh`, :f:var:`Jx`,
-    !:f:var:`Jp` and sundry terms
-    character(len=*),optional     :: ufile  !File to which the interaction operators are saved. Default :code:`umatrix.used`
+    !the elements from the internal :f:var:`ULOC`, :f:var:`UST`, :f:var:`JH`, :f:var:`JX`,
+    !:f:var:`JP` and sundry terms
+    character(len=*),optional     :: ufile  !File to which the interaction operators are saved. Default :f:var:`UMATRIX_FILE` :code:`.used`
     character(len=256)            :: outfile 
     integer                       :: iline,flen,unit_umatrix,rank, nops, ispin, jspin, iorb, jorb, ierr
     real(8)                       :: dummyU
@@ -122,7 +122,7 @@ contains
     !If :f:var:`ED_VERBOSE` > :code:`3`, this routine will print extensive information
     !about the read file(s) and the type of the operators therein contained.
     !
-    character(len=*)              :: ufile  !File containing a properly formatted interaction Hamiltonian
+    character(len=*)              :: ufile  !File containing a properly formatted interaction Hamiltonian. Default :f:var:`UMATRIX_FILE` :code:`.restart`
     character(len=300)            :: dummy
     type(coulomb_matrix_element)  :: opline
     logical                       :: master=.true.,ufile_exists, verbose, preamble
@@ -137,7 +137,7 @@ contains
     endif
 #endif
     inquire(file=trim(ufile)//reg(ed_file_suffix)//".restart",exist=ufile_exists)
-    if(.not.ufile_exists)stop "read_umatrix_file ERROR: indicated file does not exist" !#FIXME: change this to make it default back to Uloc&co.
+    if(.not.ufile_exists)stop "read_umatrix_file ERROR: indicated file does not exist"
     if(ed_verbose>0)write(LOGfile,"(A)")'Reading interaction Hamiltonian from file '//trim(ufile)//reg(ed_file_suffix)//".restart"
     !
     !Set internal interaction coefficient matrices to zero
