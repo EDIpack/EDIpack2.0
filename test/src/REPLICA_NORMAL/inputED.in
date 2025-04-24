@@ -1,41 +1,51 @@
- DELTA=0.5d0                                    !
+ DELTA=5.000000000E-01                         !
  NORB=2                                        !Number of impurity orbitals (max 5).
- NBATH=3                                       !Number of bath sites:(normal=>Nbath per orb)(hybrid=>Nbath total)(replica/general=>Nbath=Nreplica/Ngeneral)
+ NBATH=2                                       !Number of bath sites:(normal=>Nbath per orb)(hybrid=>Nbath total)(replica/general=>Nbath=Nreplica/Ngeneral)
  NSPIN=1                                       !Number of spin degeneracy (max 2)
  NPH=0                                         !Max number of phonons allowed (cut off)
- BATH_TYPE=replica                              !flag to set bath type: normal (1bath/imp), hybrid(1bath), replica(1replica/imp), general(replica++)
- ULOC=2.000000000,2.0                              !Values of the local interaction per orbital
- UST=1.5d0                                      !Value of the inter-orbital interaction term
- JH=0.25d0                                       !Hunds coupling
- JX=0.25d0                                       !S-E coupling
- JP=0.25d0                                       !P-H coupling
- NLOOP=1                                     !Max number of DMFT iterations.
+ BATH_TYPE=replica                             !flag to set bath type: normal (1bath/imp), hybrid(1bath), replica(1replica/imp), general(replica++)
+ ULOC=2.000000000,2.000000000,0.d0,0.d0,0.d0   !Values of the local interaction per orbital (max 5)
+ UST=1.500000000                               !Value of the inter-orbital interaction term
+ JH=2.500000000E-01                            !Hunds coupling
+ JX=2.500000000E-01                            !S-E coupling
+ JP=2.500000000E-01                            !P-H coupling
+ NLOOP=1                                       !Max number of DMFT iterations.
  NSUCCESS=1                                    !Number of successive iterations below threshold for convergence
  DMFT_ERROR=1.000000000E-05                    !Error threshold for DMFT convergence
  SB_FIELD=1.000000000E-01                      !Value of a symmetry breaking field for magnetic solutions.
  DELTASC=2.000000000E-02                       !Value of the SC symmetry breaking term.
  BETA=1000.000000000                           !Inverse temperature, at T=0 is used as a IR cut-off.
  XMU=0.d0                                      !Chemical potential. If HFMODE=T, xmu=0 indicates half-filling condition.
- G_PH=0.d0                                     !Electron-phonon coupling density constant
+ G_PH=0.d0,0.d0                                !Electron-phonon coupling density constant
  W0_PH=0.d0                                    !Phonon frequency
+ A_PH=0.d0                                     !Forcing field coupled to phonons displacement operator
  GPHFILE=NONE                                  !File of Phonon couplings. Put NONE to use only density couplings.
- SPIN_FIELD_X=0.d0                             !magnetic field per orbital coupling to X-spin component
- SPIN_FIELD_Y=0.d0                             !magnetic field per orbital coupling to Y-spin component
- SPIN_FIELD_Z=0.d0                             !magnetic field per orbital coupling to Z-spin component
+ SPIN_FIELD_X=0.d0,0.d0                        !magnetic field per orbital coupling to X-spin component
+ SPIN_FIELD_Y=0.d0,0.d0                        !magnetic field per orbital coupling to Y-spin component
+ SPIN_FIELD_Z=0.d0,0.d0                        !magnetic field per orbital coupling to Z-spin component
  EXC_FIELD=0.d0,0.d0,0.d0,0.d0                 !external field coupling to exciton order parameters
- PAIR_FIELD=0.d0                               !pair field per orbital coupling to s-wave order parameter component
+ PAIR_FIELD=0.d0,0.d0                          !pair field per orbital coupling to s-wave order parameter component
+ CHISPIN_FLAG=F                                !Flag to activate spin susceptibility calculation.
+ CHIDENS_FLAG=F                                !Flag to activate density susceptibility calculation.
+ CHIPAIR_FLAG=F                                !Flag to activate pair susceptibility calculation.
+ CHIEXCT_FLAG=F                                !Flag to activate excitonis susceptibility calculation.
  ED_MODE=normal                                !Flag to set ED type: normal=normal, superc=superconductive, nonsu2=broken SU(2)
- ED_DIAG_TYPE=lanc                             !flag to select the diagonalization type: 'lanc' for Lanczos/Davidson, 'full' for Full diagonalization method
  ED_FINITE_TEMP=F                              !flag to select finite temperature method. note that if T then lanc_nstates_total must be > 1
- ED_TWIN=F                                     !flag to reduce (T) or not (F,default) the number of visited sector using twin symmetry.
  ED_SECTORS=F                                  !flag to reduce sector scan for the spectrum to specific sectors +/- ed_sectors_shift.
  ED_SECTORS_SHIFT=1                            !shift to ed_sectors
  ED_SPARSE_H=T                                 !flag to select  storage of sparse matrix H (mem--, cpu++) if TRUE, or direct on-the-fly H*v product (mem++, cpu--) if FALSE
  ED_TOTAL_UD=T                                 !flag to select which type of quantum numbers have to be considered: T (default) total Nup-Ndw, F orbital based Nup-Ndw
+ ED_TWIN=T                                     !flag to reduce (T) or not (F,default) the number of visited sector using twin symmetry.
+ ED_READ_UMATRIX=F                             !flag to read (T) or not (F,default) the two-body operators from an external file.
+ ED_OBS_ALL=T                                  !flag to print observables for every loop.
  ED_SOLVE_OFFDIAG_GF=F                         !flag to select the calculation of the off-diagonal impurity GF. this is T by default if bath_type/=normal
  ED_PRINT_SIGMA=T                              !flag to print impurity Self-energies
  ED_PRINT_G=T                                  !flag to print impurity Greens function
  ED_PRINT_G0=T                                 !flag to print non-interacting impurity Greens function
+ ED_PRINT_CHISPIN=T                            !flag to print impurity spin susceptibility
+ ED_PRINT_CHIDENS=T                            !flag to print impurity dens susceptibility
+ ED_PRINT_CHIPAIR=T                            !flag to print impurity pair susceptibility
+ ED_PRINT_CHIEXCT=T                            !flag to print impurity exct susceptibility
  ED_ALL_G=T                                    !flag to evaluate all the components of the impurity Green`s functions irrespective of the symmetries
  ED_VERBOSE=1                                  !Verbosity level: 0=almost nothing --> 5:all. Really: all
  ED_HW_BATH=2.000000000                        !half-bandwidth for the bath initialization: flat in -ed_hw_bath:ed_hw_bath
@@ -53,6 +63,8 @@
  WFIN=5.000000000                              !Largest real-axis frequency
  XMIN=-3.000000000                             !Smallest position for the lattice PDF
  XMAX=3.000000000                              !Largest position for the lattice PDF
+ RDM_FLAG=F                                    !Flag to activate RDM calculation.
+ CHISPIN_FLAG=F                                !Flag to activate spin susceptibility calculation.
  CHISPIN_FLAG=F                                !Flag to activate spin susceptibility calculation.
  CHIDENS_FLAG=F                                !Flag to activate density susceptibility calculation.
  CHIPAIR_FLAG=F                                !Flag to activate pair susceptibility calculation.
@@ -78,13 +90,17 @@
  CG_NITER=500                                  !Max. number of Conjugate-Gradient iterations.
  CG_WEIGHT=1                                   !Conjugate-Gradient weight form: 1=1.0, 2=1/n , 3=1/w_n.
  CG_SCHEME=weiss                               !Conjugate-Gradient fit scheme: delta or weiss.
+ CG_NORM=elemental                             !Conjugate-Gradient norm definition: elemental (default) or frobenius.
  CG_POW=2                                      !Fit power for the calculation of the generalized distance as |G0 - G0and|**cg_pow
  CG_MINIMIZE_VER=F                             !Flag to pick old/.false. (Krauth) or new/.true. (Lichtenstein) version of the minimize CG routine
  CG_MINIMIZE_HH=1.000000000E-04                !Unknown parameter used in the CG minimize procedure.
- JZ_BASIS=F                                    !
- JZ_MAX=F                                      !
- JZ_MAX_VALUE=1000.000000000                   !
+ JZ_BASIS=F                                    !Flag to enable the Jz basis
+ JZ_MAX=F                                      !Whether to cutoff Jz
+ JZ_MAX_VALUE=1000.000000000                   !Maximum Jz
  SECTORFILE=sectors                            !File where to retrieve/store the sectors contributing to the spectrum.
  HFILE=hamiltonian                             !File where to retrieve/store the bath parameters.
+ BFILE=hbasis                                  !File where to retrieve/store the H bath matrix basis.
  HLOCFILE=inputHLOC.in                         !File read the input local H.
+ UMATRIX_FILE=umatrix                          !File read the two-body operator list from.
+ PRINT_INPUT_VARS=T                            !Flag to toggle console printing of input variables list
  LOGFILE=6                                     !LOG unit.

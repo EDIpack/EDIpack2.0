@@ -5,35 +5,31 @@ program ed_replica_nonsu2
   USE SF_MPI
   USE ASSERTING
   implicit none
-  integer                                     :: i,iw,jo,js,Nso,Nsymm,Nmomenta
-  integer                                     :: unit,unit_
-  real(8)                                     :: w,Re,Im
+  integer                :: i,iw,jo,js,Nso,Nsymm,Nmomenta
   !Bath:
-  integer                                     :: Nb,iorb,jorb,ispin,jspin,inso,print_mode
-  real(8),allocatable                         :: Bath(:),Wlist(:)
+  integer                :: Nb,iorb,jorb,ispin,jspin,inso,print_mode
+  real(8),allocatable    :: Bath(:),Wlist(:)
   !GFs and Sigma:
-  complex(8),allocatable                      :: Weiss(:,:,:,:,:)
-  complex(8),allocatable                      :: Smats(:,:,:,:,:)
+  complex(8),allocatable :: Smats(:,:,:,:,:)
   !hamiltonian input:
-  complex(8),allocatable                      :: Hloc(:,:,:,:)
+  complex(8),allocatable :: Hloc(:,:,:,:)
   !variables for the model:
-  real(8)                                     :: mh,lambda
-  character(len=30)                           :: Params
-  character(len=16)                           :: finput
+  real(8)                :: mh,lambda
+  character(len=16)      :: finput
+  real(8),allocatable    :: evals(:),evalsR(:)
   !Replica variables:
-  real(8),allocatable                         :: dens(:),docc(:),exciton(:),energy(:),imp(:)
-  real(8),allocatable                         :: Sab11s11mom(:),Sab12s11mom(:),Sab11s12mom(:),Sab12s12mom(:)
-  !CHECK variables
-  real(8),allocatable                         :: dens_(:),docc_(:),exciton_(:),energy_(:),imp_(:)
-  real(8),allocatable                         :: Sab11s11mom_(:),Sab12s11mom_(:),Sab11s12mom_(:),Sab12s12mom_(:)
-  !
+  real(8),allocatable    :: dens(:),docc(:),exciton(:),energy(:),doubles(:),imp(:)
+  real(8),allocatable    :: densR(:),doccR(:),excitonR(:),energyR(:),doublesR(:),impR(:)
+  real(8),allocatable    :: Smom(:,:,:,:,:)
+  real(8),allocatable    :: SmomR(:,:,:,:,:)
   complex(8),dimension(4,4)                   :: Gamma1,Gamma2,Gamma5,GammaN,GammaS
   complex(8),dimension(4,4)                   :: GammaE0,GammaEx,GammaEy,GammaEz
-  real(8),dimension(:,:),allocatable            :: lambdasym_vector
+  real(8),dimension(:,:),allocatable          :: lambdasym_vector
   complex(8),dimension(:,:,:,:,:),allocatable :: Hsym_basis
   !MPI Vars:
-  integer                                     :: irank,comm,rank,size2,ierr
-  logical                                     :: master
+  integer :: irank,comm,rank,size2,ierr
+  logical :: master
+  logical :: dsave
   !
   ! MPI initialization
   call init_MPI()
@@ -45,24 +41,19 @@ program ed_replica_nonsu2
   !
   !Parse additional variables && read Input
   call parse_cmd_variable(finput,"FINPUT",default="inputED.in")
-  call parse_input_variable(Params,"Params",finput,default="E0EzEx",&
-       comment="Ex; EzEx; E0Ex; ExEy; E0Ez; E0EzEx; E0EzExEy")
   call parse_input_variable(mh,"MH",finput,default=1.d0)
   call parse_input_variable(lambda,"LAMBDA",finput,default=0.3d0)
+  call parse_cmd_variable(dsave,"dsave",default=.false.)
   !
   !
   call ed_read_input(trim(finput))
   !
-  if(params/='E0EzEx')stop "Wrong setup from input file: params != E0EzEx"
   if(ed_mode/='nonsu2')stop "Wrong setup from input file: ed_mode != nonsu2"
   if(bath_type/="replica")stop "Wrong setup from input file: non replica bath"
   if(Norb/=2)stop "Wrong setup from input file: Norb!=2"
   if(Nspin/=2 )stop "Wrong setup from input file: Nspin/=2"
   Nso=Nspin*Norb
   Nmomenta=4
-  !Allocate Weiss Field:
-  allocate(Weiss(Nspin,Nspin,Norb,Norb,Lmats))
-  allocate(Smats(Nspin,Nspin,Norb,Norb,Lmats))
   !
   ! Matrices for replica hamiltonian
   gamma1=kron( pauli_sigma_z, pauli_tau_x)
@@ -75,9 +66,22 @@ program ed_replica_nonsu2
   gammaEy=kron( pauli_sigma_y, pauli_tau_x )
   gammaEz=kron( pauli_sigma_z, pauli_tau_x )
 
-
+  !Allocate Weiss Field:
+  allocate(Smats(Nspin,Nspin,Norb,Norb,Lmats))
   !
-  print_mode=3
+  allocate(dens(Norb))
+  allocate(docc(Norb))
+  allocate(exciton(4))
+  allocate(energy(4))
+  allocate(doubles(4))
+  allocate(imp(2))
+  allocate(Smom(Nspin,Nspin,Norb,Norb,Nmomenta))
+  !
+  allocate(Wlist(Lmats))  
+  Wlist = pi/beta*(2*arange(1,Lmats)-1)
+
+  allocate(Hloc(Nspin,Nspin,Norb,Norb))
+  Hloc = j2so(Mh*Gamma5)
   !
   ! Set up replica hamiltonian
   Nsymm=4
@@ -88,153 +92,135 @@ program ed_replica_nonsu2
   Hsym_basis(:,:,:,:,3)=j2so(GammaEz) ;lambdasym_vector(:,3)=sb_field
   Hsym_basis(:,:,:,:,4)=j2so(GammaEx) ;lambdasym_vector(:,4)=-sb_field
   call ed_set_Hreplica(Hsym_basis,lambdasym_vector)
-  Nb=ed_get_bath_dimension(Nsymm)!(Hsym_basis)
   !
+  Nb=ed_get_bath_dimension(Nsymm)
   allocate(Bath(Nb))
-  call ed_init_solver(bath)
   !
-  !set Hloc
-  allocate(Hloc(Nspin,Nspin,Norb,Norb))
-  Hloc = j2so(Mh*Gamma5)
-  call ed_set_Hloc(Hloc)
+  call run_test(sparse=.true.,umatrix=.false.)  
+  call run_test(sparse=.false.,umatrix=.false.)
+  call run_test(sparse=.true.,umatrix=.true.)  
+  call run_test(sparse=.false.,umatrix=.true.)
   !
-  !Solve the IMPURITY PROBLEM
-  call ed_solve(bath)
-  call ed_get_sigma(Smats,axis="m")
-  !
-
-
-  ! !
-  ! ! Check observables
-  allocate(dens(Norb),dens_(Norb))
-  allocate(docc(Norb),docc_(Norb))
-  allocate(exciton(4),exciton_(4))
-  allocate(energy(8),energy_(8))
-  allocate(imp(2),imp_(2))
-  allocate(Wlist(size(Smats,5)))
-  allocate(Sab11s11mom(Nmomenta),Sab11s11mom_(Nmomenta))
-  allocate(Sab12s11mom(Nmomenta),Sab12s11mom_(Nmomenta))
-  allocate(Sab11s12mom(Nmomenta),Sab11s12mom_(Nmomenta))
-  allocate(Sab12s12mom(Nmomenta),Sab12s12mom_(Nmomenta))
-  write(*,*) ""
-  write(*,*) "ED_MODE = NONSU2   |   BATH_TYPE = REPLICA"
-  write(*,*) "Checking..."
-  unit =free_unit()
-  unit_=free_unit()
-
-
-
-
-  ! density
-  call ed_get_dens(dens)
-  open(unit_,file="dens_last.check")
-  read(unit_,*) dens_(:)
-  close(unit_)
-  call assert(dens,dens_,"dens(:)")
-  !double occupancy
-  call ed_get_docc(docc)
-  open(unit_,file="docc_last.check")
-  read(unit_,*) docc_(:)
-  close(unit_)
-  call assert(docc,docc_,"docc(:)")
-  !exciton order parameters
-  open(unit,file="ExctS0_last.ed")
-  read(unit,*) exciton(1)
-  close(unit)
-  open(unit,file="ExctTx_last.ed")
-  read(unit,*) exciton(2)
-  close(unit)
-  open(unit,file="ExctTy_last.ed")
-  read(unit,*) exciton(3)
-  close(unit)
-  open(unit,file="ExctTz_last.ed")
-  read(unit,*) exciton(4)
-  close(unit)
-  open(unit_,file="Exct_last.check")
-  read(unit_,*) exciton_(:)
-  close(unit_)
-  call assert(exciton,exciton_,"exciton(:)")
-  !energies
-  open(unit,file="energy_last.ed")
-  read(unit,*) energy(:)
-  close(unit)
-  open(unit_,file="energy_last.check")
-  read(unit_,*) energy_(:)
-  close(unit_)
-  call assert(energy,energy_,"energy(:)")
-  !impurity
-  call ed_get_imp_info(imp)
-  open(unit_,file="imp_last.check")
-  read(unit_,*) imp_(:)
-  close(unit_)
-  call assert(imp,imp_,"imp(:)")
-  !Self-Energies
-  open(unit,file="impSigma_l11_s11_iw.ed")
-  do iw=1,size(Smats,5)
-     read(unit,*)Wlist(iw)
-  end do
-  close(unit)
-  !
-  ! Get momenta
-  do i=1,Nmomenta
-     call compute_momentum(Wlist,Smats(1,1,1,1,:),i,Sab11s11mom(i))
-     call compute_momentum(Wlist,Smats(1,1,1,2,:),i,Sab12s11mom(i))
-     call compute_momentum(Wlist,Smats(1,2,1,1,:),i,Sab11s12mom(i))
-     call compute_momentum(Wlist,Smats(1,2,1,2,:),i,Sab12s12mom(i))
-  enddo
-  ! Write new momenta
-  open(unit_,file="impSigma_l11_s11_iw.momenta.new")
-  do i=1,Nmomenta
-     write(unit_,*) i, Sab11s11mom(i)
-  enddo
-  close(unit_)
-  open(unit_,file="impSigma_l12_s11_iw.momenta.new")
-  do i=1,Nmomenta
-     write(unit_,*) i, Sab12s11mom(i)
-  enddo
-  close(unit_)
-  open(unit_,file="impSigma_l11_s12_iw.momenta.new")
-  do i=1,Nmomenta
-     write(unit_,*) i, Sab11s12mom(i)
-  enddo
-  close(unit_)
-  open(unit_,file="impSigma_l12_s12_iw.momenta.new")
-  do i=1,Nmomenta
-     write(unit_,*) i, Sab12s12mom(i)
-  enddo
-  close(unit_)
-  ! Read check momenta
-  open(unit_,file="impSigma_l11_s11_iw.momenta.check")
-  do i=1,Nmomenta
-     read(unit_,*) iw, Sab11s11mom_(i)
-  enddo
-  close(unit_)
-  open(unit_,file="impSigma_l12_s11_iw.momenta.check")
-  do i=1,Nmomenta
-     read(unit_,*) iw, Sab12s11mom_(i)
-  enddo
-  close(unit_)
-  open(unit_,file="impSigma_l11_s12_iw.momenta.check")
-  do i=1,Nmomenta
-     read(unit_,*) iw, Sab11s12mom_(i)
-  enddo
-  close(unit_)
-  open(unit_,file="impSigma_l12_s12_iw.momenta.check")
-  do i=1,Nmomenta
-     read(unit_,*) iw, Sab12s12mom_(i)
-  enddo
-  close(unit_)
-  call assert(Sab11s11mom/Sab11s11mom_,dble(ones(Nmomenta)),"Sigma_matsubara_l11_s11(:)",tol=1.0d-8)
-  call assert(Sab12s11mom/Sab12s11mom_,dble(ones(Nmomenta)),"Sigma_matsubara_l12_s11(:)",tol=1.0d-8)
-  call assert(Sab11s12mom/Sab11s12mom_,dble(ones(Nmomenta)),"Sigma_matsubara_l11_s12(:)",tol=1.0d-8)
-  call assert(Sab12s12mom/Sab12s12mom_,dble(ones(Nmomenta)),"Sigma_matsubara_l12_s12(:)",tol=1.0d-8)
-
-
   call finalize_MPI()
 
 
-
 contains
+
+  subroutine run_test(sparse,umatrix)
+    logical :: sparse,umatrix
+    ED_SPARSE_H    =sparse
+    ED_READ_UMATRIX=umatrix
+    call ed_set_Hreplica(Hsym_basis,lambdasym_vector)
+    call ed_init_solver(bath)
+    call ed_set_Hloc(hloc)
+    write(*,*) ""
+    write(*,*) "ED_MODE = SUPERC   |   BATH_TYPE = REPLICA"
+    write(*,*) "SPARSE_H= "//str(sparse)
+    write(*,*) "U_MATRIX= "//str(umatrix)
+    call ed_solve(bath)
+    call ed_get_sigma(Smats,axis="m",type="n")
+    call ed_get_dens(dens)
+    call ed_get_docc(docc)
+    do i=1,4
+       call ed_get_exct(exciton(i),i)
+    enddo
+    call ed_get_eimp(energy)
+    call ed_get_doubles(doubles)
+    call ed_get_imp_info(imp)
+    call ed_get_evals(evals)
+    do i=1,Nmomenta
+       do ispin=1,Nspin
+          do jspin=1,Nspin
+             do iorb=1,Norb
+                do jorb=1,Norb
+                   call compute_momentum(Wlist,Smats(ispin,jspin,iorb,jorb,:),i,Smom(ispin,jspin,iorb,jorb,i))
+                enddo
+             enddo
+          enddo
+       enddo
+    enddo
+    call ed_finalize_solver()
+    if(dsave)then
+       write(*,*)"Saving results to .check files and exit"
+       call save_results()
+       stop
+    endif
+    call test_results(sparse,umatrix)
+  end subroutine run_test
+
+
+
+
+  subroutine read_results()
+    integer :: L
+    L = file_length("evals.check")
+    if(allocated(evals))deallocate(evals)
+    allocate(evals(L))
+    call read_array("evals.check",evals)
+    call read_array("dens.check",dens)
+    call read_array("docc.check",docc)
+    call read_array("exciton.check",exciton)
+    call read_array("energy.check",energy)
+    call read_array("doubles.check",doubles)
+    call read_array("imp.check",imp)
+    call read_array("Sigma_momenta.check",Smom)
+    if(allocated(densR))deallocate(densR)
+    if(allocated(doccR))deallocate(doccR)
+    if(allocated(excitonR))deallocate(excitonR)
+    if(allocated(energyR))deallocate(energyR)
+    if(allocated(doublesR))deallocate(doublesR)
+    if(allocated(impR))deallocate(impR)
+    if(allocated(evalsR))deallocate(evalsR)
+    if(allocated(SmomR))deallocate(SmomR)
+    allocate(densR, source=dens)
+    allocate(doccR, source=docc)
+    allocate(excitonR, source=exciton)
+    allocate(energyR, source=energy)
+    allocate(doublesR, source=doubles)
+    allocate(impR, source=imp)
+    allocate(evalsR,source=evals)
+    allocate(SmomR, source=Smom)
+  end subroutine read_results
+
+
+
+  subroutine test_results(sparse,umatrix)
+    logical  :: sparse,umatrix
+    write(*,*)""
+    write(*,*) "Check RESULTS sparse_H, read_umatrix="//str(sparse)//","//str(umatrix)
+    call read_results()
+    call assert(dens,densR,"dens")
+    call assert(docc,doccR,"docc")
+    call assert(exciton,excitonR,"exciton")
+    call assert(energy,energyR,"energy")
+    call assert(doubles,doublesR,"doubles")
+    call assert(imp,impR,"imp")
+    call assert(evals,evalsR,"evals")
+    call assert(Smom/SmomR,dble(ones(Nspin,Nspin,Norb,Norb,Nmomenta)),"Sigma_momenta 1:4",tol=1.0d-8)
+    write(*,*)""
+    write(*,*)""
+    write(*,*)""
+    write(*,*)""
+    call wait(500)
+  end subroutine test_results
+
+
+  subroutine save_results()
+    call save_array("evals.check",evals)
+    call save_array("dens.check",dens)
+    call save_array("docc.check",docc)
+    call save_array("exciton.check",exciton)
+    call save_array("energy.check",energy)
+    call save_array("doubles.check",doubles)
+    call save_array("imp.check",imp)
+    call save_array("Sigma_momenta.check",Smom)
+  end subroutine save_results
+
+
+
+
+
+
 
 
   function so2j_index(ispin,iorb) result(isporb)
@@ -291,18 +277,16 @@ contains
     !
     integer                                  :: iw
     real(8)                                  :: num,den
-    !
-    num=0.0;    den=0.0
-    ! num = sum(abs(Fx*x**n))
-    ! den = sum(abs(Fx))
-    do iw=1,size(x)
-       num = num + (abs(Fx(iw)) )*x(iw)**n
-       den = den + (abs(Fx(iw)) )
+    num=0.0; den=0.0
+    do iw=1,size(x,1)
+       num = num + abs(Fx(iw))*x(iw)**n
+       den = den + abs(Fx(iw))
     enddo
     momentum=num/den
   end subroutine compute_momentum
 
-end program ed_replica_normal
+
+end program
 
 
 

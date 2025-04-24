@@ -31,14 +31,12 @@ endif
 all: FLAG:=${FFLAG} ${FPPFLAG}
 all:
 	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
-	@cp *.check $(TSTBIN)/
-	@cp *.in    $(TSTBIN)/
+	@cp *.check *.in *.restart $(TSTBIN)/
 
 debug: FLAG:=${DFLAG} ${FPPFLAG}
 debug:
 	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
-	@cp *.check $(TSTBIN)/
-	@cp *.in    $(TSTBIN)/
+	@cp *.check *.in *.restart $(TSTBIN)/
 
 clean: 
 	@echo "Cleaning bath:GENERAL mode:NONSU2"
