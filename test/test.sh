@@ -37,13 +37,13 @@ while read DIR; do
 		if [ -z ${WITH_MPI} ]
 		then
 		    echo "./$exe ED_VERBOSE=3 LOGFILE=6"
-		    ./$exe ED_VERBOSE=3 LOGFILE=6
+		    ./$exe ED_VERBOSE=1 LOGFILE=6
 		    echo ""
 		    echo ""
 		    sleep 1
 		else
 		    echo "mpiexec -np 2 ./$exe ED_VERBOSE=3 LOGFILE=6"
-		    mpiexec -np 2 ./$exe ED_VERBOSE=3 LOGFILE=6 < /dev/null
+		    mpiexec -np 2 ./$exe ED_VERBOSE=1 LOGFILE=6 < /dev/null
 		    echo ""
 		    echo ""
 		    sleep 1

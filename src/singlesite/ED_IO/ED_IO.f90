@@ -176,17 +176,19 @@ MODULE ED_IO
 
 
   interface ed_get_exct
-     !This subroutine gets from the EDIpack2 library the value of the excitonic order parameters :math:`X^a` ( :f:var:`ed_mode` = :code:`normal`,:code:`superc` ) and passes it to the user.
+     !This subroutine gets from the EDIpack2 library the value of the excitonic order parameters :math:`X^a` ( :f:var:`ed_mode` = :code:`normal`,:code:`nonsu2` ) and passes it to the user.
      !
      !The :f:var:`self` variable can have the following dimensions:
      ! 
-     !  * scalar: if :f:var:`iorb` is provided for single-impurity DMFT, :math:`X` between orbital and orbital+1 for :f:var:`component`
+     !  * scalar: if :f:var:`iorb` is provided  returns :math:`X` between orbital and orbital+1 for :f:var:`component`
+     !  * [4]: returns :math:`X` for all :f:var:`component` and optional orbitals :f:var:`iorb, jorb` [default (1,2)]. 
      !  * [:f:var:`norb` , :f:var:`norb`]: for single-impurity DMFT, :math:`X` for all orbitals and :f:var:`component`  
      !  * [4, :f:var:`norb` , :f:var:`norb`]: for single-impurity DMFT, :math:`X` for all orbitals and all :f:var:`component`
      !
      module procedure :: ed_get_exct_n0
      module procedure :: ed_get_exct_n1
      module procedure :: ed_get_exct_n2
+     module procedure :: ed_get_exct_n3
  end interface ed_get_exct
 
 

@@ -6,6 +6,7 @@ module ED_MAIN
   USE SF_MISC,only: assert_shape
   USE ED_INPUT_VARS
   USE ED_VARS_GLOBAL
+  USE ED_PARSE_UMATRIX
   USE ED_EIGENSPACE, only: state_list,es_delete_espace
   USE ED_AUX_FUNX
   USE ED_SETUP
@@ -171,6 +172,8 @@ contains
     call set_dmft_bath(bath)
     call write_dmft_bath()
     call save_dmft_bath(used=.true.)
+    !
+    call set_umatrix()
     !
     !SOLVE THE QUANTUM IMPURITY PROBLEM:
     call diagonalize_impurity()

@@ -182,6 +182,21 @@ MODULE E2I_IO
   end interface ed_get_phi
 
 
+  interface ed_get_exct
+     !This subroutine gets from the EDIpack2 library the value of the excitonic order parameters :math:`X^a` ( :f:var:`ed_mode` = :code:`normal`,:code:`nonsu2` ) and passes it to the user.
+     !
+     !The :f:var:`self` variable can have the following dimensions:
+     ! 
+     !  * [:f:var:`nlat`]: if :f:var:`iorb` is provided :math:`X` between orbital and orbital+1 for :f:var:`component` and and all impurity sites
+     !  * [:f:var:`nlat` , :f:var:`norb` , :f:var:`norb`]:  :math:`X` for all orbitals, for  :f:var:`component`  and all impurity sites.
+     !  * [:f:var:`nlat` , 4, :f:var:`norb` , :f:var:`norb`]: :math:`X` for all orbitals, :f:var:`component` and all impurity sites. 
+     !
+     module procedure :: ed_get_exct_n1
+     module procedure :: ed_get_exct_n3
+     module procedure :: ed_get_exct_n4
+ end interface ed_get_exct
+
+ 
   !Get Energies
   interface ed_get_eimp
      !This subroutine gets from the EDIpack2 library and passes to the user the array [ :f:var:`ed_epot` , :f:var:`ed_eint` , :f:var:`ed_ehartree` , :f:var:`ed_eknot` ].
@@ -327,6 +342,7 @@ MODULE E2I_IO
   public :: ed_get_mag
   public :: ed_get_docc
   public :: ed_get_phi
+  public :: ed_get_exct
   public :: ed_get_eimp
   public :: ed_get_epot
   public :: ed_get_eint 
@@ -412,6 +428,7 @@ contains
   #include "get_mag.f90"
   #include "get_docc.f90"
   #include "get_phi.f90"
+  #include "get_exct.f90"
   #include "get_energy.f90"
   #include "get_doubles.f90"
 #else
@@ -419,6 +436,7 @@ contains
   include "get_mag.f90"
   include "get_docc.f90"
   include "get_phi.f90"
+  include "get_exct.f90"
   include "get_energy.f90"
   include "get_doubles.f90"
 #endif

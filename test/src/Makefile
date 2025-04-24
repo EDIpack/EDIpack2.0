@@ -6,17 +6,24 @@ FFLAGS= ${FFLAG} ${FPPMPI}
 .SUFFIXES: .f90
 .PHONY: clean
 
+HAS_INEQ:=$(shell pkg-config --variable=ineq edipack2)
 GLOB_INC:=$(shell pkg-config --cflags scifor )
 
 OBJS=ASSERTING.o
 
-all: $(OBJS) NORMAL HYBRID REPLICA GENERAL 
-
+ifeq ($(HAS_INEQ),true)
+all: $(OBJS) NORMAL HYBRID REPLICA GENERAL INEQ
+else
+all: $(OBJS) NORMAL HYBRID REPLICA GENERAL
+endif
 
 NORMAL HYBRID REPLICA GENERAL: 
 	make -C ./$@_NORMAL
 	make -C ./$@_SUPERC
 	make -C ./$@_NONSU2
+
+INEQ:
+	make -C ./$@_NORMAL_NORMAL
 
 .f90.o:
 	$(FC) $(FFLAGS) -c $< ${GLOB_INC}

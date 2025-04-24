@@ -2,6 +2,7 @@ module E2I_MAIN
   !:synopsis: Main solver routines, inequivalent sites version
   !Contains routine that initialize, run and finalize the Impurity model solver
   USE EDIPACK2
+  USE ED_INPUT_VARS
   !
   USE E2I_VARS_GLOBAL
   USE E2I_AUX_FUNX
@@ -84,7 +85,9 @@ contains
     if(allocated(docc_ineq))deallocate(docc_ineq)
     if(allocated(mag_ineq))deallocate(mag_ineq)
     if(allocated(phisc_ineq))deallocate(phisc_ineq)
+    if(allocated(exct_ineq))deallocate(exct_ineq)
     if(allocated(e_ineq))deallocate(e_ineq)
+    if(allocated(dd_ineq))deallocate(dd_ineq)
     if(allocated(single_particle_density_matrix_ineq))deallocate(single_particle_density_matrix_ineq)
     if(allocated(impurity_density_matrix_ineq))deallocate(impurity_density_matrix_ineq)
     if(allocated(neigen_sector_ineq))deallocate(neigen_sector_ineq)
@@ -102,6 +105,7 @@ contains
     allocate(docc_ineq(Nineq,Norb))
     allocate(mag_ineq(Nineq,3,Norb))
     allocate(phisc_ineq(Nineq,Norb,Norb))
+    allocate(exct_ineq(Nineq,4,Norb,Norb))
     allocate(e_ineq(Nineq,4))
     allocate(dd_ineq(Nineq,4))
     allocate(single_particle_density_matrix_ineq(Nineq,Nspin,Nspin,Norb,Norb))
@@ -157,12 +161,11 @@ contains
     logical,optional                              :: flag_gf   !flag to calculate ( :code:`.true.` ) or not ( :code:`.false.` ) Green's functions and susceptibilities. Default :code:`.true.` . 
     !
     !MPI  auxiliary vars
-    complex(8)                                    :: Dmats_tmp(size(bath,1),0:Lmats)
-    complex(8)                                    :: Dreal_tmp(size(bath,1),Lreal)
     real(8)                                       :: dens_tmp(size(bath,1),Norb)
     real(8)                                       :: docc_tmp(size(bath,1),Norb)
     real(8)                                       :: mag_tmp(size(bath,1),3,Norb)
     real(8)                                       :: phisc_tmp(size(bath,1),Norb,Norb)
+    real(8)                                       :: exct_tmp(size(bath,1),4,Norb,Norb)
     real(8)                                       :: e_tmp(size(bath,1),4)
     real(8)                                       :: dd_tmp(size(bath,1),4)
     !    
@@ -213,13 +216,13 @@ contains
     allocate(neigen_sectortmp(Nineq,Nsectors))
     !
     dens_ineq     = 0d0  ; docc_ineq     = 0d0
-    mag_ineq      = 0d0  ; phisc_ineq    = 0d0  
+    mag_ineq      = 0d0  ; phisc_ineq    = 0d0  ; exct_ineq = 0d0 
     e_ineq        = 0d0  ; dd_ineq       = 0d0 
     single_particle_density_matrix_ineq = zero
     impurity_density_matrix_ineq = zero
     !
     dens_tmp   = 0d0  ; docc_tmp   = 0d0
-    mag_tmp    = 0d0  ; phisc_tmp  = 0d0
+    mag_tmp    = 0d0  ; phisc_tmp  = 0d0 ; exct_tmp = 0d0
     e_tmp      = 0d0  ; dd_tmp     = 0d0
     neigen_sectortmp = 0
     neigen_totaltmp  = 0
@@ -258,10 +261,11 @@ contains
           call ed_get_docc( docc_tmp(ilat,1:Norb) ) 
           call ed_get_mag( mag_tmp(ilat,:,1:Norb) )
           call ed_get_phi( phisc_tmp(ilat,1:Norb,1:Norb) )
+          call ed_get_exct( exct_tmp(ilat,1:4,1:Norb,1:Norb) )
           call ed_get_eimp( e_tmp(ilat,:) )
           call ed_get_doubles( dd_tmp(ilat,:) )
           call ed_get_sp_dm( single_particle_density_matrix_tmp(ilat,:,:,:,:) )
-          call ed_get_impurity_rdm( impurity_density_matrix_tmp(ilat,:,:) )
+          if(RDM_FLAG)call ed_get_impurity_rdm( impurity_density_matrix_tmp(ilat,:,:) )
        enddo
 #ifdef _MPI
        call Barrier_MPI()
@@ -275,6 +279,7 @@ contains
           call AllReduce_MPI(MPI_COMM_WORLD,docc_tmp,docc_ineq)
           call AllReduce_MPI(MPI_COMM_WORLD,mag_tmp,mag_ineq)
           call AllReduce_MPI(MPI_COMM_WORLD,phisc_tmp,phisc_ineq)
+          call AllReduce_MPI(MPI_COMM_WORLD,exct_tmp,exct_ineq)
           call AllReduce_MPI(MPI_COMM_WORLD,e_tmp,e_ineq)
           call AllReduce_MPI(MPI_COMM_WORLD,dd_tmp,dd_ineq)
           call AllReduce_MPI(MPI_COMM_WORLD,impurity_density_matrix_tmp,impurity_density_matrix_ineq)
@@ -282,11 +287,13 @@ contains
           neigen_total_ineq=0
           call AllReduce_MPI(MPI_COMM_WORLD,neigen_sectortmp,neigen_sector_ineq)
           call AllReduce_MPI(MPI_COMM_WORLD,neigen_totaltmp,neigen_total_ineq)
+          call Barrier_MPI()
        else
           dens_ineq               = dens_tmp
           docc_ineq               = docc_tmp
           mag_ineq                = mag_tmp
           phisc_ineq              = phisc_tmp
+          exct_ineq               = exct_tmp
           e_ineq                  = e_tmp
           dd_ineq                 = dd_tmp
           neigen_sector_ineq      = neigen_sectortmp
@@ -298,6 +305,7 @@ contains
        docc_ineq               = docc_tmp
        mag_ineq                = mag_tmp
        phisc_ineq              = phisc_tmp
+       exct_ineq               = exct_tmp
        e_ineq                  = e_tmp
        dd_ineq                 = dd_tmp
        neigen_sector_ineq      = neigen_sector_tmp
@@ -310,9 +318,10 @@ contains
     case(.true.)                !solve sites serial, Lanczos with MPI
        if(MPI_MASTER)call start_timer(unit=LOGfile)
        do ilat = 1, Nineq
-          write(LOGfile,*)" SOLVES INEQ SITE: "//str(ilat,Npad=4)
-          ed_file_suffix=reg(ineq_site_suffix)//str(ilat,site_indx_padding)
+          write(LOGfile,*)" SOLVES INEQ SITE w/ MPI LANCZOS: "//str(ilat,Npad=4)
           !
+          call ed_set_suffix(ilat)
+          !          
           !If required set the local value of U per each site
           if(present(Uloc_ii))Uloc(1:Norb) = Uloc_ii(ilat,1:Norb)
           if(present(Ust_ii)) Ust = Ust_ii(ilat)
@@ -333,10 +342,11 @@ contains
           call ed_get_docc( docc_ineq(ilat,1:Norb) ) 
           call ed_get_mag( mag_ineq(ilat,:,1:Norb) )
           call ed_get_phi( phisc_ineq(ilat,1:Norb,1:Norb) )
+          call ed_get_exct( exct_ineq(ilat,1:4,1:Norb,1:Norb) )
           call ed_get_eimp( e_ineq(ilat,:) )
           call ed_get_doubles( dd_ineq(ilat,:) )
           call ed_get_sp_dm( single_particle_density_matrix_ineq(ilat,:,:,:,:) )
-          call ed_get_impurity_rdm( impurity_density_matrix_ineq(ilat,:,:) )
+          if(RDM_FLAG)call ed_get_impurity_rdm( impurity_density_matrix_ineq(ilat,:,:) )
        enddo
        if(MPI_MASTER)call stop_timer
        call ed_reset_suffix
@@ -356,6 +366,7 @@ contains
     if(allocated(docc_ineq))deallocate(docc_ineq)
     if(allocated(mag_ineq))deallocate(mag_ineq)
     if(allocated(phisc_ineq))deallocate(phisc_ineq)
+    if(allocated(exct_ineq))deallocate(exct_ineq)
     if(allocated(e_ineq))deallocate(e_ineq)
     if(allocated(dd_ineq))deallocate(dd_ineq)
 

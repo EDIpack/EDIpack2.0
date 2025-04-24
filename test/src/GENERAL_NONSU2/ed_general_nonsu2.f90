@@ -121,9 +121,7 @@ contains
     call ed_get_sigma(Smats,axis="m",type="n")
     call ed_get_dens(dens)
     call ed_get_docc(docc)
-    do i=1,4
-       call ed_get_exct(exciton(i),i)
-    enddo
+    call ed_get_exct(exciton)
     call ed_get_eimp(energy)
     call ed_get_doubles(doubles)
     call ed_get_imp_info(imp)

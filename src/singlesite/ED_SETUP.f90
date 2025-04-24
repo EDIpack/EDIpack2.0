@@ -350,24 +350,6 @@ contains
       call assert_shape(Jp_internal,[Norb,Norb],"init_ed_structure","impHloc")
     endif
     !
-    if(.not. ed_read_umatrix)then
-      if(Norb > 5)STOP "ED_READ_UMATRIX = F: max 5 orbitals allowed"
-      Uloc_internal = Uloc
-      Ust_internal = Ust - Ust*eye(Norb)
-      Jh_internal = Jh - Jh*eye(Norb)
-      Jx_internal = Jx - Jx*eye(Norb)
-      Jp_internal = Jp - Jp*eye(Norb)
-    else
-      if(.not. ED_TOTAL_UD) STOP "ED_TOTAL_UD = F and ED_READ_UMATRIX = T are incompatible"
-      call read_umatrix_file(umatrix_file)
-      !set Hubbard-Kanamori input parameters to zero
-      Uloc = zero
-      Ust = zero
-      Jh = zero
-      Jx = zero
-      Jp = zero
-    endif
-    call save_umatrix_file()
     !
     if(ed_mode=="superc")then
        allocate(impGmatrix(2*Nspin,2*Nspin,Norb,Norb))
