@@ -129,6 +129,15 @@ MODULE ED_INPUT_VARS
   ! :Default ed_read_umatrix:`F`
   !
   logical                                                            :: ed_read_umatrix_
+  
+  logical(c_bool),bind(c, name="ed_use_kanamori")                    :: ed_use_kanamori   !
+  !Flag to enable ( :code:`T` ) or not (:code:`F` ) the use of the input variables :f:var:`ULOC`, 
+  !:f:var:`UST`, :f:var:`JH`, :f:var:`JX`, :f:var:`JP` for Hubbard-Kanamori coefficients.
+  ! :Default ed_use_kanamori:`T`
+  !
+  logical                                                            :: ed_use_kanamori_
+
+
 
   !==========================================!
   ! These variables are not bound to c types ! 
@@ -620,6 +629,9 @@ contains
     ed_twin = ed_twin_
     call parse_input_variable(ed_read_umatrix_,"ED_READ_UMATRIX",INPUTunit,default=.false.,comment="flag to read (T) or not (F,default) the two-body operators from an external file.")
     ed_read_umatrix = ed_read_umatrix_
+    call parse_input_variable(ed_use_kanamori_,"ED_USE_KANAMORI",INPUTunit,default=.true.,comment="flag to use (T,default) or not (F) input variables for Kanamori coefficients.")
+    ed_use_kanamori = ed_use_kanamori_
+    if(ed_read_umatrix .and. ed_use_kanamori) STOP "ED_READ_UMATRIX and ED_USE_KANAMORI cannot be both true."
     call parse_input_variable(ed_obs_all,"ED_OBS_ALL",INPUTunit,default=.true.,comment="flag to print observables for every loop.")
     !
     !

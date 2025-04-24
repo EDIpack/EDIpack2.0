@@ -1,5 +1,5 @@
 MODULE ED_PARSE_UMATRIX
-  !:synopsis: Routines and types for bath-impurity sparse maps
+  !:synopsis: Routines to parse files containing two-body operators
   USE SCIFOR, only: str,free_unit,file_length,to_lower,txtfy,eye
   USE ED_VARS_GLOBAL
   USE ED_INPUT_VARS
@@ -7,21 +7,62 @@ MODULE ED_PARSE_UMATRIX
   private
 
   public :: set_umatrix
+  public :: add_twobody_operator
+  public :: reset_umatrix
   public :: read_umatrix_file
   public :: save_umatrix_file
   public :: inspect_uparams
 
 contains
 
+  subroutine add_twobody_operator(oi,si,oj,sj,ok,sk,ol,sl,Uijkl)
+    !This subroutine lets the user add a two-body operator at runtime
+    integer                       :: oi, oj, ok, ol
+    character(len=1)              :: si, sj, sk, sl
+    type(coulomb_matrix_element)  :: opline
+    character(len=300)            :: dummy
+    real(8)                       :: Uijkl
+    if(max(oi, oj, ok, ol)>Norb) stop "add_twobody_operator: too many orbitals" 
+    if(min(oi, oj, ok, ol) <  1) stop "add_twobody_operator: orbital index < 1" 
+    if (any(( [si, sj, sk, sl] /= "u" ) .AND. ( [si, sj, sk, sl] /= "d" ))) stop "add_twobody_operator: spin index malformed" 
+    opline%cd_i = [oi, merge(1, 2, si == "u")]
+    opline%cd_j = [oj, merge(1, 2, sj == "u")]
+    opline%c_k  = [ok, merge(1, 2, sk == "u")]
+    opline%c_l  = [ol, merge(1, 2, sl == "u")]
+    opline%U    = Uijkl
+    if(ed_verbose>0)then
+       write(dummy, '(F10.6)') opline%U 
+       write(LOGfile,"(A)")'Runtime two-body operator:     '//&
+            trim(dummy)//&
+            ' cd_['//str(oi)//str(si)//']'//&
+            ' cd_['//str(oj)//str(sj)//']'//&
+            ' c_['//str(ok)//str(sk)//']'//&
+            ' c_['//str(ol)//str(sl)//']'
+    endif    
+    
+    call grow_runtime_array(opline)  
+  
+  end subroutine add_twobody_operator
+
   subroutine set_umatrix()
-    if(.not. ed_read_umatrix)then
+     integer(8)         :: iline
+     !This subroutine sets the internal interaction matrices and saves the list of 
+     !operators to a file
+      mfHloc        = zero
+      Uloc_internal = zero
+      Ust_internal  = zero
+      Jh_internal   = zero
+      Jx_internal   = zero
+      Jp_internal   = zero
+      if(allocated(coulomb_sundry))deallocate(coulomb_sundry)
+    if(ed_use_kanamori)then
        if(Norb > 5)STOP "ED_READ_UMATRIX = F: max 5 orbitals allowed"
        Uloc_internal = Uloc
        Ust_internal = Ust - Ust*eye(Norb)
        Jh_internal = Jh - Jh*eye(Norb)
        Jx_internal = Jx - Jx*eye(Norb)
        Jp_internal = Jp - Jp*eye(Norb)
-    else
+    elseif(ed_read_umatrix)then
        if(.not. ED_TOTAL_UD) STOP "ED_TOTAL_UD = F and ED_READ_UMATRIX = T are incompatible"
        call read_umatrix_file(umatrix_file)
        !set Hubbard-Kanamori input parameters to zero
@@ -31,9 +72,110 @@ contains
        Jx = zero
        Jp = zero
     endif
+    if(allocated(coulomb_runtime))then
+      do iline=1,size(coulomb_runtime)
+        call parse_umatrix_line(coulomb_runtime(iline))
+      enddo
+    endif
+    !Print interaction terms
+    if(ed_verbose>2)then
+      call print_umatrix()
+    endif
+    !Save to file
     call save_umatrix_file()
   end subroutine set_umatrix
+  
+  subroutine reset_umatrix()
+    !This subroutine resets ro zero the internal interaction matrices and the
+    !input variables
+     Uloc = zero
+     Ust = zero
+     Jh = zero
+     Jx = zero
+     Jp = zero
+     mfHloc = zero
+     Uloc_internal = zero
+     Ust_internal = zero
+     Jh_internal = zero
+     Jx_internal = zero
+     Jp_internal = zero
+     if(allocated(coulomb_sundry))deallocate(coulomb_sundry)
+     if(allocated(coulomb_runtime))deallocate(coulomb_runtime)
+  end subroutine reset_umatrix
+  
 
+  subroutine print_umatrix()
+     !This subroutine pretty-prints the interaction terms divided in Hubbard-Kanamori 
+     !and sundry ones
+     integer                       :: iorb,jorb,iline,ispin,jspin
+     real(8)                       :: dummyU
+     character(len=300)            :: dummy
+     integer                       :: o1, o2, o3, o4
+     character(len=1)              :: s1, s2, s3, s4
+     
+     write(LOGfile,"(A)")'ULOC:'
+     write(LOGfile,"(90(F15.9,1X))") (Uloc_internal(iorb),iorb=1,Norb)
+     write(LOGfile,"(A)")''
+     !
+
+     write(LOGfile,"(A)")'UST:'
+     do iorb=1,Norb
+        write(LOGfile,"(90(F15.9,1X))") (Ust_internal(iorb,jorb),jorb=1,Norb)
+     enddo
+     write(LOGfile,"(A)")''
+
+     write(LOGfile,"(A)")'JH:'
+     do iorb=1,Norb
+        write(LOGfile,"(90(F15.9,1X))") (Jh_internal(iorb,jorb),jorb=1,Norb)
+     enddo
+     write(LOGfile,"(A)")''
+
+     write(LOGfile,"(A)")'JX:'
+     do iorb=1,Norb
+        write(LOGfile,"(90(F15.9,1X))") (Jx_internal(iorb,jorb),jorb=1,Norb)
+     enddo
+     write(LOGfile,"(A)")'JP:'
+     do iorb=1,Norb
+        write(LOGfile,"(90(F15.9,1X))") (Jp_internal(iorb,jorb),jorb=1,Norb)
+     enddo
+     write(LOGfile,"(A)")''
+
+     write(LOGfile,"(A)")'Mean-field terms from anticommutators:'
+     do ispin=1,2
+        do iorb=1,Norb
+           write(LOGfile,"(100(A1,F8.4,A1,F8.4,A1,2x))")&
+                (&
+                (&
+                '(',dreal(mfHloc(ispin,jspin,iorb,jorb)),',',dimag(mfHloc(ispin,jspin,iorb,jorb)),')',&
+                jorb =1,Norb),&
+                jspin=1,Nspin)
+        enddo
+     enddo
+     write(LOGfile,"(A)")''
+
+    if(allocated(coulomb_sundry))then
+       write(LOGfile,"(A)")'There are '//str(size(coulomb_sundry))//' sundry terms.'
+       do iline=1,size(coulomb_sundry)
+          o1 = coulomb_sundry(iline)%cd_i(1)
+          o2 = coulomb_sundry(iline)%cd_j(1)
+          o3 = coulomb_sundry(iline)%c_k(1)
+          o4 = coulomb_sundry(iline)%c_l(1)
+          s1 = merge("u", "d", coulomb_sundry(iline)%cd_i(2)==1)
+          s2 = merge("u", "d", coulomb_sundry(iline)%cd_j(2)==1)
+          s3 = merge("u", "d", coulomb_sundry(iline)%c_k(2)==1)
+          s4 = merge("u", "d", coulomb_sundry(iline)%c_l(2)==1)
+          write(dummy, '(F10.6)') coulomb_sundry(iline)%U
+          write(LOGfile,"(A)")'Sundry operator '//txtfy(iline,3)//':     '//&
+               trim(dummy)//&
+               ' cd_['//str(o1)//str(s1)//']'//&
+               ' c_['//str(o2)//str(s2)//']'//&
+               ' cd_['//str(o3)//str(s3)//']'//&
+               ' c_['//str(o4)//str(s4)//']'
+       enddo
+       write(LOGfile,"(A)")''
+    endif
+
+  end subroutine print_umatrix
 
 
   subroutine inspect_uparams(which_param, coeffmatrix, ioflag, ierrflag)
@@ -208,13 +350,6 @@ contains
     if(.not.ufile_exists)stop "read_umatrix_file ERROR: indicated file does not exist"
     if(ed_verbose>0)write(LOGfile,"(A)")'Reading interaction Hamiltonian from file '//trim(ufile)//reg(ed_file_suffix)//".restart"
     !
-    !Set internal interaction coefficient matrices to zero
-    mfHloc        = zero
-    Uloc_internal = zero
-    Ust_internal  = zero
-    Jh_internal   = zero
-    Jx_internal   = zero
-    Jp_internal   = zero
     !
     !
     open(free_unit(unit_umatrix),file=trim(ufile)//reg(ed_file_suffix)//".restart")
@@ -276,88 +411,21 @@ contains
     !Here we need to operate on the various Uloc, Ust, Jh, Jx, Jp matrices
     !-the Hubbard terms are passed with an 1/2, but if the user made things
     !correctly they already have the two nup/ndw and ndw/nup terms. So nothing to do here.
-    if(ed_verbose>2)then
-       write(LOGfile,"(A)")'ULOC:'
-       write(LOGfile,"(90(F15.9,1X))") (Uloc_internal(iorb),iorb=1,Norb)
-       write(LOGfile,"(A)")''
-    endif
     !
     !-Ust is symmetric with respect to orbital exchange: the elements we got should be ordered
     !in increasing orbital order. So the matrix should be upper triangular. In the routine that
     !creates Hloc, it does nup*ndw + ndw*nup, so here we divide by 2.0
+    !
     Ust_internal = (Ust_internal + transpose(Ust_internal))/2.0
-    if(ed_verbose>2)then
-       write(LOGfile,"(A)")'UST:'
-       do iorb=1,Norb
-          write(LOGfile,"(90(F15.9,1X))") (Ust_internal(iorb,jorb),jorb=1,Norb)
-       enddo
-       write(LOGfile,"(A)")''
-    endif
-
+    !
     !-Jh needs to be rescaled. First, it also is symmetric w.r.t. orbital exchange.
     !Then, the coefficient of the terms in the H constructor is actually Ust-Jh. 
     !So, if the user passed this as Jh, we need to recast it as Ust - what the user passed
+    !
     Jh_internal = (Jh_internal + transpose(Jh_internal))/2.0
     Jh_internal = Ust_internal - Jh_internal
-    if(ed_verbose>2)then
-       write(LOGfile,"(A)")'JH:'
-       do iorb=1,Norb
-          write(LOGfile,"(90(F15.9,1X))") (Jh_internal(iorb,jorb),jorb=1,Norb)
-       enddo
-       write(LOGfile,"(A)")''
-    endif
-
+    !
     !Jx and Jp have a summation that goes from 1 to Norb for both orbital indices, so no change there
-    if(ed_verbose>2)then
-       write(LOGfile,"(A)")'JX:'
-       do iorb=1,Norb
-          write(LOGfile,"(90(F15.9,1X))") (Jx_internal(iorb,jorb),jorb=1,Norb)
-       enddo
-       write(LOGfile,"(A)")'JP:'
-       do iorb=1,Norb
-          write(LOGfile,"(90(F15.9,1X))") (Jp_internal(iorb,jorb),jorb=1,Norb)
-       enddo
-       write(LOGfile,"(A)")''
-    endif
-
-    !Print mean-field terms
-    if(ed_verbose>2)then
-       write(LOGfile,"(A)")'Mean-field terms from anticommutators:'
-       do ispin=1,2
-          do iorb=1,Norb
-             write(LOGfile,"(100(A1,F8.4,A1,F8.4,A1,2x))")&
-                  (&
-                  (&
-                  '(',dreal(mfHloc(ispin,jspin,iorb,jorb)),',',dimag(mfHloc(ispin,jspin,iorb,jorb)),')',&
-                  jorb =1,Norb),&
-                  jspin=1,Nspin)
-          enddo
-       enddo
-       write(LOGfile,"(A)")''
-    endif
-
-    !Is there anything else?
-    if(ed_verbose>2 .and. allocated(coulomb_sundry))then
-       write(LOGfile,"(A)")'There are '//str(size(coulomb_sundry))//' sundry terms.'
-       do iline=1,size(coulomb_sundry)
-          o1 = coulomb_sundry(iline)%cd_i(1)
-          o2 = coulomb_sundry(iline)%cd_j(1)
-          o3 = coulomb_sundry(iline)%c_k(1)
-          o4 = coulomb_sundry(iline)%c_l(1)
-          s1 = merge("u", "d", coulomb_sundry(iline)%cd_i(2)==1)
-          s2 = merge("u", "d", coulomb_sundry(iline)%cd_j(2)==1)
-          s3 = merge("u", "d", coulomb_sundry(iline)%c_k(2)==1)
-          s4 = merge("u", "d", coulomb_sundry(iline)%c_l(2)==1)
-          write(dummy, '(F10.6)') coulomb_sundry(iline)%U
-          write(LOGfile,"(A)")'Sundry operator '//txtfy(iline,3)//':     '//&
-               trim(dummy)//&
-               ' cd_['//str(o1)//str(s1)//']'//&
-               ' c_['//str(o2)//str(s2)//']'//&
-               ' cd_['//str(o3)//str(s3)//']'//&
-               ' c_['//str(o4)//str(s4)//']'
-       enddo
-       write(LOGfile,"(A)")''
-    endif
     !
     !
   end subroutine read_umatrix_file
@@ -504,6 +572,25 @@ contains
     endif
     !
   end subroutine grow_sundry_array
+  
+  
+  subroutine grow_runtime_array(new_element)
+    type(coulomb_matrix_element),intent(in)                 :: new_element
+    type(coulomb_matrix_element),dimension(:),allocatable   :: temp
+    integer                                                 :: dim_old
+    !
+    if(.not.allocated(coulomb_runtime))then
+       allocate(coulomb_runtime(1))
+       coulomb_runtime(1) = new_element
+    else     
+       dim_old = size(coulomb_runtime)
+       allocate(temp(dim_old+1))
+       temp(1:dim_old) = coulomb_runtime
+       temp(dim_old+1) = new_element
+       call move_alloc(temp,coulomb_runtime)
+    endif
+    !
+  end subroutine grow_runtime_array
 
 
 end module ED_PARSE_UMATRIX

@@ -17,6 +17,7 @@ contains
   include "edipack2/edipack_c_binding_aux_funx.f90"
   include "edipack2/edipack_c_binding_bath.f90"
   include "edipack2/edipack_c_binding_bath_fit.f90"
+  include "edipack2/edipack_c_binding_parse_umatrix.f90"
 #ifdef _WINEQ  
   include "edipack2ineq/edipack2ineq_c_binding_aux_funx.f90"
   include "edipack2ineq/edipack2ineq_c_binding_bath.f90"

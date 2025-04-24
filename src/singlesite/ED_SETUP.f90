@@ -443,6 +443,7 @@ contains
     if(allocated(Jx_internal))deallocate(Jx_internal)
     if(allocated(Jp_internal))deallocate(Jp_internal)
     if(allocated(coulomb_sundry))deallocate(coulomb_sundry)
+    if(allocated(coulomb_runtime))deallocate(coulomb_runtime)
 
     if(allocated(ed_dens))deallocate(ed_dens)
     if(allocated(ed_docc))deallocate(ed_docc)

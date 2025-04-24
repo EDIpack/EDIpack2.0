@@ -277,6 +277,7 @@ MODULE ED_VARS_GLOBAL
   !File suffixes for printing fine tuning.
   !=========================================================
   type(coulomb_matrix_element),dimension(:),allocatable  ::  coulomb_sundry
+  type(coulomb_matrix_element),dimension(:),allocatable  ::  coulomb_runtime
 
 
   !This is the internal Mpi Communicator and variables.

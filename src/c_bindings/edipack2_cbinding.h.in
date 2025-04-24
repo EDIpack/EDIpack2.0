@@ -482,6 +482,19 @@ void inspect_uparams(int whichparam,
                      int ioflag,
                      int64_t *ierrflag
                      );
+                     
+void reset_umatrix();
+
+void add_twobody_operator(int o1,
+                          int s1,
+                          int o2,
+                          int s2,
+                          int o3,
+                          int s3,
+                          int o4,
+                          int s4,
+                          double U
+                     );
 
 #ifdef __cplusplus
 }
