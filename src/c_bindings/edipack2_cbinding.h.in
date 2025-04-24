@@ -477,12 +477,6 @@ void solve_ineq(double *bath,
 
 void finalize_solver(@WITH_INEQ_HEADER@);
 
-void inspect_uparams(int whichparam,
-                     double *value, 
-                     int ioflag,
-                     int64_t *ierrflag
-                     );
-                     
 void reset_umatrix();
 
 void add_twobody_operator(int o1,
