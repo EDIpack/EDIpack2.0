@@ -74,26 +74,30 @@ program ed_normal_normal
   Nb=ed_get_bath_dimension()
   allocate(Bath(Nb))
   !
-  call run_test(sparse=.true.,umatrix=.false.)  
-  call run_test(sparse=.false.,umatrix=.false.)
-  call run_test(sparse=.true.,umatrix=.true.)  
-  call run_test(sparse=.false.,umatrix=.true.)
+  call run_test(sparse=.true.,umatrix=.false.,hk=.true.)  
+  call run_test(sparse=.false.,umatrix=.false.,hk=.true.)
+  call run_test(sparse=.true.,umatrix=.true.,hk=.false.)  
+  call run_test(sparse=.false.,umatrix=.true.,hk=.false.)
+  call run_test(sparse=.true.,umatrix=.false.,hk=.false.)  
+  call run_test(sparse=.false.,umatrix=.false.,hk=.false.)
   !
   call finalize_MPI()
 
 contains
 
 
-  subroutine run_test(sparse,umatrix)
-    logical :: sparse,umatrix
-    ED_SPARSE_H    =sparse
-    ED_READ_UMATRIX=umatrix
-    call ed_init_solver(bath)
-    call ed_set_Hloc(hloc)
-    write(*,*) ""
+  subroutine run_test(sparse,umatrix,hk)
+    logical :: sparse,umatrix,hk
     write(*,*) "ED_MODE = NORMAL   |   BATH_TYPE = NORMAL"
     write(*,*) "SPARSE_H= "//str(sparse)
     write(*,*) "U_MATRIX= "//str(umatrix)
+    write(*,*) "USE HK  = "//str(hk)//" (use twobody operators) "
+    ED_SPARSE_H    =sparse
+    ED_READ_UMATRIX=umatrix
+    ED_USE_KANAMORI=hk
+    if(.not.umatrix.AND..not.hk)call set_twobody_hk()
+    call ed_init_solver(bath)
+    call ed_set_Hloc(hloc)
     call ed_solve(bath)
     call ed_get_sigma(Smats,axis="m",type="n")
     call ed_get_dens(dens)
@@ -113,7 +117,16 @@ contains
        call save_results()
        stop
     endif
-    call test_results(sparse,umatrix)
+    call test_results()
+    write(*,*) "Summary RESULTS:"
+    write(*,*) "ED_MODE = NORMAL   |   BATH_TYPE = NORMAL"
+    write(*,*) "SPARSE_H= "//str(sparse)
+    write(*,*) "U_MATRIX= "//str(umatrix)
+    write(*,*) "USE HK  = "//str(hk)//" (use twobody operators) "
+    write(*,*)""
+    write(*,*)""
+    write(*,*)""
+    call wait(500)    
   end subroutine run_test
 
 
@@ -146,10 +159,7 @@ contains
   end subroutine read_results
 
 
-  subroutine test_results(sparse,umatrix)
-    logical  :: sparse,umatrix
-    write(*,*)""
-    write(*,*) "Check RESULTS sparse_H, read_umatrix="//str(sparse)//","//str(umatrix)
+  subroutine test_results()
     call read_results()
     call assert(dens,densR,"dens")
     call assert(docc,doccR,"docc")
@@ -158,11 +168,6 @@ contains
     call assert(imp,impR,"imp")
     call assert(evals,evalsR,"evals")
     call assert(Smom/SmomR,dble(ones(Norb,Nmomenta)),"Sigma_momenta 1:4",tol=1.0d-8)
-    write(*,*)""
-    write(*,*)""
-    write(*,*)""
-    write(*,*)""
-    call wait(500)
   end subroutine test_results
 
 
@@ -178,7 +183,35 @@ contains
   end subroutine save_results
 
 
+  subroutine set_twobody_hk()
+    call ed_add_twobody_operator(1,"u",1,"d",1,"u",1,"d",2.00000000d0)
+    call ed_add_twobody_operator(1,"d",1,"u",1,"d",1,"u",2.00000000d0)
+    call ed_add_twobody_operator(2,"u",2,"d",2,"u",2,"d",2.00000000d0)
+    call ed_add_twobody_operator(2,"d",2,"u",2,"d",2,"u",2.00000000d0)
+    call ed_add_twobody_operator(1,"d",2,"u",1,"d",2,"u",2.00000000d0)
+    call ed_add_twobody_operator(1,"u",2,"d",1,"u",2,"d",2.00000000d0)
+    call ed_add_twobody_operator(2,"d",1,"u",2,"d",1,"u",2.00000000d0)
+    call ed_add_twobody_operator(2,"u",1,"d",2,"u",1,"d",2.00000000d0)
+    call ed_add_twobody_operator(1,"u",2,"u",1,"u",2,"u",2.00000000d0)
+    call ed_add_twobody_operator(1,"d",2,"d",1,"d",2,"d",2.00000000d0)
+    call ed_add_twobody_operator(2,"u",1,"u",2,"u",1,"u",2.00000000d0)
+    call ed_add_twobody_operator(2,"d",1,"d",2,"d",1,"d",2.00000000d0)
+    call ed_add_twobody_operator(1,"u",2,"u",2,"u",1,"u",0.12500000d0)
+    call ed_add_twobody_operator(1,"d",2,"d",2,"d",1,"d",0.12500000d0)
+    call ed_add_twobody_operator(2,"u",1,"u",1,"u",2,"u",0.12500000d0)
+    call ed_add_twobody_operator(2,"d",1,"d",1,"d",2,"d",0.12500000d0)
+    call ed_add_twobody_operator(1,"d",2,"u",2,"d",1,"u",0.12500000d0)
+    call ed_add_twobody_operator(1,"u",2,"d",2,"u",1,"d",0.12500000d0)
+    call ed_add_twobody_operator(2,"d",1,"u",1,"d",2,"u",0.12500000d0)
+    call ed_add_twobody_operator(2,"u",1,"d",1,"u",2,"d",0.12500000d0)
+    call ed_add_twobody_operator(1,"d",1,"u",2,"d",2,"u",0.12500000d0)
+    call ed_add_twobody_operator(1,"u",1,"d",2,"u",2,"d",0.12500000d0)
+    call ed_add_twobody_operator(2,"d",2,"u",1,"d",1,"u",0.12500000d0)
+    call ed_add_twobody_operator(2,"u",2,"d",1,"u",1,"d",0.12500000d0)
+  end subroutine set_twobody_hk
 
+  
+  
   ! Subroutine to compute momenta
   ! 
   ! ( sum_w abs(F(w))*w**n ) / ( sum_w abs(F(w)) )
@@ -200,6 +233,3 @@ contains
 
 
 end program ed_normal_normal
-
-
-

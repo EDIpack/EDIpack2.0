@@ -110,6 +110,7 @@ contains
     logical :: sparse,umatrix
     ED_SPARSE_H    =sparse
     ED_READ_UMATRIX=umatrix
+    if(umatrix)ED_USE_KANAMORI=.false.
     call ed_set_Hreplica(Hsym_basis,lambdasym_vector)
     call ed_init_solver(bath)
     call ed_set_Hloc(hloc)

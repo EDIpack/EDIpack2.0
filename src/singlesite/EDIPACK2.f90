@@ -119,6 +119,8 @@ MODULE EDIPACK2
        ed_get_reduced_rdm   => get_reduced_rdm
 
 
+  USE ED_PARSE_UMATRIX, only: &
+       ed_add_twobody_operator => add_twobody_operator
 
   USE ED_GREENS_FUNCTIONS, only: &
        ed_build_impG   => get_impG ,&

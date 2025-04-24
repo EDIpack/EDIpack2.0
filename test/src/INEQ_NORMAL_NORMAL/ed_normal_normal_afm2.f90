@@ -95,6 +95,7 @@ contains
     integer :: ip
     ED_SPARSE_H    =sparse
     ED_READ_UMATRIX=umatrix
+    if(umatrix)ED_USE_KANAMORI=.false.
     call ed_init_solver(bath)
     call ed_break_symmetry_bath(bath,sb_field, (/( (-1d0)**(ip+1), ip=1,Nlat)/) )
     call ed_set_Hloc(hloc,Nlat)
