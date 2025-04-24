@@ -73,11 +73,11 @@ contains
        if(.not. ED_TOTAL_UD) STOP "ED_TOTAL_UD = F and ED_READ_UMATRIX = T are incompatible"
        call read_umatrix_file(umatrix_file)
        !set Hubbard-Kanamori input parameters to zero
-       Uloc = zero
-       Ust = zero
-       Jh = zero
-       Jx = zero
-       Jp = zero
+       !Uloc = zero
+       !Ust = zero
+       !Jh = zero
+       !Jx = zero
+       !Jp = zero
     endif
     if(allocated(coulomb_runtime))then
       do iline=1,size(coulomb_runtime)
@@ -95,11 +95,11 @@ contains
   subroutine reset_umatrix()
     !This subroutine resets ro zero the internal interaction matrices and the
     !input variables
-     Uloc = zero
-     Ust = zero
-     Jh = zero
-     Jx = zero
-     Jp = zero
+     !Uloc = zero
+     !Ust = zero
+     !Jh = zero
+     !Jx = zero
+     !Jp = zero
      mfHloc = zero
      Uloc_internal = zero
      Ust_internal = zero
