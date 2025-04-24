@@ -221,12 +221,12 @@ contains
   subroutine c(pos,in,out,fsgn,ierr)
     !Fermionic destruction operator, used in the construction of the sector Hamiltonian. The :f:func:`c` operator set the bit at position :f:var:`pos` to 0 in the bit representation of the integer :f:var:`in`. Further it evaluates the corresponding fermionic sign :f:var:`fsign` as :math:`\sum_{i<pos}(-1)^{i}`. The obtained bitset identifies a new integer :f:var:`Out`. 
     !
-    integer,intent(in)    :: pos
-    integer,intent(in)    :: in
-    integer,intent(inout) :: out
-    real(8),intent(inout) :: fsgn    
+    integer,intent(in)    :: pos  !Position to be set to :code:`0`
+    integer,intent(in)    :: in   !Input index
+    integer,intent(inout) :: out  !Output index
+    real(8),intent(inout) :: fsgn !Accrued sign
     integer               :: l
-    logical,optional      :: ierr
+    logical,optional      :: ierr !Error flag: if present, the operator cannot be applied on the state, it is set to :code:`.false.`. Else, execution stops.
     
     if(.not.btest(in,pos-1))then
       if(.not.present(ierr))then
@@ -247,12 +247,12 @@ contains
   subroutine cdg(pos,in,out,fsgn,ierr)
     !Fermionic creation operator, used in the construction of the sector Hamiltonian. The :f:func:`cdg` operator set the bit at position :f:var:`pos` to 1 in the bit representation of the integer :f:var:`in`. Further it evaluates the corresponding fermionic sign :f:var:`fsign` as :math:`\sum_{i<pos}(-1)^{i}`. The obtained bitset identifies a new integer :f:var:`Out`. 
     !
-    integer,intent(in)    :: pos
-    integer,intent(in)    :: in
-    integer,intent(inout) :: out
-    real(8),intent(inout) :: fsgn    
+    integer,intent(in)    :: pos  !Position to be set to :code:`1`
+    integer,intent(in)    :: in   !Input index
+    integer,intent(inout) :: out  !Output index
+    real(8),intent(inout) :: fsgn !Accrued sign   
     integer               :: l
-    logical,optional      :: ierr
+    logical,optional      :: ierr !Error flag: if present, the operator cannot be applied on the state, it is set to :code:`.false.`. Else, execution stops.
     
     if(btest(in,pos-1))then
       if(.not.present(ierr))then

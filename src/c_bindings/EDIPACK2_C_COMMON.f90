@@ -79,5 +79,16 @@ contains
     case("nonsu2");  edm = 3
     end select
   end function get_ed_mode_c
+  
+  !Inspect interaction parameters
+  subroutine inspect_uparams_c(which_param, coeffmatrix, ioflag, ierrflag) bind(c, name='inspect_uparams')
+    use, intrinsic :: iso_c_binding
+    use ED_PARSE_UMATRIX, only: inspect_uparams
+    integer(c_int),value                :: which_param, ioflag
+    integer(c_int),dimension(1)         :: ierrflag
+    real(c_double),dimension(Norb,Norb) :: coeffmatrix
+    !
+    call inspect_uparams(which_param, coeffmatrix, ioflag, ierrflag(1))
+  end subroutine inspect_uparams_c
 
 END MODULE EDIPACK2_C_COMMON

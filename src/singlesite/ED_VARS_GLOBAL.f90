@@ -207,11 +207,11 @@ MODULE ED_VARS_GLOBAL
 
   !Interaction coefficients used internally
   !=========================================================
-  real(8),allocatable,dimension(:)                     :: Uloc_internal ! [Norb]
-  real(8),allocatable,dimension(:,:)                   :: Ust_internal  ! [Norb,Norb]
-  real(8),allocatable,dimension(:,:)                   :: Jh_internal   ! [Norb,Norb]
-  real(8),allocatable,dimension(:,:)                   :: Jx_internal   ! [Norb,Norb]
-  real(8),allocatable,dimension(:,:)                   :: Jp_internal   ! [Norb,Norb]
+  real(8),allocatable,dimension(:)                     :: Uloc_internal ! Internal copy of the Hubbard :math:`U` terms, read from input parameters or umatrix file :code:`[Norb]`
+  real(8),allocatable,dimension(:,:)                   :: Ust_internal  ! Internal copy of the :math:`U'` terms, read from input parameters or umatrix file :code:`[Norb,Norb]`
+  real(8),allocatable,dimension(:,:)                   :: Jh_internal   ! Internal copy of the :math:`J_{H}` terms, read from input parameters or umatrix file :code:`[Norb,Norb]`
+  real(8),allocatable,dimension(:,:)                   :: Jx_internal   ! Internal copy of the :math:`J_{X}` terms, read from input parameters or umatrix file :code:`[Norb,Norb]`
+  real(8),allocatable,dimension(:,:)                   :: Jp_internal   ! Internal copy of the :math:`J_{P}` terms, read from input parameters or umatrix file :code:`[Norb,Norb]`
 
 
   !Green's functions
