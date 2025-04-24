@@ -16,12 +16,19 @@ MODULE ED_PARSE_UMATRIX
 contains
 
   subroutine add_twobody_operator(oi,si,oj,sj,ok,sk,ol,sl,Uijkl)
-    !This subroutine lets the user add a two-body operator at runtime
-    integer                       :: oi, oj, ok, ol
-    character(len=1)              :: si, sj, sk, sl
+    !This subroutine lets the user add a two-body operator at runtime.
+    !The convention is consistent with that of the umatrix file
+    integer                       :: oi !First creation operator orbital index
+    integer                       :: oj !Second creation operator orbital index
+    integer                       :: ok !First annihilation operator orbital index
+    integer                       :: ol !Second annihilation operator orbital index
+    character(len=1)              :: si !First creation operator spin index
+    character(len=1)              :: sj !Second creation operator spin index
+    character(len=1)              :: sk !First annihilation operator spin index
+    character(len=1)              :: sl !Second annihilation operator spin index
     type(coulomb_matrix_element)  :: opline
     character(len=300)            :: dummy
-    real(8)                       :: Uijkl
+    real(8)                       :: Uijkl !Interaction coefficient
     if(max(oi, oj, ok, ol)>Norb) stop "add_twobody_operator: too many orbitals" 
     if(min(oi, oj, ok, ol) <  1) stop "add_twobody_operator: orbital index < 1" 
     if (any(( [si, sj, sk, sl] /= "u" ) .AND. ( [si, sj, sk, sl] /= "d" ))) stop "add_twobody_operator: spin index malformed" 

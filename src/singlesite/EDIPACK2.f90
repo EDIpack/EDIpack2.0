@@ -37,9 +37,10 @@ MODULE EDIPACK2
        ed_mode       , &
        ed_verbose    , &
        ed_read_umatrix,&
-       ed_sparse_H,&
-       ed_hw_bath    , &
-       ed_input_file ,&
+       ed_use_kanamori,&
+       ed_sparse_H    ,&
+       ed_hw_bath     ,&
+       ed_input_file  ,&
        lanc_nstates_total ,&
        bath_type 
 

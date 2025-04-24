@@ -82,4 +82,4 @@ What follows is an example for a Hubbard-Kanamori interaction corresponding to t
 
 
 .. f:automodule::   ed_parse_umatrix
-   :members: read_umatrix_file, save_umatrix_file
+   :members: read_umatrix_file, save_umatrix_file, reset_umatrix, add_twobody_operator
