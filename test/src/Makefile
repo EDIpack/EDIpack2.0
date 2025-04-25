@@ -1,5 +1,5 @@
 FC=mpif90
-FFLAG = -O2 -ffree-line-length-none -coverage
+FFLAG = -O2 -ffree-line-length-none
 FPPMPI=-cpp -D_MPI
 FFLAGS= ${FFLAG} ${FPPMPI}
 
@@ -7,9 +7,9 @@ FFLAGS= ${FFLAG} ${FPPMPI}
 .PHONY: clean
 
 HAS_INEQ:=$(shell pkg-config --variable=ineq edipack2)
-GLOB_INC:=$(shell pkg-config --cflags scifor )
+GLOB_INC:=$(shell pkg-config --cflags scifor edipack2)
 
-OBJS=ASSERTING.o
+OBJS=ASSERTING.o COMMON.o
 
 ifeq ($(HAS_INEQ),true)
 all: $(OBJS) NORMAL HYBRID REPLICA GENERAL INEQ

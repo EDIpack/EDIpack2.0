@@ -4,28 +4,18 @@ program ed_general_normal
   USE MPI
   USE SF_MPI
   USE ASSERTING
+  USE COMMON
   implicit none
-  integer                :: i,iw,jo,js,Nso,Nsymm,Nmomenta
-  !Bath:
-  integer                :: Nb,iorb,jorb,ispin,jspin,inso,print_mode
-  real(8),allocatable    :: Bath(:),Wlist(:)
-  !GFs and Sigma:
-  complex(8),allocatable :: Smats(:,:,:,:,:)
-  !hamiltonian input:
-  complex(8),allocatable :: Hloc(:,:,:,:)
-  !variables for the model:
-  real(8)                :: Delta
-  character(len=16)      :: finput
-  real(8),allocatable    :: evals(:),evalsR(:)
-  real(8),allocatable    :: dens(:),docc(:),exciton(:),energy(:),doubles(:),imp(:),Smom(:,:)
-  real(8),allocatable    :: densR(:),doccR(:),excitonR(:),energyR(:),doublesR(:),impR(:),SmomR(:,:)
+  integer                                     :: i,js,Nso,Nsymm,Nmomenta
+  integer                                     :: Nb,iorb,jorb,ispin,jspin
+  complex(8),allocatable                      :: Smats(:,:,:,:,:)
+  complex(8),allocatable                      :: Hloc(:,:,:,:)
+  real(8)                                     :: Delta
+  character(len=16)                           :: finput
+  logical                                     :: dsave
   complex(8),dimension(4,4)                   :: GammaN,GammaE0
   real(8),dimension(:,:),allocatable          :: lambdasym_vector
   complex(8),dimension(:,:,:,:,:),allocatable :: Hsym_basis
-  !MPI Vars:
-  integer                                     :: irank,comm,rank,size2,ierr
-  logical                                     :: master
-  logical                                     :: dsave
   !
   ! MPI initialization
   call init_MPI()
@@ -96,13 +86,13 @@ program ed_general_normal
   call ed_set_Hgeneral(Hsym_basis,lambdasym_vector)
   Nb=ed_get_bath_dimension(Nsymm)
   allocate(Bath(Nb))
-
   !
-  !
-  call run_test(sparse=.true.,umatrix=.false.)  
-  call run_test(sparse=.false.,umatrix=.false.)
-  call run_test(sparse=.true.,umatrix=.true.)  
-  call run_test(sparse=.false.,umatrix=.true.)
+  call run_test(sparse=.true.,umatrix=.false.,hk=.true.)  
+  call run_test(sparse=.false.,umatrix=.false.,hk=.true.)
+  call run_test(sparse=.true.,umatrix=.true.,hk=.false.)  
+  call run_test(sparse=.false.,umatrix=.true.,hk=.false.)
+  call run_test(sparse=.true.,umatrix=.false.,hk=.false.)  
+  call run_test(sparse=.false.,umatrix=.false.,hk=.false.)
   !
   call finalize_MPI()
 
@@ -110,18 +100,16 @@ program ed_general_normal
 contains
 
 
-  subroutine run_test(sparse,umatrix)
-    logical :: sparse,umatrix
+  subroutine run_test(sparse,umatrix,hk)
+    logical :: sparse,umatrix,hk
     ED_SPARSE_H    =sparse
     ED_READ_UMATRIX=umatrix
-    if(umatrix)ED_USE_KANAMORI=.false.
+    ED_USE_KANAMORI=hk
+    if(.not.umatrix.AND..not.hk)call set_twobody_hk()
+    call print_status()
     call ed_set_Hgeneral(Hsym_basis,lambdasym_vector)
     call ed_init_solver(bath)
     call ed_set_Hloc(hloc)
-    write(*,*) ""
-    write(*,*) "ED_MODE = NORMAL   |   BATH_TYPE = GENERAL"
-    write(*,*) "SPARSE_H= "//str(sparse)
-    write(*,*) "U_MATRIX= "//str(umatrix)
     call ed_solve(bath)
     call ed_get_sigma(Smats,axis="m",type="n")
     call ed_get_dens(dens)
@@ -143,7 +131,7 @@ contains
        call save_results()
        stop
     endif
-    call test_results(sparse,umatrix)
+    call test_results()
   end subroutine run_test
 
 
@@ -182,11 +170,10 @@ contains
 
 
 
-  subroutine test_results(sparse,umatrix)
-    logical  :: sparse,umatrix
-    write(*,*)""
-    write(*,*) "Check RESULTS sparse_H, read_umatrix="//str(sparse)//","//str(umatrix)
+  subroutine test_results()
     call read_results()
+    write(*,*)
+    write(*,"(A50)") "Summary RESULTS:"
     call assert(dens,densR,"dens")
     call assert(docc,doccR,"docc")
     call assert(exciton,excitonR,"docc")
@@ -195,12 +182,13 @@ contains
     call assert(imp,impR,"imp")
     call assert(evals,evalsR,"evals")
     call assert(Smom/SmomR,dble(ones(Norb,Nmomenta)),"Sigma_momenta 1:4",tol=1.0d-8)
+    call print_status()
     write(*,*)""
     write(*,*)""
     write(*,*)""
-    write(*,*)""
-    call wait(500)
+    call wait(1000)
   end subroutine test_results
+
 
 
   subroutine save_results()
@@ -217,72 +205,32 @@ contains
 
 
 
-
-  function so2j_index(ispin,iorb) result(isporb)
-    integer :: ispin,iorb
-    integer :: isporb
-    if(iorb>Norb)stop "error so2j_index: iorb>Norb"
-    if(ispin>Nspin)stop "error so2j_index: ispin>Nspin"
-    isporb=(ispin-1)*Nspin + iorb
-  end function so2j_index
-
-
-  function so2j(fg) result(g)
-    complex(8),dimension(Nspin,Nspin,Norb,Norb) :: fg
-    complex(8),dimension(Nspin*Norb,Nspin*Norb) :: g
-    integer                                     :: i,j,iorb,jorb,ispin,jspin
-    do ispin=1,Nspin
-       do jspin=1,Nspin
-          do iorb=1,Norb
-             do jorb=1,Norb
-                i=so2j_index(ispin,iorb)
-                j=so2j_index(jspin,jorb)
-                g(i,j) = fg(ispin,jspin,iorb,jorb)
-             enddo
-          enddo
-       enddo
-    enddo
-  end function so2j
-
-  function j2so(fg) result(g)
-    complex(8),dimension(Nspin*Norb,Nspin*Norb) :: fg
-    complex(8),dimension(Nspin,Nspin,Norb,Norb) :: g
-    integer                                     :: i,j,iorb,jorb,ispin,jspin
-    do ispin=1,Nspin
-       do jspin=1,Nspin
-          do iorb=1,Norb
-             do jorb=1,Norb
-                i=so2j_index(ispin,iorb)
-                j=so2j_index(jspin,jorb)
-                g(ispin,jspin,iorb,jorb)  = fg(i,j)
-             enddo
-          enddo
-       enddo
-    enddo
-  end function j2so
-
-
-  ! Subroutine to compute momenta
-  ! 
-  ! ( sum_w abs(F(w))*w**n ) / ( sum_w abs(F(w)) )
-  subroutine compute_momentum(x,Fx,n,momentum)
-    real(8)   ,dimension(:),intent(in)       :: x
-    complex(8),dimension(:),intent(in)       :: Fx
-    integer   ,intent(in)                    :: n
-    real(8)   ,intent(out)                   :: momentum
-    !
-    integer                                  :: iw
-    real(8)                                  :: num,den
-    num=0.0; den=0.0
-    do iw=1,size(x,1)
-       num = num + abs(Fx(iw))*x(iw)**n
-       den = den + abs(Fx(iw))
-    enddo
-    momentum=num/den
-  end subroutine compute_momentum
+  subroutine set_twobody_hk()
+    call ed_add_twobody_operator(1,"u",1,"d",1,"u",1,"d",2.000000d0)
+    call ed_add_twobody_operator(1,"d",1,"u",1,"d",1,"u",2.000000d0)
+    call ed_add_twobody_operator(2,"u",2,"d",2,"u",2,"d",2.000000d0)
+    call ed_add_twobody_operator(2,"d",2,"u",2,"d",2,"u",2.000000d0)
+    call ed_add_twobody_operator(1,"d",2,"u",1,"d",2,"u",1.500000d0)
+    call ed_add_twobody_operator(1,"u",2,"d",1,"u",2,"d",1.500000d0)
+    call ed_add_twobody_operator(2,"d",1,"u",2,"d",1,"u",1.500000d0)
+    call ed_add_twobody_operator(2,"u",1,"d",2,"u",1,"d",1.500000d0)
+    call ed_add_twobody_operator(1,"u",2,"u",1,"u",2,"u",1.500000d0)
+    call ed_add_twobody_operator(1,"d",2,"d",1,"d",2,"d",1.500000d0)
+    call ed_add_twobody_operator(2,"u",1,"u",2,"u",1,"u",1.500000d0)
+    call ed_add_twobody_operator(2,"d",1,"d",2,"d",1,"d",1.500000d0)
+    call ed_add_twobody_operator(1,"u",2,"u",2,"u",1,"u",0.250000d0)
+    call ed_add_twobody_operator(1,"d",2,"d",2,"d",1,"d",0.250000d0)
+    call ed_add_twobody_operator(2,"u",1,"u",1,"u",2,"u",0.250000d0)
+    call ed_add_twobody_operator(2,"d",1,"d",1,"d",2,"d",0.250000d0)
+    call ed_add_twobody_operator(1,"d",2,"u",2,"d",1,"u",0.250000d0)
+    call ed_add_twobody_operator(1,"u",2,"d",2,"u",1,"d",0.250000d0)
+    call ed_add_twobody_operator(2,"d",1,"u",1,"d",2,"u",0.250000d0)
+    call ed_add_twobody_operator(2,"u",1,"d",1,"u",2,"d",0.250000d0)
+    call ed_add_twobody_operator(1,"d",1,"u",2,"d",2,"u",0.250000d0)
+    call ed_add_twobody_operator(1,"u",1,"d",2,"u",2,"d",0.250000d0)
+    call ed_add_twobody_operator(2,"d",2,"u",1,"d",1,"u",0.250000d0)
+    call ed_add_twobody_operator(2,"u",2,"d",1,"u",1,"d",0.250000d0)
+  end subroutine set_twobody_hk
 
 
 end program ed_general_normal
-
-
-

@@ -4,26 +4,17 @@ program ed_normal_normal
   USE MPI
   USE SF_MPI
   USE ASSERTING
+  USE COMMON
   implicit none
-  integer                :: i,iw,jo,js,Nso,Nmomenta
-  !Bath:
-  integer                :: Nb,iorb,jorb,ispin,jspin,inso,print_mode
-  real(8),allocatable    :: Bath(:),Wlist(:)
-  !GFs and Sigma:
+  integer                :: i,js,Nso,Nmomenta
+  integer                :: Nb,iorb,jorb,ispin,jspin
   complex(8),allocatable :: Smats(:,:,:,:,:)
-  !hamiltonian input:
   complex(8),allocatable :: Hloc(:,:,:,:)
   !variables for the model:
   real(8)                :: Delta
   character(len=16)      :: finput
-  real(8),allocatable    :: evals(:),evalsR(:)
-  real(8),allocatable    :: dens(:),docc(:),energy(:),doubles(:),imp(:),Smom(:,:)
-  real(8),allocatable    :: densR(:),doccR(:),energyR(:),doublesR(:),impR(:),SmomR(:,:)
-  !
-  !MPI Vars:
-  integer                :: irank,comm,rank,size2,ierr
-  logical                :: master
   logical                :: dsave
+  !
   !
   ! MPI initialization
   call init_MPI()
@@ -88,14 +79,11 @@ contains
 
   subroutine run_test(sparse,umatrix,hk)
     logical :: sparse,umatrix,hk
-    write(*,*) "ED_MODE = NORMAL   |   BATH_TYPE = NORMAL"
-    write(*,*) "SPARSE_H= "//str(sparse)
-    write(*,*) "U_MATRIX= "//str(umatrix)
-    write(*,*) "USE HK  = "//str(hk)//" (use twobody operators) "
     ED_SPARSE_H    =sparse
     ED_READ_UMATRIX=umatrix
     ED_USE_KANAMORI=hk
     if(.not.umatrix.AND..not.hk)call set_twobody_hk()
+    call print_status()
     call ed_init_solver(bath)
     call ed_set_Hloc(hloc)
     call ed_solve(bath)
@@ -118,16 +106,8 @@ contains
        stop
     endif
     call test_results()
-    write(*,*) "Summary RESULTS:"
-    write(*,*) "ED_MODE = NORMAL   |   BATH_TYPE = NORMAL"
-    write(*,*) "SPARSE_H= "//str(sparse)
-    write(*,*) "U_MATRIX= "//str(umatrix)
-    write(*,*) "USE HK  = "//str(hk)//" (use twobody operators) "
-    write(*,*)""
-    write(*,*)""
-    write(*,*)""
-    call wait(500)    
   end subroutine run_test
+
 
 
   subroutine read_results()
@@ -161,6 +141,8 @@ contains
 
   subroutine test_results()
     call read_results()
+    write(*,*)
+    write(*,"(A50)") "Summary RESULTS:"
     call assert(dens,densR,"dens")
     call assert(docc,doccR,"docc")
     call assert(energy,energyR,"energy")
@@ -168,6 +150,11 @@ contains
     call assert(imp,impR,"imp")
     call assert(evals,evalsR,"evals")
     call assert(Smom/SmomR,dble(ones(Norb,Nmomenta)),"Sigma_momenta 1:4",tol=1.0d-8)
+    call print_status()
+    write(*,*)""
+    write(*,*)""
+    write(*,*)""
+    call wait(1000)    
   end subroutine test_results
 
 
@@ -210,26 +197,7 @@ contains
     call ed_add_twobody_operator(2,"u",2,"d",1,"u",1,"d",0.12500000d0)
   end subroutine set_twobody_hk
 
-  
-  
-  ! Subroutine to compute momenta
-  ! 
-  ! ( sum_w abs(F(w))*w**n ) / ( sum_w abs(F(w)) )
-  subroutine compute_momentum(x,Fx,n,momentum)
-    real(8)   ,dimension(:),intent(in)       :: x
-    complex(8),dimension(:),intent(in)       :: Fx
-    integer   ,intent(in)                    :: n
-    real(8)   ,intent(out)                   :: momentum
-    !
-    integer                                  :: iw
-    real(8)                                  :: num,den
-    num=0.0; den=0.0
-    do iw=1,size(x,1)
-       num = num + abs(Fx(iw))*x(iw)**n
-       den = den + abs(Fx(iw))
-    enddo
-    momentum=num/den
-  end subroutine compute_momentum
+
 
 
 end program ed_normal_normal
