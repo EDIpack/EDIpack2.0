@@ -18,13 +18,13 @@ contains
     !This subroutine lets the user add a two-body operator at runtime.
     !The convention is consistent with that of the umatrix file
     integer                       :: oi !Orbital index of :math:`c^{\dagger}_{i}`
-    integer                       :: oj !Spin index of :math:`c^{\dagger}_{i}`
-    integer                       :: ok !Orbital index of :math:`c^{\dagger}_{j}`
-    integer                       :: ol !Spin index of :math:`c^{\dagger}_{j}`
-    character(len=1)              :: si !Orbital index of :math:`c_{k}`
-    character(len=1)              :: sj !Spin index of :math:`c_{k}`
-    character(len=1)              :: sk !Orbital index of :math:`c_{l}`
-    character(len=1)              :: sl !Spin index of :math:`c_{l}`
+    integer                       :: oj !Orbital index of :math:`c^{\dagger}_{j}`
+    integer                       :: ok !Orbital index of :math:`c_{k}`
+    integer                       :: ol !Orbital index of :math:`c_{l}`
+    character(len=1)              :: si !Spin index of :math:`c^{\dagger}_{i}`
+    character(len=1)              :: sj !Spin index of :math:`c^{\dagger}_{j}`
+    character(len=1)              :: sk !Spin index of :math:`c_{k}`
+    character(len=1)              :: sl !Spin index of :math:`c_{l}`  
     type(coulomb_matrix_element)  :: opline
     character(len=300)            :: dummy
     real(8)                       :: Uijkl !Interaction coefficient
