@@ -7,10 +7,12 @@ EDIpack2.0 offers the user two ways of providing the interaction Hamiltonian.
 
 The default way is to use the in-built variables :f:var:`ULOC`, :f:var:`UST`,
 :f:var:`JH`, :f:var:`JX`, :f:var:`JP`, which implement a Hubbard-Kanamori Hamiltonian for a maximum of 5 orbitals.
+This is achieved by setting the :f:var:`ED_USE_KANAMORI` flag to :code:`T` in the input file.
 
 Alternatively, the user can provide a plain text file containing the second-quantized
 two-body operators. This is achieved by setting the :f:var:`ED_READ_UMATRIX` flag to :code:`T`
-in the input file. The filename (without extension) has to be provide via the :f:var:`UMATRIX_FILE` 
+in the input file. Note that :f:var:`ED_READ_UMATRIX` and :f:var:`ED_USE_KANAMORI` cannot be :code:`T` at the same time.
+The filename (without extension) has to be provide via the :f:var:`UMATRIX_FILE` 
 variable (default name :code:`umatrix` ). The actual file in the execution folder will need to have
 the :code:`.restart` suffix. When doing a real-space DMFT simulation, the prefix will need to be
 :code:`_ineqXXXX.restart` , where :code:`XXXX` is a 4-digit incresing number corresponding to the index of 
@@ -27,6 +29,7 @@ Each umatrix file needs to have the following format:
     NORB BANDS
     i1 j1 k1 l1 U_i1j1k1l1
     i2 j2 k2 l2 U_i2j2k2l2
+     ...
 
 
 :f:var:`NORB` is the number of orbitals. Empty lines and lines starting with :code:`#,%,!` are ignored.
