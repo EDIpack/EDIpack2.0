@@ -36,12 +36,15 @@ fi
 
 
 rm -f ford_doc.md
-rm -rf ford_doc 
+rm -rf ford_doc
 
 SRC=src
 GRAPH=graphs
 MOD=module
 MOM=$(pwd)
+
+rm -r $GRAPH
+rm -r $MOD
 
 mkdir -p $GRAPH
 mkdir -p $MOD

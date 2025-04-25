@@ -6,5 +6,5 @@ ED_FIT_GENERAL
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/parse_umatrix/src/singlesite/ED_FIT/ED_FIT_GENERAL.f90>`_ for :f:mod:`ed_fit_general` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/master/src/singlesite/ED_FIT/ED_FIT_GENERAL.f90>`_ for :f:mod:`ed_fit_general` on GitHub
  

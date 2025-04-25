@@ -6,5 +6,5 @@ E2I_BATH_FIT
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/parse_umatrix/src>`_ for :f:mod:`e2i_bath_fit` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/master/src>`_ for :f:mod:`e2i_bath_fit` on GitHub
  
