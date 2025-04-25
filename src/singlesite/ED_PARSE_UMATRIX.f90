@@ -51,38 +51,29 @@ contains
   end subroutine add_twobody_operator
 
   subroutine set_umatrix()
-     integer(8)         :: iline
-     !This subroutine sets the internal interaction matrices and saves the list of 
-     !operators to a file
-      mfHloc        = zero
-      Uloc_internal = zero
-      Ust_internal  = zero
-      Jh_internal   = zero
-      Jx_internal   = zero
-      Jp_internal   = zero
-      if(allocated(coulomb_sundry))deallocate(coulomb_sundry)
-    if(ed_use_kanamori)then
-       if(Norb > 5)STOP "ED_READ_UMATRIX = F: max 5 orbitals allowed"
-       Uloc_internal = Uloc
-       Ust_internal = Ust - Ust*eye(Norb)
-       Jh_internal = Jh - Jh*eye(Norb)
-       Jx_internal = Jx - Jx*eye(Norb)
-       Jp_internal = Jp - Jp*eye(Norb)
-    elseif(ed_read_umatrix)then
+    integer(8)         :: iline
+    !This subroutine sets the internal interaction matrices and saves the list of 
+    !operators to a file
+    mfHloc        = zero
+    Uloc_internal = zero
+    Ust_internal  = zero
+    Jh_internal   = zero
+    Jx_internal   = zero
+    Jp_internal   = zero
+    if(allocated(coulomb_sundry))deallocate(coulomb_sundry)
+  
+    !If we need to read a umatrix file, we read a umatrix file
+    if(ed_read_umatrix)then
        if(.not. ED_TOTAL_UD) STOP "ED_TOTAL_UD = F and ED_READ_UMATRIX = T are incompatible"
        call read_umatrix_file(umatrix_file)
-       !set Hubbard-Kanamori input parameters to zero
-       !Uloc = zero
-       !Ust = zero
-       !Jh = zero
-       !Jx = zero
-       !Jp = zero
-    endif
-    if(allocated(coulomb_runtime))then
-      do iline=1,size(coulomb_runtime)
-        call parse_umatrix_line(coulomb_runtime(iline))
-      enddo
-    endif
+     endif
+     
+     !If the user has passed some extra operators, we read them
+     if(allocated(coulomb_runtime))then
+       do iline=1,size(coulomb_runtime)
+         call parse_umatrix_line(coulomb_runtime(iline))
+       enddo
+     endif
 
     !Here we need to operate on the various Uloc, Ust, Jh, Jx, Jp matrices
     !-the Hubbard terms are passed with an 1/2, but if the user made things
@@ -102,7 +93,19 @@ contains
     Jh_internal = Ust_internal - Jh_internal
     !
     !Jx and Jp have a summation that goes from 1 to Norb for both orbital indices, so no change there
-       
+ 
+     !If we use the default input variables, we set them  here. It is important to do that here, after
+     !the reshufflings before, because these coefficients are not subject to those!
+     if(ed_use_kanamori)then
+       if(Norb > 5)STOP "ED_READ_UMATRIX = F: max 5 orbitals allowed"
+       Uloc_internal = Uloc_internal + Uloc(1:Norb)
+       Ust_internal  = Ust_internal  + Ust - Ust*eye(Norb)
+       Jh_internal   = Jh_internal   + Jh  - Jh*eye(Norb)
+       Jx_internal   = Jx_internal   + Jx  - Jx*eye(Norb)
+       Jp_internal   = Jp_internal   + Jp  - Jp*eye(Norb)
+    endif
+ 
+ 
     !Print interaction terms
     if(ed_verbose>2)then
       call print_umatrix()
