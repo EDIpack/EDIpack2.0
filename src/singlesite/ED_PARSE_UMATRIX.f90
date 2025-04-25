@@ -99,12 +99,13 @@ contains
      !Jh = zero
      !Jx = zero
      !Jp = zero
-     mfHloc = zero
-     Uloc_internal = zero
-     Ust_internal = zero
-     Jh_internal = zero
-     Jx_internal = zero
-     Jp_internal = zero
+     write(LOGfile,"(A)")'Clearing all internal interaction matrix coefficients and user-prodived two-body orbitals.'
+     if(allocated(mfHloc))mfHloc = zero
+     if(allocated(Uloc_internal))Uloc_internal = zero
+     if(allocated(Ust_internal))Ust_internal = zero
+     if(allocated(Jh_internal))Jh_internal = zero
+     if(allocated(Jx_internal))Jx_internal = zero
+     if(allocated(Jp_internal))Jp_internal = zero
      if(allocated(coulomb_sundry))deallocate(coulomb_sundry)
      if(allocated(coulomb_runtime))deallocate(coulomb_runtime)
   end subroutine reset_umatrix
