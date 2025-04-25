@@ -120,7 +120,8 @@ MODULE EDIPACK2
 
 
   USE ED_PARSE_UMATRIX, only: &
-       ed_add_twobody_operator => add_twobody_operator
+       ed_add_twobody_operator => add_twobody_operator, &
+       ed_reset_umatrix => reset_umatrix
 
   USE ED_GREENS_FUNCTIONS, only: &
        ed_build_impG   => get_impG ,&

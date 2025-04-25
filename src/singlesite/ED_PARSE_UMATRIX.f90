@@ -92,8 +92,8 @@ contains
   end subroutine set_umatrix
   
   subroutine reset_umatrix()
-    !This subroutine resets ro zero the internal interaction matrices and the
-    !input variables
+    !This subroutine resets ro zero the internal interaction matrices 
+    
      !Uloc = zero
      !Ust = zero
      !Jh = zero
