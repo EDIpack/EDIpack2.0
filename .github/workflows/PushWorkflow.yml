@@ -73,6 +73,11 @@ jobs:
 
       - name: Testing...
         run: |
+          source ~/.scifor_config_user
+          source ~/.edipack2_config_user
+          export PKG_CONFIG_PATH=~/.pkgconfig.d
+          export GLOB_INC=$( pkg-config --cflags scifor edipack2)
+          export GLOB_LIB=$( pkg-config --libs   scifor edipack2 | sed  "s/;/ /g"  | sed 's/\\/  /g' )
           cd edipack2/test
           make test
 
