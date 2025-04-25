@@ -17,14 +17,14 @@ contains
   subroutine add_twobody_operator(oi,si,oj,sj,ok,sk,ol,sl,Uijkl)
     !This subroutine lets the user add a two-body operator at runtime.
     !The convention is consistent with that of the umatrix file
-    integer                       :: oi !First creation operator orbital index
-    integer                       :: oj !Second creation operator orbital index
-    integer                       :: ok !First annihilation operator orbital index
-    integer                       :: ol !Second annihilation operator orbital index
-    character(len=1)              :: si !First creation operator spin index
-    character(len=1)              :: sj !Second creation operator spin index
-    character(len=1)              :: sk !First annihilation operator spin index
-    character(len=1)              :: sl !Second annihilation operator spin index
+    integer                       :: oi !Orbital index of :math:`c^{\dagger}_{i}`
+    integer                       :: oj !Spin index of :math:`c^{\dagger}_{i}`
+    integer                       :: ok !Orbital index of :math:`c^{\dagger}_{j}`
+    integer                       :: ol !Spin index of :math:`c^{\dagger}_{j}`
+    character(len=1)              :: si !Orbital index of :math:`c_{k}`
+    character(len=1)              :: sj !Spin index of :math:`c_{k}`
+    character(len=1)              :: sk !Orbital index of :math:`c_{l}`
+    character(len=1)              :: sl !Spin index of :math:`c_{l}`
     type(coulomb_matrix_element)  :: opline
     character(len=300)            :: dummy
     real(8)                       :: Uijkl !Interaction coefficient
@@ -83,6 +83,26 @@ contains
         call parse_umatrix_line(coulomb_runtime(iline))
       enddo
     endif
+
+    !Here we need to operate on the various Uloc, Ust, Jh, Jx, Jp matrices
+    !-the Hubbard terms are passed with an 1/2, but if the user made things
+    !correctly they already have the two nup/ndw and ndw/nup terms. So nothing to do here.
+    !
+    !-Ust is symmetric with respect to orbital exchange: the elements we got should be ordered
+    !in increasing orbital order. So the matrix should be upper triangular. In the routine that
+    !creates Hloc, it does nup*ndw + ndw*nup, so here we divide by 2.0
+    !
+    Ust_internal = (Ust_internal + transpose(Ust_internal))/2.0
+    !
+    !-Jh needs to be rescaled. First, it also is symmetric w.r.t. orbital exchange.
+    !Then, the coefficient of the terms in the H constructor is actually Ust-Jh. 
+    !So, if the user passed this as Jh, we need to recast it as Ust - what the user passed
+    !
+    Jh_internal = (Jh_internal + transpose(Jh_internal))/2.0
+    Jh_internal = Ust_internal - Jh_internal
+    !
+    !Jx and Jp have a summation that goes from 1 to Norb for both orbital indices, so no change there
+       
     !Print interaction terms
     if(ed_verbose>2)then
       call print_umatrix()
@@ -119,7 +139,11 @@ contains
      character(len=300)            :: dummy
      integer                       :: o1, o2, o3, o4
      character(len=1)              :: s1, s2, s3, s4
-     
+ 
+     write(LOGfile,"(A)")''
+     write(LOGfile,"(A)")'Interaction coefficients:'
+     write(LOGfile,"(A)")''
+ 
      write(LOGfile,"(A)")'ULOC:'
      write(LOGfile,"(90(F15.9,1X))") (Uloc_internal(iorb),iorb=1,Norb)
      write(LOGfile,"(A)")''
@@ -366,31 +390,6 @@ contains
     !
     close(unit_umatrix)
     !    
-    if(ed_verbose>2)then
-       write(LOGfile,"(A)")''
-       write(LOGfile,"(A)")'Interaction coefficients:'
-       write(LOGfile,"(A)")''
-    endif
-    !
-    !Here we need to operate on the various Uloc, Ust, Jh, Jx, Jp matrices
-    !-the Hubbard terms are passed with an 1/2, but if the user made things
-    !correctly they already have the two nup/ndw and ndw/nup terms. So nothing to do here.
-    !
-    !-Ust is symmetric with respect to orbital exchange: the elements we got should be ordered
-    !in increasing orbital order. So the matrix should be upper triangular. In the routine that
-    !creates Hloc, it does nup*ndw + ndw*nup, so here we divide by 2.0
-    !
-    Ust_internal = (Ust_internal + transpose(Ust_internal))/2.0
-    !
-    !-Jh needs to be rescaled. First, it also is symmetric w.r.t. orbital exchange.
-    !Then, the coefficient of the terms in the H constructor is actually Ust-Jh. 
-    !So, if the user passed this as Jh, we need to recast it as Ust - what the user passed
-    !
-    Jh_internal = (Jh_internal + transpose(Jh_internal))/2.0
-    Jh_internal = Ust_internal - Jh_internal
-    !
-    !Jx and Jp have a summation that goes from 1 to Norb for both orbital indices, so no change there
-    !
     !
   end subroutine read_umatrix_file
 
