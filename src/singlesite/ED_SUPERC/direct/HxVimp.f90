@@ -1,10 +1,11 @@
   !Diagonal Elements, i.e. local part
   htmp = zero
-  htmp = htmp - xmu*(sum(nup)+sum(ndw))
   !
   do iorb=1,Norb
-     htmp = htmp + impHloc(1,1,iorb,iorb)*nup(iorb)
-     htmp = htmp + impHloc(Nspin,Nspin,iorb,iorb)*ndw(iorb)
+    htmp = htmp + (impHloc(1,1,iorb,iorb) + mfHloc(1,1,iorb,iorb))*nup(iorb)
+    htmp = htmp + impHloc(Nspin,Nspin,iorb,iorb)*ndw(iorb)
+    htmp = htmp + mfHloc(2,2,iorb,iorb) * ndw(iorb)!Needed because these terms come from the anticommutator
+    htmp = htmp - xmu*(nup(iorb)+ndw(iorb))
   enddo
   !
   hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(i)
@@ -14,31 +15,36 @@
   do iorb=1,Norb
      do jorb=1,Norb
         !UP
-        Jcondition = &
-             (impHloc(1,1,iorb,jorb)/=zero) .AND. &
-             (ib(jorb)==1).AND. (ib(iorb)==0)
+       Jcondition = &
+            ((impHloc(1,1,iorb,jorb)/=zero) .OR. &
+             (mfHloc(1,1,iorb,jorb)/=zero)).AND. &
+            (ib(jorb)==1)                  .AND. &
+            (ib(iorb)==0)
         if (Jcondition) then
            call c(jorb,m,k1,sg1)
            call cdg(iorb,k1,k2,sg2)
            j_el = binary_search(Hsector%H(1)%map,k2)
            j    = j_el + (iph-1)*DimEl
-           htmp = impHloc(1,1,iorb,jorb)*sg1*sg2
+           htmp = (impHloc(1,1,iorb,jorb)+mfHloc(1,1,iorb,jorb))*sg1*sg2
            !
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
         endif
         !DW
-        Jcondition = &
-             (impHloc(Nspin,Nspin,iorb,jorb)/=zero) .AND. &
-             (ib(jorb+Ns)==1).AND. (ib(iorb+Ns)==0)
+       Jcondition = &
+            ((impHloc(Nspin,Nspin,iorb,jorb)/=zero) .OR. &
+             (mfHloc(2,2,iorb,jorb)/=zero)).AND. &
+            (ib(jorb+Ns)==1)                       .AND. &
+            (ib(iorb+Ns)==0)
         if (Jcondition) then
            call c(jorb+Ns,m,k1,sg1)
            call cdg(iorb+Ns,k1,k2,sg2)
            j_el = binary_search(Hsector%H(1)%map,k2)
            j    = j_el + (iph-1)*DimEl
            htmp = impHloc(Nspin,Nspin,iorb,jorb)*sg1*sg2
+           htmp = htmp + mfHloc(2,2,iorb,jorb)*sg1*sg2
            !
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
         endif
      enddo
@@ -56,7 +62,7 @@
            j    = j_el + (iph-1)*DimEl
            htmp=one*pair_field(iorb)*sg1*sg2
            !
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
         endif
         !
@@ -68,7 +74,7 @@
            j    = j_el + (iph-1)*DimEl
            htmp=one*pair_field(iorb)*sg1*sg2 !
            !
-           hv(j-MpiIshift) = hv(j-MpiIshift) + htmp*vin(i)
+           hv(i-MpiIshift) = hv(i-MpiIshift) + htmp*vin(j)
            !
         endif
      enddo

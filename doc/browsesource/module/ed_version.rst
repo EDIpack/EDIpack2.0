@@ -6,5 +6,5 @@ ED_VERSION
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/detach_rdmft/src/singlesite/revision.in>`_ for :f:mod:`ed_version` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/parse_umatrix/src/singlesite/revision.in>`_ for :f:mod:`ed_version` on GitHub
  

@@ -16,3 +16,4 @@ src/ED_VERSION.f90
 src/python/edipy2/__pycache__
 doc/utils/sphinxfortran/__pycache__
 doc/utils/f2py/__pycache__
+../../test/DEBUG_DIRECT_HxV

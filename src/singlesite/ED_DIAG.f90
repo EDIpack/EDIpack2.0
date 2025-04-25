@@ -1,6 +1,8 @@
 MODULE ED_DIAG
   !:synopsis: Fock space ED-Lanczos diagonalization routines
   USE ED_INPUT_VARS
+  USE ED_VARS_GLOBAL
+  USE ED_EIGENSPACE
   USE ED_DIAG_NORMAL
   USE ED_DIAG_SUPERC
   USE ED_DIAG_NONSU2
@@ -33,6 +35,8 @@ contains
 #ifdef _DEBUG
     write(Logfile,"(A)")""
 #endif
+    call es_return_evals(state_list,ed_evals)
+    !
   end subroutine diagonalize_impurity
 
 end MODULE ED_DIAG

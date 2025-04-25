@@ -218,15 +218,25 @@ contains
   !   |out>=C_pos|in>  OR  |out>=C^+_pos|in> ; 
   !   the sign of |out> has the phase convention, pos labels the sites
   !+-------------------------------------------------------------------+
-  subroutine c(pos,in,out,fsgn)
+  subroutine c(pos,in,out,fsgn,ierr)
     !Fermionic destruction operator, used in the construction of the sector Hamiltonian. The :f:func:`c` operator set the bit at position :f:var:`pos` to 0 in the bit representation of the integer :f:var:`in`. Further it evaluates the corresponding fermionic sign :f:var:`fsign` as :math:`\sum_{i<pos}(-1)^{i}`. The obtained bitset identifies a new integer :f:var:`Out`. 
     !
-    integer,intent(in)    :: pos
-    integer,intent(in)    :: in
-    integer,intent(inout) :: out
-    real(8),intent(inout) :: fsgn    
+    integer,intent(in)    :: pos  !Position to be set to :code:`0`
+    integer,intent(in)    :: in   !Input index
+    integer,intent(inout) :: out  !Output index
+    real(8),intent(inout) :: fsgn !Accrued sign
     integer               :: l
-    if(.not.btest(in,pos-1))stop "C error: C_i|...0_i...>"
+    logical,optional      :: ierr !Error flag: if present, the operator cannot be applied on the state, it is set to :code:`.false.`. Else, execution stops.
+    
+    if(.not.btest(in,pos-1))then
+      if(.not.present(ierr))then
+        stop "C error: C_i|...0_i...>"
+      else
+        ierr = .false.
+        return
+      endif
+    endif
+    
     fsgn=1d0
     do l=1,pos-1
        if(btest(in,l-1))fsgn=-fsgn
@@ -234,15 +244,25 @@ contains
     out = ibclr(in,pos-1)
   end subroutine c
 
-  subroutine cdg(pos,in,out,fsgn)
+  subroutine cdg(pos,in,out,fsgn,ierr)
     !Fermionic creation operator, used in the construction of the sector Hamiltonian. The :f:func:`cdg` operator set the bit at position :f:var:`pos` to 1 in the bit representation of the integer :f:var:`in`. Further it evaluates the corresponding fermionic sign :f:var:`fsign` as :math:`\sum_{i<pos}(-1)^{i}`. The obtained bitset identifies a new integer :f:var:`Out`. 
     !
-    integer,intent(in)    :: pos
-    integer,intent(in)    :: in
-    integer,intent(inout) :: out
-    real(8),intent(inout) :: fsgn    
+    integer,intent(in)    :: pos  !Position to be set to :code:`1`
+    integer,intent(in)    :: in   !Input index
+    integer,intent(inout) :: out  !Output index
+    real(8),intent(inout) :: fsgn !Accrued sign   
     integer               :: l
-    if(btest(in,pos-1))stop "C^+ error: C^+_i|...1_i...>"
+    logical,optional      :: ierr !Error flag: if present, the operator cannot be applied on the state, it is set to :code:`.false.`. Else, execution stops.
+    
+    if(btest(in,pos-1))then
+      if(.not.present(ierr))then
+        stop "C^+ error: C^+_i|...1_i...>"
+      else
+        ierr = .false.
+        return
+      endif
+    endif
+    
     fsgn=1d0
     do l=1,pos-1
        if(btest(in,l-1))fsgn=-fsgn

@@ -84,34 +84,42 @@ contains
           enddo
        enddo
     case ("replica")
-       allocate(diag_hybr(Nnambu*Nspin,Norb,Nbath));diag_hybr=0d0
+       !H_p
        allocate(bath_diag(Nnambu*Nspin,Norb,Nbath));bath_diag=0d0
        do ibath=1,Nbath
           Hbath_tmp(:,:,:,:,ibath) = build_Hreplica(dmft_bath%item(ibath)%lambda)
-          do ispin=1,Nspin
-             do iorb=1,Norb
-                diag_hybr(ispin,iorb,ibath)=dmft_bath%item(ibath)%v
-             enddo
-          enddo
           do ispin=1,Nnambu*Nspin
              do iorb=1,Norb
                 bath_diag(ispin,iorb,ibath)=Hbath_tmp(ispin,ispin,iorb,iorb,ibath)
              enddo
           enddo
        enddo
+       !V_p
+       allocate(diag_hybr(Nspin,Norb,Nbath));diag_hybr=0d0
+       do ibath=1,Nbath
+          do ispin=1,Nspin
+             do iorb=1,Norb
+                diag_hybr(ispin,iorb,ibath)=dmft_bath%item(ibath)%v
+             enddo
+          enddo
+       enddo
     case ("general")
-       allocate(diag_hybr(Nnambu*Nspin,Norb,Nbath));diag_hybr=0d0
+       !H_p
        allocate(bath_diag(Nnambu*Nspin,Norb,Nbath));bath_diag=0d0
        do ibath=1,Nbath
           Hbath_tmp(:,:,:,:,ibath) = build_Hgeneral(dmft_bath%item(ibath)%lambda)
-          do ispin=1,Nspin
-             do iorb=1,Norb
-                diag_hybr(ispin,iorb,ibath)=dmft_bath%item(ibath)%vg(iorb+Norb*(ispin-1))
-             enddo
-          enddo
           do ispin=1,Nnambu*Nspin
              do iorb=1,Norb
                 bath_diag(ispin,iorb,ibath)=Hbath_tmp(ispin,ispin,iorb,iorb,ibath)
+             enddo
+          enddo
+       enddo
+       !V_p
+       allocate(diag_hybr(Nspin,Norb,Nbath));diag_hybr=0d0
+       do ibath=1,Nbath
+          do ispin=1,Nspin
+             do iorb=1,Norb
+                diag_hybr(ispin,iorb,ibath)=dmft_bath%item(ibath)%vg(iorb+(ispin-1)*Norb)
              enddo
           enddo
        enddo

@@ -30,6 +30,8 @@ MODULE ED_HAMILTONIAN_NONSU2_COMMON
   complex(8)                           :: htmp,htmpup,htmpdw
   logical                              :: Jcondition
   integer                              :: Nfoo
+  integer                                 :: iline
+  integer,dimension(2)                    :: orbvec, orbvec_dag, spinvec, spinvec_dag
   complex(8),dimension(:,:,:),allocatable :: diag_hybr ![Nspin,Norb,Nbath]
   complex(8),dimension(:,:,:),allocatable :: bath_diag ![Nspin,Norb/1,Nbath]
 

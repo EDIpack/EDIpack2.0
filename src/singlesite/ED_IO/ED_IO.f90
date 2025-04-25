@@ -175,6 +175,23 @@ MODULE ED_IO
   end interface ed_get_phi
 
 
+  interface ed_get_exct
+     !This subroutine gets from the EDIpack2 library the value of the excitonic order parameters :math:`X^a` ( :f:var:`ed_mode` = :code:`normal`,:code:`nonsu2` ) and passes it to the user.
+     !
+     !The :f:var:`self` variable can have the following dimensions:
+     ! 
+     !  * scalar: if :f:var:`iorb` is provided  returns :math:`X` between orbital and orbital+1 for :f:var:`component`
+     !  * [4]: returns :math:`X` for all :f:var:`component` and optional orbitals :f:var:`iorb, jorb` [default (1,2)]. 
+     !  * [:f:var:`norb` , :f:var:`norb`]: for single-impurity DMFT, :math:`X` for all orbitals and :f:var:`component`  
+     !  * [4, :f:var:`norb` , :f:var:`norb`]: for single-impurity DMFT, :math:`X` for all orbitals and all :f:var:`component`
+     !
+     module procedure :: ed_get_exct_n0
+     module procedure :: ed_get_exct_n1
+     module procedure :: ed_get_exct_n2
+     module procedure :: ed_get_exct_n3
+ end interface ed_get_exct
+
+
   !Get Energies
   interface ed_get_eimp
      !This subroutine gets from the EDIpack2 library and passes to the user the array [ :f:var:`ed_epot` , :f:var:`ed_eint` , :f:var:`ed_ehartree` , :f:var:`ed_eknot` ].
@@ -331,6 +348,7 @@ MODULE ED_IO
   public :: ed_get_mag
   public :: ed_get_docc
   public :: ed_get_phi
+  public :: ed_get_exct
   public :: ed_get_eimp
   public :: ed_get_epot
   public :: ed_get_eint 
@@ -345,6 +363,7 @@ MODULE ED_IO
   public :: ed_get_impurity_rdm
   public :: ed_get_quantum_SOC_operators
   public :: ed_get_imp_info
+  public :: ed_get_evals
   public :: ed_get_nsectors
   public :: ed_get_neigen_sector
   public :: ed_set_neigen_sector
@@ -375,8 +394,8 @@ contains
   ! PURPOSE: Retrieve measured values of the impurity green's functions 
   !+-----------------------------------------------------------------------------+!
 #if __INTEL_COMPILER
-  #include "get_gimp.f90"
-  #include "get_dimp.f90"
+#include "get_gimp.f90"
+#include "get_dimp.f90"
 #else
   include "get_gimp.f90"
   include "get_dimp.f90"
@@ -387,7 +406,7 @@ contains
   ! PURPOSE: Retrieve measured values of the impurity self-energy 
   !+-----------------------------------------------------------------------------+!
 #if __INTEL_COMPILER
-  #include "get_sigma.f90"
+#include "get_sigma.f90"
 #else
   include "get_sigma.f90"
 #endif
@@ -397,7 +416,7 @@ contains
   ! PURPOSE: Retrieve non-interacting green's functions 
   !+--------------------------------------------------------------------------+!
 #if __INTEL_COMPILER
-  #include "get_g0imp.f90"
+#include "get_g0imp.f90"
 #else
   include "get_g0imp.f90"
 #endif
@@ -407,7 +426,7 @@ contains
   ! PURPOSE: Retrieve spin.dens.pair.exct susceptibilties
   !+--------------------------------------------------------------------------+!
 #if __INTEL_COMPILER
-  #include "get_chi.f90"
+#include "get_chi.f90"
 #else
   include "get_chi.f90"
 #endif
@@ -417,7 +436,7 @@ contains
   ! PURPOSE: Retrieve SOC operators
   !+--------------------------------------------------------------------------+!
 #if __INTEL_COMPILER
-  #include "get_imp_SOC_op.f90"
+#include "get_imp_SOC_op.f90"
 #else
   include "get_imp_SOC_op.f90"
 #endif
@@ -426,17 +445,19 @@ contains
   ! PURPOSE: Retrieve measured values of the local observables
   !+--------------------------------------------------------------------------+!
 #if __INTEL_COMPILER
-  #include "get_dens.f90"
-  #include "get_mag.f90"
-  #include "get_docc.f90"
-  #include "get_phi.f90"
-  #include "get_energy.f90"
-  #include "get_doubles.f90"
+#include "get_dens.f90"
+#include "get_mag.f90"
+#include "get_docc.f90"
+#include "get_phi.f90"
+#include "get_exct.f90"
+#include "get_energy.f90"
+#include "get_doubles.f90"
 #else
   include "get_dens.f90"
   include "get_mag.f90"
   include "get_docc.f90"
   include "get_phi.f90"
+  include "get_exct.f90"
   include "get_energy.f90"
   include "get_doubles.f90"
 #endif
@@ -446,7 +467,7 @@ contains
   ! PURPOSE: Single Particle DM
   !+--------------------------------------------------------------------------+!
 #if __INTEL_COMPILER
-  #include "get_sp_dm.f90"
+#include "get_sp_dm.f90"
 #else
   include "get_sp_dm.f90"
 #endif
@@ -457,12 +478,19 @@ contains
   ! PURPOSE: Impurity RDM
   !+--------------------------------------------------------------------------+!
 #if __INTEL_COMPILER
-  #include "get_imp_rdm.f90"
+#include "get_imp_rdm.f90"
 #else
   include "get_imp_rdm.f90"
 #endif
 
 
+
+
+  subroutine ed_get_evals(self)
+    real(8),dimension(:),allocatable :: self
+    if(allocated(self))deallocate(self)
+    allocate(self, source=ed_evals)
+  end subroutine ed_get_evals
 
 
 

@@ -6,5 +6,5 @@ EDIPACK2
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/detach_rdmft/src/singlesite/EDIPACK2.f90>`_ for :f:mod:`edipack2` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/parse_umatrix/src/singlesite/EDIPACK2.f90>`_ for :f:mod:`edipack2` on GitHub
  

@@ -5,11 +5,13 @@ MODULE ED_SETUP
   USE ED_INPUT_VARS
   USE ED_VARS_GLOBAL
   USE ED_AUX_FUNX
+  USE ED_PARSE_UMATRIX
   USE ED_SECTOR
   USE SF_TIMER
   USE SF_PARSE_INPUT, only: delete_input
   USE SF_IOTOOLS, only:free_unit,reg,file_length
   USE SF_MISC, only: assert_shape
+  USE SF_LINALG, only: eye
 #ifdef _MPI
   USE MPI
   USE SF_MPI
@@ -35,7 +37,7 @@ contains
     !
     if(Lfit>Lmats)Lfit=Lmats
     if(Nspin>2)stop "ED ERROR: Nspin > 2 is currently not supported"
-    if(Norb>5)stop "ED ERROR: Norb > 5 is currently not supported"
+    if(Norb>5 .and. .not.ed_read_umatrix)stop "ED ERROR: Norb > 5 is supported only by providing a umatrix file"
     !
     if(.not.ed_total_ud)then
        if(bath_type=="hybrid")stop "ED ERROR: ed_total_ud=F can not be used with bath_type=hybrid"
@@ -301,12 +303,53 @@ contains
     endif
     !
     !ALLOCATE impHloc
+    if(.not.allocated(mfHloc))then
+       allocate(mfHloc(2,2,Norb,Norb)) !Anticommutator terms, always resolved by spin
+       mfHloc=zero
+    else
+       call assert_shape(mfHloc,[2,2,Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    !
+    !ALLOCATE impHloc
     if(.not.allocated(impHloc))then
        allocate(impHloc(Nspin,Nspin,Norb,Norb))
        impHloc=zero
     else
        call assert_shape(impHloc,[Nspin,Nspin,Norb,Norb],"init_ed_structure","impHloc")
     endif
+    !
+    !ALLOCATE AND SET interaction coefficient matrices
+    if(.not.allocated(Uloc_internal))then
+      allocate(Uloc_internal(Norb))
+      Uloc_internal = zero
+    else
+      call assert_shape(Uloc_internal,[Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Ust_internal))then
+      allocate(Ust_internal(Norb,Norb))
+      Ust_internal = zero
+    else
+      call assert_shape(Ust_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Jh_internal))then
+      allocate(Jh_internal(Norb,Norb))
+      Jh_internal = zero
+    else
+      call assert_shape(Jh_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Jx_internal))then
+      allocate(Jx_internal(Norb,Norb))
+      Jx_internal = zero
+    else
+      call assert_shape(Jx_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    if(.not.allocated(Jp_internal))then
+      allocate(Jp_internal(Norb,Norb))
+      Jp_internal = zero
+    else
+      call assert_shape(Jp_internal,[Norb,Norb],"init_ed_structure","impHloc")
+    endif
+    !
     !
     if(ed_mode=="superc")then
        allocate(impGmatrix(2*Nspin,2*Nspin,Norb,Norb))
@@ -322,12 +365,14 @@ contains
     !allocate observables
     allocate(ed_dens(Norb),ed_docc(Norb),ed_dens_up(Norb),ed_dens_dw(Norb))
     allocate(ed_mag(3,Norb),ed_phisc(Norb,Norb),ed_imp_info(2))
+    allocate(ed_exct(4,Norb,Norb))
     ed_dens=0d0
     ed_docc=0d0
     ed_phisc=0d0
     ed_dens_up=0d0
     ed_dens_dw=0d0
     ed_mag=0d0
+    ed_exct=0d0
     ed_imp_info=0d0
     !
     allocate(spin_field(Norb,3))
@@ -391,10 +436,19 @@ contains
     if(allocated(sectors_mask))deallocate(sectors_mask)
     if(allocated(neigen_sector))deallocate(neigen_sector)
     if(allocated(impHloc))deallocate(impHloc)
+    if(allocated(mfHloc))deallocate(mfHloc)
+    if(allocated(Uloc_internal))deallocate(Uloc_internal)
+    if(allocated(Ust_internal))deallocate(Ust_internal)
+    if(allocated(Jh_internal))deallocate(Jh_internal)
+    if(allocated(Jx_internal))deallocate(Jx_internal)
+    if(allocated(Jp_internal))deallocate(Jp_internal)
+    if(allocated(coulomb_sundry))deallocate(coulomb_sundry)
+    if(allocated(coulomb_runtime))deallocate(coulomb_runtime)
 
     if(allocated(ed_dens))deallocate(ed_dens)
     if(allocated(ed_docc))deallocate(ed_docc)
     if(allocated(ed_phisc))deallocate(ed_phisc)
+    if(allocated(ed_exct))deallocate(ed_exct)
     if(allocated(ed_imp_info))deallocate(ed_imp_info)
     if(allocated(ed_dens_up))deallocate(ed_dens_up)
     if(allocated(ed_dens_dw))deallocate(ed_dens_dw)

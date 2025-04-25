@@ -6,5 +6,5 @@ ED_EIGENSPACE
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/detach_rdmft/src/singlesite/ED_EIGENSPACE.f90>`_ for :f:mod:`ed_eigenspace` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/parse_umatrix/src/singlesite/ED_EIGENSPACE.f90>`_ for :f:mod:`ed_eigenspace` on GitHub
  

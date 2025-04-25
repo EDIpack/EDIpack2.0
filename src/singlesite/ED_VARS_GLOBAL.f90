@@ -15,6 +15,26 @@ MODULE ED_VARS_GLOBAL
 #endif
   implicit none
 
+!======================!
+!        TYPES         !
+!======================!
+
+!######## Two-body operators #######!
+
+  type coulomb_matrix_element
+     ! One two-body operator
+     integer,dimension(2)  :: cd_i           ! Spin, orbital of first operator (dagger)
+     integer,dimension(2)  :: cd_j           ! Spin, orbital of second operator (dagger)
+     integer,dimension(2)  :: c_k            ! Spin, orbital of third operator
+     integer,dimension(2)  :: c_l            ! Spin, orbital of fourth operator
+     real(8)               :: U              ! Interaction coefficient
+  end type coulomb_matrix_element
+  
+
+
+
+!######## Effective bath #######!
+
 
   type effective_bath_component
      ! Effective bath component for the replica/general bath. Each istance of this type defines the parameters :math:`\vec{\lambda}` and the amplitudes :math:`\vec{V}`. The first is used to decompose the Hamiltonian of each element of the bath :math:`H_p=\sum_{i=1}^{N_{basis}} \lambda_i(p) O_i`, the latter describes the hopping from/to the impurity.
@@ -154,6 +174,7 @@ MODULE ED_VARS_GLOBAL
   !local part of the Hamiltonian
   !=========================================================
   complex(8),dimension(:,:,:,:),allocatable          :: impHloc           !local hamiltonian
+  complex(8),dimension(:,:,:,:),allocatable          :: mfHloc            !additional mean-field terms
 
 
 
@@ -184,7 +205,13 @@ MODULE ED_VARS_GLOBAL
   real(8)                                            :: zeta_function
   real(8)                                            :: gs_energy
 
-
+  !Interaction coefficients used internally
+  !=========================================================
+  real(8),allocatable,dimension(:)                     :: Uloc_internal ! Internal copy of the Hubbard :math:`U` terms, read from input parameters or umatrix file :code:`[Norb]`
+  real(8),allocatable,dimension(:,:)                   :: Ust_internal  ! Internal copy of the :math:`U'` terms, read from input parameters or umatrix file :code:`[Norb,Norb]`
+  real(8),allocatable,dimension(:,:)                   :: Jh_internal   ! Internal copy of the :math:`J_{H}` terms, read from input parameters or umatrix file :code:`[Norb,Norb]`
+  real(8),allocatable,dimension(:,:)                   :: Jx_internal   ! Internal copy of the :math:`J_{X}` terms, read from input parameters or umatrix file :code:`[Norb,Norb]`
+  real(8),allocatable,dimension(:,:)                   :: Jp_internal   ! Internal copy of the :math:`J_{P}` terms, read from input parameters or umatrix file :code:`[Norb,Norb]`
 
 
   !Green's functions
@@ -206,11 +233,14 @@ MODULE ED_VARS_GLOBAL
   !Local energies and generalized double occupancies
   !PRIVATE (now public but accessible thru routines)
   !=========================================================
+  real(8),dimension(:),allocatable                   :: ed_evals
   real(8),dimension(:),allocatable                   :: ed_dens
-  real(8),dimension(:),allocatable                   :: ed_dens_up,ed_dens_dw
+  real(8),dimension(:),allocatable                   :: ed_dens_up
+  real(8),dimension(:),allocatable                   :: ed_dens_dw
   real(8),dimension(:),allocatable                   :: ed_docc
   real(8),dimension(:,:),allocatable                 :: ed_phisc
   real(8),dimension(:,:),allocatable                 :: ed_mag
+  real(8),dimension(:,:,:),allocatable               :: ed_exct ![1:4,Norb,Norb]
   real(8),dimension(:),allocatable                   :: ed_imp_info
   real(8)                                            :: ed_Ekin
   real(8)                                            :: ed_Epot
@@ -242,6 +272,12 @@ MODULE ED_VARS_GLOBAL
   character(len=10)                                  :: ineq_site_suffix="_ineq"
   integer                                            :: site_indx_padding=4
   logical                                            :: offdiag_gf_flag=.false.
+
+
+  !File suffixes for printing fine tuning.
+  !=========================================================
+  type(coulomb_matrix_element),dimension(:),allocatable  ::  coulomb_sundry
+  type(coulomb_matrix_element),dimension(:),allocatable  ::  coulomb_runtime
 
 
   !This is the internal Mpi Communicator and variables.
@@ -310,7 +346,6 @@ contains
 #endif
   end subroutine ed_del_MpiComm
   !=========================================================
-
 
 
 

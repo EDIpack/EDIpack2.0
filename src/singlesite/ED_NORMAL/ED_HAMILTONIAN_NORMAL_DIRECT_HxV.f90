@@ -33,6 +33,11 @@ contains
     integer,dimension(Ns_Ud,Ns_Orb)                :: Nups,Ndws       ![1,Ns]-[Norb,1+Nbath]
     integer,dimension(Ns)                          :: Nup,Ndw
     real(8),dimension(Nspin,Nspin,Norb,Norb,Nbath) :: Hbath_tmp
+    logical                                        :: nonloc_condition, sundry_condition, either_condition
+    !
+    nonloc_condition = (Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0))))
+    sundry_condition = allocated(coulomb_sundry)
+    either_condition = nonloc_condition .OR. sundry_condition
     !
     if(.not.Hsector%status)stop "directMatVec_cc ERROR: Hsector NOT allocated"
     isector=Hsector%index
@@ -103,8 +108,12 @@ contains
     end if
     !
     !NON-LOCAL HAMILTONIAN PART: H_non_loc*vin = vout
-    if(Norb>1.AND.(Jx/=0d0.OR.Jp/=0d0))then
+    if(nonloc_condition)then
        include "direct/HxV_non_local.f90"
+    endif
+    !NON-LOCAL HAMILTONIAN TERMS
+    if(sundry_condition)then
+       include "direct/HxV_sundry.f90"
     endif
     !-----------------------------------------------!
     !
@@ -227,6 +236,11 @@ contains
     real(8),dimension(Nspin,Nspin,Norb,Norb,Nbath) :: Hbath_tmp
     !
     integer                                        :: i_start,i_end
+    logical                                        :: nonloc_condition, sundry_condition, either_condition
+    !
+    nonloc_condition = (Norb>1 .AND. (any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0))))
+    sundry_condition = allocated(coulomb_sundry)
+    either_condition = nonloc_condition .OR. sundry_condition
     !
     if(.not.Hsector%status)stop "directMatVec_cc ERROR: Hsector NOT allocated"
     isector=Hsector%index
@@ -284,6 +298,7 @@ contains
     !-----------------------------------------------!
     !LOCAL HAMILTONIAN PART: H_loc*vin = vout
     include "direct_mpi/HxV_local.f90"
+    !NON-LOCAL HAMILTONIAN TERMS
     !
     !UP HAMILTONIAN TERMS: MEMORY CONTIGUOUS
     include "direct_mpi/HxV_up.f90"
@@ -316,16 +331,21 @@ contains
     end if
     !
     !NON-LOCAL HAMILTONIAN PART: H_non_loc*vin = vout
-    if(Norb>1.AND.(Jx/=0d0.OR.Jp/=0d0))then
+    if(either_condition)then
        N = 0
        call AllReduce_MPI(MpiComm,Nloc,N)
        !
        allocate(vt(N)) ; vt = 0d0
        call allgather_vector_MPI(MpiComm,vin,vt)
        !
-       include "direct_mpi/HxV_non_local.f90"
+       if(nonloc_condition)then
+         include "direct_mpi/HxV_non_local.f90"
+       endif
+       if(sundry_condition)then
+         include "direct_mpi/HxV_sundry.f90"
+       endif
        !
-       deallocate(Vt)
+       deallocate(vt)
     endif
     !-----------------------------------------------!
     !

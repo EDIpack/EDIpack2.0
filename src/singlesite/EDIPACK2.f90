@@ -36,8 +36,11 @@ MODULE EDIPACK2
        LOGfile       , &
        ed_mode       , &
        ed_verbose    , &
-       ed_hw_bath    , &
-       ed_input_file ,&
+       ed_read_umatrix,&
+       ed_use_kanamori,&
+       ed_sparse_H    ,&
+       ed_hw_bath     ,&
+       ed_input_file  ,&
        lanc_nstates_total ,&
        bath_type 
 
@@ -94,6 +97,7 @@ MODULE EDIPACK2
        ed_get_exctChi         , &       
        ed_get_dens            , &
        ed_get_phi             , &
+       ed_get_exct            , &
        ed_get_mag             , &
        ed_get_docc            , &
        ed_get_eimp            , &
@@ -102,6 +106,7 @@ MODULE EDIPACK2
        ed_get_ehartree        , &
        ed_get_eknot           , &
        ed_get_doubles         , &
+       ed_get_evals           , &
        ed_get_imp_info        , &
        ed_get_nsectors        , &
        ed_get_neigen_sector   , &
@@ -114,6 +119,9 @@ MODULE EDIPACK2
        ed_get_reduced_rdm   => get_reduced_rdm
 
 
+  USE ED_PARSE_UMATRIX, only: &
+       ed_add_twobody_operator => add_twobody_operator, &
+       ed_reset_umatrix => reset_umatrix
 
   USE ED_GREENS_FUNCTIONS, only: &
        ed_build_impG   => get_impG ,&

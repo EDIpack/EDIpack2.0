@@ -1,6 +1,14 @@
 name: CI EDIpack2 test workflow 
 
-on: push
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
 
 defaults:
   run:

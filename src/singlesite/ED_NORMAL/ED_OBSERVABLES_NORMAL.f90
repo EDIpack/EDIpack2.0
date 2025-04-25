@@ -373,6 +373,10 @@ contains
        ed_dens(iorb)   =dens(iorb)
        ed_mag(3,iorb)  =magZ(iorb)
        ed_docc(iorb)   =docc(iorb)
+       do jorb=1,Norb
+          ed_exct(1,iorb,jorb) = exct_S0(iorb,jorb)
+          ed_exct(4,iorb,jorb) = exct_Tz(iorb,jorb)
+       enddo
     enddo
     !
     ed_imp_info=[s2tot,egs]
@@ -385,6 +389,7 @@ contains
        call Bcast_MPI(MpiComm,ed_dens)
        call Bcast_MPI(MpiComm,ed_docc)
        call Bcast_MPI(MpiComm,ed_mag)
+       call Bcast_MPI(MpiComm,ed_exct)
        call Bcast_MPI(MpiComm,ed_imp_info)
        if(allocated(single_particle_density_matrix))call Bcast_MPI(MpiComm,single_particle_density_matrix)
     endif
@@ -505,7 +510,7 @@ contains
                 enddo
                 ! 
                 !SPIN-EXCHANGE Jx
-                if(Norb>1.AND.Jx/=0d0)then
+                if(Norb>1 .AND. any((Jx_internal /= 0.0d0)))then
                    do iorb=1,Norb
                       do jorb=1,Norb
                          Jcondition=(&
@@ -523,7 +528,7 @@ contains
                             jup=binary_search(sectorI%H(1)%map,k4)
                             j = jup + (jdw-1)*sectorI%DimUp
                             !
-                            ed_Epot = ed_Epot + Jx*sg1*sg2*sg3*sg4*v_state(i)*v_state(j)*peso
+                            ed_Epot = ed_Epot + Jx_internal(iorb,jorb)*sg1*sg2*sg3*sg4*v_state(i)*v_state(j)*peso
                             ed_Dse = ed_Dse + sg1*sg2*sg3*sg4*v_state(i)*v_state(j)*peso
                             !
                          endif
@@ -532,7 +537,7 @@ contains
                 endif
                 !
                 ! PAIR-HOPPING Jp
-                if(Norb>1.AND.Jp/=0d0)then
+                if(Norb>1 .AND. any((Jp_internal /= 0.0d0)))then
                    do iorb=1,Norb
                       do jorb=1,Norb
                          Jcondition=(&
@@ -549,7 +554,7 @@ contains
                             jup = binary_search(sectorI%H(1)%map,k4)
                             j = jup + (jdw-1)*sectorI%DimUp
                             !
-                            ed_Epot = ed_Epot + Jp*sg1*sg2*sg3*sg4*v_state(i)*v_state(j)*peso
+                            ed_Epot = ed_Epot + Jp_internal(iorb,jorb)*sg1*sg2*sg3*sg4*v_state(i)*v_state(j)*peso
                             ed_Dph = ed_Dph + sg1*sg2*sg3*sg4*v_state(i)*v_state(j)*peso
                             !
                          endif
@@ -563,7 +568,7 @@ contains
              !Euloc=\sum=i U_i*(n_u*n_d)_i
              !ed_Epot = ed_Epot + dot_product(uloc,nup*ndw)*gs_weight
              do iorb=1,Norb
-                ed_Epot = ed_Epot + Uloc(iorb)*nup(iorb)*ndw(iorb)*gs_weight
+                ed_Epot = ed_Epot + Uloc_internal(iorb)*nup(iorb)*ndw(iorb)*gs_weight
              enddo
              !
              !DENSITY-DENSITY INTERACTION: DIFFERENT ORBITALS, OPPOSITE SPINS
@@ -572,7 +577,7 @@ contains
              if(Norb>1)then
                 do iorb=1,Norb
                    do jorb=iorb+1,Norb
-                      ed_Epot = ed_Epot + Ust*(nup(iorb)*ndw(jorb) + nup(jorb)*ndw(iorb))*gs_weight
+                      ed_Epot = ed_Epot + Ust_internal(iorb,jorb)*(nup(iorb)*ndw(jorb) + nup(jorb)*ndw(iorb))*gs_weight
                       ed_Dust = ed_Dust + (nup(iorb)*ndw(jorb) + nup(jorb)*ndw(iorb))*gs_weight
                    enddo
                 enddo
@@ -585,7 +590,7 @@ contains
              if(Norb>1)then
                 do iorb=1,Norb
                    do jorb=iorb+1,Norb
-                      ed_Epot = ed_Epot + (Ust-Jh)*(nup(iorb)*nup(jorb) + ndw(iorb)*ndw(jorb))*gs_weight
+                      ed_Epot = ed_Epot + (Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))*(nup(iorb)*nup(jorb) + ndw(iorb)*ndw(jorb))*gs_weight
                       ed_Dund = ed_Dund + (nup(iorb)*nup(jorb) + ndw(iorb)*ndw(jorb))*gs_weight
                    enddo
                 enddo
@@ -595,13 +600,13 @@ contains
              if(hfmode)then
                 !ed_Ehartree=ed_Ehartree - 0.5d0*dot_product(uloc,nup+ndw)*gs_weight + 0.25d0*sum(uloc)*gs_weight
                 do iorb=1,Norb
-                   ed_Ehartree=ed_Ehartree - 0.5d0*uloc(iorb)*(nup(iorb)+ndw(iorb))*gs_weight + 0.25d0*uloc(iorb)*gs_weight
+                   ed_Ehartree=ed_Ehartree - 0.5d0*Uloc_internal(iorb)*(nup(iorb)+ndw(iorb))*gs_weight + 0.25d0*Uloc_internal(iorb)*gs_weight
                 enddo
                 if(Norb>1)then
                    do iorb=1,Norb
                       do jorb=iorb+1,Norb
-                         ed_Ehartree=ed_Ehartree - 0.5d0*Ust*(nup(iorb)+ndw(iorb)+nup(jorb)+ndw(jorb))*gs_weight + 0.5d0*Ust*gs_weight
-                         ed_Ehartree=ed_Ehartree - 0.5d0*(Ust-Jh)*(nup(iorb)+ndw(iorb)+nup(jorb)+ndw(jorb))*gs_weight + 0.5d0*(Ust-Jh)*gs_weight
+                         ed_Ehartree=ed_Ehartree - 0.5d0*Ust_internal(iorb,jorb)*(nup(iorb)+ndw(iorb)+nup(jorb)+ndw(jorb))*gs_weight + 0.5d0*Ust_internal(iorb,jorb)*gs_weight
+                         ed_Ehartree=ed_Ehartree - 0.5d0*(Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))*(nup(iorb)+ndw(iorb)+nup(jorb)+ndw(jorb))*gs_weight + 0.5d0*(Ust_internal(iorb,jorb)-Jh_internal(iorb,jorb))*gs_weight
                       enddo
                    enddo
                 endif
@@ -680,11 +685,13 @@ contains
     !
     !Parameters used:
     unit = free_unit()
-    open(unit,file="parameters_info.ed")
-    write(unit,"(A1,90(A14,1X))")"#","1xmu","2beta",&
-         (reg(txtfy(2+iorb))//"U_"//reg(txtfy(iorb)),iorb=1,Norb),&
-         reg(txtfy(2+Norb+1))//"U'",reg(txtfy(2+Norb+2))//"Jh",reg(txtfy(2+Norb+3))//"Jx",reg(txtfy(2+Norb+4))//"Jp"
-    close(unit)
+      if(.not.ed_read_umatrix)then
+      open(unit,file="parameters_info.ed")
+      write(unit,"(A1,90(A14,1X))")"#","1xmu","2beta",&
+           (reg(txtfy(2+iorb))//"U_"//reg(txtfy(iorb)),iorb=1,Norb),&
+           reg(txtfy(2+Norb+1))//"U'",reg(txtfy(2+Norb+2))//"Jh",reg(txtfy(2+Norb+3))//"Jx",reg(txtfy(2+Norb+4))//"Jp"
+      close(unit)
+    endif
     !
     !Generic observables 
     unit = free_unit()
@@ -740,10 +747,12 @@ contains
     integer :: iorb,jorb,ispin
     !
     !Parameters used:
-    unit = free_unit()
-    open(unit,file="parameters.ed")
-    write(unit,"(90F15.9)")xmu,beta,(uloc(iorb),iorb=1,Norb),Ust,Jh,Jx,Jp
-    close(unit)
+    if(.not.ed_read_umatrix)then
+      unit = free_unit()
+      open(unit,file="parameters.ed")
+      write(unit,"(90F15.9)")xmu,beta,(Uloc_internal(iorb),iorb=1,Norb),Ust,Jh,Jx,Jp
+      close(unit)
+    endif
     !
     !Generic observables 
     unit = free_unit()
@@ -800,7 +809,7 @@ contains
        !
        unit = free_unit()
        open(unit,file="Occupation_prob"//reg(ed_file_suffix)//".ed")
-       write(unit,"(125F15.9)")Uloc(1),Prob,sum(Prob)
+       write(unit,"(125F15.9)")Uloc_internal(1),Prob,sum(Prob)
        close(unit)
        !
        !N_ph probability:

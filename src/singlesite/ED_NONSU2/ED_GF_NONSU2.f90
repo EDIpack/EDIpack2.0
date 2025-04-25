@@ -390,7 +390,7 @@ contains
     !
     if(.not.allocated(impGmatrix))stop "get_impG_nonsu2 ERROR: impGmatrix not allocated!"
     !
-    call PrintHmask()
+    !call PrintHmask()
     !
     Gf = zero
     !

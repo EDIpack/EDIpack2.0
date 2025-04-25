@@ -51,6 +51,10 @@ contains
     integer                        :: bath_size,ndx,ispin,iorb,jspin,jorb,io,jo,Maxspin
     complex(8),allocatable         :: H(:,:,:,:)
     !
+#ifdef _DEBUG
+    if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_bath_dimension_direct"
+#endif
+
     select case(bath_type)
        !
     case default
@@ -198,6 +202,9 @@ contains
     real(8),dimension(:)           :: bath_ !user-accessible bath array
     integer                        :: Ntrue,i
     logical                        :: bool
+#ifdef _DEBUG
+    if(ed_verbose>1)write(Logfile,"(A)")"DEBUG check_bath_dimension"
+#endif
     select case (bath_type)
     case default
        Ntrue = get_bath_dimension()
@@ -205,6 +212,7 @@ contains
        Ntrue   = get_bath_dimension_symmetries(Hb%Nsym)
     end select
     bool  = ( size(bath_) == Ntrue )
+    return
   end function check_bath_dimension
 
 

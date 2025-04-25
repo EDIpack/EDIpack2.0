@@ -79,5 +79,6 @@ contains
     case("nonsu2");  edm = 3
     end select
   end function get_ed_mode_c
+  
 
 END MODULE EDIPACK2_C_COMMON
