@@ -479,6 +479,12 @@ contains
        ed_mag(1,iorb)  =magX(iorb)
        ed_mag(2,iorb)  =magY(iorb)
        ed_mag(3,iorb)  =magZ(iorb)
+       do jorb=1,Norb
+          ed_exct(1,iorb,jorb) = exct_S0(iorb,jorb)
+          ed_exct(2,iorb,jorb) = exct_Tx(iorb,jorb)
+          ed_exct(3,iorb,jorb) = exct_Ty(iorb,jorb)
+          ed_exct(4,iorb,jorb) = exct_Tz(iorb,jorb)
+       enddo
     enddo
     !
     ed_imp_info=[s2tot,egs]
@@ -491,10 +497,7 @@ contains
        call Bcast_MPI(MpiComm,ed_dens)
        call Bcast_MPI(MpiComm,ed_docc)
        call Bcast_MPI(MpiComm,ed_mag)
-       call Bcast_MPI(MpiComm,exct_s0)
-       call Bcast_MPI(MpiComm,exct_tx)
-       call Bcast_MPI(MpiComm,exct_ty)
-       call Bcast_MPI(MpiComm,exct_tz)    
+       call Bcast_MPI(MpiComm,ed_exct)
        call Bcast_MPI(MpiComm,ed_imp_info)
        if(allocated(single_particle_density_matrix))call Bcast_MPI(MpiComm,single_particle_density_matrix)
     endif
