@@ -1,6 +1,6 @@
 subroutine ed_get_sigma_site_n3(self,axis,type,z)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   complex(8),dimension(:,:,:),intent(inout)   :: self ! Green's function matrix
   character(len=*),optional                   :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
@@ -18,6 +18,7 @@ subroutine ed_get_sigma_site_n3(self,axis,type,z)
   call allocate_grids
   if(.not.dmft_bath%status)call read_dmft_bath()
   if(.not.allocated(impGmatrix))call read_impGmatrix()
+  if(.not.allocated(impHloc))stop "ed_get_sigma error: Hloc not allocated. Either call ed_set_Hloc or ed_init_solver before ed_get_sigma"
   !
   if(present(z))then
      allocate(z_, source=z)
@@ -52,7 +53,7 @@ end subroutine ed_get_sigma_site_n3
 
 subroutine ed_get_sigma_site_n5(self,axis,type,z)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   complex(8),dimension(:,:,:,:,:),intent(inout) :: self
   character(len=*),optional                     :: axis ! Can be :f:var:`"m"` for Matsubara (default), :f:var:`"r"` for real
@@ -69,6 +70,7 @@ subroutine ed_get_sigma_site_n5(self,axis,type,z)
   call allocate_grids
   if(.not.dmft_bath%status)call read_dmft_bath()
   if(.not.allocated(impGmatrix))call read_impGmatrix()
+  if(.not.allocated(impHloc))stop "ed_get_sigma error: Hloc not allocated. Either call ed_set_Hloc or ed_init_solver before ed_get_sigma"
   !
   if(present(z))then
      allocate(z_, source=z)

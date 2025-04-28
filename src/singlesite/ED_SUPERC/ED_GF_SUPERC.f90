@@ -623,7 +623,7 @@ contains
     !
     subroutine get_superc_Gdiag(iorb) !get auxG(1:2)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+      use ED_INPUT_VARS, only: Nspin,Norb
 #endif
       integer,intent(in)                 :: iorb
       integer                            :: Nstates,istate
@@ -650,10 +650,10 @@ contains
                  de    = impGmatrix(1,1,iorb,iorb)%state(istate)%channel(ic)%poles(iexc)
                  G     = G + peso/(zeta-de)
               enddo
-
            enddo
         enddo
       end associate
+
       return
     end subroutine get_superc_Gdiag
 
@@ -923,6 +923,7 @@ contains
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(zeta)) :: Sigma
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(zeta)) :: G,F
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(zeta)) :: invG,invF,invG0,invF0
+    real(8)                                                :: Gdet(size(zeta))
     complex(8)                                             :: detG(size(zeta))
     complex(8),dimension(2*Norb,2*Norb)                    :: M
     character(len=1)                                       :: axis_
@@ -943,8 +944,8 @@ contains
     invF0 = invf0_bath_function(zeta,axis_)
     !
     !Get G, F
-    G     = get_impG_superc(zeta)
-    F     = get_impF_superc(zeta)
+    G     = get_impG_superc(zeta,axis_)
+    F     = get_impF_superc(zeta,axis_)
     !
     !get G^{-1},F^{-1} --> Sigma
     Sigma = zero
@@ -955,8 +956,8 @@ contains
           select case(axis_)
           case default;stop "get_Sigma_superc error: axis_ != mats,real"
           case("m")
-             detG =  dreal(abs(G(ispin,ispin,iorb,iorb,:))**2 + F(ispin,ispin,iorb,iorb,:)**2)
-             invG(ispin,ispin,iorb,iorb,:)  =  conjg(G(ispin,ispin,iorb,iorb,:))/detG
+             Gdet =  dreal(abs(G(ispin,ispin,iorb,iorb,:))**2 + F(ispin,ispin,iorb,iorb,:)**2)
+             invG(ispin,ispin,iorb,iorb,:)  =  conjg(G(ispin,ispin,iorb,iorb,:))/Gdet
           case("r")
              detG = -G(ispin,ispin,iorb,iorb,:)*conjg(G(ispin,ispin,iorb,iorb,L:1:-1)) - F(ispin,ispin,iorb,iorb,:)**2
              invG(ispin,ispin,iorb,iorb,:)  = -conjg(G(ispin,ispin,iorb,iorb,L:1:-1))/detG

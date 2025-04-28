@@ -57,6 +57,14 @@ contains
     if(ed_verbose>1)write(Logfile,"(A)")"DEBUG build_GF: build GFs"
 #endif
     !
+    if(.not.allocated(impGmatrix))then
+       if(ed_mode=="superc")then
+          allocate(impGmatrix(2*Nspin,2*Nspin,Norb,Norb))
+       else
+          allocate(impGmatrix(Nspin,Nspin,Norb,Norb))
+       endif
+    endif
+    !
     call deallocate_GFmatrix(impGmatrix)
     call deallocate_GFmatrix(impDmatrix)
     !

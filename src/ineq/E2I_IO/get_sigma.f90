@@ -28,6 +28,8 @@ subroutine ed_get_sigma_lattice_n3(self,nlat,axis,type,z)
   !
   call allocate_grids
   !
+  if(.not.allocated(Hloc_ineq))stop "ed_get_sigma error: Hloc_ineq not allocated. Call ed_set_Hloc before ed_get_sigma"
+  !
   if(present(z))then
      allocate(z_, source=z)
   else
@@ -76,7 +78,7 @@ end subroutine ed_get_sigma_lattice_n3
 
 subroutine ed_get_sigma_lattice_n4(self,nlat,axis,type,z)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   complex(8),dimension(:,:,:,:),intent(inout) :: self !! [Nlat,Nso,Nso,:]
   integer,intent(in)                          :: nlat
@@ -101,6 +103,8 @@ subroutine ed_get_sigma_lattice_n4(self,nlat,axis,type,z)
   axis_='m';if(present(axis))axis_=trim(axis)
   type_='n';if(present(type))type_=trim(type)
   call allocate_grids
+  !
+  if(.not.allocated(Hloc_ineq))stop "ed_get_sigma error: Hloc_ineq not allocated. Call ed_set_Hloc before ed_get_sigma"
   !
   if(present(z))then
      allocate(z_, source=z)
@@ -151,7 +155,7 @@ end subroutine ed_get_sigma_lattice_n4
 
 subroutine ed_get_sigma_lattice_n6(self,nlat,axis,type,z)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+  use ED_INPUT_VARS, only: Nspin,Norb
 #endif
   complex(8),dimension(:,:,:,:,:,:),intent(inout) :: self
   integer,intent(in)                              :: nlat
@@ -174,6 +178,8 @@ subroutine ed_get_sigma_lattice_n6(self,nlat,axis,type,z)
   axis_='m';if(present(axis))axis_=trim(axis)
   type_='n';if(present(type))type_=trim(type)
   call allocate_grids
+  !
+  if(.not.allocated(Hloc_ineq))stop "ed_get_sigma error: Hloc_ineq not allocated. Call ed_set_Hloc before ed_get_sigma"
   !
   if(present(z))then
      allocate(z_, source=z)

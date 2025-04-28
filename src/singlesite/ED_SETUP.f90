@@ -351,11 +351,11 @@ contains
     endif
     !
     !
-    if(ed_mode=="superc")then
-       allocate(impGmatrix(2*Nspin,2*Nspin,Norb,Norb))
-    else
-       allocate(impGmatrix(Nspin,Nspin,Norb,Norb))
-    endif
+    ! if(ed_mode=="superc")then
+    !    allocate(impGmatrix(2*Nspin,2*Nspin,Norb,Norb))
+    ! else
+    !    allocate(impGmatrix(Nspin,Nspin,Norb,Norb))
+    ! endif
     !
     allocate(spinChiMatrix(Norb,Norb))
     allocate(densChiMatrix(Norb,Norb))
