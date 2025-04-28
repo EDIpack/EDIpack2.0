@@ -562,7 +562,6 @@ contains
     read(unit,*) alloc
     if(.not.alloc)return
     read(unit,*)Nstates
-    print*,"read_formatted_gfmatrix",Nstates
     call allocate_GFmatrix(dtv,Nstate=Nstates)
     do istate=1,Nstates
        read(unit,*)Nchan
