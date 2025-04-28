@@ -20,6 +20,7 @@ then
 fi
 
 WITH_MPI=$(pkg-config --variable=mpi edipack2)
+BUILD_TYPE=$(pkg-config --variable=build_type edipack2)
 
 cd bin/
 HERE=`pwd`
@@ -34,7 +35,7 @@ while read DIR; do
 	    for exe in *.x
 	    do
 		echo "Running $exe:"
-		if [ -z ${WITH_MPI} ]
+		if [ "$BUILD_TYPE" = "DEBUG" ]
 		then
 		    echo "./$exe ED_VERBOSE=3 LOGFILE=6"
 		    ./$exe ED_VERBOSE=1 LOGFILE=6
@@ -42,11 +43,20 @@ while read DIR; do
 		    echo ""
 		    sleep 1
 		else
-		    echo "mpiexec -np 2 ./$exe ED_VERBOSE=3 LOGFILE=6"
-		    mpiexec -np 2 ./$exe ED_VERBOSE=1 LOGFILE=6 < /dev/null
-		    echo ""
-		    echo ""
-		    sleep 1
+		    if [ -z ${WITH_MPI} ]
+		    then
+			echo "./$exe ED_VERBOSE=3 LOGFILE=6"
+			./$exe ED_VERBOSE=1 LOGFILE=6
+			echo ""
+			echo ""
+			sleep 1
+		    else
+			echo "mpiexec -np 2 ./$exe ED_VERBOSE=3 LOGFILE=6"
+			mpiexec -np 2 ./$exe ED_VERBOSE=1 LOGFILE=6 < /dev/null
+			echo ""
+			echo ""
+			sleep 1
+		    fi
 		fi
 	    done
 	    cd $HERE
