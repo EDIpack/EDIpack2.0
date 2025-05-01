@@ -2,6 +2,10 @@
    max-width: 1080px;
 }
 
+.toctree-wrapper a code.literal {
+    color: #404040 !important;
+    font-weight: bold !important;
+}
 
 .sig.sig-object.f {
     background-color: #e7f2fa;  /* Light blue background */

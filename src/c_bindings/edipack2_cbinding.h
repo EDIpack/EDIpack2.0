@@ -360,24 +360,6 @@ void search_variable(double *var,
 \rst
 This function sets the replica bath H. 
 Interfaces to :f:func:`f/ed_bath_replica/set_hreplica`.
-Rank-5 array case for single-site DMFT.
-\endrst
-*
-* @param Hvec: array of matrices summing up to the replica H
-* @param d_hvec: dimensions of the array of matrices
-* @param lambdavec: array of coefficients of the array linear combination
-* @param d_lambdavec: dimensions of the array of coefficients
-*/ 
-void init_Hreplica_symmetries_d5(std::complex<double> *Hvec, 
-                                 int64_t *d_hvec, 
-                                 double *lambdavec, 
-                                 int64_t *d_lambdavec
-                                 );
-                                 
-/*!
-\rst
-This function sets the replica bath H. 
-Interfaces to :f:func:`f/ed_bath_replica/set_hreplica`.
 Rank-3 array case for single-site DMFT.
 \endrst
 *
@@ -391,6 +373,42 @@ void init_Hreplica_symmetries_d3(std::complex<double> *Hvec,
                                  double *lambdavec, 
                                  int64_t *d_lambdavec
                                  );
+
+/*!
+\rst
+This function sets the replica bath H. 
+Interfaces to :f:func:`f/ed_bath_replica/set_hreplica`.
+Rank-5 array case for single-site DMFT.
+\endrst
+*
+* @param Hvec: array of matrices summing up to the replica H
+* @param d_hvec: dimensions of the array of matrices
+* @param lambdavec: array of coefficients of the array linear combination
+* @param d_lambdavec: dimensions of the array of coefficients
+*/ 
+void init_Hreplica_symmetries_d5(std::complex<double> *Hvec, 
+                                 int64_t *d_hvec, 
+                                 double *lambdavec, 
+                                 int64_t *d_lambdavec
+                                 );
+                                                                  
+/*!
+\rst
+This function sets the general bath H. 
+Interfaces to :f:func:`f/ed_bath_replica/set_hgeneral`.
+Rank-3 array case for single-site DMFT.
+\endrst
+*
+* @param Hvec: array of matrices summing up to the general H
+* @param d_hvec: dimensions of the array of matrices
+* @param lambdavec: array of coefficients of the array linear combination
+* @param d_lambdavec: dimensions of the array of coefficients
+*/                               
+void init_Hgeneral_symmetries_d3(std::complex<double> *Hvec, 
+                                 int64_t *d_hvec, 
+                                 double *lambdavec, 
+                                 int64_t *d_lambdavec
+                                 );                              
                                  
 /*!
 \rst
@@ -412,22 +430,21 @@ void init_Hgeneral_symmetries_d5(std::complex<double> *Hvec,
 
 /*!
 \rst
-This function sets the general bath H. 
-Interfaces to :f:func:`f/ed_bath_replica/set_hgeneral`.
-Rank-3 array case for single-site DMFT.
+This function sets the replica bath H. 
+Interfaces to :f:func:`f/e2i_bath_replica/set_hreplica`.
+Rank-3 array case for real-space DMFT.
 \endrst
 *
-* @param Hvec: array of matrices summing up to the general H
+* @param Hvec: array of matrices summing up to the replica H
 * @param d_hvec: dimensions of the array of matrices
 * @param lambdavec: array of coefficients of the array linear combination
 * @param d_lambdavec: dimensions of the array of coefficients
-*/                               
-void init_Hgeneral_symmetries_d3(std::complex<double> *Hvec, 
-                                 int64_t *d_hvec, 
-                                 double *lambdavec, 
-                                 int64_t *d_lambdavec
-                                 );
-
+*/                                            
+void init_Hreplica_symmetries_lattice_d3(std::complex<double> *Hvec, 
+                                         int64_t *d_hvec, 
+                                         double *lambdavec, 
+                                         int64_t *d_lambdavec
+                                         );
 
 /*!
 \rst
@@ -446,25 +463,26 @@ void init_Hreplica_symmetries_lattice_d5(std::complex<double> *Hvec,
                                          double *lambdavec, 
                                          int64_t *d_lambdavec
                                          );
-                                         
-/*!
+
+/*!                                         
 \rst
-This function sets the replica bath H. 
-Interfaces to :f:func:`f/e2i_bath_replica/set_hreplica`.
+This function sets the general bath H. 
+Interfaces to :f:func:`f/e2i_bath_replica/set_hgeneral`.
 Rank-3 array case for real-space DMFT.
 \endrst
 *
-* @param Hvec: array of matrices summing up to the replica H
+* @param Hvec: array of matrices summing up to the general H
 * @param d_hvec: dimensions of the array of matrices
 * @param lambdavec: array of coefficients of the array linear combination
 * @param d_lambdavec: dimensions of the array of coefficients
-*/                                            
-void init_Hreplica_symmetries_lattice_d3(std::complex<double> *Hvec, 
+*/                                       
+void init_Hgeneral_symmetries_lattice_d3(std::complex<double> *Hvec, 
                                          int64_t *d_hvec, 
                                          double *lambdavec, 
                                          int64_t *d_lambdavec
                                          );
-                                         
+
+                                                                                 
 /*!
 \rst
 This function sets the general bath H. 
@@ -482,24 +500,6 @@ void init_Hgeneral_symmetries_lattice_d5(std::complex<double> *Hvec,
                                          double *lambdavec, 
                                          int64_t *d_lambdavec
                                          );
-/*!                                         
-\rst
-This function sets the general bath H. 
-Interfaces to :f:func:`f/e2i_bath_replica/set_hgeneral`.
-Rank-5 array case for real-space DMFT.
-\endrst
-*
-* @param Hvec: array of matrices summing up to the general H
-* @param d_hvec: dimensions of the array of matrices
-* @param lambdavec: array of coefficients of the array linear combination
-* @param d_lambdavec: dimensions of the array of coefficients
-*/                                       
-void init_Hgeneral_symmetries_lattice_d3(std::complex<double> *Hvec, 
-                                         int64_t *d_hvec, 
-                                         double *lambdavec, 
-                                         int64_t *d_lambdavec
-                                         );
-
 
 /*!                                         
 \rst

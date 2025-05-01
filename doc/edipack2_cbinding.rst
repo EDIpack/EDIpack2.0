@@ -35,5 +35,9 @@ A more exotic usecase is available here_, come fosse antani.
 .. _here: https://github.com/lcrippa/prematurata_la_dmft
 
 
-.. doxygenfile:: edipack2_cbinding.h
-   :project: edipack2
+.. toctree::
+   :maxdepth: 2
+   :glob:
+
+   c_bindings/*
+
