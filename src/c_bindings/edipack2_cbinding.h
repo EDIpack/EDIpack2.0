@@ -853,11 +853,9 @@ void solve_ineq(double *bath,
                 int flag_gf
                 );
 
-/*! 
-\cond
-void finalize_solver (@WITH_INEQ_HEADER@)
-\endcond
-*/
+
+void finalize_solver (int *Nineq);
+
 
 void reset_umatrix();
 

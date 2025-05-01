@@ -223,7 +223,7 @@ int main(int argc, char* argv[]) {
     }
     
     // Finalize MPI
-    MPI_Finalize();
+    finalize_solver(0);
     
     return 0;
 }

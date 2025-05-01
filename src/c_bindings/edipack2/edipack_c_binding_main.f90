@@ -15,7 +15,12 @@ subroutine solve_site_c(bath,dim_bath,flag_gf,flag_mpi) bind(c, name='solve_site
   call ed_solve(bath,flag_gf=i2l(flag_gf),flag_mpi=i2l(flag_mpi))
 end subroutine solve_site_c
 
-subroutine finalize_solver_c() bind(c, name='finalize_solver')
+subroutine finalize_solver_c(Nineq) bind(c, name='finalize_solver')
   use, intrinsic :: iso_c_binding
-  call ed_finalize_solver()
+  integer(c_int),value                            :: Nineq
+  if (Nineq == 0) then
+     call ed_finalize_solver()
+  else
+     STOP "Cannot finalize solver for more than one site without R-DMFT support"
+  endif
 end subroutine finalize_solver_c

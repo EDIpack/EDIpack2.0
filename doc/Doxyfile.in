@@ -5,6 +5,7 @@ XML_OUTPUT             = xml
 INPUT                  = ../src/c_bindings
 RECURSIVE              = YES
 GENERATE_HTML          = NO
+GENERATE_LATEX         = NO
 QUIET                  = YES
 EXTRACT_ALL            = YES
 EXTRACT_STATIC         = YES
