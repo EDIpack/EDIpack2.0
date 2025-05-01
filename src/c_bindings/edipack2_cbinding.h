@@ -11,7 +11,7 @@ extern "C" {
 
 
 /**
-*This flag is `1` if real-space DMFT support enabled, `0` othervise
+*This flag is `1` if real-space DMFT support enabled, `0` otherwhise
 */ 
 extern int has_ineq;
 
@@ -1025,7 +1025,7 @@ void ed_get_docc_n2(std::complex<double> *self, int Nlat);
 /*!                                         
 \rst
 This function obtains the superconductive order parameter.
-Interfaces to :f:func:`f/ed_io/ed_get_phisc`. 
+Interfaces to :f:func:`f/ed_io/ed_get_phi`. 
 Single-site DMFT version
 \endrst
 *
@@ -1036,7 +1036,7 @@ void ed_get_phisc_n2(std::complex<double> *self);
 /*!                                         
 \rst
 This function obtains the superconductive order parameter.
-Interfaces to :f:func:`f/e2i_io/ed_get_phisc`. 
+Interfaces to :f:func:`f/e2i_io/ed_get_phi`. 
 Real-space DMFT version
 \endrst
 *
