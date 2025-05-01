@@ -17,13 +17,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
+
       - name: Install dependencies
         run: |
-          pip install numpy sphinx sphinx_rtd_theme myst-parser sphinxfortran-ng charset_normalizer
-      - name: Sphinx build
+          sudo apt-get update
+          sudo apt-get install -y doxygen
+          pip install numpy sphinx sphinx_rtd_theme myst-parser sphinxfortran-ng breathe charset_normalizer
+
+      - name: Build documentation (Sphinx + Doxygen via conf.py)
         run: |
           sphinx-build doc _build
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:

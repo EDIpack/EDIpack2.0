@@ -1,0 +1,14 @@
+PROJECT_NAME           = "edipack2"
+OUTPUT_DIRECTORY       = ../_build/doxygen
+GENERATE_XML           = YES
+XML_OUTPUT             = xml
+INPUT                  = ../src/c_bindings
+RECURSIVE              = YES
+GENERATE_HTML          = NO
+QUIET                  = YES
+EXTRACT_ALL            = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+FILE_PATTERNS          = *.h *.hpp *.c *.cpp *.h.in
+ALIASES += rst="\verbatim embed:rst"
+ALIASES += endrst="\endverbatim"

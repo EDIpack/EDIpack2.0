@@ -12,5 +12,5 @@ else()
 endif()
 
 set(HEADER_OUTPUT_DIR ${CMAKE_BINARY_DIR}/include)
-configure_file(${LIB_CBIND}/edipack2_cbinding.h.in
+configure_file(${LIB_CBIND}/edipack2_cbinding.h
                ${HEADER_OUTPUT_DIR}/edipack2_cbinding.h)

@@ -15,6 +15,7 @@
 
 import os
 import sys
+import subprocess
 sys.path.insert(0, os.path.abspath('../python'))
 sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('./utils'))
@@ -52,10 +53,12 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.autodoc',
     'myst_parser',
+    'breathe',
     'sphinx_rtd_theme',
     'sphinxfortran_ng.fortran_domain',
     'sphinxfortran_ng.fortran_autodoc'
 ]
+
 
 # MyST configuration
 myst_enable_extensions = [
@@ -111,9 +114,23 @@ fortran_src=[os.path.abspath('../src/singlesite/*.f90'),
                  os.path.abspath('../src/ineq/E2I_IO/*.f90'),
                  os.path.abspath('../src/ineq/E2I_BATH/*.f90'),
                  os.path.abspath('../src/ineq/E2I_FIT/*.f90'),
-                 os.path.abspath('../src/c_bindings/EDIPACK2INEQ2PY.f90'),
-                 os.path.abspath('../src/c_bindings/edipack2ineq/*.f90'),]
-    
+                 os.path.abspath('../src/c_bindings/*.f90'),
+                 os.path.abspath('../src/c_bindings/edipack2/*.f90'),
+                 os.path.abspath('../src/c_bindings/edipack2ineq/*.f90')]
+  
+breathe_projects = { "edipack2": os.path.abspath('../_build/doxygen/xml') }
+breathe_default_project = "edipack2"
+
+def run_doxygen():
+    doxyfile_in = os.path.join(os.path.dirname(__file__), 'Doxyfile.in')
+    doxyfile_out = os.path.join(os.path.dirname(__file__), 'Doxyfile')
+    with open(doxyfile_in) as f:
+        template = f.read()
+    with open(doxyfile_out, 'w') as f:
+        f.write(template)
+    subprocess.call(['doxygen', doxyfile_out])
+
+
 #DEFAULT
 fortran_ext=['f90', 'f95']
 
@@ -309,3 +326,21 @@ class FixQuotesTransform(SphinxTransform):
 def setup(app):
     app.add_transform(FixQuotesTransform)
     app.set_html_assets_policy('always')
+    
+def run_doxygen():
+    docs_dir = os.path.dirname(__file__)
+    build_dir = os.path.join(docs_dir, "../_build/doxygen")
+
+    # Create the output directory if it doesn't exist
+    os.makedirs(build_dir, exist_ok=True)
+
+    doxyfile_in = os.path.join(os.path.dirname(__file__), 'Doxyfile.in')
+    doxyfile_out = os.path.join(os.path.dirname(__file__), 'Doxyfile')
+
+    with open(doxyfile_in) as f:
+        template = f.read()
+    with open(doxyfile_out, 'w') as f:
+        f.write(template)
+    subprocess.call(['doxygen', doxyfile_out])
+
+run_doxygen()
