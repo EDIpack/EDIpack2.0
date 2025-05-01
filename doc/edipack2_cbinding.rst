@@ -25,8 +25,9 @@ Caution needs to be applied for functions requiring array input parameters: sinc
 have to be passed as raw pointers, additional
 arrays containing the dimensions of the former need to be passed.
 
-An example :code:`c++` is provided  in the examples_ folder of the GitHub repository.
-A more nuanced usecase is available here_.
+An example :code:`c++` program using EDIpack is provided  in the examples_ folder 
+of the GitHub repository.
+A more exotic usecase is available here_, come fosse antani.
 
 .. _EDIpy2.0: https://github.com/edipack/EDIpy2.0
 .. _EDIjl2.0: https://github.com/edipack/EDIjl2.0
