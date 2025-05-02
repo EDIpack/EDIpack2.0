@@ -1548,7 +1548,7 @@ void solve_ineq(double *bath,
 This function finalizes the solver.
 Interfaces to :f:func:`f/ed_main/finalize_solver` and :f:func:`f/e2i_main/finalize_solver`.
 \endrst
-* @param Nineq: user-accessible bath array. Set to `0` for single-site DMFT.
+* @param Nineq: number of inequivalent sites. Set to `0` for single-site DMFT.
 */  
 void finalize_solver (int Nineq);
 
