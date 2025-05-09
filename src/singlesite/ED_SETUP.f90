@@ -37,7 +37,7 @@ contains
     !
     if(Lfit>Lmats)Lfit=Lmats
     if(Nspin>2)stop "ED ERROR: Nspin > 2 is currently not supported"
-    if(Norb>5 .and. .not.ed_read_umatrix)stop "ED ERROR: Norb > 5 is supported only by providing a umatrix file"
+    if(Norb>5 .and. ed_use_kanamori)stop "ED ERROR: Norb > 5 and ED_USE_KANAMORI=T are incompatible."
     !
     if(.not.ed_total_ud)then
        if(bath_type=="hybrid")stop "ED ERROR: ed_total_ud=F can not be used with bath_type=hybrid"
