@@ -16,13 +16,13 @@
      ! Diagonal terms: Sum_iorb g_iorb,iorb n_iorb*(bdg + b)
      htmp=zero
      do iorb=1,Norb
-        htmp = htmp + g_ph(iorb,iorb)*(nup(iorb)+ndw(iorb) - 1.d0) !electronin part
+        htmp = htmp + one*g_ph(iorb,iorb)*(nup(iorb)+ndw(iorb) - 1.d0) !electronin part
      enddo
      !
      do jj = 1,DimPh
         if(jj .eq. iph+1) then
            j = i_el + (jj-1)*DimUp*DimDw
-           Hv(i) = Hv(i) + htmp*sqrt(dble(iph))*vin(j)
+           Hv(i) = Hv(i) +htmp*sqrt(dble(iph))*vin(j)
         endif
         !
         if(jj .eq. iph-1) then
@@ -43,7 +43,7 @@
               call cdg(iorb,k1,k2,sg2)
               jup  = binary_search(Hsector%H(1)%map,k2)
               jdw  = idw
-              htmp = g_ph(iorb,jorb)*sg1*sg2
+              htmp = one*g_ph(iorb,jorb)*sg1*sg2
               !
               if(iph<Nph)then !bdg
                  j     = jup + (jdw-1)*dimUp + (iph)*DimUp*MpiQdw
@@ -67,7 +67,7 @@
               call cdg(iorb,k1,k2,sg2)
               jdw = binary_search(Hsector%H(2)%map,k2)
               jup  = iup
-              htmp = g_ph(iorb,jorb)*sg1*sg2
+              htmp = one*g_ph(iorb,jorb)*sg1*sg2
               !
               if(iph<Nph)then !bdg
                  j     = jup + (jdw-1)*dimUp + (iph)*DimUp*MpiQdw

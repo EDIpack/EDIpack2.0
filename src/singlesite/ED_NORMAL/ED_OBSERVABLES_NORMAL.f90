@@ -20,49 +20,54 @@ MODULE ED_OBSERVABLES_NORMAL
   public :: observables_normal
   public :: local_energy_normal
 
-  real(8),dimension(:),allocatable   :: dens ! orbital-resolved charge density
-  real(8),dimension(:),allocatable   :: dens_up ! orbital-resolved spin-:math:`\uparrow` electron density
-  real(8),dimension(:),allocatable   :: dens_dw ! orbital-resolved spin-:math:`\downarrow` electron density
-  real(8),dimension(:),allocatable   :: docc ! orbital-resolved double occupation
-  real(8),dimension(:),allocatable   :: magz ! orbital-resolved magnetization ( :code:`z` component )
-  real(8),dimension(:,:),allocatable :: n2 ! :math:`\langle n_{i} n_{j} \rangle` for i,j orbitals
-  real(8),dimension(:,:),allocatable :: sz2! :math:`\langle S^{z}_{i} S^{z}_{j} \rangle` for i,j orbitals
-  real(8),dimension(:,:),allocatable :: exct_s0 !excitonic order parameter :math:`\langle c^{\dagger}_{is}\sigma^{0}c_{js^{'}} \rangle`
-  real(8),dimension(:,:),allocatable :: exct_tz !excitonic order parameter :math:`\langle c^{\dagger}_{is}\sigma^{z}c_{js^{'}} \rangle`
-  real(8)                            :: dens_ph !phonon density
-  real(8)                            :: X_ph ! :math:`\langle X \rangle` with :math:`X = \frac{b + b^{dagger}}{2}`
-  real(8)                            :: X2_ph ! :math:`\langle X^{2} \rangle` with :math:`X = \frac{b + b^{dagger}}{2}`
-  real(8)                            :: s2tot ! :math:`\langle S_{z}^{2} \rangle`
-  real(8)                            :: Egs ! Ground-state energy
-  real(8)                            :: Ei
-  real(8),dimension(:),allocatable   :: Prob ! Probability distribution
-  real(8),dimension(:),allocatable   :: prob_ph ! Phonon probability
-  real(8),dimension(:),allocatable   :: pdf_ph ! Phonon probability distribution :f:func:`prob_distr_ph`
-  real(8),dimension(:,:),allocatable :: pdf_part ! Lattice probability distribution as obtained by :f:func:`prob_distr_ph`
+  real(8),dimension(:),allocatable    :: dens ! orbital-resolved charge density
+  real(8),dimension(:),allocatable    :: dens_up ! orbital-resolved spin-:math:`\uparrow` electron density
+  real(8),dimension(:),allocatable    :: dens_dw ! orbital-resolved spin-:math:`\downarrow` electron density
+  real(8),dimension(:),allocatable    :: docc ! orbital-resolved double occupation
+  real(8),dimension(:),allocatable    :: magz ! orbital-resolved magnetization ( :code:`z` component )
+  real(8),dimension(:,:),allocatable  :: n2 ! :math:`\langle n_{i} n_{j} \rangle` for i,j orbitals
+  real(8),dimension(:,:),allocatable  :: sz2! :math:`\langle S^{z}_{i} S^{z}_{j} \rangle` for i,j orbitals
+  real(8),dimension(:,:),allocatable  :: exct_s0 !excitonic order parameter :math:`\langle c^{\dagger}_{is}\sigma^{0}c_{js^{'}} \rangle`
+  real(8),dimension(:,:),allocatable  :: exct_tz !excitonic order parameter :math:`\langle c^{\dagger}_{is}\sigma^{z}c_{js^{'}} \rangle`
+  real(8)                             :: dens_ph !phonon density
+  real(8)                             :: X_ph ! :math:`\langle X \rangle` with :math:`X = \frac{b + b^{dagger}}{2}`
+  real(8)                             :: X2_ph ! :math:`\langle X^{2} \rangle` with :math:`X = \frac{b + b^{dagger}}{2}`
+  real(8)                             :: s2tot ! :math:`\langle S_{z}^{2} \rangle`
+  real(8)                             :: Egs ! Ground-state energy
+  real(8)                             :: Ei
+  real(8),dimension(:),allocatable    :: Prob ! Probability distribution
+  real(8),dimension(:),allocatable    :: prob_ph ! Phonon probability
+  real(8),dimension(:),allocatable    :: pdf_ph ! Phonon probability distribution :f:func:`prob_distr_ph`
+  real(8),dimension(:,:),allocatable  :: pdf_part ! Lattice probability distribution as obtained by :f:func:`prob_distr_ph`
   !
-  integer                            :: iorb,jorb,iorb1,jorb1
-  integer                            :: ispin,jspin
-  integer                            :: isite,jsite
-  integer                            :: ibath
-  integer                            :: r,m,k,k1,k2,k3,k4
-  integer                            :: iup,idw
-  integer                            :: jup,jdw
-  integer                            :: mup,mdw
-  integer                            :: iph,i_el,isectorDim
-  real(8)                            :: sgn,sgn1,sgn2,sg1,sg2,sg3,sg4
-  real(8)                            :: gs_weight
+  integer                             :: iorb,jorb,iorb1,jorb1
+  integer                             :: ispin,jspin
+  integer                             :: isite,jsite
+  integer                             :: ibath
+  integer                             :: r,m,k,k1,k2,k3,k4
+  integer                             :: iup,idw
+  integer                             :: jup,jdw
+  integer                             :: mup,mdw
+  integer                             :: iph,i_el,isectorDim
+  real(8)                             :: sgn,sgn1,sgn2,sg1,sg2,sg3,sg4
+  real(8)                             :: gs_weight
   !
-  real(8)                            :: peso
-  real(8)                            :: norm
+  real(8)                             :: peso
+  real(8)                             :: norm
   !
-  integer                            :: i,j,ii
-  integer                            :: isector,jsector
+  integer                             :: i,j,ii
+  integer                             :: isector,jsector
   !
-  real(8),dimension(:),allocatable   :: vvinit,v1,v2
-  real(8),dimension(:),allocatable   :: v_state
-  logical                            :: Jcondition
+#ifdef _CMPLX_NORMAL
+  complex(8),dimension(:),allocatable :: vvinit
+  complex(8),dimension(:),allocatable :: v_state
+#else
+  real(8),dimension(:),allocatable    :: vvinit
+  real(8),dimension(:),allocatable    :: v_state
+#endif
+  logical                             :: Jcondition
   !
-  type(sector)                       :: sectorI,sectorJ
+  type(sector)                        :: sectorI,sectorJ
 
 
 contains 
@@ -123,7 +128,11 @@ contains
     do istate=1,state_list%size
        isector = es_return_sector(state_list,istate)
        Ei      = es_return_energy(state_list,istate)
+#ifdef _CMPLX_NORMAL
+       v_state =  es_return_cvec(state_list,istate)
+#else
        v_state =  es_return_dvec(state_list,istate)
+#endif
        !
 #ifdef _DEBUG
        if(ed_verbose>3)write(Logfile,"(A)")&
@@ -214,61 +223,76 @@ contains
          "DEBUG observables_normal: eval exciton OP Singlet, Triplet_Z"
 #endif
     if (ed_total_ud) then
-      do istate=1,state_list%size
-         isector = es_return_sector(state_list,istate)
-         Ei      = es_return_energy(state_list,istate)
-         v_state  =  es_return_dvec(state_list,istate)
-#ifdef _DEBUG
-         if(ed_verbose>3)write(Logfile,"(A)")&
-              "DEBUG observables_normal: get contribution from state:"//str(istate)
+       do istate=1,state_list%size
+          isector = es_return_sector(state_list,istate)
+          Ei      = es_return_energy(state_list,istate)
+#ifdef _CMPLX_NORMAL
+          v_state =  es_return_cvec(state_list,istate)
+#else
+          v_state =  es_return_dvec(state_list,istate)
 #endif
 
-         !
-         peso = 1.d0 ; if(finiteT)peso=exp(-beta*(Ei-Egs))
-         peso = peso/zeta_function
-         !
-         do iorb=1,Norb
-            do jorb=iorb+1,Norb
-               !
-               !\Theta_upup = <v|v>, |v> = (C_aup + C_bup)|>
-               jsector = getCsector(1,1,isector)
-               if(jsector/=0)then
-                  vvinit =  apply_Cops(v_state,[1d0,1d0],[-1,-1],[iorb,jorb],[1,1],isector,jsector)
-                  if(Mpimaster)then
-                     theta_upup(iorb,jorb) = theta_upup(iorb,jorb) + dot_product(vvinit,vvinit)*peso
-                  endif
-                  if(allocated(vvinit))deallocate(vvinit)
-               endif
-               !
-               !\Theta_dwdw = <v|v>, |v> = (C_adw + C_bdw)|>
-               jsector = getCsector(1,2,isector)
-               if(jsector/=0)then
-                  vvinit =  apply_Cops(v_state,[1d0,1d0],[-1,-1],[iorb,jorb],[2,2],isector,jsector)
-                  if(Mpimaster)then
-                     theta_dwdw(iorb,jorb) = theta_dwdw(iorb,jorb) + dot_product(vvinit,vvinit)*peso
-                  endif
-                  if(allocated(vvinit))deallocate(vvinit)
-               endif
-               !
-            enddo
-         enddo
-         !
-         if(allocated(v_state))deallocate(v_state)
-         !
-      enddo
-      !
-      do iorb=1,Norb
-         do jorb=iorb+1,Norb
-            exct_s0(iorb,jorb) = 0.5d0*(theta_upup(iorb,jorb) + theta_dwdw(iorb,jorb) - dens(iorb) - dens(jorb))
-            exct_tz(iorb,jorb) = 0.5d0*(theta_upup(iorb,jorb) - theta_dwdw(iorb,jorb) - magZ(iorb) - magZ(jorb))
-         enddo
-      enddo
 #ifdef _DEBUG
-      if(ed_verbose>2)write(Logfile,"(A)")""
+          if(ed_verbose>3)write(Logfile,"(A)")&
+               "DEBUG observables_normal: get contribution from state:"//str(istate)
 #endif
-  else
-    write(Logfile,"(A)")"Cannot calculate exciton operators with ed_total_ud=F"
-  endif
+
+          !
+          peso = 1.d0 ; if(finiteT)peso=exp(-beta*(Ei-Egs))
+          peso = peso/zeta_function
+          !
+          do iorb=1,Norb
+             do jorb=iorb+1,Norb
+                !
+                !\Theta_upup = <v|v>, |v> = (C_aup + C_bup)|>
+                jsector = getCsector(1,1,isector)
+                if(jsector/=0)then
+#ifdef _CMPLX_NORMAL
+                   vvinit =  apply_Cops(v_state,[one,one],[-1,-1],[iorb,jorb],[1,1],isector,jsector)
+#else
+                   vvinit =  apply_Cops(v_state,[1d0,1d0],[-1,-1],[iorb,jorb],[1,1],isector,jsector)
+#endif
+
+                   if(Mpimaster)then
+                      theta_upup(iorb,jorb) = theta_upup(iorb,jorb) + dot_product(vvinit,vvinit)*peso
+                   endif
+                   if(allocated(vvinit))deallocate(vvinit)
+                endif
+                !
+                !\Theta_dwdw = <v|v>, |v> = (C_adw + C_bdw)|>
+                jsector = getCsector(1,2,isector)
+                if(jsector/=0)then
+#ifdef _CMPLX_NORMAL
+                   vvinit =  apply_Cops(v_state,[one,one],[-1,-1],[iorb,jorb],[2,2],isector,jsector)
+#else
+                   vvinit =  apply_Cops(v_state,[1d0,1d0],[-1,-1],[iorb,jorb],[2,2],isector,jsector)
+#endif
+
+                   if(Mpimaster)then
+                      theta_dwdw(iorb,jorb) = theta_dwdw(iorb,jorb) + dot_product(vvinit,vvinit)*peso
+                   endif
+                   if(allocated(vvinit))deallocate(vvinit)
+                endif
+                !
+             enddo
+          enddo
+          !
+          if(allocated(v_state))deallocate(v_state)
+          !
+       enddo
+       !
+       do iorb=1,Norb
+          do jorb=iorb+1,Norb
+             exct_s0(iorb,jorb) = 0.5d0*(theta_upup(iorb,jorb) + theta_dwdw(iorb,jorb) - dens(iorb) - dens(jorb))
+             exct_tz(iorb,jorb) = 0.5d0*(theta_upup(iorb,jorb) - theta_dwdw(iorb,jorb) - magZ(iorb) - magZ(jorb))
+          enddo
+       enddo
+#ifdef _DEBUG
+       if(ed_verbose>2)write(Logfile,"(A)")""
+#endif
+    else
+       write(Logfile,"(A)")"Cannot calculate exciton operators with ed_total_ud=F"
+    endif
 
     !
     !SINGLE PARTICLE IMPURITY DENSITY MATRIX
@@ -281,7 +305,12 @@ contains
     do istate=1,state_list%size
        isector = es_return_sector(state_list,istate)
        Ei      = es_return_energy(state_list,istate)
-       v_state =  es_return_dvec(state_list,istate)              
+#ifdef _CMPLX_NORMAL
+       v_state =  es_return_cvec(state_list,istate)
+#else
+       v_state =  es_return_dvec(state_list,istate)
+#endif
+
 #ifdef _DEBUG
        if(ed_verbose>3)write(Logfile,"(A)")&
             "DEBUG observables_normal: get contribution from state:"//str(istate)
@@ -440,7 +469,12 @@ contains
     do istate=1,state_list%size
        isector = es_return_sector(state_list,istate)
        Ei      = es_return_energy(state_list,istate)
+#ifdef _CMPLX_NORMAL
+       v_state =  es_return_cvec(state_list,istate)
+#else
        v_state =  es_return_dvec(state_list,istate)
+#endif
+
 #ifdef _DEBUG
        if(ed_verbose>3)write(Logfile,"(A)")&
             "DEBUG local_energy_normal: get contribution from state:"//str(istate)
@@ -490,8 +524,13 @@ contains
                          call cdg(iorb,k1,k2,sg2)
                          jup = binary_search(sectorI%H(1)%map,k2)
                          j   = jup + (idw-1)*sectorI%DimUp
+#ifdef _CMPLX_NORMAL
+                         ed_Eknot = ed_Eknot + &
+                              impHloc(1,1,iorb,jorb)*sg1*sg2*v_state(i)*conjg(v_state(j))*peso
+#else
                          ed_Eknot = ed_Eknot + &
                               impHloc(1,1,iorb,jorb)*sg1*sg2*v_state(i)*(v_state(j))*peso
+#endif
                       endif
                       !
                       !DW
@@ -503,8 +542,13 @@ contains
                          call cdg(iorb,k1,k2,sg2)
                          jdw = binary_search(sectorI%H(2)%map,k2)
                          j   = iup + (jdw-1)*sectorI%DimUp
+#ifdef _CMPLX_NORMAL
+                         ed_Eknot = ed_Eknot + &
+                              impHloc(Nspin,Nspin,iorb,jorb)*sg1*sg2*v_state(i)*conjg(v_state(j))*peso
+#else
                          ed_Eknot = ed_Eknot + &
                               impHloc(Nspin,Nspin,iorb,jorb)*sg1*sg2*v_state(i)*(v_state(j))*peso
+#endif
                       endif
                    enddo
                 enddo
@@ -528,8 +572,13 @@ contains
                             jup=binary_search(sectorI%H(1)%map,k4)
                             j = jup + (jdw-1)*sectorI%DimUp
                             !
+#ifdef _CMPLX_NORMAL
+                            ed_Epot = ed_Epot + Jx_internal(iorb,jorb)*sg1*sg2*sg3*sg4*v_state(i)*conjg(v_state(j))*peso
+                            ed_Dse = ed_Dse + sg1*sg2*sg3*sg4*v_state(i)*conjg(v_state(j))*peso
+#else
                             ed_Epot = ed_Epot + Jx_internal(iorb,jorb)*sg1*sg2*sg3*sg4*v_state(i)*v_state(j)*peso
                             ed_Dse = ed_Dse + sg1*sg2*sg3*sg4*v_state(i)*v_state(j)*peso
+#endif
                             !
                          endif
                       enddo
@@ -554,8 +603,13 @@ contains
                             jup = binary_search(sectorI%H(1)%map,k4)
                             j = jup + (jdw-1)*sectorI%DimUp
                             !
+#ifdef _CMPLX_NORMAL
+                            ed_Epot = ed_Epot + Jp_internal(iorb,jorb)*sg1*sg2*sg3*sg4*v_state(i)*conjg(v_state(j))*peso
+                            ed_Dph = ed_Dph + sg1*sg2*sg3*sg4*v_state(i)*conjg(v_state(j))*peso
+#else
                             ed_Epot = ed_Epot + Jp_internal(iorb,jorb)*sg1*sg2*sg3*sg4*v_state(i)*v_state(j)*peso
                             ed_Dph = ed_Dph + sg1*sg2*sg3*sg4*v_state(i)*v_state(j)*peso
+#endif
                             !
                          endif
                       enddo
@@ -936,11 +990,15 @@ contains
   subroutine prob_distr_ph(vec,val)
     !Compute the local lattice probability distribution function (PDF), i.e. the local probability of displacement
     !as a function of the displacement itself
-    real(8),dimension(:) :: vec
-    real(8)              :: psi(0:DimPh-1)
-    real(8)              :: x,dx
-    integer              :: i,j,i_ph,j_ph,val
-    integer              :: istart,jstart,iend,jend
+#ifdef _CMPLX_NORMAL
+    complex(8),dimension(:) :: vec
+#else
+    real(8),dimension(:)    :: vec
+#endif
+    real(8)                 :: psi(0:DimPh-1)
+    real(8)                 :: x,dx
+    integer                 :: i,j,i_ph,j_ph,val
+    integer                 :: istart,jstart,iend,jend
     !
     dx = (xmax-xmin)/dble(Lpos)
     !

@@ -92,7 +92,7 @@
            !
            jdw=binary_search(Hsector%H(2)%map,p_dw_new)
            jup=binary_search(Hsector%H(1)%map,p_up_new)
-           htmp = coulomb_sundry(iline)%U * sg1 * sg2 * sg3 * sg4
+           htmp = one*coulomb_sundry(iline)%U * sg1 * sg2 * sg3 * sg4
            j = jup + (jdw-1)*DimUp
            !
            select case(MpiStatus)

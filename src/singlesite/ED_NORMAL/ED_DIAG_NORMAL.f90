@@ -74,17 +74,21 @@ contains
   ! spectrum DOUBLE PRECISION
   !+------------------------------------------------------------------+
   subroutine ed_diag_d
-    integer             :: isector,Dim,istate
-    integer             :: DimUps(Ns_Ud),DimUp
-    integer             :: DimDws(Ns_Ud),DimDw
-    integer             :: Nups(Ns_Ud)
-    integer             :: Ndws(Ns_Ud)
-    integer             :: i,j,iter,unit,vecDim,PvecDim
-    integer             :: Nitermax,Neigen,Nblock
-    real(8)             :: oldzero,enemin,Ei
-    real(8),allocatable :: eig_values(:)
-    real(8),allocatable :: eig_basis(:,:),eig_basis_tmp(:,:)
-    logical             :: lanc_solve,Tflag,lanc_verbose,bool
+    integer                :: isector,Dim,istate
+    integer                :: DimUps(Ns_Ud),DimUp
+    integer                :: DimDws(Ns_Ud),DimDw
+    integer                :: Nups(Ns_Ud)
+    integer                :: Ndws(Ns_Ud)
+    integer                :: i,j,iter,unit,vecDim,PvecDim
+    integer                :: Nitermax,Neigen,Nblock
+    real(8)                :: oldzero,enemin,Ei
+    real(8),allocatable    :: eig_values(:)
+#ifdef _CMPLX_NORMAL
+    complex(8),allocatable :: eig_basis(:,:),eig_basis_tmp(:,:)
+#else
+    real(8),allocatable    :: eig_basis(:,:),eig_basis_tmp(:,:)
+#endif
+    logical                :: lanc_solve,Tflag,lanc_verbose,bool    
     !
 #ifdef _DEBUG
     write(Logfile,"(A)")"DEBUG ed_diag_d NORMAL: diagonalization"
@@ -220,7 +224,7 @@ contains
           !
        else                     !else LAPACK_SOLVE
           allocate(eig_values(Dim)) ; eig_values=0d0
-          allocate(eig_basis_tmp(Dim,Dim)) ; eig_basis_tmp=0d0
+          allocate(eig_basis_tmp(Dim,Dim)) ; eig_basis_tmp=zero
           call build_Hv_sector_normal(isector,eig_basis_tmp)
           !
 #ifdef _DEBUG
@@ -237,11 +241,11 @@ contains
              allocate(eig_basis(vecDim,Neigen)) ; eig_basis=0d0
              call scatter_basis_MPI(MpiComm,eig_basis_tmp,eig_basis)
           else
-             allocate(eig_basis(Dim,Neigen)) ; eig_basis=0d0
+             allocate(eig_basis(Dim,Neigen)) ; eig_basis=zero
              eig_basis = eig_basis_tmp(:,1:Neigen)
           endif
 #else
-          allocate(eig_basis(Dim,Neigen)) ; eig_basis=0d0
+          allocate(eig_basis(Dim,Neigen)) ; eig_basis=zero
           eig_basis = eig_basis_tmp(:,1:Neigen)
 #endif
           !

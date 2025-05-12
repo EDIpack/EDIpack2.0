@@ -14,40 +14,44 @@ MODULE ED_HAMILTONIAN_NORMAL_COMMON
   implicit none
 
   !
-  integer                                   :: Dim
-  integer                                   :: DimUp
-  integer                                   :: DimDw
-  integer,allocatable,dimension(:)          :: DimUps
-  integer,allocatable,dimension(:)          :: DimDws
+  integer                                 :: Dim
+  integer                                 :: DimUp
+  integer                                 :: DimDw
+  integer,allocatable,dimension(:)        :: DimUps
+  integer,allocatable,dimension(:)        :: DimDws
   !
-  type(sector)                              :: Hsector
+  type(sector)                            :: Hsector
   !
-  integer                                   :: iiup,iidw,jjup,jjdw
-  integer                                   :: iud,jj
-  integer                                   :: ishift
-  integer                                   :: isector,jsector
-  integer                                   :: i,iup,idw
-  integer                                   :: j,jup,jdw
-  integer                                   :: iph,i_el,j_el
-  integer                                   :: m,mup,mdw
-  integer                                   :: ms
-  integer                                   :: impi
-  integer                                   :: iorb,jorb,ispin,jspin,ibath
-  integer                                   :: kp,k1,k2,k3,k4
-  integer                                   :: p_dw_new, p_dw_old, p_up_new, p_up_old
-  integer                                   :: ialfa,ibeta,indx
-  real(8)                                   :: sg1,sg2,sg3,sg4
-  real(8)                                   :: htmp,htmpup,htmpdw
-  logical                                   :: Jcondition
-  integer                                   :: Nfoo
-  integer                                   :: spinchange,icount
-  integer                                   :: iline
-  integer,dimension(2)                      :: orbvec, orbvec_dag, spinvec, spinvec_dag
-  real(8),dimension(:,:,:),allocatable      :: diag_hybr ![Nspin,Norb,Nbath]
-  real(8),dimension(:,:,:),allocatable      :: bath_diag ![Nspin,Norb/1,Nbath]
-
-
-  integer,save,public                       :: iter=0
+  integer                                 :: iiup,iidw,jjup,jjdw
+  integer                                 :: iud,jj
+  integer                                 :: ishift
+  integer                                 :: isector,jsector
+  integer                                 :: i,iup,idw
+  integer                                 :: j,jup,jdw
+  integer                                 :: iph,i_el,j_el
+  integer                                 :: m,mup,mdw
+  integer                                 :: ms
+  integer                                 :: impi
+  integer                                 :: iorb,jorb,ispin,jspin,ibath
+  integer                                 :: kp,k1,k2,k3,k4
+  integer                                 :: p_dw_new, p_dw_old, p_up_new, p_up_old
+  integer                                 :: ialfa,ibeta,indx
+  real(8)                                 :: sg1,sg2,sg3,sg4
+#ifdef _CMPLX_NORMAL
+  complex(8)                              :: htmp,htmpup,htmpdw
+  complex(8),dimension(:,:,:),allocatable :: diag_hybr ![Nspin,Norb,Nbath] !these are real only, but gets initialized to cmplx for consistency
+  complex(8),dimension(:,:,:),allocatable :: bath_diag ![Nspin,Norb/1,Nbath]
+#else
+  real(8)                                 :: htmp,htmpup,htmpdw
+  real(8),dimension(:,:,:),allocatable    :: diag_hybr ![Nspin,Norb,Nbath]
+  real(8),dimension(:,:,:),allocatable    :: bath_diag ![Nspin,Norb/1,Nbath]
+#endif
+  logical                                 :: Jcondition
+  integer                                 :: Nfoo
+  integer                                 :: spinchange,icount
+  integer                                 :: iline
+  integer,dimension(2)                    :: orbvec, orbvec_dag, spinvec, spinvec_dag
+  integer,save,public                     :: iter=0
 
 contains
 
@@ -68,16 +72,24 @@ contains
     !
     !.. _j.cpc.2021.108261: https://doi.org/10.1016/j.cpc.2021.108261
     !
-    integer                            :: nrow !Global number of rows 
-    integer                            :: ncol !Global number of columns
-    integer                            :: qrow !Local number of rows on each thread
-    integer                            :: qcol !Local number of columns on each thread
-    real(8)                            :: a(nrow,qcol) ! Input vector to be transposed
-    real(8)                            :: b(ncol,qrow) ! Output vector :math:`b = v^T` 
-    integer,allocatable,dimension(:,:) :: send_counts,send_offset
-    integer,allocatable,dimension(:,:) :: recv_counts,recv_offset
-    integer                            :: counts,Ntot
-    integer                            :: i,j,irank,ierr
+    integer                             :: nrow !Global number of rows 
+    integer                             :: ncol !Global number of columns
+    integer                             :: qrow !Local number of rows on each thread
+    integer                             :: qcol !Local number of columns on each thread
+#ifdef _CMPLX_NORMAL
+    complex(8)                          :: A(nrow,qcol) ! Input vector to be transposed
+    complex(8)                          :: B(ncol,qrow) ! Output vector :math:`b = v^T`
+    complex(8),dimension(:),allocatable :: Vtmp
+#else
+    real(8)                             :: A(nrow,qcol) ! Input vector to be transposed
+    real(8)                             :: B(ncol,qrow) ! Output vector :math:`b = v^T`
+    real(8),dimension(:),allocatable    :: Vtmp
+#endif
+    integer,allocatable,dimension(:,:)  :: send_counts,send_offset
+    integer,allocatable,dimension(:,:)  :: recv_counts,recv_offset
+    integer                             :: counts,Ntot
+    integer                             :: i,j,irank,ierr
+
     !
     counts = Nrow/MpiSize
     Ntot   = Ncol/MpiSize
@@ -126,10 +138,23 @@ contains
     !
     !
     do j=1,Ntot
+       if(j<=size(A,2))then
+          Vtmp = A(:,j)            !automatic allocation
+       else
+          allocate(Vtmp(0))
+       endif
+#ifdef _CMPLX_NORMAL
        call MPI_AllToAllV(&
-            A(:,j),send_counts(:,j),send_offset(:,j),MPI_DOUBLE_PRECISION,&
+            Vtmp,send_counts(:,j),send_offset(:,j),MPI_DOUBLE_COMPLEX,&
+            B(:,:),recv_counts(:,j),recv_offset(:,j),MPI_DOUBLE_COMPLEX,&
+            MpiComm,ierr)
+#else
+       call MPI_AllToAllV(&
+            Vtmp,send_counts(:,j),send_offset(:,j),MPI_DOUBLE_PRECISION,&
             B(:,:),recv_counts(:,j),recv_offset(:,j),MPI_DOUBLE_PRECISION,&
             MpiComm,ierr)
+#endif
+       deallocate(Vtmp)
     enddo
     !
     call local_transpose(b,ncol,qrow)
@@ -139,8 +164,12 @@ contains
 
 
   subroutine local_transpose(mat,nrow,ncol)
-    integer                      :: nrow,ncol
-    real(8),dimension(Nrow,Ncol) :: mat
+    integer                         :: nrow,ncol
+#ifdef _CMPLX_NORMAL
+    complex(8),dimension(Nrow,Ncol) :: mat
+#else
+    real(8),dimension(Nrow,Ncol)    :: mat
+#endif
     mat = transpose(reshape(mat,[Ncol,Nrow]))
   end subroutine local_transpose
 #endif

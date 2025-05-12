@@ -17,40 +17,41 @@ MODULE ED_RDM_NORMAL
   !
   public                           :: imp_rdm_normal
 
-  real(8)                          :: Egs ! Ground-state energy
-  real(8)                          :: Ei
-  integer                          :: iorb,jorb,iorb1,jorb1
-  integer                          :: ispin,jspin
-  integer                          :: isite,jsite
-  integer                          :: ibath
-  integer                          :: r,m,k,k1,k2,k3,k4
-  integer                          :: iup,idw
-  integer                          :: jup,jdw
-  integer                          :: mup,mdw
-  integer                          :: iph,i_el,isectorDim
-  real(8)                          :: sgn,sgn1,sgn2,sg1,sg2,sg3,sg4
-  real(8)                          :: gs_weight
+  real(8)                             :: Egs ! Ground-state energy
+  real(8)                             :: Ei
+  integer                             :: iorb,jorb,iorb1,jorb1
+  integer                             :: ispin,jspin
+  integer                             :: isite,jsite
+  integer                             :: ibath
+  integer                             :: r,m,k,k1,k2,k3,k4
+  integer                             :: iup,idw
+  integer                             :: jup,jdw
+  integer                             :: mup,mdw
+  integer                             :: iph,i_el,isectorDim
+  real(8)                             :: sgn,sgn1,sgn2,sg1,sg2,sg3,sg4
+  real(8)                             :: gs_weight
   !
-  real(8)                          :: peso
-  real(8)                          :: norm
+  real(8)                             :: peso
+  real(8)                             :: norm
   !
-  integer                          :: i,j,ii,io,jo
-  integer                          :: isector,jsector
+  integer                             :: i,j,ii,io,jo
+  integer                             :: isector,jsector
   !
-  real(8),dimension(:),allocatable :: vvinit
-  real(8),dimension(:),allocatable :: state_dvec
-  logical                          :: Jcondition
+#ifdef _CMPLX_NORMAL
+  complex(8),dimension(:),allocatable :: v_state
+#else
+  real(8),dimension(:),allocatable    :: v_state
+#endif
+  logical                             :: Jcondition
   !
-  integer                          :: iImpUp,iImpDw
-  integer                          :: jImpUp,jImpDw
-  integer                          :: iBathUp,iBathDw
-  integer                          :: iBup,iBdw
-
-  integer                          :: LenBathUp,LenBathDw
-  integer,allocatable              :: BathUp(:),BathDw(:)
-
-  type(sector)                     :: sectorI,sectorJ
-  character(len=128)               :: fmt
+  integer                             :: iImpUp,iImpDw
+  integer                             :: jImpUp,jImpDw
+  integer                             :: iBathUp,iBathDw
+  integer                             :: iBup,iBdw
+  integer                             :: LenBathUp,LenBathDw
+  integer,allocatable                 :: BathUp(:),BathDw(:)
+  type(sector)                        :: sectorI,sectorJ
+  character(len=128)                  :: fmt
 
 contains 
 
@@ -103,14 +104,10 @@ contains
 
        isector = es_return_sector(state_list,istate)
        Ei      = es_return_energy(state_list,istate)
-#ifdef _MPI
-       if(MpiStatus)then
-          call es_return_dvector(MpiComm,state_list,istate, state_dvec)
-       else
-          call es_return_dvector(state_list,istate, state_dvec)
-       endif
+#ifdef _CMPLX_NORMAL
+       v_state =  es_return_cvec(state_list,istate)
 #else
-       call es_return_dvector(state_list,istate, state_dvec)
+       v_state =  es_return_dvec(state_list,istate)
 #endif
        !
        peso = 1.d0 ; if(finiteT)peso=exp(-beta*(Ei-Egs))
@@ -166,8 +163,13 @@ contains
                             jo = (JimpUp + 2**Norb*JimpDw) + 1
                             !-----------------------------------------------------------------
                             !(i,j)_th contribution to the (io,jo)_th element of \rho_IMP
+#ifdef _CMPLX_NORMAL
                             impurity_density_matrix(io,jo) = impurity_density_matrix(io,jo) + &
-                                 state_dvec(i)*state_dvec(j)*peso
+                                 v_state(i)*conjg(v_state(j))*peso
+#else
+                            impurity_density_matrix(io,jo) = impurity_density_matrix(io,jo) + &
+                                 v_state(i)*v_state(j)*peso
+#endif
                             !-----------------------------------------------------------------
                          enddo
                       enddo !=============================================================================
@@ -181,7 +183,7 @@ contains
           call delete_sector(sectorI)
        endif
        !
-       if(allocated(state_dvec))deallocate(state_dvec)
+       if(allocated(v_state))deallocate(v_state)
        !
     enddo
 #ifdef _DEBUG

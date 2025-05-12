@@ -92,7 +92,7 @@
            !
            idw=binary_search(Hsector%H(2)%map,p_dw_new)
            iup=binary_search(Hsector%H(1)%map,p_up_new)
-           htmp = coulomb_sundry(iline)%U * sg1 * sg2 * sg3 * sg4
+           htmp = one*coulomb_sundry(iline)%U * sg1 * sg2 * sg3 * sg4
            !
            i = iup + (idw-1)*DimUp + (iph-1)*DimUp*MpiQdw
            !

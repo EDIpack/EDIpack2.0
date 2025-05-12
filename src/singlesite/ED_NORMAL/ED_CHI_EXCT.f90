@@ -23,15 +23,20 @@ MODULE ED_CHI_EXCT
   public :: build_exctChi_normal
   public :: get_exctChi_normal
 
-  integer                          :: istate,iorb,jorb,ispin,jspin
-  integer                          :: isector,jsector,ksector
-  real(8),allocatable              :: vvinit(:)
-  real(8),allocatable              :: alfa_(:),beta_(:)
-  integer                          :: ipos,jpos
-  integer                          :: i,j,k
-  real(8)                          :: sgn,norm2
-  real(8),dimension(:),allocatable :: v_state
-  real(8)                          :: e_state
+  integer                             :: istate,iorb,jorb,ispin,jspin
+  integer                             :: isector,jsector,ksector
+  real(8),allocatable                 :: alfa_(:),beta_(:)
+  integer                             :: ipos,jpos
+  integer                             :: i,j,k
+  real(8)                             :: sgn,norm2
+#ifdef _CMPLX_NORMAL
+  complex(8),allocatable              :: vvinit(:)
+  complex(8),dimension(:),allocatable :: v_state
+#else
+  real(8),allocatable                 :: vvinit(:)
+  real(8),dimension(:),allocatable    :: v_state
+#endif
+  real(8)                             :: e_state
 
 
 
@@ -83,9 +88,13 @@ contains
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    integer      :: iorb,jorb
-    type(sector) :: sectorI
-    real(8),dimension(:),allocatable :: vup,vdw,vtmp
+    integer                             :: iorb,jorb
+    type(sector)                        :: sectorI
+#ifdef _CMPLX_NORMAL
+    complex(8),dimension(:),allocatable :: vup,vdw,vtmp
+#else
+    real(8),dimension(:),allocatable    :: vup,vdw,vtmp
+#endif
     !
     write(LOGfile,"(A)")"Get singlet Chi_exct_l"//reg(txtfy(iorb))//reg(txtfy(jorb))
     !
@@ -93,7 +102,11 @@ contains
        call allocate_GFmatrix(exctChimatrix(0,iorb,jorb),istate,Nchan=1)
        isector    =  es_return_sector(state_list,istate)
        e_state    =  es_return_energy(state_list,istate)
+#ifdef _CMPLX_NORMAL
+       v_state    =  es_return_cvec(state_list,istate)
+#else
        v_state    =  es_return_dvec(state_list,istate)
+#endif
        !
        ksector = getCsector(1,2,isector)       
        if(ksector/=0)then
@@ -130,7 +143,11 @@ contains
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
     integer                          :: iorb,jorb
-    real(8),dimension(:),allocatable :: vup,vdw,vtmp
+#ifdef _CMPLX_NORMAL
+    complex(8),dimension(:),allocatable :: vup,vdw,vtmp
+#else
+    real(8),dimension(:),allocatable    :: vup,vdw,vtmp
+#endif
     !
     write(LOGfile,"(A)")"Get triplet Z Chi_exct_l"//reg(txtfy(iorb))//reg(txtfy(jorb))
     !
@@ -139,7 +156,11 @@ contains
        call allocate_GFmatrix(exctChimatrix(2,iorb,jorb),istate,Nchan=1)
        isector    =  es_return_sector(state_list,istate)
        e_state    =  es_return_energy(state_list,istate)
+#ifdef _CMPLX_NORMAL
+       v_state    =  es_return_cvec(state_list,istate)
+#else
        v_state    =  es_return_dvec(state_list,istate)
+#endif
        !
        !Z - Component:
        !Z_{ab}= C^+_{a,up}C_{b,up} - C^+_{a,dw}C_{b,dw}
@@ -204,7 +225,11 @@ contains
        call allocate_GFmatrix(exctChimatrix(1,iorb,jorb),istate,Nchan=2)
        isector    =  es_return_sector(state_list,istate)
        e_state    =  es_return_energy(state_list,istate)
+#ifdef _CMPLX_NORMAL
+       v_state    =  es_return_cvec(state_list,istate)
+#else
        v_state    =  es_return_dvec(state_list,istate)
+#endif
        !
        !X - Component == Y -Component 
        !X_{ab}= C^+_{a,up}C_{b,dw} + C^+_{a,dw}C_{b,up}

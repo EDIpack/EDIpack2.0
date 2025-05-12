@@ -92,10 +92,10 @@
                  call cdg(iorb,k1,k2,sg2)
                  iup = binary_search(Hsector%H(1)%map,k2)
                  !
-                 htmp = exc_field(1)*sg1*sg2
+                 htmp = one*exc_field(1)*sg1*sg2
                  call sp_insert_element(spH0ups(1),htmp,iup,jup)
                  !
-                 htmp = exc_field(4)*sg1*sg2
+                 htmp = one*exc_field(4)*sg1*sg2
                  call sp_insert_element(spH0ups(1),htmp,iup,jup)
               endif
            enddo
