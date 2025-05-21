@@ -1,7 +1,7 @@
 FC=mpif90
 
-INC=$(shell pkg-config --cflags edipack2 scifor)
-LIB=$(shell pkg-config --libs   edipack2 scifor)
+INC=$(shell pkg-config --cflags edipack scifor)
+LIB=$(shell pkg-config --libs   edipack scifor)
 
 FFLAG = -O2 -ffree-line-length-none -cpp -D_MPI
 

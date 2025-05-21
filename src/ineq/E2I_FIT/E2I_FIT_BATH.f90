@@ -1,7 +1,7 @@
 MODULE E2I_BATH_FIT
   !:synopsis: Bath fitting routines: real-space DMFT extension
   !Contains routines that fit the Impurity model bath
-  USE EDIPACK2
+  USE EDIPACK
   !
   USE E2I_VARS_GLOBAL
   USE E2I_AUX_FUNX

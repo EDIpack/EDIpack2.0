@@ -1,6 +1,6 @@
 MODULE COMMON
   USE SCIFOR
-  USE EDIPACK2
+  USE EDIPACK
   implicit none
 
 

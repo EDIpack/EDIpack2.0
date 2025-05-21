@@ -103,7 +103,7 @@ module ED_EIGENSPACE
   !
   type(sparse_espace)                        :: state_list
   type(full_espace),dimension(:),allocatable :: espace
-  public :: state_list          !The shared instance of the :f:var:`sparse_espace` used in the :code:`EDIpack2.0` library
+  public :: state_list          !The shared instance of the :f:var:`sparse_espace` used in the :code:`EDIpack` library
   public :: espace
 
 

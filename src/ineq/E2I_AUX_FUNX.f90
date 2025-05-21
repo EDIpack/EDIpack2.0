@@ -3,7 +3,7 @@ MODULE E2I_AUX_FUNX
   !Hosts a number of auxiliary procedures required in different parts of the code.
   !Specifically, it implements: creation/annihilation fermionic operators, binary decomposition of integer representation of Fock states and setup the local impurity Hamiltonian
   !
-  USE EDIPACK2
+  USE EDIPACK
   USE E2I_VARS_GLOBAL
   !
   USE SF_TIMER

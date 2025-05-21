@@ -11,7 +11,7 @@ fi
 if $RUNFORD; then
 cat <<EOF > ford_doc.md
 ---
-project: EDIpack2.0
+project: EDIpack
 preprocess:false
 display:none
 hide_undoc:true
@@ -82,7 +82,7 @@ for ifile in *.html; do
   mv $ifile.new $ifile
 done
 
-#edipack2.0 in consistent blue. Use both regex
+#edipack in consistent blue. Use both regex
 for ifile in *.html; do
   #if there's link
   awk '/title="ED/ {print; next_line=1; next} next_line {gsub(/#c061cb/, "#2980b9"); next_line=0} 1' $ifile > $ifile.new
@@ -202,7 +202,7 @@ for file in $(cat list); do
   if [ $name == "ed_version" ]; then
     relativepath=$(find ../../ -type f -name "*revision.in" | awk -Fsrc '{print $2}')  
   fi
-  githubpath="https://github.com/EDIpack/EDIpack2.0/tree/${current_branch}/src${relativepath}"
+  githubpath="https://github.com/EDIpack/EDIpack/tree/${current_branch}/src${relativepath}"
   echo $name_upper > module/$file
   echo "=====================================" >> module/$file
   echo " " >> module/$file

@@ -1,4 +1,4 @@
-# EDIpack2 library
+# EDIpack library
 FILE(GLOB ED_IO_SRC
   ED_IO.f90  
   )

@@ -3,7 +3,7 @@
 Attractive Hubbard model
 =============================================
 
-In this second example we focus on the use of |edipack2| ED method
+In this second example we focus on the use of |edipack| ED method
 as a solver for DMFT in presence of superconductivity, i.e. :f:var:`ed_mode` = **superc**. 
 
 We consider the simple, but non-trivial, case of the attractive
@@ -26,14 +26,14 @@ modules, including  `DMFT_TOOLS`_ library to perform some tasks
 related to DMFT implementation. We read the input file using
 :f:func:`ed_read_input`. Given the simplicity of this program we do
 **not** make use of MPI setup here. In the absence of MPI
-initialization, the `EDIpack2.0` code will automatically fall back to
+initialization, the `EDIpack.0` code will automatically fall back to
 serial execution. 
    
 
 .. code-block:: fortran
 
    program ed_ahm_2d
-      USE EDIPACK2
+      USE EDIPACK
       USE SCIFOR
       USE DMFT_TOOLS
       implicit none
@@ -196,7 +196,7 @@ real-axis Green's functions using the retrieved normal and anomalous self-energi
 Results
 ------------------------------
 
-We present some results obtained using this `EDIpack2.0` based
+We present some results obtained using this `EDIpack.0` based
 program. To begin with, we show in panel A a snapshot of the evolution
 of the spectral functions :math:`-\Im G(\omega)/\pi` upon increasing
 the attraction strength :math:`U`. The tiny gap visible for small
@@ -220,7 +220,7 @@ mean-field solution.
 In the remaining two panels C and D we analyze the temperature
 behavior of superconducting solution at the edge of the BCS regime,
 :math:`U=0.5`. This  also illustrates the
-capability of  `EDIpack2.0`  to obtain finite temperature results.
+capability of  `EDIpack.0`  to obtain finite temperature results.
 In C we report the fall off of the pair amplitude as a function of
 temperature, while in panel D we show the corresponding potential
 energy behavior.  

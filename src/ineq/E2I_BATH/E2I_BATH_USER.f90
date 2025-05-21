@@ -1,6 +1,6 @@
 MODULE E2I_BATH_USER
   !:synopsis: Bath user routines: real-space DMFT extension
-  USE EDIPACK2
+  USE EDIPACK
   !Implements functions the user can use to enforce specific symmetry operations on the bath array.
   !
   USE E2I_VARS_GLOBAL

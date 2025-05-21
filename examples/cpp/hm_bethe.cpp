@@ -6,7 +6,7 @@
 #include <cmath>
 #include <cstring>
 #include <mpi.h>
-#include <edipack2_cbinding.h>
+#include <edipack_cbindings.h>
 
 
 using namespace std;

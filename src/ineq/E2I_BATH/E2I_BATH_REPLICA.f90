@@ -4,7 +4,7 @@ MODULE E2I_BATH_REPLICA
   !This module implements the functions to set the matrix basis :math:`\{ \hat{O}_i \}_{i=1,\dots,N_{sym}}` and the initial variational parameters :math:`\vec{\lambda}` used to decompose each local bath hamiltonian for the  :f:var:`replica` and :f:var:`general` bath types.  
   !The functions extends the functionalities to the case of multiple inequivalent impurities.
   !
-  USE EDIPACK2
+  USE EDIPACK
   !
   USE E2I_VARS_GLOBAL
   USE E2I_AUX_FUNX

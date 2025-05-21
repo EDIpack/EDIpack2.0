@@ -6,11 +6,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="description" content="Documentation for EDIpack2.0">
+      <meta name="description" content="Documentation for EDIpack">
     <meta name="author" content="" >
     <link rel="icon" href="../favicon.png">
 
-    <title>ED_SPARSE_MATRIX &ndash; EDIpack2.0</title>
+    <title>ED_SPARSE_MATRIX &ndash; EDIpack</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -29,7 +29,7 @@
     <div class="container-fluid mb-sm-4 mb-xl-2">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
-          <a class="navbar-brand" href="../index.html">EDIpack2.0 </a>
+          <a class="navbar-brand" href="../index.html">EDIpack </a>
           <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar"
                   aria-expanded="false" aria-controls="navbar" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon">
@@ -136,9 +136,9 @@
         <ul class="list-group list-group-flush">
             <li class="list-group-item">
               <ul class="list-inline">
+                  <li class="list-inline-item">SF_MPI</li>
                   <li class="list-inline-item"><a href='ed_input_vars.html'>ED_INPUT_VARS</a></li>
                   <li class="list-inline-item"><a href='http://www.mpi-forum.org/docs/mpi-3.1/mpi31-report/node410.htm'>mpi</a></li>
-                  <li class="list-inline-item">SF_MPI</li>
               </ul>
             </li>
             <li class="list-group-item">
@@ -201,69 +201,66 @@
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M292.02,-83.96C271.12,-77.83 245.94,-70.43 225.83,-64.52"/>
 <polygon fill="#000000" stroke="#000000" points="226.69,-61.13 216.11,-61.67 224.72,-67.84 226.69,-61.13"/>
 </g>
-<!-- SF_IOTOOLS -->
+<!-- ED_VERSION -->
 <g id="module~~ed_sparse_matrix~~UsesGraph_node5" class="node">
-<title>SF_IOTOOLS</title>
+<title>ED_VERSION</title>
 <polygon fill="#337ab7" stroke="#337ab7" points="91.5,-192 12.5,-192 12.5,-168 91.5,-168 91.5,-192"/>
-<text text-anchor="middle" x="52" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SF_IOTOOLS</text>
+<text text-anchor="middle" x="52" y="-177.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ED_VERSION</text>
 </g>
-<!-- module~ed_input_vars&#45;&gt;SF_IOTOOLS -->
+<!-- module~ed_input_vars&#45;&gt;ED_VERSION -->
 <g id="module~~ed_sparse_matrix~~UsesGraph_edge4" class="edge">
-<title>module~ed_input_vars&#45;&gt;SF_IOTOOLS</title>
+<title>module~ed_input_vars&#45;&gt;ED_VERSION</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M154.89,-108.12C149.69,-110.68 144.53,-113.64 140,-117 120.24,-131.63 123.92,-144.59 104,-159 101.93,-160.5 99.74,-161.91 97.47,-163.24"/>
 <polygon fill="#000000" stroke="#000000" points="95.69,-160.23 88.46,-167.97 98.94,-166.43 95.69,-160.23"/>
 </g>
-<!-- SF_PARSE_INPUT -->
+<!-- SF_IOTOOLS -->
 <g id="module~~ed_sparse_matrix~~UsesGraph_node6" class="node">
-<title>SF_PARSE_INPUT</title>
-<polygon fill="#337ab7" stroke="#337ab7" points="104,-150 0,-150 0,-126 104,-126 104,-150"/>
-<text text-anchor="middle" x="52" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SF_PARSE_INPUT</text>
+<title>SF_IOTOOLS</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="91.5,-150 12.5,-150 12.5,-126 91.5,-126 91.5,-150"/>
+<text text-anchor="middle" x="52" y="-135.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SF_IOTOOLS</text>
 </g>
-<!-- module~ed_input_vars&#45;&gt;SF_PARSE_INPUT -->
+<!-- module~ed_input_vars&#45;&gt;SF_IOTOOLS -->
 <g id="module~~ed_sparse_matrix~~UsesGraph_edge5" class="edge">
-<title>module~ed_input_vars&#45;&gt;SF_PARSE_INPUT</title>
+<title>module~ed_input_vars&#45;&gt;SF_IOTOOLS</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M149.31,-108.04C134.35,-112.69 117.05,-118.07 101.28,-122.98"/>
 <polygon fill="#000000" stroke="#000000" points="100.2,-119.65 91.69,-125.96 102.28,-126.33 100.2,-119.65"/>
 </g>
-<!-- SF_VERSION -->
+<!-- SF_PARSE_INPUT -->
 <g id="module~~ed_sparse_matrix~~UsesGraph_node7" class="node">
+<title>SF_PARSE_INPUT</title>
+<polygon fill="#337ab7" stroke="#337ab7" points="104,-108 0,-108 0,-84 104,-84 104,-108"/>
+<text text-anchor="middle" x="52" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SF_PARSE_INPUT</text>
+</g>
+<!-- module~ed_input_vars&#45;&gt;SF_PARSE_INPUT -->
+<g id="module~~ed_sparse_matrix~~UsesGraph_edge6" class="edge">
+<title>module~ed_input_vars&#45;&gt;SF_PARSE_INPUT</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M139.64,-96C131.47,-96 122.88,-96 114.43,-96"/>
+<polygon fill="#000000" stroke="#000000" points="114.21,-92.5 104.21,-96 114.21,-99.5 114.21,-92.5"/>
+</g>
+<!-- SF_VERSION -->
+<g id="module~~ed_sparse_matrix~~UsesGraph_node8" class="node">
 <title>SF_VERSION</title>
-<polygon fill="#337ab7" stroke="#337ab7" points="91.5,-108 12.5,-108 12.5,-84 91.5,-84 91.5,-108"/>
-<text text-anchor="middle" x="52" y="-93.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SF_VERSION</text>
+<polygon fill="#337ab7" stroke="#337ab7" points="91.5,-66 12.5,-66 12.5,-42 91.5,-42 91.5,-66"/>
+<text text-anchor="middle" x="52" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">SF_VERSION</text>
 </g>
 <!-- module~ed_input_vars&#45;&gt;SF_VERSION -->
-<g id="module~~ed_sparse_matrix~~UsesGraph_edge6" class="edge">
+<g id="module~~ed_sparse_matrix~~UsesGraph_edge7" class="edge">
 <title>module~ed_input_vars&#45;&gt;SF_VERSION</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M139.64,-96C127.35,-96 114.13,-96 101.81,-96"/>
-<polygon fill="#000000" stroke="#000000" points="101.72,-92.5 91.72,-96 101.72,-99.5 101.72,-92.5"/>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M149.31,-83.96C134.35,-79.31 117.05,-73.93 101.28,-69.02"/>
+<polygon fill="#000000" stroke="#000000" points="102.28,-65.67 91.69,-66.04 100.2,-72.35 102.28,-65.67"/>
 </g>
 <!-- iso_c_binding -->
-<g id="module~~ed_sparse_matrix~~UsesGraph_node8" class="node">
+<g id="module~~ed_sparse_matrix~~UsesGraph_node9" class="node">
 <title>iso_c_binding</title>
-<g id="a_module~~ed_sparse_matrix~~UsesGraph_node8"><a xlink:href="http://fortranwiki.org/fortran/show/iso_c_binding" xlink:title="iso_c_binding">
-<polygon fill="#337ab7" stroke="#337ab7" points="91,-66 13,-66 13,-42 91,-42 91,-66"/>
-<text text-anchor="middle" x="52" y="-51.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_c_binding</text>
+<g id="a_module~~ed_sparse_matrix~~UsesGraph_node9"><a xlink:href="http://fortranwiki.org/fortran/show/iso_c_binding" xlink:title="iso_c_binding">
+<polygon fill="#337ab7" stroke="#337ab7" points="91,-24 13,-24 13,0 91,0 91,-24"/>
+<text text-anchor="middle" x="52" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">iso_c_binding</text>
 </a>
 </g>
 </g>
 <!-- module~ed_input_vars&#45;&gt;iso_c_binding -->
-<g id="module~~ed_sparse_matrix~~UsesGraph_edge7" class="edge">
-<title>module~ed_input_vars&#45;&gt;iso_c_binding</title>
-<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M149.31,-83.96C134.22,-79.27 116.75,-73.83 100.87,-68.89"/>
-<polygon fill="#000000" stroke="#000000" points="101.81,-65.52 91.22,-65.89 99.73,-72.2 101.81,-65.52"/>
-</g>
-<!-- module~ed_version -->
-<g id="module~~ed_sparse_matrix~~UsesGraph_node9" class="node">
-<title>module~ed_version</title>
-<g id="a_module~~ed_sparse_matrix~~UsesGraph_node9"><a xlink:href="../module/ed_version.html" xlink:title="ED_VERSION">
-<polygon fill="#337ab7" stroke="#337ab7" points="91.5,-24 12.5,-24 12.5,0 91.5,0 91.5,-24"/>
-<text text-anchor="middle" x="52" y="-9.6" font-family="Helvetica,sans-Serif" font-size="10.50" fill="white">ED_VERSION</text>
-</a>
-</g>
-</g>
-<!-- module~ed_input_vars&#45;&gt;module~ed_version -->
 <g id="module~~ed_sparse_matrix~~UsesGraph_edge8" class="edge">
-<title>module~ed_input_vars&#45;&gt;module~ed_version</title>
+<title>module~ed_input_vars&#45;&gt;iso_c_binding</title>
 <path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M154.89,-83.88C149.69,-81.32 144.53,-78.36 140,-75 120.24,-60.37 123.92,-47.41 104,-33 101.93,-31.5 99.74,-30.09 97.47,-28.76"/>
 <polygon fill="#000000" stroke="#000000" points="98.94,-25.57 88.46,-24.03 95.69,-31.77 98.94,-25.57"/>
 </g>
@@ -495,7 +492,7 @@ modules which it uses.
         <div class="row justify-content-between">
           <div class="col">
             <p>
-              EDIpack2.0
+              EDIpack
               &copy; 2025 
 </p>
           </div>
@@ -503,7 +500,7 @@ modules which it uses.
             <p class="text-end">
               Documentation generated by
               <a href="https://github.com/Fortran-FOSS-Programmers/ford">FORD</a>
- on 2025-04-25T12:19:18.965864+0200             </p>
+ on 2025-05-21T17:23:45.400143+0200             </p>
           </div>
         </div>
         <br>

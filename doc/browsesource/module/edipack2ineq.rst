@@ -6,5 +6,5 @@ EDIPACK2INEQ
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/master/src/ineq/EDIPACK2INEQ.f90>`_ for :f:mod:`edipack2ineq` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack/tree/rename_to_edipack/src/ineq/EDIPACK2INEQ.f90>`_ for :f:mod:`edipack2ineq` on GitHub
  

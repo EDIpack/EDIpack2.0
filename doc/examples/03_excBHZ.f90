@@ -1,5 +1,5 @@
 program ed_bhz
-  USE EDIPACK2
+  USE EDIPACK
   USE SCIFOR
   USE DMFT_TOOLS
   USE MPI
@@ -103,7 +103,7 @@ program ed_bhz
   allocate(Hloc(Nso,Nso))
   Hloc = sum(Hk,dim=3)/Lk
   where(abs(dreal(Hloc))<1d-6)Hloc=zero
-  !> Set H_{loc} in EDIpack2
+  !> Set H_{loc} in EDIpack
   call ed_set_hloc(Hloc)
 
 

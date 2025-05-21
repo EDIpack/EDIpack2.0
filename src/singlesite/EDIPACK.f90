@@ -1,5 +1,5 @@
-MODULE EDIPACK2
-  !:synopsis: EDIpack2.0 library frontend
+MODULE EDIPACK
+  !:synopsis: EDIpack library frontend
   USE ED_INPUT_VARS  , only: &
        ed_read_input , &
        ed_update_input,&
@@ -148,5 +148,5 @@ MODULE EDIPACK2
   USE ED_BATH_FIT,  only: ed_chi2_fitgf
 
 
-END MODULE EDIPACK2
+END MODULE EDIPACK
 

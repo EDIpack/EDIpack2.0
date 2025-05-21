@@ -6,8 +6,8 @@ FFLAGS= ${FFLAG} ${FPPMPI}
 .SUFFIXES: .f90
 .PHONY: clean
 
-HAS_INEQ:=$(shell pkg-config --variable=ineq edipack2)
-GLOB_INC:=$(shell pkg-config --cflags scifor edipack2)
+HAS_INEQ:=$(shell pkg-config --variable=ineq edipack)
+GLOB_INC:=$(shell pkg-config --cflags scifor edipack)
 
 OBJS=ASSERTING.o COMMON.o
 

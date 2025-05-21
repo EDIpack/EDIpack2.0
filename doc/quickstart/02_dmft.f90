@@ -1,5 +1,5 @@
 program ed_hm_bethe
-  USE EDIPACK2
+  USE EDIPACK
   USE SCIFOR
   USE DMFT_TOOLS
   implicit none

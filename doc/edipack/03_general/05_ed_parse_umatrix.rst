@@ -3,7 +3,7 @@
 Parse Umatrix
 =======================
 
-EDIpack2.0 offers the user two ways of providing the interaction Hamiltonian.
+EDIpack offers the user two ways of providing the interaction Hamiltonian.
 
 The default way is to use the in-built variables :f:var:`ULOC`, :f:var:`UST`,
 :f:var:`JH`, :f:var:`JX`, :f:var:`JP`, which implement a Hubbard-Kanamori Hamiltonian for a maximum of 5 orbitals.

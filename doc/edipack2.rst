@@ -1,17 +1,17 @@
-.. _edipack2:
+.. _edipack:
 
-The EDIpack2 Fortran Library
+The EDIpack Fortran Library
 #################################################################################
 
-Here we give an overview of the structure of the |edipack2| library,
+Here we give an overview of the structure of the |edipack| library,
 with a detailed description of the relevant modules and procedures.
 
 
 :ref:`Library Frontend <edipackmodule>`
 =================================================================
 
-The :f:mod:`EDIPACK2` module represents the main user interface (or Fortran API) 
-of the |edipack2| library. This modules gives access to all the
+The :f:mod:`EDIPACK` module represents the main user interface (or Fortran API) 
+of the |edipack| library. This modules gives access to all the
 available procedures and variables as needed to solve quantum impurity problems.  
 
 .. toctree::
@@ -19,13 +19,13 @@ available procedures and variables as needed to solve quantum impurity problems.
    :maxdepth: 2
    :hidden:
       
-   edipack2/01_edipackmodule
+   edipack/01_edipackmodule
       
 
 :ref:`Core Solver Routines <main>`
 =================================================================
      
-The module :f:mod:`ED_MAIN` wraps the |edipack2| algorithm into
+The module :f:mod:`ED_MAIN` wraps the |edipack| algorithm into
 three functions, one for each step: initialization, solution and finalization. 
 
 .. toctree::
@@ -33,7 +33,7 @@ three functions, one for each step: initialization, solution and finalization.
    :maxdepth: 2
    :hidden:
 
-   edipack2/02_main
+   edipack/02_main
 
 
 General Environment
@@ -59,7 +59,7 @@ The set includes:
    :maxdepth: 2
    :glob:
 
-   edipack2/03_general/*
+   edipack/03_general/*
 
 
 Classes
@@ -85,7 +85,7 @@ functions in terms of weights and poles of the Kallen-Lehmann representation.
    :maxdepth: 2
    :glob:
 
-   edipack2/04_classes/*
+   edipack/04_classes/*
 
 
   
@@ -95,7 +95,7 @@ functions in terms of weights and poles of the Kallen-Lehmann representation.
 =================================================================
 
 The :f:mod:`ED_SECTOR` module implements the construction of the symmetry
-sectors for the three sets of quantum numbers :math:`\vec{Q}` considered in |edipack2|, that we
+sectors for the three sets of quantum numbers :math:`\vec{Q}` considered in |edipack|, that we
 recall are:
 
 * :math:`\vec{Q}=[\vec{N}_\uparrow,\vec{N}_\downarrow]` for which
@@ -114,14 +114,14 @@ recall are:
    :maxdepth: 2
    :hidden:
 
-   edipack2/05_sectors
+   edipack/05_sectors
 
 
 
 :ref:`Quantum Impurity Bath  <bath>`
 =================================================================
 
-In |edipack2| the bath is handled using a Reverse Communication
+In |edipack| the bath is handled using a Reverse Communication
 Strategy. All the procedures designed to define or handle the
 discretized bath as well as those to evaluate suitable functions of
 the bath are grouped in set of modules.   
@@ -132,13 +132,13 @@ the bath are grouped in set of modules.
    :maxdepth: 2
    :hidden:
 
-   edipack2/06_bath
+   edipack/06_bath
    
 
 :ref:`Hamiltonian <hamiltonian>`
 =================================================================
 
-This part of the |edipack2| code implements the setup of the
+This part of the |edipack| code implements the setup of the
 sector Hamiltonian in each  operational modes,  corresponding to the
 choice of one of the  symmetries implemented in the code selected by the variable :f:var:`ed_mode` =  :code:`normal, superc, nosu2`. See
 :f:mod:`ED_SECTOR` for more info about the symmetries implemented in
@@ -154,7 +154,7 @@ vector product, required by the Arpack/Lanczos.
    :glob:
    :hidden:
       
-   edipack2/07_hamiltonian
+   edipack/07_hamiltonian
 
 
    
@@ -162,7 +162,7 @@ vector product, required by the Arpack/Lanczos.
 :ref:`Exact Diagonalization <diag>`
 =================================================================
 
-This part of the |edipack2| code implements the exact
+This part of the |edipack| code implements the exact
 diagonalization of the general, single-site, multi-orbital quantum
 impurity problem in each of the specific symmetry implemented in the
 code. The operational modes are selected by the variable
@@ -178,7 +178,7 @@ distinct class of modules.
    :glob:
    :hidden:
 
-   edipack2/08_diag
+   edipack/08_diag
    
 
 
@@ -186,7 +186,7 @@ distinct class of modules.
 :ref:`Green's Functions  <greensfunctions>`
 =================================================================
      
-This part of the |edipack2| code implements the calculation of the
+This part of the |edipack| code implements the calculation of the
 impurity interacting Green's functions, self-energy functions and
 impurity susceptibilities. Calculations are performed in  each operational mode,  corresponding to the
 choice of the specific symmetry implemented in the code, i.e. which
@@ -201,13 +201,13 @@ the code).
    :glob:
    :hidden:
       
-   edipack2/09_greensfunctions
+   edipack/09_greensfunctions
 
 
 :ref:`Susceptibilities  <chifunctions>`
 =================================================================
      
-This part of the |edipack2| code implements the calculation of the
+This part of the |edipack| code implements the calculation of the
 impurity susceptibilities in different physical channels: spin,
 charge, pair and excitonic. The calculations are performed for
 :f:var:`ed_mode` =  :code:`normal`.  
@@ -218,7 +218,7 @@ charge, pair and excitonic. The calculations are performed for
    :glob:
    :hidden:
       
-   edipack2/10_chifunctions
+   edipack/10_chifunctions
 
 
    
@@ -226,7 +226,7 @@ charge, pair and excitonic. The calculations are performed for
 :ref:`Observables <observables>`
 =================================================================
 
-This part of the |edipack2| code implements the calculation of the
+This part of the |edipack| code implements the calculation of the
 impurity observables and static correlations, such as density,
 internal energy or double occupation. Calculations are performed in
 each operational mode,  corresponding to the choice of the specific
@@ -244,14 +244,14 @@ the code).
    :glob:
    :hidden:
 
-   edipack2/11_observables
+   edipack/11_observables
 
 
    
 :ref:`Reduced Density Matrix <rdm>`
 =================================================================
 
-This part of the |edipack2| code implements the calculation of the
+This part of the |edipack| code implements the calculation of the
 impurity Reduced Density Matrix (RDM). Calculations are performed in
 each operational mode,  corresponding to the choice of the specific
 symmetry implemented in the code, i.e. which quantum numbers are to be
@@ -268,7 +268,7 @@ through the routines listed in :f:mod:`ED_IO`.
    :glob:
    :hidden:
 
-   edipack2/12_rdm
+   edipack/12_rdm
 
 
    
@@ -289,7 +289,7 @@ frequency domain.
    :maxdepth: 2
    :hidden:
       
-   edipack2/13_io
+   edipack/13_io
 
 
 
@@ -311,7 +311,7 @@ Anderson Green's function with the aim of updating the user bath parameters.
    :maxdepth: 2
    :hidden:
       
-   edipack2/14_fit
+   edipack/14_fit
 
 
 

@@ -1,6 +1,6 @@
-MODULE EDIPACK2_C_COMMON
+MODULE EDIPACK_C_COMMON
 !:synopsis: Fortran-C bindings: common routines and variables
-  USE EDIPACK2
+  USE EDIPACK
   USE SCIFOR
   USE ISO_C_BINDING
   implicit none
@@ -81,4 +81,4 @@ contains
   end function get_ed_mode_c
   
 
-END MODULE EDIPACK2_C_COMMON
+END MODULE EDIPACK_C_COMMON

@@ -54,6 +54,9 @@ edipack2_c_common.rst
 edipack2_c.rst
 edipack2.rst
 edipack2ineq.rst
+edipack_c_common.rst
+edipack_c.rst
+edipack.rst
 ed_main.rst
 ed_observables.rst
 ed_observables_nonsu2.rst
@@ -69,4 +72,3 @@ ed_setup.rst
 ed_sparse_map.rst
 ed_sparse_matrix.rst
 ed_vars_global.rst
-ed_version.rst

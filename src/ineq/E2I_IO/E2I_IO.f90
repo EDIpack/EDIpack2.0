@@ -1,7 +1,7 @@
 MODULE E2I_IO
   !:synopsis: Retrieve observables and response functions, inequivalent sites version
   !Contains a set of routines that retrieve quantities such as Green's functions, self-energies (see :f:mod:`ed_greens_functions` ) and observables (from :f:mod:`ed_observables` ) and pass them to the user, as well ass routines to read and store Green's function and self-energies.
-  USE EDIPACK2
+  USE EDIPACK
   !
   USE E2I_VARS_GLOBAL
   USE E2I_AUX_FUNX
@@ -15,7 +15,7 @@ MODULE E2I_IO
   private
 
   interface ed_get_gimp
-     !This subroutine gets from the EDIpack2 library the value of the impurity Green's function calculated 
+     !This subroutine gets from the EDIpack library the value of the impurity Green's function calculated 
      !on the Matsubara or real-frequency axis, with number of frequencies :f:var:`lmats` or :f:var:`lreal` .
      !
      !The impurity Green's function is an array having the following possible dimensions:
@@ -31,7 +31,7 @@ MODULE E2I_IO
   end interface ed_get_gimp
 
   interface ed_get_dimp
-     !This subroutine gets from the EDIpack2 library the value of the impurity phonon's Green's function calculated 
+     !This subroutine gets from the EDIpack library the value of the impurity phonon's Green's function calculated 
      !on the Matsubara or real-frequency axis, with number of frequencies :f:var:`lmats` or :f:var:`lreal` .
      !
      !The impurity phonon's Green's function is an array having the following possible dimensions:
@@ -42,7 +42,7 @@ MODULE E2I_IO
   end interface ed_get_dimp
 
   interface ed_get_sigma
-     !| This subrotine gets from the EDIpack2 library the value of the self-energy calculated 
+     !| This subrotine gets from the EDIpack library the value of the self-energy calculated 
      ! on the Matsubara or real-frequency axis, with number of frequencies :f:var:`lmats` or :f:var:`lreal` .
      !| The self-energy is an array having the following possible dimensions:
      !
@@ -59,7 +59,7 @@ MODULE E2I_IO
 
 
   interface ed_get_g0imp
-     !| This subroutine gets from the EDIpack2 library the value of the impurity non-interacting Green's function calculated 
+     !| This subroutine gets from the EDIpack library the value of the impurity non-interacting Green's function calculated 
      ! on the Matsubara or real-frequency axis, with number of frequencies :f:var:`lmats` or :f:var:`lreal` .
      !| It autonomously decides whether the system is single-impurity or real-space DMFT based on the :f:var:`bath` shape
      !
@@ -83,7 +83,7 @@ MODULE E2I_IO
 
 
   interface ed_get_spinChi
-     !This subroutine gets from the EDIpack2 library the value of the impurity spin susceptibility function calculated 
+     !This subroutine gets from the EDIpack library the value of the impurity spin susceptibility function calculated 
      !on the Matsubara or real-frequency axis, with number of frequencies :f:var:`lmats` or :f:var:`lreal` .
      !
      !The impurity spin susceptibility function is an array having the following possible dimensions:
@@ -94,7 +94,7 @@ MODULE E2I_IO
   end interface ed_get_spinChi
 
   interface ed_get_densChi
-     !This subroutine gets from the EDIpack2 library the value of the impurity dens susceptibility function calculated 
+     !This subroutine gets from the EDIpack library the value of the impurity dens susceptibility function calculated 
      !on the Matsubara or real-frequency axis, with number of frequencies :f:var:`lmats` or :f:var:`lreal` .
      !
      !The impurity dens susceptibility function is an array having the following possible dimensions:
@@ -105,7 +105,7 @@ MODULE E2I_IO
   end interface ed_get_densChi
 
   interface ed_get_pairChi
-     !This subroutine gets from the EDIpack2 library the value of the impurity pair susceptibility function calculated 
+     !This subroutine gets from the EDIpack library the value of the impurity pair susceptibility function calculated 
      !on the Matsubara or real-frequency axis, with number of frequencies :f:var:`lmats` or :f:var:`lreal` .
      !
      !The impurity pair susceptibility function is an array having the following possible dimensions:
@@ -116,7 +116,7 @@ MODULE E2I_IO
   end interface ed_get_pairChi
 
   interface ed_get_exctChi
-     !This subroutine gets from the EDIpack2 library the value of the impurity exct susceptibility function calculated 
+     !This subroutine gets from the EDIpack library the value of the impurity exct susceptibility function calculated 
      !on the Matsubara or real-frequency axis, with number of frequencies :f:var:`lmats` or :f:var:`lreal` .
      !
      !The impurity exct susceptibility function is an array having the following possible dimensions:
@@ -129,7 +129,7 @@ MODULE E2I_IO
 
   !Observables
   interface ed_get_dens
-     !This subroutine gets from the EDIpack2 library the value of the charge density and passes it to the user.
+     !This subroutine gets from the EDIpack library the value of the charge density and passes it to the user.
      !
      !The :f:var:`self` variable can have the following dimensions:
      ! 
@@ -142,7 +142,7 @@ MODULE E2I_IO
   end interface ed_get_dens
 
   interface ed_get_mag
-     !This subroutine gets from the EDIpack2 library the value of the magnetization and passes it to the user.
+     !This subroutine gets from the EDIpack library the value of the magnetization and passes it to the user.
      !
      !The :f:var:`self` variable can have the following dimensions:
      ! 
@@ -157,7 +157,7 @@ MODULE E2I_IO
   end interface ed_get_mag
 
   interface ed_get_docc
-     !This subroutine gets from the EDIpack2 library the value of the double occupation and passes it to the user.
+     !This subroutine gets from the EDIpack library the value of the double occupation and passes it to the user.
      !
      !The :f:var:`self` variable can have the following dimensions:
      ! 
@@ -170,7 +170,7 @@ MODULE E2I_IO
   end interface ed_get_docc
 
   interface ed_get_phi
-     !This subroutine gets from the EDIpack2 library the value of the superconducting order parameter :math:`\phi` ( :f:var:`ed_mode` = :code:`superc` ) and passes it to the user.
+     !This subroutine gets from the EDIpack library the value of the superconducting order parameter :math:`\phi` ( :f:var:`ed_mode` = :code:`superc` ) and passes it to the user.
      !
      !The :f:var:`self` variable can have the following dimensions:
      ! 
@@ -183,7 +183,7 @@ MODULE E2I_IO
 
 
   interface ed_get_exct
-     !This subroutine gets from the EDIpack2 library the value of the excitonic order parameters :math:`X^a` ( :f:var:`ed_mode` = :code:`normal`,:code:`nonsu2` ) and passes it to the user.
+     !This subroutine gets from the EDIpack library the value of the excitonic order parameters :math:`X^a` ( :f:var:`ed_mode` = :code:`normal`,:code:`nonsu2` ) and passes it to the user.
      !
      !The :f:var:`self` variable can have the following dimensions:
      ! 
@@ -199,7 +199,7 @@ MODULE E2I_IO
  
   !Get Energies
   interface ed_get_eimp
-     !This subroutine gets from the EDIpack2 library and passes to the user the array [ :f:var:`ed_epot` , :f:var:`ed_eint` , :f:var:`ed_ehartree` , :f:var:`ed_eknot` ].
+     !This subroutine gets from the EDIpack library and passes to the user the array [ :f:var:`ed_epot` , :f:var:`ed_eint` , :f:var:`ed_ehartree` , :f:var:`ed_eknot` ].
      !These are the expectation values various contribution to the internal energy
      !
      !  * :f:var:`ed_epot` = energy contribution from the interaction terms, **including** the Hartree term
@@ -217,7 +217,7 @@ MODULE E2I_IO
   end interface ed_get_eimp
 
   interface ed_get_epot
-     !This subroutine gets from the EDIpack2 library and passes to the user the value of 
+     !This subroutine gets from the EDIpack library and passes to the user the value of 
      !:f:var:`ed_epot`, the energy contribution from the interaction terms, **including** the Hartree term.
      !The returned array can have the following dimensions:
      !
@@ -227,7 +227,7 @@ MODULE E2I_IO
   end interface ed_get_epot
 
   interface ed_get_eint
-     !This subroutine gets from the EDIpack2 library and passes to the user the value of 
+     !This subroutine gets from the EDIpack library and passes to the user the value of 
      !:f:var:`ed_int`, the energy contribution from the interaction terms, **excluding** the Hartree term.
      !The returned array can have the following dimensions:
      !
@@ -237,7 +237,7 @@ MODULE E2I_IO
   end interface ed_get_eint
 
   interface ed_get_ehartree
-     !This subroutine gets from the EDIpack2 library and passes to the user the value of the Hartree potential 
+     !This subroutine gets from the EDIpack library and passes to the user the value of the Hartree potential 
      !:f:var:`ed_ehartree`. The returned array can have the following dimensions:
      !
      !  * [:f:var:`nlat`]: for real-space DMFT with :f:var:`nlat` impurities
@@ -246,7 +246,7 @@ MODULE E2I_IO
   end interface ed_get_ehartree
 
   interface ed_get_eknot
-     !This subroutine gets from the EDIpack2 library and passes to the user the value
+     !This subroutine gets from the EDIpack library and passes to the user the value
      !:f:var:`ed_eknot`, the kinetic term from the **local** 1-body Hamiltonian
      !The returned array can have the following dimensions:
      !
@@ -257,7 +257,7 @@ MODULE E2I_IO
 
 
   interface ed_get_doubles
-     !This subroutine gets from the EDIpack2 library and passes to the user the array [ :f:var:`ed_dust` , :f:var:`ed_dund` , :f:var:`ed_dse` , :f:var:`ed_dph` ].
+     !This subroutine gets from the EDIpack library and passes to the user the array [ :f:var:`ed_dust` , :f:var:`ed_dund` , :f:var:`ed_dse` , :f:var:`ed_dph` ].
      !These are the expectation values of the two-body operators associated with the density-density inter-orbital interaction (with opposite and parallel spins), 
      !spin-exchange and pair-hopping.
      !
@@ -274,7 +274,7 @@ MODULE E2I_IO
   end interface ed_get_doubles
 
   interface ed_get_dust
-     !This subroutine gets from the EDIpack2 library and passes to the user the value of 
+     !This subroutine gets from the EDIpack library and passes to the user the value of 
      !:f:var:`ed_dust` = :math:`\sum_{i < j} n_{i\uparrow}n_{j\downarrow} + n_{i\downarrow}n_{j\uparrow}` for :math:`i,j` orbitals
      !The returned array can have the following dimensions:
      !
@@ -284,7 +284,7 @@ MODULE E2I_IO
   end interface ed_get_dust
 
   interface ed_get_dund
-     !This subroutine gets from the EDIpack2 library and passes to the user the value of 
+     !This subroutine gets from the EDIpack library and passes to the user the value of 
      !:f:var:`ed_dund` = :math:`\sum_{i < j} n_{i\uparrow}n_{j\uparrow}  + n_{i\downarrow}n_{j\downarrow}` for :math:`i,j` orbitals
      !The returned array can have the following dimensions:
      !
@@ -294,7 +294,7 @@ MODULE E2I_IO
   end interface ed_get_dund
 
   interface ed_get_dse
-     !This subroutine gets from the EDIpack2 library and passes to the user the value of 
+     !This subroutine gets from the EDIpack library and passes to the user the value of 
      !:f:var:`ed_dse` = :math:`\sum_{i < j} c^{\dagger}_{i\uparrow}c^{\dagger}_{j\uparrow}c_{i\downarrow}c_{j\uparrow}` for :math:`i,j` orbitals
      !The returned array can have the following dimensions:
      !
@@ -304,7 +304,7 @@ MODULE E2I_IO
   end interface ed_get_dse
 
   interface ed_get_dph
-     !This subroutine gets from the EDIpack2 library and passes to the user the value of 
+     !This subroutine gets from the EDIpack library and passes to the user the value of 
      !:f:var:`ed_dph` = :math:`\sum_{i < j} c^{\dagger}_{i\uparrow}c^{\dagger}_{i\downarrow}c_{j\downarrow}c_{j\uparrow}` for :math:`i,j` orbitals
      !The returned array can have the following dimensions:
      !

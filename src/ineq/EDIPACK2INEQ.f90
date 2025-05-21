@@ -1,6 +1,6 @@
 MODULE EDIPACK2INEQ
-  !:synopsis: EDIpack2 real-space DMFT extension
-  USE EDIPACK2
+  !:synopsis: EDIpack real-space DMFT extension
+  USE EDIPACK
   USE E2I_AUX_FUNX, only:                        &
        ed_set_Hloc
 

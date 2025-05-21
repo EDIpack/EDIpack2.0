@@ -1,7 +1,7 @@
 TSTDIR=src
 TSTBIN=bin
 
-HAS_INEQ:=$(shell pkg-config --variable=ineq edipack2)
+HAS_INEQ:=$(shell pkg-config --variable=ineq edipack)
 
 ifeq ($(HAS_INEQ),true)
 all: bin ineq

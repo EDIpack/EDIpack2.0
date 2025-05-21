@@ -1,24 +1,24 @@
-.. _edipack2_cbinding:
+.. _edipack_cbinding:
 
-EDIpack2 Fortran-C interface
+EDIpack Fortran-C interface
 =================================================================
 
-EDIpack2 offers Fortran-C interoperability making use of the
+EDIpack offers Fortran-C interoperability making use of the
 :f:mod:`ISO_C_BINDINGS` Fortran module.
 
-The :f:mod:`EDIPACK2_C` module consists of a series of
+The :f:mod:`EDIPACK_C` module consists of a series of
 C-type procedures which wrap one-by-one the relevant
 functions as required to perform a full calculation.  
 
-At compile time, if :code:`make` or :code:`make edipack2_cbinding` is issued,
-a dynamic library called :code:`libedipack2_cbinding.so` will be created and
+At compile time, if :code:`make` or :code:`make edipack_cbinding` is issued,
+a dynamic library called :code:`libedipack_cbinding.so` will be created and
 put in the same folder as the static Fortrna library.
 An API to another language will need to interface to this library. 
 
-A Python API called EDIpy2.0_ is provided and mantained.
-An experimental Julia API called EDijl2.0_ is in development.
+A Python API called EDIpack2py_ is provided and mantained.
+An experimental Julia API called EDipack2jl_ is in development.
 
-A :code:`c++` header file called :code:`edipack2_cbinding.h` is installed into the
+A :code:`c++` header file called :code:`edipack_cbinding.h` is installed into the
 include directory at build time. The list of variables and functions therein provided
 is documented in the following. 
 Caution needs to be applied for functions requiring array input parameters: since arrays 
@@ -29,9 +29,9 @@ An example :code:`c++` program using EDIpack is provided  in the examples_ folde
 of the GitHub repository.
 A more exotic usecase is available here_, come fosse antani.
 
-.. _EDIpy2.0: https://github.com/edipack/EDIpy2.0
-.. _EDIjl2.0: https://github.com/edipack/EDIjl2.0
-.. _examples: https://github.com/EDIpack/EDIpack2.0/tree/master/examples/cpp
+.. _EDIpack2py: https://github.com/edipack/EDIpack2py
+.. _EDIpack2jl: https://github.com/edipack/EDIpack2jl
+.. _examples: https://github.com/EDIpack/EDIpack/tree/master/examples/cpp
 .. _here: https://github.com/lcrippa/prematurata_la_dmft
 
 

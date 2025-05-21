@@ -1,6 +1,6 @@
 .. _02_dmft:
 
-Solving Dynamical Mean-Field Theory with |edipack2|
+Solving Dynamical Mean-Field Theory with |edipack|
 ===========================================================
 
 .. preferred-crossrefs::
@@ -12,9 +12,9 @@ Solving Dynamical Mean-Field Theory with |edipack2|
 
 
 In this section we take a step further to show how to integrate the
-|edipack2| as a solver for Dynamical Mean-Field Theory calculations. 
+|edipack| as a solver for Dynamical Mean-Field Theory calculations. 
 Specifically, here we discuss the step-by-step implementation of a Fortran program (see
-below) solving this model using DMFT with the |edipack2| exact
+below) solving this model using DMFT with the |edipack| exact
 diagonalization algorithm at :math:`T=0`.
 
 Similar to the previous section, we consider a Fermi-Hubbard
@@ -29,7 +29,7 @@ Source code
 .. code-block:: fortran
 
    program ed_hm_bethe
-      USE EDIPACK2
+      USE EDIPACK
       USE SCIFOR
       USE DMFT_TOOLS
       implicit none
@@ -56,10 +56,10 @@ Source code
       call ed_read_input(trim(finput))
 
 
-In this  we load both the |edipack2| and SciFortran_ libraries through
-their main module :f:mod:`EDIPACK2` and :f:mod:`SCIFOR`. We  define
+In this  we load both the |edipack| and SciFortran_ libraries through
+their main module :f:mod:`EDIPACK` and :f:mod:`SCIFOR`. We  define
 some local variables and  read the input file
-(default :code:`"inputED.conf"`) using the |edipack2| function :f:func:`ed_read_input`.
+(default :code:`"inputED.conf"`) using the |edipack| function :f:func:`ed_read_input`.
 
 
 The next step is to construct the Bethe lattice DOS, we use
@@ -127,7 +127,7 @@ present it looks like:
 
 
 The first step (line 6) is to call the :f:func:`ed_solve` procedure in
-|edipack2| which solve the quantum impurity problem defined by a given
+|edipack| which solve the quantum impurity problem defined by a given
 input bath :f:var:`bath`. On exit, all the ED related quantities are
 stored in the memory, ready to be retrieved upon call.
 For instance we retrieve the Matsubara self-energy

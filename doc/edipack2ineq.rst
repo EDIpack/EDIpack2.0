@@ -1,9 +1,9 @@
 .. _edipack2ineq:
 
-EDIpack2 for inequivalent impurities
+EDIpack for inequivalent impurities
 #################################################################################
 
-|edipack2ineq| is a complementary sub-library of |edipack2|, which
+|edipack2ineq| is a complementary sub-library of |edipack|, which
 extends its functionalities to systems with several 
 independent impurities. These maye emerge from RealSpace-DMFT treatment of
 unit cells with different inequivalent atoms or large super-cells with
@@ -11,9 +11,9 @@ broken translational symmetries (heterostructures, disordered
 systems, etc.).
 
 As for its scope, the structure of this sub-library closely mimics that
-of |edipack2| adding, where needed, new procedures adapted to the 
+of |edipack| adding, where needed, new procedures adapted to the 
 inequivalent impurities case. A standard fortran interface is then used to group
-all the procedures (from `EDIpack2` and `EDIpack2ineq`) under the same
+all the procedures (from `EDIpack` and `EDIpackineq`) under the same
 name.      
 
 
@@ -57,7 +57,7 @@ General Environment
 =================================================================
 
 This part of the library includes a set of global variables and
-procedures  for `EDIpack2ineq`.  This includes:
+procedures  for `EDIpackineq`.  This includes:
 
 :f:mod:`E2I_VARS_GLOBAL`: contains global shared
 variables storing site dependent quantities in the memory

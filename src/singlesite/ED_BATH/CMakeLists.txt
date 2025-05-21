@@ -1,4 +1,4 @@
-# EDIpack2 library
+# EDIpack library
 FILE(GLOB ED_BATH_SRC
   ED_BATH_AUX.f90
   ED_BATH_REPLICA.f90

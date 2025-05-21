@@ -1,4 +1,4 @@
-EDIpack2
+EDIpack
 ################
 
 A massively parallel Exact Diagonalization solver for Quantum Impurity problems.
@@ -45,7 +45,7 @@ The choice of the symmetry is possible through the input variable `ed_mode=norma
 In the actual development stage both the `normal` and `superc` modes
 include **electron-phonon** coupling to Holstein phonons. 
 
-|edipack2| is designed to obtain the lowest part of the
+|edipack| is designed to obtain the lowest part of the
 spectrum of the quantum impurity problem., While this makes the
 software naturally works at **zero temperature**, it also supports the
 determination of **low temperatures** properties.   
@@ -56,7 +56,7 @@ of Lanczos-Arnoldi linear procedures.
 However, substantial modifications have been introduced in this
 version to address the *Superconducting* and *non-SU(2)* channels.  
 
-.. _EDIPACK2: https://github.com/edipack/EDIpack2.0
+.. _EDIPACK: https://github.com/edipack/EDIpack
 .. _EDIPACK: https://github.com/edipack/EDIpack
 .. _j.cpc.2021.108261: https://doi.org/10.1016/j.cpc.2021.108261
 
@@ -96,7 +96,7 @@ Installation
 ***************************************
 
 :doc:`dependencies`
-     Software requirements to install the |edipack2| library.
+     Software requirements to install the |edipack| library.
      
 :doc:`installation`
      Build, install and configure the library in the OS.
@@ -116,35 +116,35 @@ Usage
 Structure
 ***************************************
 :doc:`structure`
-     Overview of the |edipack2| library structure.
+     Overview of the |edipack| library structure.
      
      
 ***************************************
-EDIpack2
+EDIpack
 ***************************************
-:doc:`edipack2`
+:doc:`edipack`
      A detailed presentation  of the library with a thorough 
      description of the relevant modules, data types and procedures.
 
 ***************************************     
-EDIpack2ineq
+EDIpackineq
 ***************************************
 :doc:`edipack2ineq`
-     The inequivalent impurities extension of |edipack2|
+     The inequivalent impurities extension of |edipack|
 
 
 ***************************************   
-EDIpack2 C-bindings
+EDIpack C-bindings
 ***************************************
-:doc:`edipack2_cbinding`
-     The Fortran-C interface for |edipack2| and |edipack2ineq|
+:doc:`edipack_cbinding`
+     The Fortran-C interface for |edipack| and |edipack2ineq|
      
 *****************************************  
 Python projects
 *****************************************
-:doc:`edipack2_python`
+:doc:`edipack_python`
      Link to the documentation of the EDIpack python API
-     EDIpy2.0, as well as the TRIQS compatibilty layer
+     EDIack2py, as well as the TRIQS compatibilty layer
      
 
 ***************************************
@@ -182,15 +182,15 @@ Browse Source Code
    structure
 
 .. toctree::
-   :caption: EDIpack2
+   :caption: EDIpack
    :maxdepth: 2
    :hidden:
       
-   edipack2
+   edipack
 
 
 .. toctree::
-   :caption: EDIpack2ineq
+   :caption: EDIpackineq
    :maxdepth: 2
    :hidden:
 
@@ -198,18 +198,18 @@ Browse Source Code
 
    
 .. toctree::
-   :caption: EDIpack2 C-bindings
+   :caption: EDIpack C-bindings
    :maxdepth: 2
    :hidden:
 
-   edipack2_cbinding
+   edipack_cbinding
    
 .. toctree::
    :caption: Python projects
    :maxdepth: 2
    :hidden:
 
-   edipack2_python
+   edipack_python
    
 
 .. toctree::
@@ -222,9 +222,9 @@ Browse Source Code
 .. toctree::
    :caption: External Links
 
-   EDIpack2.0 on GitHub <https://github.com/edipack/EDIpack2.0>   
-   EDIpy2.0 on GitHub <https://github.com/edipack/EDIpy2.0>
-   EDIpack2TRIQS on GitHub <https://github.com/krivenko/edipack2triqs>
+   EDIpack on GitHub <https://github.com/edipack/EDIpack>   
+   EDIpack2py on GitHub <https://github.com/edipack/EDIpack2py>
+   EDIpackTRIQS on GitHub <https://github.com/krivenko/edipacktriqs>
    SciFortran on GitHub <https://github.com/SciFortran/SciFortran>
 
 

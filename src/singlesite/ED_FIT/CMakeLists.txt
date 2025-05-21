@@ -1,4 +1,4 @@
-# EDIpack2 library
+# EDIpack library
 FILE(GLOB ED_FIT_SRC
   ED_FIT_COMMON.f90
   ED_FIT_NORMAL.f90

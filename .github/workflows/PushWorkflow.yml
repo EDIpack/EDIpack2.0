@@ -1,4 +1,4 @@
-name: CI EDIpack2 test workflow 
+name: CI EDIpack test workflow 
 
 on:
   push:
@@ -15,7 +15,7 @@ defaults:
     shell: bash -l {0}
 
 jobs:
-  test-EDIpack2:
+  test-EDIpack:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -44,16 +44,16 @@ jobs:
       - name: Install SciFortran
         run: scifor/bin/ci_setup_scifor.sh
 
-# Build EDIpack2
-      - name: Cloning EDIpack2
-        run: git clone https://github.com/edipack/EDIpack2.0.git edipack2
-      - name: Install EDIpack2
+# Build EDIpack
+      - name: Cloning EDIpack
+        run: git clone https://github.com/edipack/EDIpack.git edipack
+      - name: Install EDIpack
         run: |
           source ~/.scifor_config_user
           export PKG_CONFIG_PATH=~/.pkgconfig.d
           export GLOB_INC=$( pkg-config --cflags scifor )
           export GLOB_LIB=$( pkg-config --libs   scifor  | sed  "s/;/ /g"  | sed 's/\\/  /g' )
-          edipack2/bin/ci_setup_edipack2.sh
+          edipack/bin/ci_setup_edipack.sh
 
 
 
@@ -63,22 +63,22 @@ jobs:
       - name: Building tests
         run:  |
           source ~/.scifor_config_user
-          source ~/.edipack2_config_user
+          source ~/.edipack_config_user
           export PKG_CONFIG_PATH=~/.pkgconfig.d
-          export GLOB_INC=$( pkg-config --cflags scifor edipack2)
-          export GLOB_LIB=$( pkg-config --libs   scifor edipack2 | sed  "s/;/ /g"  | sed 's/\\/  /g' )
-          cd edipack2/test
+          export GLOB_INC=$( pkg-config --cflags scifor edipack)
+          export GLOB_LIB=$( pkg-config --libs   scifor edipack | sed  "s/;/ /g"  | sed 's/\\/  /g' )
+          cd edipack/test
           export TERM=xterm
           make all
 
       - name: Testing...
         run: |
           source ~/.scifor_config_user
-          source ~/.edipack2_config_user
+          source ~/.edipack_config_user
           export PKG_CONFIG_PATH=~/.pkgconfig.d
-          export GLOB_INC=$( pkg-config --cflags scifor edipack2)
-          export GLOB_LIB=$( pkg-config --libs   scifor edipack2 | sed  "s/;/ /g"  | sed 's/\\/  /g' )
-          cd edipack2/test
+          export GLOB_INC=$( pkg-config --cflags scifor edipack)
+          export GLOB_LIB=$( pkg-config --libs   scifor edipack | sed  "s/;/ /g"  | sed 's/\\/  /g' )
+          cd edipack/test
           make test
 
       # - name: Install LCOV

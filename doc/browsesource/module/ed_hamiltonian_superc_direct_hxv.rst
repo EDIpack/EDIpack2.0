@@ -6,5 +6,5 @@ ED_HAMILTONIAN_SUPERC_DIRECT_HxV
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/master/src/singlesite/ED_SUPERC/ED_HAMILTONIAN_SUPERC_DIRECT_HxV.f90>`_ for :f:mod:`ed_hamiltonian_superc_direct_hxv` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack/tree/rename_to_edipack/src/singlesite/ED_SUPERC/ED_HAMILTONIAN_SUPERC_DIRECT_HxV.f90>`_ for :f:mod:`ed_hamiltonian_superc_direct_hxv` on GitHub
  

@@ -6,5 +6,5 @@ E2I_IO
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/master/src/ineq/E2I_IO/E2I_IO.f90>`_ for :f:mod:`e2i_io` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack/tree/rename_to_edipack/src/ineq/E2I_IO/E2I_IO.f90>`_ for :f:mod:`e2i_io` on GitHub
  

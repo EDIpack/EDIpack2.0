@@ -3,7 +3,7 @@ MODULE E2I_VARS_GLOBAL
   !Contains all variables, arrays and derived types instances shared throughout the code.
   !Specifically, it contains definitions of the :f:var:`effective_bath`, the :f:var:`gfmatrix` and the :f:var:`sector` data structures. 
   !
-  USE EDIPACK2
+  USE EDIPACK
   USE SF_CONSTANTS
   USE SF_IOTOOLS, only:free_unit,reg,str
 #ifdef _MPI

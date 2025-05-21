@@ -11,16 +11,16 @@ then
     return 1
 fi
 
-CHECK_LIB=$(pkg-config --libs edipack2)
+CHECK_LIB=$(pkg-config --libs edipack)
 if [ -z ${CHECK_LIB} ]
 then
     echo "\e[31m ERROR \e[0m"
-    echo " EDIpack2 not loaded"
+    echo " EDIpack not loaded"
     return 1
 fi
 
-WITH_MPI=$(pkg-config --variable=mpi edipack2)
-BUILD_TYPE=$(pkg-config --variable=build_type edipack2)
+WITH_MPI=$(pkg-config --variable=mpi edipack)
+BUILD_TYPE=$(pkg-config --variable=build_type edipack)
 
 cd bin/
 HERE=`pwd`

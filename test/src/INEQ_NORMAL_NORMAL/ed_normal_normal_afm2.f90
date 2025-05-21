@@ -1,5 +1,5 @@
 program ed_normal_normal_ineq
-  USE EDIPACK2
+  USE EDIPACK
   USE EDIPACK2INEQ
   USE SCIFOR
   USE MPI

@@ -2,11 +2,11 @@
 # DMFTED PROJECT
 ##################################################
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10.0)
-PROJECT(edipack2 Fortran)
+PROJECT(edipack Fortran)
 SET(EDI ${PROJECT_NAME})
 SET(EDI2INEQ edipack2ineq)
-SET(EDI_C edipack2_cbinding)
-SET(EDI2INEQ_C edipack2ineq_cbinding)
+SET(EDI_C edipack_cbindings)
+SET(EDI2INEQ_C edipack2ineq_cbindings)
 SET(VERSION 4.0.0)
 
 
@@ -254,7 +254,7 @@ ENDIF(WITH_INEQ)
 
 
 ####################################################
-# EDIpack2 Fortran-C interface
+# EDIpack Fortran-C interface
 ####################################################
 ADD_SUBDIRECTORY(${LIB_CBIND} )
 ADD_DEPENDENCIES(EDI_C_LIB ${EDI})

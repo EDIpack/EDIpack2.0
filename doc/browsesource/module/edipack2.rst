@@ -6,5 +6,5 @@ EDIPACK2
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack2.0/tree/master/src/singlesite/EDIPACK2.f90>`_ for :f:mod:`edipack2` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack/tree/rename_to_edipack/src>`_ for :f:mod:`edipack2` on GitHub
  

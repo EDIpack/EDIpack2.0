@@ -46,7 +46,7 @@ MODULE ED_GFMATRIX
      !Type storing all the weights and poles of a given dynamical correlation function, mostly Green's functions,
      !obtained through the dynamical Lanczos algorithm. This structure is used to evalaute on-the-fly any
      !given dynamical function at any point in the complex frequency plane using additional procedures
-     !contained in the **EDIpack2** library. 
+     !contained in the **EDIpack** library. 
      !
      type(GFchannel),dimension(:),allocatable  :: state
      logical                                   :: status=.false.

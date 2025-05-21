@@ -1,4 +1,4 @@
-PROJECT_NAME           = "edipack2"
+PROJECT_NAME           = "edipack"
 OUTPUT_DIRECTORY       = ../_build/doxygen
 GENERATE_XML           = YES
 XML_OUTPUT             = xml

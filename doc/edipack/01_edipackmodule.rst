@@ -4,12 +4,12 @@ EDIpack2 Fortran Module
 ==========================
 
 
-:f:mod:`EDIPACK2` is the top module of the |EDIpack2| library. It provides access to the all the relevant procedures of the library, realizing the Fortran API. The user needs to invoke use of this module to get access to |edipack2| as:
+:f:mod:`EDIPACK` is the top module of the |EDIpack| library. It provides access to the all the relevant procedures of the library, realizing the Fortran API. The user needs to invoke use of this module to get access to |edipack| as:
 
    .. code-block:: fortran
 
       program test
-          USE EDIPACK2
+          USE EDIPACK
 	  ...
 
    		   
@@ -28,4 +28,4 @@ The module also contains a subset of the global and input variables that can be 
    :ed_bath/save_array_as_bath: f/ed_bath_user/save_array_as_bath
 
 
-.. f:automodule::   edipack2
+.. f:automodule::   edipack

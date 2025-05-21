@@ -4,7 +4,7 @@ Interacting BHZ model
 =============================================
 
 In this section we discuss a thorough example , using the
-|edipack2| ED algorithm as a solver for DMFT for  :f:var:`ed_mode` =
+|edipack| ED algorithm as a solver for DMFT for  :f:var:`ed_mode` =
 **normal**.  We focus on a paradigmatic multi-orbital model of interacting electrons.
 
 This is a Fermi-Hubbard model describing two-orbital electrons on a
@@ -60,14 +60,14 @@ Source code
 ------------------------------
 
 In presence of interaction we can solve the model using DMFT. We
-review here the setup of the program using |edipack2|. 
+review here the setup of the program using |edipack|. 
 
 
 .. code-block:: fortran
    :linenos:
    
    program ed_bhz
-      USE EDIPACK2
+      USE EDIPACK
       USE SCIFOR
       USE DMFT_TOOLS
       USE MPI
@@ -186,7 +186,7 @@ which in the code setup the impurity Hamiltonian, initialize the bath.
    allocate(Hloc(Nso,Nso))
    Hloc = sum(Hk,dim=3)/Lk
    where(abs(dreal(Hloc))<1d-6)Hloc=zero
-   !> Set H_{loc} in EDIpack2
+   !> Set H_{loc} in EDIpack
    call ed_set_hloc(Hloc)
    !> Get bath dimension and allocate user bath to this size
    Nb=ed_get_bath_dimension()
@@ -270,7 +270,7 @@ Hamiltonian:
 Results
 ------------------------------   
 
-We now show some results obtained using this |edipack2| based
+We now show some results obtained using this |edipack| based
 program, starting from a simple analysis of the effect of interaction
 to the QSHI state. For, we consider
 :math:`M=1` and fix the Hund's exchange to :math:`J/U=0.25`. As

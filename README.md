@@ -1,8 +1,8 @@
-# EDIpack2.0: Massively parallel Exact Diagonalization for generic Quantum Impurity problems
+# EDIpack: Massively parallel Exact Diagonalization for generic Quantum Impurity problems
 
-[![TestSuite](https://img.shields.io/github/actions/workflow/status/edipack/EDIpack2.0/PushWorkflow.yml?label=TestSuite&logo=Fortran&style=flat-square)](https://github.com/edipack/EDIpack2.0/actions/workflows/PushWorkflow.yml) 
-[![api docs](https://img.shields.io/static/v1?label=API&message=documentation&color=734f96&logo=read-the-docs&logoColor=white&style=flat-square)](https://edipack.github.io/EDIpack2.0/)
-[![Anaconda-Server Badge](https://anaconda.org/edipack/edipack2/badges/version.svg)](https://anaconda.org/edipack/edipack2)
+[![TestSuite](https://img.shields.io/github/actions/workflow/status/edipack/EDIpack/PushWorkflow.yml?label=TestSuite&logo=Fortran&style=flat-square)](https://github.com/edipack/EDIpack/actions/workflows/PushWorkflow.yml) 
+[![api docs](https://img.shields.io/static/v1?label=API&message=documentation&color=734f96&logo=read-the-docs&logoColor=white&style=flat-square)](https://edipack.github.io/EDIpack/)
+[![Anaconda-Server Badge](https://anaconda.org/edipack/edipack/badges/version.svg)](https://anaconda.org/edipack/edipack)
 
 <!-- TO BE SETUP ASAP
 [![Coverage]()]()
@@ -18,12 +18,12 @@ See [j.cpc.2021.108261](https://doi.org/10.1016/j.cpc.2021.108261) for further i
 
 ### Install & Use
 
-*EDIpack2.0* builds and get installed using CMake. Loading into the operative systemisis provided by different methods, including module environment.    
+*EDIpack* builds and get installed using CMake. Loading into the operative systemisis provided by different methods, including module environment.    
 Further informations and a guided proceudre are available in the documentation.
 
 
 ### Documentation
-All the informations about the structure of the library and its use, together with the Python API *EDIpy2*, are documented at [edipack.github.io/EDIpack2.0/](https://edipack.github.io/EDIpack2.0/)  
+All the informations about the structure of the library and its use, together with the Python API *EDIpy2*, are documented at [edipack.github.io/EDIpack/](https://edipack.github.io/EDIpack/)  
 
 NOTE: The documentation is currently under construction. 
 
@@ -41,4 +41,4 @@ NOTE: The documentation is currently under construction.
 
 
 ### Issues
-If you encounter bugs or difficulties, please [file an issue](https://github.com/edipack/EDIpack2.0/issues/new/choose). For any other communication, please reach out any of the developers.          
+If you encounter bugs or difficulties, please [file an issue](https://github.com/edipack/EDIpack/issues/new/choose). For any other communication, please reach out any of the developers.          

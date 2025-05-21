@@ -1,0 +1,14 @@
+edipack_cbindings_dir=@CMAKE_INSTALL_PREFIX@
+
+exec_prefix=${edipack_cbindings_dir}/bin
+includedir=${edipack_cbindings_dir}/include
+libdir=${edipack_cbindings_dir}/lib
+
+Name: edipack_cbindings
+Description: The EDIpack C-bindings for Python API library
+Cflags: -I${includedir}
+Requires: edipack
+Libs: -L${libdir} -ledipack_cbindings
+Version:@VERSION@
+
+

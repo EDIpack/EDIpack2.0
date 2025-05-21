@@ -28,14 +28,14 @@ from sphinx.application import Sphinx
 
 # -- Project information -----------------------------------------------------
 
-project = u'EDIpack2.0'
+project = u'EDIpack'
 copyright = u'2024, Lorenzo Crippa and Adriano Amaricci'
 author = u'Lorenzo Crippa and Adriano Amaricci'
 
 # The short X.Y version
 version = u''
 # The full version, including alpha/beta/rc tags
-release = u'4.0.0'
+release = u'5.0.0'
 
 
 # -- General configuration ---------------------------------------------------
@@ -115,11 +115,11 @@ fortran_src=[os.path.abspath('../src/singlesite/*.f90'),
                  os.path.abspath('../src/ineq/E2I_BATH/*.f90'),
                  os.path.abspath('../src/ineq/E2I_FIT/*.f90'),
                  os.path.abspath('../src/c_bindings/*.f90'),
-                 os.path.abspath('../src/c_bindings/edipack2/*.f90'),
+                 os.path.abspath('../src/c_bindings/edipack/*.f90'),
                  os.path.abspath('../src/c_bindings/edipack2ineq/*.f90')]
   
-breathe_projects = { "edipack2": os.path.abspath('../_build/doxygen/xml') }
-breathe_default_project = "edipack2"
+breathe_projects = { "edipack": os.path.abspath('../_build/doxygen/xml') }
+breathe_default_project = "edipack"
 
 def run_doxygen():
     doxyfile_in = os.path.join(os.path.dirname(__file__), 'Doxyfile.in')
@@ -157,7 +157,7 @@ pygments_style = 'sphinx'
 
 
 rst_prolog = """
-.. |edipack2| replace:: `EDIpack2`
+.. |edipack| replace:: `EDIpack`
 .. |edipack2ineq| replace:: `EDIpack2ineq`
 .. |Nnambu| replace:: :f:var:`nnambu`
 .. |Nspin| replace:: :f:var:`nspin`
@@ -260,7 +260,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'EDIpack2.tex', u'EDIpack2 documentation',
+    (master_doc, 'EDIpack.tex', u'EDIpack documentation',
      u'io', 'manual'),
 ]
 
@@ -270,7 +270,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'EDIpack2', u'EDIpack2 documentation',
+    (master_doc, 'EDIpack', u'EDIpack documentation',
      [author], 1)
 ]
 
@@ -281,8 +281,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'EDIpack2', u'EDIpack2 documentation',
-     author, 'EDIpack2', 'One line description of project.',
+    (master_doc, 'EDIpack', u'EDIpack documentation',
+     author, 'EDIpack', 'One line description of project.',
      'Miscellaneous'),
 ]
 

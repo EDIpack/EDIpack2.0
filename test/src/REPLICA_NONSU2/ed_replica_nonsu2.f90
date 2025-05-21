@@ -1,5 +1,5 @@
 program ed_replica_nonsu2
-  USE EDIPACK2
+  USE EDIPACK
   USE SCIFOR
   USE MPI
   USE SF_MPI

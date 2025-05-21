@@ -6,7 +6,7 @@ Solving a Single Impurity Anderson model
 .. preferred-crossrefs::
    :ed_solve: f/ed_main/ed_solve
 
-In this section we use the methods in |edipack2|  to solve a simple
+In this section we use the methods in |edipack|  to solve a simple
 example of Anderson quantum impurity problem.
 
 Looking forward for a DMFT application, here we consider the Bethe
@@ -17,7 +17,7 @@ corresponding non-interacting  Green's function :math:`G_0(z) =
 We construct a discretized bath by fitting such function on the
 Matsubara frequencies  :math:`G_0(i\omega_n)` using the methods in
 :ref:`fit`. Finally we input this bath into the :f:func:`ed_solve`
-solver of  |edipack2| in presence of local interaction on the impurity.  
+solver of  |edipack| in presence of local interaction on the impurity.  
 
 Source code
 ------------------------------
@@ -27,7 +27,7 @@ The initialization of the code is:
 .. code-block:: fortran
 		
    program lancED
-      USE EDIPACK2
+      USE EDIPACK
       USE SCIFOR
       implicit none
       ! Bethe lattice half-bandwidth = energy unit
@@ -44,8 +44,8 @@ The initialization of the code is:
       call ed_read_input('inputED.conf')
 
       
-where we load both the |edipack2| and SciFortran_ libraries through
-their main module :f:mod:`EDIPACK2` and :f:mod:`SCIFOR`. We also define
+where we load both the |edipack| and SciFortran_ libraries through
+their main module :f:mod:`EDIPACK` and :f:mod:`SCIFOR`. We also define
 some local variables and proceed with reading the input file
 :code:`"inputED.conf"` using the function
 :f:func:`ed_read_input`.
@@ -67,7 +67,7 @@ function, using procedures available in SciFortran_:
 Then we initialize the solver. This step requires the user to pass
 the user bath as a rank-1 double precision array of a given size. The
 correct size of the bath array is evaluated internally by the
-|edipack2| code through the function
+|edipack| code through the function
 :f:func:`ed_get_bath_dimension`.
 
 .. code-block:: fortran

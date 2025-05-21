@@ -1,5 +1,5 @@
-#ifndef EDIPACK2_CBINDING
-#define EDIPACK2_CBINDING
+#ifndef EDIPACK_CBINDINGS
+#define EDIPACK_CBINDINGS
 
 #include <stdint.h>
 #include <stdbool.h>

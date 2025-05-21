@@ -24,7 +24,7 @@ module ED_MAIN
   !>INIT ED SOLVER
   interface ed_init_solver
      !
-     !Initialize the Exact Diagonalization solver of `EDIpack2.0`. This procedure reserves and allocates all the  
+     !Initialize the Exact Diagonalization solver of `EDIpack`. This procedure reserves and allocates all the  
      !memory required by the solver, performs all the consistency check and initializes the bath instance guessing or reading from a file.      
      !It requires as an input a double precision array of rank-1 [ :f:var:`nb` ].
      !while :f:var:`nb` depends on the bath size and geometry and can be obtained from :f:func:`get_bath_dimension` .

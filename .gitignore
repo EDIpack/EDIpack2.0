@@ -13,8 +13,6 @@ src/singlesite/ED_VERSION.f90
 src/ED_VERSION.f90
 .DS_Store
 *~
-src/python/edipy2/__pycache__
 doc/utils/sphinxfortran/__pycache__
-doc/utils/f2py/__pycache__
 doc/Doxyfile
 ../../test/DEBUG_DIRECT_HxV

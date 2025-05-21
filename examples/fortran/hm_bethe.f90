@@ -1,5 +1,5 @@
 program hm_bethe
-  USE EDIPACK2
+  USE EDIPACK
   USE SCIFOR
   USE MPI
   implicit none

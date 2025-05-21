@@ -15,7 +15,7 @@ suggest a possible instability towards the in-plane triplet exciton
 state :math:`E_1` or :math:`E_2`. Interestingly, the onset of this
 state breaks several symmetries, e.g. time-reversal and spin SU(2).
 As thus, this is a physical case to investigate the :f:var:`ed_mode` =
-**nonsu2** mode in |edipack2|. 
+**nonsu2** mode in |edipack|. 
 
 
 Source code
@@ -37,7 +37,7 @@ part: the bath construction. We get:
    allocate(Hloc(Nso,Nso))
    Hloc = sum(Hk,dim=3)/Lk
    where(abs(dreal(Hloc))<1d-6)Hloc=zero
-   !> Set H_{loc} in EDIpack2
+   !> Set H_{loc} in EDIpack
    call ed_set_hloc(Hloc)
    !> Get bath dimension and allocate user bath to this size
    ! ~removed~[Nb=ed_get_bath_dimension()]~
@@ -74,7 +74,7 @@ printing flags.
 Results
 ------------------------------
 
-We can now discuss some results obtained with this |edipack2| code concerning the
+We can now discuss some results obtained with this |edipack| code concerning the
 exciton condensation in QSHI. A more thorough presentation can be found in `PhysRevB.107.115117`_. 
 
 .. _PhysRevB.107.115117: https://journals.aps.org/prb/abstract/10.1103/PhysRevB.107.115117

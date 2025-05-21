@@ -3,8 +3,8 @@
 Install
 ##############################
 
-|edipack2| is available in the form of a static Fortran library
-(`libedipack2.a`) and the related Fortran module :f:mod:`EDIPACK2`.
+|edipack| is available in the form of a static Fortran library
+(`libedipack.a`) and the related Fortran module :f:mod:`EDIPACK`.
 The release version includes additional modules to extend the
 software functionalities: an inequivalent impurities extension |edipack2ineq|
 and a shared dynamical library implementing the Fortran-C interface. 
@@ -22,7 +22,7 @@ Building
 
 We assume that SciFortran_ and MPI_ have been correctly installed
 and are available in the system. See related documentation. Note that
-the installation of |edipack2| closely follows the SciFortran_ template.
+the installation of |edipack| closely follows the SciFortran_ template.
 
 .. _SciFortran: https://github.com/SciFortran/SciFortran
 .. _MPI: https://github.com/open-mpi/ompi
@@ -32,7 +32,7 @@ Clone the repo:
 
 .. code-block:: bash
 		
-   git clone https://github.com/edipack/EDIpack2.0 EDIpack2
+   git clone https://github.com/edipack/EDIpack EDIpack
 
 
 
@@ -43,7 +43,7 @@ Optionally define the fortran compiler:
    export FC=mpif90/gfortran/ifort
 
 
-From the repository directory (`cd EDIpack2`) make a standard
+From the repository directory (`cd EDIpack`) make a standard
 out-of-source CMake compilation:
 
 GNU Make
@@ -88,7 +88,7 @@ additional variables:
        
    * - :code:`-DPREFIX`
      - prefix directory  
-     - ~/opt/EDIpack2/VERSION/PLATFORM/[GIT_BRANCH]
+     - ~/opt/EDIpack/VERSION/PLATFORM/[GIT_BRANCH]
        
    * - :code:`-DUSE_MPI`
      - MPI support pre-compilation flag
@@ -120,14 +120,14 @@ step the following recap is printed:
 
 .. code-block:: bash
 
-   *Build edipack2 [Default]:  
-   $ make -j [all/edipack2, default=all]
+   *Build edipack [Default]:  
+   $ make -j [all/edipack, default=all]
    
    *Build C-bindings: 
-   $ make edipack2_cbinding
+   $ make edipack_cbinding
       
    *Install: 
-   $ make [all/edipack2/edipack2_cbinding, default=all] install
+   $ make [all/edipack/edipack_cbinding, default=all] install
    
    *Uninstall: 
    $ make uninstall
@@ -164,11 +164,11 @@ or
 Please follow the instructions on the screen to complete installation on your environment.  
 The library can be loaded using one of the following, automatically generated, files :  
 
-*  A generated `environment module`_ , installed to `~/.modules.d/edipack2/<PLAT>`
+*  A generated `environment module`_ , installed to `~/.modules.d/edipack/<PLAT>`
   
 * A generated `bash` script at `<PREFIX>/bin/configvars.sh`, to be sourced for permanent loading.
 
-*  A generated `pkg-config`_ file to, installed to `~/.pkg-config.d/edipack2.pc`  
+*  A generated `pkg-config`_ file to, installed to `~/.pkg-config.d/edipack.pc`  
 
 .. _environment module: https://github.com/cea-hpc/modules
 .. _pkg-config: https://github.com/freedesktop/pkg-config
@@ -215,17 +215,17 @@ python 3.10 or later.
 
 Once a command-line tool such as `conda <https://www.anaconda.com/>`_ or 
 `mamba <https://mamba.readthedocs.io/en/latest/>`_ is installed, an environment 
-using one of the available python version can be created, and then the EDIpack2.0 
+using one of the available python version can be created, and then the EDIpack 
 package can be installed:
 
 .. code-block:: shell
 
    conda create -n edipack
    conda activate edipack
-   conda install -c conda-forge -c edipack edipack2
+   conda install -c conda-forge -c edipack edipack
 
 
-this installs a bundle of the `scifor` and `edipack2` libraries. In order to compile a
+this installs a bundle of the `scifor` and `edipack` libraries. In order to compile a
 fortran program linking the libraries, we provide  `.pc` files which are readable via 
 :code:`pkg-config`. If not present, the :code:`compilers` and :code:`pkg-config` conda
 packages need to be installed
@@ -239,6 +239,6 @@ The inclusion and linking flag can then be obtained via
 
 .. code-block:: shell
 
-   pkg-config --cflags edipack2 scifor
-   pkg-config --libs   edipack2 scifor
+   pkg-config --cflags edipack scifor
+   pkg-config --libs   edipack scifor
 
