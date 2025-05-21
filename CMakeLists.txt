@@ -129,7 +129,7 @@ INCLUDE_DIRECTORIES(BEFORE ${CMAKE_Fortran_MODULE_DIRECTORY})
 
 
 ####################################################
-#       EDIpack2 library
+#       EDIpack library
 ####################################################
 ADD_SUBDIRECTORY(${LIB_SRC}/ED_BATH)
 
