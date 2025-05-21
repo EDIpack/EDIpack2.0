@@ -13,7 +13,7 @@ EDIpack_ is a Lanczos based Exact Diagonalization method
 for the solution of generic Quantum Impurity problems,  exploiting MPI
 distributed memory parallelization.
 
-This version 2 extends the former EDIpack_ library by enabling the solution of
+This version enables the solution of
 multi-orbital quantum impurity models with different conserved
 quantum numbers :math:`\vec{Q}`:
 
@@ -57,16 +57,15 @@ However, substantial modifications have been introduced in this
 version to address the *Superconducting* and *non-SU(2)* channels.  
 
 .. _EDIPACK: https://github.com/edipack/EDIpack
-.. _EDIPACK: https://github.com/edipack/EDIpack
 .. _j.cpc.2021.108261: https://doi.org/10.1016/j.cpc.2021.108261
 
 
-Authors
-""""""""""""""""""""""""""""""""""
+Corresponding Authors
+"""""""""""""""""""""""""""""""""""""""""""""""""
 
 The `EDIpack` libraries have been developed as a
 collective effort by different authors, each contributing to diverse
-aspects of the library.
+aspects of the library. The main corresponding authors are:
 
 * `Adriano Amaricci`_ (leading author)
   
@@ -75,12 +74,6 @@ aspects of the library.
 * `Samuele Giuli`_
 
 * `Gabriele Bellomia`_
-
-* `Giacomo Mazza`_
-
-* Alberto Scazzola
-
-* Luca de Medici
   
 * Massimo Capone
 
@@ -88,7 +81,6 @@ aspects of the library.
 .. _Lorenzo Crippa: https://github.com/lcrippa    
 .. _Samuele Giuli: https://github.com/SamueleGiuli
 .. _Gabriele Bellomia: https://github.com/beddalumia
-.. _Giacomo Mazza: https://github.com/GiacMazza
 
 
 ***************************************
@@ -136,7 +128,7 @@ EDIpack2ineq
 ***************************************   
 EDIpack C-bindings
 ***************************************
-:doc:`edipack_cbindings`
+:doc:`edipack_cbinding`
      The Fortran-C interface for |edipack| and |edipack2ineq|
      
 *****************************************  
@@ -202,7 +194,7 @@ Browse Source Code
    :maxdepth: 2
    :hidden:
 
-   edipack_cbindings
+   edipack_cbinding
    
 .. toctree::
    :caption: Python projects
@@ -224,7 +216,7 @@ Browse Source Code
 
    EDIpack on GitHub <https://github.com/edipack/EDIpack>   
    EDIpack2py on GitHub <https://github.com/edipack/EDIpack2py>
-   EDIpackTRIQS on GitHub <https://github.com/krivenko/edipacktriqs>
+   EDIpack2Triqs on GitHub <https://github.com/krivenko/edipacktriqs>
    SciFortran on GitHub <https://github.com/SciFortran/SciFortran>
 
 

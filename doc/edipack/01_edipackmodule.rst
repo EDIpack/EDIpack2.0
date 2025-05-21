@@ -1,6 +1,6 @@
 .. _edipackmodule:
 
-EDIpack2 Fortran Module
+EDIpack Fortran Module
 ==========================
 
 
