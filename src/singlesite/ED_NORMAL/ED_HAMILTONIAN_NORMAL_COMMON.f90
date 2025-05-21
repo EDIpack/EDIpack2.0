@@ -73,7 +73,8 @@ contains
     integer                            :: qrow !Local number of rows on each thread
     integer                            :: qcol !Local number of columns on each thread
     real(8)                            :: a(nrow,qcol) ! Input vector to be transposed
-    real(8)                            :: b(ncol,qrow) ! Output vector :math:`b = v^T` 
+    real(8)                            :: b(ncol,qrow) ! Output vector :math:`b = v^T`
+    real(8),dimension(:),allocatable   :: Vtmp
     integer,allocatable,dimension(:,:) :: send_counts,send_offset
     integer,allocatable,dimension(:,:) :: recv_counts,recv_offset
     integer                            :: counts,Ntot
@@ -126,10 +127,18 @@ contains
     !
     !
     do j=1,Ntot
+       !Fix issue with empty columns arising from having few MPI nodes
+       if(j<=size(A,2))then
+          Vtmp = A(:,j)            !automatic allocation
+       else
+          allocate(Vtmp(0))
+       endif
        call MPI_AllToAllV(&
-            A(:,j),send_counts(:,j),send_offset(:,j),MPI_DOUBLE_PRECISION,&
+            ! A(:,j),send_counts(:,j),send_offset(:,j),MPI_DOUBLE_PRECISION,&
+            Vtmp,send_counts(:,j),send_offset(:,j),MPI_DOUBLE_PRECISION,&
             B(:,:),recv_counts(:,j),recv_offset(:,j),MPI_DOUBLE_PRECISION,&
             MpiComm,ierr)
+       deallocate(Vtmp)
     enddo
     !
     call local_transpose(b,ncol,qrow)
