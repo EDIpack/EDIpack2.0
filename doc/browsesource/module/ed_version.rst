@@ -6,5 +6,5 @@ ED_VERSION
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack/tree/rename_to_edipack/src/singlesite/revision.in>`_ for :f:mod:`ed_version` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack/tree/master/src/singlesite/revision.in>`_ for :f:mod:`ed_version` on GitHub
  

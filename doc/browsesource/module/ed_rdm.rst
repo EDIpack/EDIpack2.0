@@ -6,5 +6,5 @@ ED_RDM
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack/tree/rename_to_edipack/src/singlesite/ED_RDM.f90>`_ for :f:mod:`ed_rdm` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack/tree/master/src/singlesite/ED_RDM.f90>`_ for :f:mod:`ed_rdm` on GitHub
  

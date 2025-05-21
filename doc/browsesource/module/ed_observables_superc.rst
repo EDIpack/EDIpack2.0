@@ -6,5 +6,5 @@ ED_OBSERVABLES_SUPERC
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack/tree/rename_to_edipack/src/singlesite/ED_SUPERC/ED_OBSERVABLES_SUPERC.f90>`_ for :f:mod:`ed_observables_superc` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack/tree/master/src/singlesite/ED_SUPERC/ED_OBSERVABLES_SUPERC.f90>`_ for :f:mod:`ed_observables_superc` on GitHub
  

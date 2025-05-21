@@ -6,5 +6,5 @@ E2I_BATH_REPLICA
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack/tree/rename_to_edipack/src/ineq/E2I_BATH/E2I_BATH_REPLICA.f90>`_ for :f:mod:`e2i_bath_replica` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack/tree/master/src/ineq/E2I_BATH/E2I_BATH_REPLICA.f90>`_ for :f:mod:`e2i_bath_replica` on GitHub
  

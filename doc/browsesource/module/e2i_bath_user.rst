@@ -6,5 +6,5 @@ E2I_BATH_USER
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack/tree/rename_to_edipack/src/ineq/E2I_BATH/E2I_BATH_USER.f90>`_ for :f:mod:`e2i_bath_user` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack/tree/master/src/ineq/E2I_BATH/E2I_BATH_USER.f90>`_ for :f:mod:`e2i_bath_user` on GitHub
  

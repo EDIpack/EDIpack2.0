@@ -6,5 +6,5 @@ ED_OBSERVABLES_NORMAL
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack/tree/rename_to_edipack/src/singlesite/ED_NORMAL/ED_OBSERVABLES_NORMAL.f90>`_ for :f:mod:`ed_observables_normal` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack/tree/master/src/singlesite/ED_NORMAL/ED_OBSERVABLES_NORMAL.f90>`_ for :f:mod:`ed_observables_normal` on GitHub
  

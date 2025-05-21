@@ -6,5 +6,5 @@ ED_GFMATRIX
  
 |
  
-`Open source file <https://github.com/EDIpack/EDIpack/tree/rename_to_edipack/src/singlesite/ED_GFMATRIX.f90>`_ for :f:mod:`ed_gfmatrix` on GitHub
+`Open source file <https://github.com/EDIpack/EDIpack/tree/master/src/singlesite/ED_GFMATRIX.f90>`_ for :f:mod:`ed_gfmatrix` on GitHub
  

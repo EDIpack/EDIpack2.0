@@ -28,6 +28,8 @@ graph_maxnodes:20
 This is my Fortran project!
 EOF
 
+rm -f src/*
+
 #Run FORD (not checking actual presence)
 ford ford_doc.md
 #Sync module/*.html files in local src
