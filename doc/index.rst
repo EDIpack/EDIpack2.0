@@ -127,7 +127,7 @@ EDIpack
      description of the relevant modules, data types and procedures.
 
 ***************************************     
-EDIpackineq
+EDIpack2ineq
 ***************************************
 :doc:`edipack2ineq`
      The inequivalent impurities extension of |edipack|
@@ -136,7 +136,7 @@ EDIpackineq
 ***************************************   
 EDIpack C-bindings
 ***************************************
-:doc:`edipack_cbinding`
+:doc:`edipack_cbindings`
      The Fortran-C interface for |edipack| and |edipack2ineq|
      
 *****************************************  
@@ -190,7 +190,7 @@ Browse Source Code
 
 
 .. toctree::
-   :caption: EDIpackineq
+   :caption: EDIpack2ineq
    :maxdepth: 2
    :hidden:
 
@@ -202,7 +202,7 @@ Browse Source Code
    :maxdepth: 2
    :hidden:
 
-   edipack_cbinding
+   edipack_cbindings
    
 .. toctree::
    :caption: Python projects

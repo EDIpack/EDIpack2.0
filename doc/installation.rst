@@ -124,10 +124,10 @@ step the following recap is printed:
    $ make -j [all/edipack, default=all]
    
    *Build C-bindings: 
-   $ make edipack_cbinding
+   $ make edipack_cbindings
       
    *Install: 
-   $ make [all/edipack/edipack_cbinding, default=all] install
+   $ make [all/edipack/edipack_cbindings, default=all] install
    
    *Uninstall: 
    $ make uninstall
