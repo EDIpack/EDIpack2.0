@@ -19,7 +19,7 @@ This version, aims to solve single-site, multi-orbital models, in either  *norma
 ### Install 
 *EDIpack* is available in the form of a static Fortran library (`libedipack.a`) and the related Fortran module `EDIPACK`.
 The release version includes additional modules to extend the software functionalities: i) an inequivalent impurities extension `Edipack2ineq`
-and ii) a shared dynamical library `edipack_cbinding.so` implementing the Fortran-C interface. 
+and ii) a shared dynamical library `edipack_cbindings.so` implementing the Fortran-C interface. 
 
 A standard installation from source is available through `CMake`, via the standard out-of-source method. 
 
