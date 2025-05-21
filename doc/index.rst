@@ -127,7 +127,7 @@ EDIpack
      description of the relevant modules, data types and procedures.
 
 ***************************************     
-EDIpackineq
+EDIpack2ineq
 ***************************************
 :doc:`edipack2ineq`
      The inequivalent impurities extension of |edipack|
@@ -190,7 +190,7 @@ Browse Source Code
 
 
 .. toctree::
-   :caption: EDIpackineq
+   :caption: EDIpack2ineq
    :maxdepth: 2
    :hidden:
 

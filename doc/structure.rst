@@ -17,7 +17,7 @@ It builds into the static libary `libedipack.a` and it is
 accessible via the Fortran module :f:mod:`EDIPACK`
 
 
-**EDIpackineq**: :ref:`edipack2ineq`
+**EDIpack2ineq**: :ref:`edipack2ineq`
 =======================================
 This is a sub-library implementing the inequivalent impurities
 extension for |edipack|, tackling the solution of systems represented by several

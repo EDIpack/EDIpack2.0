@@ -13,7 +13,7 @@ systems, etc.).
 As for its scope, the structure of this sub-library closely mimics that
 of |edipack| adding, where needed, new procedures adapted to the 
 inequivalent impurities case. A standard fortran interface is then used to group
-all the procedures (from `EDIpack` and `EDIpackineq`) under the same
+all the procedures (from `EDIpack` and `EDIpack2ineq`) under the same
 name.      
 
 
@@ -57,7 +57,7 @@ General Environment
 =================================================================
 
 This part of the library includes a set of global variables and
-procedures  for `EDIpackineq`.  This includes:
+procedures  for `EDIpack2ineq`.  This includes:
 
 :f:mod:`E2I_VARS_GLOBAL`: contains global shared
 variables storing site dependent quantities in the memory
