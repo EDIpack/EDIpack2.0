@@ -15,6 +15,7 @@ FLAG = -O2 -D_MPI
 ifdef LIB_ED
 GLOB_INC+=$(shell pkg-config --cflags ${LIB_ED})
 GLOB_LIB+=$(shell pkg-config --libs ${LIB_ED})
+GLOB_LIB += -Wl,-rpath,$(shell pkg-config --variable=libdir ${LIB_ED})
 endif
 
 
