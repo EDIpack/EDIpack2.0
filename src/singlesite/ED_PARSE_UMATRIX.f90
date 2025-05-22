@@ -62,13 +62,15 @@ contains
     Jp_internal   = zero
     if(allocated(coulomb_sundry))deallocate(coulomb_sundry)
   
-    !If we need to read a umatrix file, we read a umatrix file
+    !If we need to read a umatrix file, we read a umatrix file. This is not at present 
+    !compatible with ED_TOTAL_UD: in that case, just use the Kanamori coefficients.
     if(ed_read_umatrix)then
        if(.not. ED_TOTAL_UD) STOP "ED_TOTAL_UD = F and ED_READ_UMATRIX = T are incompatible"
        call read_umatrix_file(umatrix_file)
      endif
      
-     !If the user has passed some extra operators, we read them
+     !If the user has passed some extra operators, we read them.
+     !This in principle doesn't care about ED_TOTAL_UD: we will check later.
      if(allocated(coulomb_runtime))then
        do iline=1,size(coulomb_runtime)
          call parse_umatrix_line(coulomb_runtime(iline))
@@ -94,15 +96,15 @@ contains
     !
     !Jx and Jp have a summation that goes from 1 to Norb for both orbital indices, so no change there
  
-     !If we use the default input variables, we set them  here. It is important to do that here, after
-     !the reshufflings before, because these coefficients are not subject to those!
-     if(ed_use_kanamori)then
-       if(Norb > 5)STOP "ED_READ_UMATRIX = F: max 5 orbitals allowed"
-       Uloc_internal = Uloc_internal + Uloc(1:Norb)
-       Ust_internal  = Ust_internal  + Ust - Ust*eye(Norb)
-       Jh_internal   = Jh_internal   + Jh  - Jh*eye(Norb)
-       Jx_internal   = Jx_internal   + Jx  - Jx*eye(Norb)
-       Jp_internal   = Jp_internal   + Jp  - Jp*eye(Norb)
+    !If we use the default input variables, we set them  here. It is important to do that here, after
+    !the reshufflings before, because these coefficients are not subject to those!
+    if(ed_use_kanamori)then
+      if(Norb > 5)STOP "ED_READ_UMATRIX = F: max 5 orbitals allowed"
+      Uloc_internal = Uloc_internal + Uloc(1:Norb)
+      Ust_internal  = Ust_internal  + Ust - Ust*eye(Norb)
+      Jh_internal   = Jh_internal   + Jh  - Jh*eye(Norb)
+      Jx_internal   = Jx_internal   + Jx  - Jx*eye(Norb)
+      Jp_internal   = Jp_internal   + Jp  - Jp*eye(Norb)
     endif
  
  
@@ -110,6 +112,19 @@ contains
     if(ed_verbose>2)then
       call print_umatrix()
     endif
+    
+    !Second check for ED_TOTAL_UD: it cannot be 'F' if 'Jx_internal, Jp_internal' or 'Coulomb_sundry'
+    !are nonzero, with a caveat. Slightly different condition than the standard one: if only 
+    !one orbital is present, Coulomb sundry terms are all fine. They are either the Hubbard U,
+    !something impossible or something like n^2 = n. This latter case goes in sundry but does not
+    !interfere with ed_total_ud. If more than one orbital is present, the standard check applies.
+    if(.not.ed_total_ud)then
+      if( (Norb>1 .AND. ( any((Jx_internal/=0d0)) .OR. any((Jp_internal/=0d0)) ) ) &
+      .OR. (Norb>1 .AND. allocated(coulomb_sundry)) ) then
+        STOP "ED ERROR: ed_total_ud=F cannot be used if non-density-density interaction terms are present"
+      endif
+    endif
+    !
     !Save to file
     call save_umatrix_file()
   end subroutine set_umatrix

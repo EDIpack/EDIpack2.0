@@ -42,7 +42,7 @@ contains
     if(.not.ed_total_ud)then
        if(bath_type=="hybrid")stop "ED ERROR: ed_total_ud=F can not be used with bath_type=hybrid"
        if(bath_type=="replica".or.bath_type=="general")print*,"ED WARNING: ed_total_ud=F with bath_type=replica/general requires some care with H_bath"
-       if(Norb>1.AND.(Jx/=0d0.OR.Jp/=0d0))stop "ED ERROR: ed_total_ud=F can not be used with Jx!=0 OR Jp!=0"
+       !if(Norb>1.AND.(Jx/=0d0.OR.Jp/=0d0))stop "ED ERROR: ed_total_ud=F can not be used with Jx!=0 OR Jp!=0" !This has been moved to ED_PARSE_UMATRIX
     endif
     !
     if(ed_mode=="superc")then
