@@ -349,7 +349,7 @@ Interfaces to :f:func:`get_bath_dimension`.
 * @param Nsym: the number of components of the replica matrix linear combination
 * @return the dimension of the bath array
 */ 
-int  get_bath_dimension_direct(int Nsym);
+int  get_bath_dimension_symmetries(int Nsym);
 
 /*!
 \rst
