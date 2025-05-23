@@ -415,9 +415,9 @@ MODULE ED_INPUT_VARS
   ! :Default cg_norm:`ELEMENTAL`
   !.. warning:: 
   !   The Frobenius norm is currently implemented only for :f:var:`ed_bath` = :code:`replica, general`. 
-  !   Also, for :f:var:`cg_pow` = 2  the Frobenius norm is ill-defined, at least with respect to its
-  !   usual mathematical meaning. The behavior of :code:`cg_norm=frobenius` might be changed or removed
-  !   in future versions of the code, breaking back-compatibility.
+  !   Also, for :f:var:`cg_pow` :math:`\neq 2`  the Frobenius norm is ill-defined, at least with respect 
+  !   to its usual mathematical meaning. The behavior of :code:`cg_norm=frobenius` might be changed or 
+  !   removed in future versions of the code, breaking back-compatibility.
   !
   logical              :: cg_minimize_ver   !
   !If :f:var:`cg_grad` = :code:`1` , select which version of :code:`minimize.f` to use
