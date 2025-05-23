@@ -410,10 +410,14 @@ MODULE ED_INPUT_VARS
   !
   character(len=12)    :: cg_norm           !
   !Which norm to use in the evaluation of the :math:`\chi^{2}` for matrix quantities. 
-  !Relevant for :f:var:`ed_bath` = :code:`replica, general` 
   ! * :code:`ELEMENTAL` : :math:`\chi^{2}` is the sum of each component's :math:`\chi^{2}`
   ! * :code:`FROBENIUS` : :math:`\chi^{2}` is calculated on the Frobenius norm (Matrix distance)
   ! :Default cg_norm:`ELEMENTAL`
+  !.. warning:: 
+  !   The Frobenius norm is currently implemented only for :f:var:`ed_bath` = :code:`replica, general`. 
+  !   Also, for :f:var:`cg_pow` = 2  the Frobenius norm is ill-defined, at least with respect to its
+  !   usual mathematical meaning. The behavior of :code:`cg_norm=frobenius` might be changed or removed
+  !   in future versions of the code, breaking back-compatibility.
   !
   logical              :: cg_minimize_ver   !
   !If :f:var:`cg_grad` = :code:`1` , select which version of :code:`minimize.f` to use
@@ -705,6 +709,15 @@ contains
     call parse_input_variable(cg_minimize_ver,"CG_MINIMIZE_VER",INPUTunit,default=.false.,comment="Flag to pick old/.false. (Krauth) or new/.true. (Lichtenstein) version of the minimize CG routine")
     call parse_input_variable(cg_minimize_hh,"CG_MINIMIZE_HH",INPUTunit,default=1d-4,comment="Unknown parameter used in the CG minimize procedure.")
     !
+    if (cg_norm=='frobenius' .and. bath_type/='replica' .or. bath_type/='general') then
+          print*, "WARNING: The Frobenius norm is currently not implemented for normal and hybrid bath types."
+          print*, "         The elemental (usual element-wise chi^2) norm will be used instead."
+    endif
+    if(cg_norm=='frobenius' .and. cg_pow/=2)then
+          print *, "WARNING: CG_POW must be 2 for a meaningful definition of the Frobenius norm."
+          print *, "         We'll still let you go ahead with the desired input, but please be "
+          print *, "         be aware that CG_POW is not doing what you would expect for a chi^q"
+    endif
     !
     call parse_input_variable(Jz_basis,"JZ_BASIS",INPUTunit,default=.false.,comment="Flag to enable the Jz basis")
     call parse_input_variable(Jz_max,"JZ_MAX",INPUTunit,default=.false.,comment="Whether to cutoff Jz")
