@@ -337,7 +337,19 @@ Interfaces to :f:func:`get_bath_dimension`.
 *
 * @return the dimension of the bath array
 */ 
-int  get_bath_dimension(void);
+int  get_bath_dimension_direct(void);
+
+/*!
+\rst
+This function gets the dimension of the user-accessible bath array.
+Specific for replica and general baths.
+Interfaces to :f:func:`get_bath_dimension`.
+\endrst
+*
+* @param Nsym: the number of components of the replica matrix linear combination
+* @return the dimension of the bath array
+*/ 
+int  get_bath_dimension_direct(int Nsym);
 
 /*!
 \rst

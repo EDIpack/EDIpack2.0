@@ -264,19 +264,21 @@ contains
              do ibath=1,Nbath
                 dmft_bath%item(ibath)%lambda(isym) =  Hb%linit(ibath,isym) + offset(ibath)
              enddo
-             write(LOGfile,*) "                                                                    "
-             write(LOGfile,*) "WARNING: some of your inital lambda have been internally changed    "
-             write(LOGfile,*) "         while calling ed_init_solver. This happens whenever the    "
-             write(LOGfile,*) "         corresponding Hsym is diagonal and all the replicas receive"
-             write(LOGfile,*) "         the same initial lambda value, due to the deprecated legacy"
-             write(LOGfile,*) "         practice of defining a unique lambda vector forall replicas"
-             write(LOGfile,*) "         and let the solver decide how to handle these degeneracies."
-             write(LOGfile,*) "         >>> If you really intend to have a degenerate diagonal term"
-             write(LOGfile,*) "             in the bath you can define a suitable restart file.    "
-             write(LOGfile,*) "         >>> If instead this is what you expected please consider to"
-             write(LOGfile,*) "             move the desired rescaling in your driver, since this  "
-             write(LOGfile,*) "             funcionality might be removed in a future update.      "
-             write(LOGfile,*) "                                                                    "
+             if(MpiMaster)then
+               write(LOGfile,*) "                                                                    "
+               write(LOGfile,*) "WARNING: some of your inital lambda have been internally changed    "
+               write(LOGfile,*) "         while calling ed_init_solver. This happens whenever the    "
+               write(LOGfile,*) "         corresponding Hsym is diagonal and all the replicas receive"
+               write(LOGfile,*) "         the same initial lambda value, due to the deprecated legacy"
+               write(LOGfile,*) "         practice of defining a unique lambda vector forall replicas"
+               write(LOGfile,*) "         and let the solver decide how to handle these degeneracies."
+               write(LOGfile,*) "         >>> If you really intend to have a degenerate diagonal term"
+               write(LOGfile,*) "             in the bath you can define a suitable restart file.    "
+               write(LOGfile,*) "         >>> If instead this is what you expected please consider to"
+               write(LOGfile,*) "             move the desired rescaling in your driver, since this  "
+               write(LOGfile,*) "             funcionality might be removed in a future update.      "
+               write(LOGfile,*) "                                                                    "
+             endif
           endif
        enddo
        !

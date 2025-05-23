@@ -1,8 +1,14 @@
 !ED_BATH:
-integer(c_int) function get_bath_dimension_c() result(Nb) bind(c, name='get_bath_dimension')
+integer(c_int) function get_bath_dimension_direct_c() result(Nb) bind(c, name='get_bath_dimension_direct')
   use, intrinsic :: iso_c_binding
   Nb=ed_get_bath_dimension()
-end function get_bath_dimension_c
+end function get_bath_dimension_direct_c
+
+integer(c_int) function get_bath_dimension_symmetries_c(Nsym) result(Nb) bind(c, name='get_bath_dimension_symmetries')
+  use, intrinsic                           :: iso_c_binding
+  integer(c_int),value                     :: Nsym
+  Nb=ed_get_bath_dimension(Nsym)
+end function get_bath_dimension_symmetries_c
 
 !H_REPLICA SETUP
 subroutine init_Hreplica_symmetries_d5_c(Hvec,d_hvec,lambdavec,d_lambdavec) bind(c, name='init_Hreplica_symmetries_d5')
