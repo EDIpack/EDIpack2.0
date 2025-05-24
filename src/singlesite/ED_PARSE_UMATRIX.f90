@@ -335,7 +335,7 @@ contains
     !from the anticommutation, these are stored in an array :f:var:`mfHloc` of dimension
     ![:code:`2`, :code:`2`, :f:var:`Norb`, :f:var:`Norb`], which will be added to
     !:f:var:`impHloc` upon Fock space H construction.
-    !If :f:var:`ED_VERBOSE` > :code:`3`, this routine will print extensive information
+    !If :f:var:`ED_VERBOSE` > :code:`2`, this routine will print extensive information
     !about the read file(s) and the type of the operators therein contained.
     !
     character(len=*)              :: ufile  !File containing a properly formatted interaction Hamiltonian. Default :f:var:`UMATRIX_FILE` :code:`.restart`

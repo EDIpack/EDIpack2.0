@@ -113,7 +113,7 @@ additional variables:
    :code:`BUILD_TYPE=AGGRESSIVE`  includes many deep level debug options which might not compile on some systems or breakdown compilation at linking step.  
 
 
-The default target builds either the main library and the C-binding. A
+The default target builds either the main library and the C-bindings. A
 specific building for each library is also available specifying the
 required target. For user convenience at the end CMake configuration
 step the following recap is printed:

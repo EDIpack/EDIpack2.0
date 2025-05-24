@@ -30,14 +30,14 @@ This |edipack2ineq| builds into the same static library
 The naming convention of the |edipack| procedures is preserved. 
 
 
-**EDIpack C-binding**: :ref:`edipack_cbindings`
+**EDIpack C-bindings**: :ref:`edipack_cbindings`
 =================================================
 A module implementing the Fortran-C interface for |edipack|,
 including |edipack2ineq| extension where included.
 The  language interoperability leverages over the implicit Fortran
 :code:`ISO_C_BINDING` features and is achieved using C-types to wrap the
 relevant `EDIpack` procedures.
-The C-binding module serves as a key tool to setup additional API for 
+The C-bindings module serves as a key tool to setup additional API for 
 |edipack|, as for instance the Python API (see EDIpack2py_ ).
 This module builds into dynamic libraries
 `libedipack_cbindings.so/.dylib`. 

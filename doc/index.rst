@@ -128,7 +128,7 @@ EDIpack2ineq
 ***************************************   
 EDIpack C-bindings
 ***************************************
-:doc:`edipack_cbinding`
+:doc:`edipack_cbindings`
      The Fortran-C interface for |edipack| and |edipack2ineq|
      
 *****************************************  
@@ -194,7 +194,7 @@ Browse Source Code
    :maxdepth: 2
    :hidden:
 
-   edipack_cbinding
+   edipack_cbindings
    
 .. toctree::
    :caption: Python projects
