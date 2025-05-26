@@ -709,7 +709,7 @@ contains
     call parse_input_variable(cg_minimize_ver,"CG_MINIMIZE_VER",INPUTunit,default=.false.,comment="Flag to pick old/.false. (Krauth) or new/.true. (Lichtenstein) version of the minimize CG routine")
     call parse_input_variable(cg_minimize_hh,"CG_MINIMIZE_HH",INPUTunit,default=1d-4,comment="Unknown parameter used in the CG minimize procedure.")
     !
-    if (cg_norm=='frobenius' .and. bath_type/='replica' .or. bath_type/='general') then
+    if (cg_norm=='frobenius' .and. (bath_type/='replica' .or. bath_type/='general')) then
           print*, "WARNING: The Frobenius norm is currently not implemented for normal and hybrid bath types."
           print*, "         The elemental (usual element-wise chi^2) norm will be used instead."
     endif
