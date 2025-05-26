@@ -151,7 +151,7 @@ int main(int argc, char* argv[]) {
     complex<double> zeta = 0.0;
     vector<double> Ebands, Dbands;
     
-    Nb = get_bath_dimension();
+    Nb = get_bath_dimension_direct();
     int64_t bath_dim[1] = {Nb};
 
     // Solver-specific arrays
