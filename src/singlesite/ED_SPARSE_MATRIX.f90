@@ -164,7 +164,6 @@ contains
 
 
 
-#ifdef _MPI
   subroutine mpi_sp_init_matrix_csr(MpiComm,sparse,N,N1)
     integer                               :: MpiComm !MPI global communicator
     type(sparse_matrix_csr),intent(inout) :: sparse
@@ -172,6 +171,9 @@ contains
     integer,optional                      :: N1
     integer                               :: i,Ncol,Nloc
     !
+#ifndef _MPI
+  STOP "mpi_sp_init_matrix_csr called in a non-mpi build"
+#else
 #ifdef _DEBUG
     if(ed_verbose>4)write(Logfile,"(A)")"DEBUG MPI_sp_init_matrix_csr: allocate sparse"
 #endif
@@ -194,19 +196,9 @@ contains
        allocate(sparse%loc(i)%cols(0)) !empty array
     end do
     !
-  end subroutine mpi_sp_init_matrix_csr
-#else
-  subroutine mpi_sp_init_matrix_csr(MpiComm,sparse,N,N1)
-    integer                               :: MpiComm !MPI global communicator
-    type(sparse_matrix_csr),intent(inout) :: sparse
-    integer                               :: N
-    integer,optional                      :: N1
-    integer                               :: i,Ncol,Nloc
-    !
-    STOP "mpi_sp_init_matrix_csr called in a non-mpi build"
-    !
-  end subroutine mpi_sp_init_matrix_csr
 #endif
+  end subroutine mpi_sp_init_matrix_csr
+
 
 
 
@@ -242,13 +234,15 @@ contains
 
 
 
-#ifdef _MPI
   subroutine mpi_sp_delete_matrix_csr(MpiComm,sparse)
     integer                              :: MpiComm
     type(sparse_matrix_csr),intent(inout) :: sparse
     integer                              :: i
     type(sparse_row_csr),pointer          :: row
     !
+#ifndef mpi
+    STOP "mpi_sp_init_matrix_csr called in a non-mpi build"
+#else
 #ifdef _DEBUG
     if(ed_verbose>4)write(Logfile,"(A)")"DEBUG MPI_sp_delete_matrix_csr: delete sparse"
 #endif
@@ -277,16 +271,8 @@ contains
     sparse%ishift=0
     sparse%mpi=.false.
     !
+#endif
   end subroutine mpi_sp_delete_matrix_csr
-#else  
-  subroutine mpi_sp_delete_matrix_csr(MpiComm,sparse)
-    integer                              :: MpiComm
-    type(sparse_matrix_csr),intent(inout) :: sparse
-    integer                              :: i
-    type(sparse_row_csr),pointer          :: row
-    STOP "mpi_sp_init_matrix_csr called in a non-mpi build"
-  end subroutine mpi_sp_delete_matrix_csr
-#endif  
 
 
 
@@ -373,7 +359,7 @@ contains
     !
   end subroutine sp_insert_element_csr_c
 
-#ifdef _MPI
+
   subroutine mpi_sp_insert_element_csr_d(MpiComm,sparse,value,i,j)
     integer                               :: MpiComm !MPI global communicator
     type(sparse_matrix_csr),intent(inout) :: sparse
@@ -383,6 +369,9 @@ contains
     integer                               :: column,pos
     logical                               :: iadd
     !
+#ifndef _MPI
+  STOP "mpi_sp_insert_element_csr_c called in a non-mpi build"
+#else
 #ifdef _DEBUG
     if(ed_verbose>5)write(Logfile,"(A,2I8)")"DEBUG MPI_sp_insert_element_csr_d: insert element in sparse @",i,j
 #endif
@@ -411,6 +400,7 @@ contains
     !
     if(row%Size > sparse%Ncol)stop "mpi_sp_insert_element_csr ERROR: row%Size > sparse%Ncol"
     !
+#endif
   end subroutine mpi_sp_insert_element_csr_d
 
   subroutine mpi_sp_insert_element_csr_c(MpiComm,sparse,value,i,j)
@@ -422,6 +412,9 @@ contains
     integer                               :: column,pos
     logical                               :: iadd
     !
+#ifndef _MPI
+  STOP "mpi_sp_insert_element_csr_c called in a non-mpi build"
+#else
 #ifdef _DEBUG
     if(ed_verbose>5)write(Logfile,"(A,2I8)")"DEBUG MPI_sp_insert_element_csr_c: insert element in sparse @",i,j
 #endif
@@ -452,32 +445,8 @@ contains
     !
     if(row%Size > sparse%Ncol)stop "mpi_sp_insert_element_csr ERROR: row%Size > sparse%Ncol"
     !
-  end subroutine mpi_sp_insert_element_csr_c
-#else
-  subroutine mpi_sp_insert_element_csr_d(MpiComm,sparse,value,i,j)
-    integer                               :: MpiComm
-    type(sparse_matrix_csr),intent(inout) :: sparse
-    real(8),intent(in)                 :: value
-    integer,intent(in)                    :: i,j
-    type(sparse_row_csr),pointer          :: row
-    integer                               :: column,pos
-    logical                               :: iadd
-    !
-    STOP "mpi_sp_insert_element_csr_c called in a non-mpi build"
-  end subroutine mpi_sp_insert_element_csr_d
-
-  subroutine mpi_sp_insert_element_csr_c(MpiComm,sparse,value,i,j)
-    integer                               :: MpiComm
-    type(sparse_matrix_csr),intent(inout) :: sparse
-    complex(8),intent(in)                 :: value
-    integer,intent(in)                    :: i,j
-    type(sparse_row_csr),pointer          :: row
-    integer                               :: column,pos
-    logical                               :: iadd
-    !
-    STOP "mpi_sp_insert_element_csr_c called in a non-mpi build"
-  end subroutine mpi_sp_insert_element_csr_c
 #endif
+  end subroutine mpi_sp_insert_element_csr_c
 
 
 
