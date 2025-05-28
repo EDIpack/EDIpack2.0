@@ -27,6 +27,11 @@ INCLUDE(${CMAKE_MODULE_PATH}/ColorsMsg.cmake)
 
 # Set some options the user may choose
 OPTION(USE_MPI "Set MPI pre-compilation flag" ON)
+if(USE_MPI)
+  message(STATUS "USE_MPI is ON")
+else()
+  message(STATUS "USE_MPI is OFF")
+endif()
 OPTION(WITH_INEQ "Includes Support for inequivalent impurities" ON)
 if(WITH_INEQ)
   message(STATUS "WITH_INEQ is ON")
