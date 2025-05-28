@@ -5,13 +5,14 @@ Pair Susceptibility
 
 
 
-In :f:mod:`ed_chi_dens` we evaluate the impurity pair 
+In :f:mod:`ed_chi_pair` we evaluate the impurity pair 
 susceptibility, defined as:
 
 .. math::
 
-   \chi^{\Delta}_{ab}(\omega) = \langle \Delta_a(\omega) \Delta_b(\omega) \rangle = \frac{1}{\cal
-   Z}\sum_m e^{-\beta E_m} \langle m | \Delta_a [\omega-H]^{-1} \Delta_b  | m \rangle
+   \chi^{\Delta}_{ab}(\omega) = \frac{1}{\cal
+   Z}\sum_m e^{-\beta E_m} (\langle m | \Delta_a [\omega-H]^{-1} \Delta_b  | m \rangle +
+    \langle m | \Delta_b [\omega+H]^{-1} \Delta_a  | m \rangle )
 
 where :math:`\Delta_a = c_{a\uparrow} c_{a\downarrow}` is the fermion
 singlet pair operator of the orbital :math:`a` and :math:`\omega \in {\mathbb C}`. As for the

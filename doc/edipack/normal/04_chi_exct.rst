@@ -8,8 +8,9 @@ susceptibility, defined as:
 
 .. math::
 
-   \chi^{X}_{ab}(\omega) = \langle {X}^\dagger_{ab}(\omega) X_{ab}(\omega) \rangle = \frac{1}{\cal
-   Z}\sum_m e^{-\beta E_m} \langle m | X^\dagger_{ab} [\omega-H]^{-1} X_{ab}  | m \rangle
+   \chi^{X}_{ab}(\omega) = \frac{1}{\cal
+   Z}\sum_m e^{-\beta E_m} (\langle m | X^\dagger_{ab} [\omega-H]^{-1} X_{ab}  | m \rangle
+   + \langle m | X_{ab} [\omega+H]^{-1} X^\dagger_{ab}  | m \rangle )
 
 where :math:`X_{ab}=S_{ab},T^x_{ab},T^y_{ab},T^z_{ab}` are, respectively, the singlet and
 triplet :math:`x,y,z`  exciton operators: 

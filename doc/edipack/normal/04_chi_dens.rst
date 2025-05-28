@@ -9,8 +9,9 @@ susceptibility, defined as:
 
 .. math::
 
-   \chi^n_{ab}(\omega) = \langle n_a(\omega) n_b(\omega) \rangle = \frac{1}{\cal
-   Z}\sum_m e^{-\beta E_m} \langle m | n_a [\omega-H]^{-1} n_b  | m \rangle
+   \chi^n_{ab}(\omega)  = \frac{1}{\cal
+   Z}\sum_m e^{-\beta E_m} (\langle m | n_a [\omega-H]^{-1} n_b  | m \rangle +
+   \langle m | n_b [\omega+H]^{-1} n_a  | m \rangle)
 
 where :math:`n_a` is the density operator of the
 orbital :math:`a` and :math:`\omega \in {\mathbb C}`. As for the

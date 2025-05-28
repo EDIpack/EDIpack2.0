@@ -8,8 +8,9 @@ susceptibility, defined as:
 
 .. math::
 
-   \chi^{z}_{ab}(\omega) = \langle S^z_a(\omega) S^z_b(\omega) \rangle = \frac{1}{\cal
-   Z}\sum_n e^{-\beta E_n} \langle n | S^z_a [\omega-H]^{-1} S^z_b  | n \rangle
+   \chi^{z}_{ab}(\omega) = \frac{1}{\cal
+   Z}\sum_n e^{-\beta E_n} (\langle n | S^z_a [\omega-H]^{-1} S^z_b  | n \rangle +
+   \langle n | S^z_b [\omega+H]^{-1} S^z_a  | n \rangle )
 
 where :math:`S^z_a` is the z-component of the spin operator of the
 orbital :math:`a` and :math:`\omega \in {\mathbb C}`. As for the
