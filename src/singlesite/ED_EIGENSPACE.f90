@@ -875,7 +875,7 @@ contains        !some routine to perform simple operation on the lists
        call es_return_dvector_default(space,n,vector)
     endif
 #else
-    call es_return_cvector_default(space,n,vector)
+    call es_return_dvector_default(space,n,vector)
 #endif
   end function es_return_dvec
 

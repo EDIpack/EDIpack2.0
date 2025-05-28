@@ -172,8 +172,8 @@ contains
     complex(8)                                    :: single_particle_density_matrix_tmp(size(bath,1),Nspin,Nspin,Norb,Norb)
     complex(8)                                    :: impurity_density_matrix_tmp(size(bath,1),4**Norb,4**Norb)
     !
-    integer,allocatable,dimension(:,:)            :: neigen_sectortmp !(size(bath,1),Nsectors)
-    integer                                       :: neigen_totaltmp(size(bath,1))
+    integer,allocatable,dimension(:,:)            :: neigen_sector_tmp !(size(bath,1),Nsectors)
+    integer                                       :: neigen_total_tmp(size(bath,1))
     ! 
     integer                                       :: i,j,ilat,iorb,jorb,ispin,jspin,Nsectors
     integer                                       :: Nineq
@@ -213,7 +213,7 @@ contains
     !    if(.not.check_dim) stop "init_lattice_bath: wrong bath size dimension 1 or 2 "
     ! end do
     !
-    allocate(neigen_sectortmp(Nineq,Nsectors))
+    allocate(neigen_sector_tmp(Nineq,Nsectors))
     !
     dens_ineq     = 0d0  ; docc_ineq     = 0d0
     mag_ineq      = 0d0  ; phisc_ineq    = 0d0  ; exct_ineq = 0d0 
@@ -224,8 +224,8 @@ contains
     dens_tmp   = 0d0  ; docc_tmp   = 0d0
     mag_tmp    = 0d0  ; phisc_tmp  = 0d0 ; exct_tmp = 0d0
     e_tmp      = 0d0  ; dd_tmp     = 0d0
-    neigen_sectortmp = 0
-    neigen_totaltmp  = 0
+    neigen_sector_tmp = 0
+    neigen_total_tmp  = 0
     single_particle_density_matrix_tmp = zero
     impurity_density_matrix_tmp = zero
     !
@@ -255,8 +255,8 @@ contains
           !
           call ed_solve(bath(ilat,:),flag_gf=flag_gf_,flag_mpi=mpi_lanc_)
           !
-          neigen_totaltmp(ilat)      = lanc_nstates_total
-          call ed_get_neigen_sector ( neigen_sectortmp(ilat,:) )
+          neigen_total_tmp(ilat)      = lanc_nstates_total
+          call ed_get_neigen_sector ( neigen_sector_tmp(ilat,:) )
           call ed_get_dens( dens_tmp(ilat,1:Norb) )
           call ed_get_docc( docc_tmp(ilat,1:Norb) ) 
           call ed_get_mag( mag_tmp(ilat,:,1:Norb) )
@@ -285,8 +285,8 @@ contains
           call AllReduce_MPI(MPI_COMM_WORLD,impurity_density_matrix_tmp,impurity_density_matrix_ineq)
           neigen_sector_ineq=0
           neigen_total_ineq=0
-          call AllReduce_MPI(MPI_COMM_WORLD,neigen_sectortmp,neigen_sector_ineq)
-          call AllReduce_MPI(MPI_COMM_WORLD,neigen_totaltmp,neigen_total_ineq)
+          call AllReduce_MPI(MPI_COMM_WORLD,neigen_sector_tmp,neigen_sector_ineq)
+          call AllReduce_MPI(MPI_COMM_WORLD,neigen_total_tmp,neigen_total_ineq)
           call Barrier_MPI()
        else
           dens_ineq               = dens_tmp
@@ -296,8 +296,8 @@ contains
           exct_ineq               = exct_tmp
           e_ineq                  = e_tmp
           dd_ineq                 = dd_tmp
-          neigen_sector_ineq      = neigen_sectortmp
-          neigen_total_ineq       = neigen_totaltmp
+          neigen_sector_ineq      = neigen_sector_tmp
+          neigen_total_ineq       = neigen_total_tmp
           impurity_density_matrix_ineq = impurity_density_matrix_tmp
        endif
 #else
