@@ -133,7 +133,7 @@ contains
                       call sp_return_intersection(sectorI%H(1)%sp,iImp,jImp,Bath,lenBath)
                       if(lenBATH==0)cycle
                       !
-                      !=== >>> TRACE over bath states <<< =================================================
+                      !=== >>> TRACE over bath states <<< =======
                       do ib=1,lenBath
                          iBath = Bath(ib)
                          !

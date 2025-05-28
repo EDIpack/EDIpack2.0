@@ -78,7 +78,6 @@ contains
     integer                 :: Isign,Jsign,signI,signJ,Sign
     real(8),dimension(Norb) :: nup,ndw
 
-
     !
 #ifdef _DEBUG
     write(Logfile,"(A)")"DEBUG imp_rdm_nonsu2"
@@ -98,6 +97,13 @@ contains
     if(allocated(impurity_density_matrix))deallocate(impurity_density_matrix)
     allocate(impurity_density_matrix(4**Norb,4**Norb))
     impurity_density_matrix=zero
+
+
+    print*,Ns
+    print*,Norb
+    print*,Nbath
+    print*,Norb*Nbath
+    stop
     do istate=1,state_list%size
 #ifdef _DEBUG
        if(ed_verbose>3)write(Logfile,"(A)")&
@@ -134,7 +140,7 @@ contains
                       call sp_return_intersection(sectorI%H(1)%sp,iImp,jImp,Bath,lenBath)
                       if(lenBATH==0)cycle
                       !
-                      !=== >>> TRACE over bath states <<< =================================================
+                      !=== >>> TRACE over bath states <<< =======
                       do ib=1,lenBath
                          iBath = Bath(ib)
                          !
@@ -152,6 +158,8 @@ contains
                          jj= jImpUp + jImpDw*2**Ns + 2**Norb*(IBathUp + IBathDw*2**Ns)
                          j = binary_search(sectorI%H(1)%map,jj)
                          !
+                         print*,ii,i,"--",jj,j
+                         if(i==0.OR.j==0)cycle
                          !Construct the sign of each components of RDM(io,jo)
                          nBup  = popcnt(Ibits(ii,Norb,Norb*Nbath))
                          nIdw  = popcnt(Ibits(ii,Ns,Norb))
