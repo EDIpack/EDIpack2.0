@@ -399,7 +399,7 @@ contains
     if(row%Size > sparse%Ncol)stop "mpi_sp_insert_element_csr ERROR: row%Size > sparse%Ncol"
     !
 #else
-  STOP "mpi_sp_insert_element_csr_c called in a non-mpi build"
+  STOP "mpi_sp_insert_element_csr_d called in a non-mpi build"
 #endif
   end subroutine mpi_sp_insert_element_csr_d
 
