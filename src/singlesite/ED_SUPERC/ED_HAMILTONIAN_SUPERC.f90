@@ -219,10 +219,10 @@ contains
        ! else
        MpiQ = Dim/MpiSize
        if(MpiRank==(MpiSize-1))MpiR=mod(Dim,MpiSize)
-       vecDim=MpiQ + MpiR
  !      endif
     end if
 #endif
+    vecDim=MpiQ + MpiR
     !
   end function vecDim_Hv_sector_superc
 
