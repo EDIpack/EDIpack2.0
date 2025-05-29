@@ -36,7 +36,7 @@
                  htmp = Jx_internal(iorb,jorb)*sg1*sg2*sg3*sg4
                  i = iup + (idw-1)*dimup + (iph-1)*DimUp*DimDw
                  !
-                 Hv(j) = Hv(j) + htmp*vt(i)
+                 Hv(j) = Hv(j) + htmp*vin(i)
                  !
               endif
            enddo
@@ -64,7 +64,7 @@
                  htmp = Jp_internal(iorb,jorb)*sg1*sg2*sg3*sg4
                  i = iup + (idw-1)*dimup + (iph-1)*DimUp*DimDw
                  !
-                 Hv(j) = Hv(j) + htmp*vt(i)
+                 Hv(j) = Hv(j) + htmp*vin(i)
                  !
               endif
            enddo

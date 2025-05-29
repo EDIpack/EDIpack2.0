@@ -96,7 +96,7 @@
            !
            i = iup + (idw-1)*dimup + (iph-1)*DimUp*DimDw
            !
-           Hv(j) = Hv(j) + htmp*vt(i)
+           Hv(j) = Hv(j) + htmp*vin(i)
           !
          enddo
       endif

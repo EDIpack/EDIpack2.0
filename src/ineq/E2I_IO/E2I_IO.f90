@@ -383,63 +383,46 @@ contains
   !+-----------------------------------------------------------------------------+!
   ! PURPOSE: Retrieve measured values of the impurity green's functions 
   !+-----------------------------------------------------------------------------+!
-#if __INTEL_COMPILER
-  #include "get_gimp.f90"
-  #include "get_dimp.f90"
-#else
-  include "get_gimp.f90"
-  include "get_dimp.f90"
-#endif
+
+#include "get_gimp.f90"
+#include "get_dimp.f90"
+
 
   !+-----------------------------------------------------------------------------+!
   ! PURPOSE: Retrieve measured values of the impurity self-energy 
   !+-----------------------------------------------------------------------------+!
-#if __INTEL_COMPILER
-  #include "get_sigma.f90"
-#else
-  include "get_sigma.f90"
-#endif
+
+#include "get_sigma.f90"
+
 
   !+--------------------------------------------------------------------------+!
   ! PURPOSE: Retrieve non-interacting green's functions 
   !+--------------------------------------------------------------------------+!
-#if __INTEL_COMPILER
-  #include "get_g0imp.f90"
-#else
-  include "get_g0imp.f90"
-#endif
+
+#include "get_g0imp.f90"
+
 
 
   !+--------------------------------------------------------------------------+!
   ! PURPOSE: Retrieve spin.dens.pair.exct susceptibilties
   !+--------------------------------------------------------------------------+!
-#if __INTEL_COMPILER
-  #include "get_chi.f90"
-#else
-  include "get_chi.f90"
-#endif
+
+#include "get_chi.f90"
+
 
 
   !+--------------------------------------------------------------------------+!
   ! PURPOSE: Retrieve measured values of the local observables
   !+--------------------------------------------------------------------------+!
-#if __INTEL_COMPILER
-  #include "get_dens.f90"
-  #include "get_mag.f90"
-  #include "get_docc.f90"
-  #include "get_phi.f90"
-  #include "get_exct.f90"
-  #include "get_energy.f90"
-  #include "get_doubles.f90"
-#else
-  include "get_dens.f90"
-  include "get_mag.f90"
-  include "get_docc.f90"
-  include "get_phi.f90"
-  include "get_exct.f90"
-  include "get_energy.f90"
-  include "get_doubles.f90"
-#endif
+
+#include "get_dens.f90"
+#include "get_mag.f90"
+#include "get_docc.f90"
+#include "get_phi.f90"
+#include "get_exct.f90"
+#include "get_energy.f90"
+#include "get_doubles.f90"
+
 
   ! !+--------------------------------------------------------------------------+!
   ! ! PURPOSE: Single Particle DM

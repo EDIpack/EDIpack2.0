@@ -53,9 +53,14 @@ MODULE E2I_VARS_GLOBAL
 #ifdef _MPI
   integer                                            :: MpiComm_Global=MPI_COMM_NULL
   integer                                            :: MpiComm=MPI_COMM_NULL
-#endif
   integer                                            :: MpiGroup_Global=MPI_GROUP_NULL
   integer                                            :: MpiGroup=MPI_GROUP_NULL
+#else
+  integer                                            :: MpiComm_Global=0
+  integer                                            :: MpiComm=0
+  integer                                            :: MpiGroup_Global=0
+  integer                                            :: MpiGroup=0
+#endif
   logical                                            :: MpiStatus=.false.
   logical                                            :: MpiMaster=.true.
   integer                                            :: MpiRank=0

@@ -28,7 +28,6 @@ contains
     integer                                        :: Nloc !Global dimension of the problem. :code:`size(v)=Nloc=size(Hv)`
     real(8),dimension(Nloc)                        :: vin  !input vector (passed by Arpack/Lanczos) :math:`\vec{v}`
     real(8),dimension(Nloc)                        :: Hv   !output vector (required by Arpack/Lanczos) :math:`\vec{w}`
-    real(8),dimension(:),allocatable               :: vt,Hvt
     integer,dimension(2*Ns_Ud)                     :: Indices,Jndices ![2-2*Norb]
     integer,dimension(Ns_Ud,Ns_Orb)                :: Nups,Ndws       ![1,Ns]-[Norb,1+Nbath]
     integer,dimension(Ns)                          :: Nup,Ndw
@@ -132,7 +131,6 @@ contains
     integer                                        :: Nloc !Global dimension of the problem. :code:`size(v)=Nloc=size(Hv)`
     real(8),dimension(Nloc)                        :: vin  !input vector (passed by Arpack/Lanczos) :math:`\vec{v}`
     real(8),dimension(Nloc)                        :: Hv   !output vector (required by Arpack/Lanczos) :math:`\vec{w}`
-    real(8),dimension(:),allocatable               :: vt,Hvt
     integer                                        :: isector
     integer,dimension(2*Ns_Ud)                     :: Indices,Jndices ![2-2*Norb]
     integer,dimension(Ns_Ud,Ns_Orb)                :: Nups,Ndws       ![1,Ns]-[Norb,1+Nbath]
