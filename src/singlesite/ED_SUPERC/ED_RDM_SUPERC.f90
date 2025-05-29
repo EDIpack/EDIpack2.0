@@ -133,23 +133,20 @@ contains
                       call sp_return_intersection(sectorI%H(1)%sp,iImp,jImp,Bath,lenBath)
                       if(lenBATH==0)cycle
                       !
-                      !=== >>> TRACE over bath states <<< =================================================
+                      !=== >>> TRACE over bath states <<< =======
                       do ib=1,lenBath
                          iBath = Bath(ib)
                          !
-                         !Decompose iBath into IBath_Up, IBath_Dww
-                         ! then use the following expression
-                         ! to reconstruct the Fock state. 
-                         !IBath --> {IBathUp,IBathDw}
-                         iBathUp = mod(iBath,2**Nbath)
-                         iBathDw = (iBath)/2**Nbath
                          !I: get the Fock state ii, search the corresponding sector i
-                         ii= iImpUp + iImpDw*2**Ns + 2**Norb*(IBathUp + IBathDw*2**Ns)
+                         ii= iImpUp + iImpDw*2**Ns + iBath*2**Norb
                          i = binary_search(sectorI%H(1)%map,ii)
                          !
                          !J: get the Fock state jj, search the corresponding sector j
-                         jj= jImpUp + jImpDw*2**Ns + 2**Norb*(IBathUp + IBathDw*2**Ns)
+                         jj= jImpUp + jImpDw*2**Ns + iBath*2**Norb
                          j = binary_search(sectorI%H(1)%map,jj)
+                         !
+                         !this is a safety measure which should never ever apply
+                         if(i==0.OR.j==0)cycle
                          !
                          !Construct the sign of each components of RDM(io,jo)
                          nBup  = popcnt(Ibits(ii,Norb,Norb*Nbath))

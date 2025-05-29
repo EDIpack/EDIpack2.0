@@ -110,7 +110,7 @@ contains
     if(imp_state < 0) stop "sp_insert_state error: imp_state < 0 "
     if(imp_state > sparse%Nimp_state-1) stop "sp_insert_state error: imp_state > map%Nimp_state 2^Nimp-1"
     row => sparse%imp_state(imp_state)
-    if(any(row%bath_state == bath_state))stop "sp_insert_state error: bath_state already present for this imp_state"
+    if(any(row%bath_state == bath_state))return!stop "sp_insert_state error: bath_state already present for this imp_state"
     !    
     call add_to(row%bath_state,bath_state)
     call add_to(row%sector_indx,sector_indx)

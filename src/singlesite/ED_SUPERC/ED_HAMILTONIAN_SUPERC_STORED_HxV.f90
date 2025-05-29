@@ -310,7 +310,7 @@ contains
     Hv=zero
     ! Electron Part
     do i=1,Nloc
-       iph  = (i-1)/DimEl +1
+       iph  = (i-1)/DimEl+1
        i_el = mod(i-1,DimEl) +1
        matmul: do j_el=1, spH0%row(i_el)%Size
           val = spH0%row(i_el)%cvals(j_el)
