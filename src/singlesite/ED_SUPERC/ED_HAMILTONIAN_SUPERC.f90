@@ -194,35 +194,27 @@ contains
 
   
 
-  function vecDim_Hv_sector_superc(isector,full_matrix) result(vecDim)
+  function vecDim_Hv_sector_superc(isector) result(vecDim)
     !
     ! Returns the dimensions :f:var:`vecdim` of the vectors used in the Arpack/Lanczos produces given the current sector index :f:var:`isector` . If parallel mode is active the returned dimension corresponds to the correct chunk for each thread.
     !
-    logical, optional :: full_matrix
-    logical :: full_matrix_
     integer :: isector          !current sector index
     integer :: vecDim           !vector or vector chunck dimension  
-    integer :: Dim,DimEl
+    integer :: Dim
     !
-    full_matrix_ = .false.; if(present(full_matrix))full_matrix_ = full_matrix
-    Dim   = getdim(isector)
-    DimEl = Dim/(nph+1)
+    Dim  = getdim(isector)
     MpiQ = Dim
     MpiR = 0
     !
 #ifdef _MPI
     if(MpiStatus)then
-       ! if(ed_sparse_h .or. full_matrix_ )then
-       !    MpiQ = DimEl/MpiSize
-       !    if(MpiRank==(MpiSize-1))MpiR=mod(DimEl,MpiSize)
-       !    vecDim=(MpiQ + MpiR)*(nph+1)
-       ! else
        MpiQ = Dim/MpiSize
+       MpiR = 0
        if(MpiRank==(MpiSize-1))MpiR=mod(Dim,MpiSize)
-       vecDim=MpiQ + MpiR
- !      endif
     end if
 #endif
+    !
+    vecDim = MpiQ + MpiR
     !
   end function vecDim_Hv_sector_superc
 

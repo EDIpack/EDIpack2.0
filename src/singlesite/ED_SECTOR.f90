@@ -150,6 +150,16 @@ contains
   !##################################################################
   !##################################################################
   !BUILD SECTORS
+  !
+  !About sparse map:
+  ! iImp = Iup + Bup*2**Norb + (Idw + Bdw*2**Norb)*2**Ns
+  !      = Iup + Idw*2**Ns + (Bup+Bdw*2**Ns)*2**Norb
+  !      = I_ + B_*2**Norb
+  ! so that iImp should be: 
+  ! iImp = ImpUp + ImpDw*2^Ns (1)
+  ! and not
+  ! iImp = ImpUp + ImpDw*2^Nimp (2)
+  ! However (2) is used to have Imp states in 1:4**Norb, the size of RDM.
   !##################################################################
   !##################################################################
   subroutine build_sector(isector,self,iTrace)
@@ -263,20 +273,8 @@ contains
                 iImpDw  = ibits(idw,0,Norb)
                 iBathUp = ibits(iup,Norb,Norb*Nbath)
                 iBathDw = ibits(idw,Norb,Norb*Nbath)
-                ! The correct reconstruction is:
-                ! iImp = Iup + Bup*2**Norb + (Idw + Bdw*2**Norb)*2**Ns
-                ! iImp = Iup + Idw*2**Ns + (Bup + Bdw*2**Ns)*2**Norb
-                ! so that iImp should be (as iBath): 
-                ! iImp = ImpUp + ImpDw*2^Ns (1)
-                ! and not
-                ! iImp = ImpUp + ImpDw*2^Nimp (2)
-                ! However (2) is used to have Imp states in 1:4**Norb, the size of RDM.
-                ! This ensures that, when needed, we could decompose the iImp from (2) into Iup .+. Idw
-                ! correctly and reconstruct the exact iImp index as in (1). 
                 iImp    = iImpUp  + iImpDw*(2**Norb)
-                !>>ACTHUNG: modified map:
-                iBath   = iBathUp + iBathDw*(2**(Norb*Nbath))!bathDw*(2**Ns)
-                !<<+++++++
+                iBath   = iBathUp + iBathDw*(2**Ns)
                 call sp_insert_state(self%H(1)%sp,iImp,iBath,dim)
              endif
           enddo
@@ -328,7 +326,7 @@ contains
                    iBathUp = ibits(iup,Norb,Norb*Nbath)
                    iBathDw = ibits(idw,Norb,Norb*Nbath)
                    iImp    = iImpUp  + iImpDw*(2**Norb)
-                   iBath   = iBathUp + iBathDw*(2**(Norb*Nbath))!bathDw*(2**Ns)
+                   iBath   = iBathUp + iBathDw*(2**Ns)
                    call sp_insert_state(self%H(1)%sp,iImp,iBath,dim)
                 endif
              enddo
@@ -355,31 +353,17 @@ contains
              do iup=0,2**Ns-1
                 nup_ = popcnt(iup)
                 nt_  = nup_ + ndw_
-                if(nt_ == self%Ntot)then
-                   dim=dim+1
-                   self%H(1)%map(dim) = iup + idw*2**Ns
-                   if(.not.itrace_)cycle
-                   iImpUp  = ibits(iup,0,Norb)
-                   iImpDw  = ibits(idw,0,Norb)
-                   iBathUp = ibits(iup,Norb,Norb*Nbath)
-                   iBathDw = ibits(idw,Norb,Norb*Nbath)
-                   ! iImp = Iup + Bup*2**Norb + (Idw + Bdw*2**Norb)*2**Ns
-                   ! iImp = Iup + Idw*2**Ns + (Bup + Bdw*2**Ns)*2**Norb
-                   ! so that iImp should be (as iBath): 
-                   ! iImp = ImpUp + ImpDw*2^Ns (1)
-                   ! and not
-                   ! iImp = ImpUp + ImpDw*2^Nimp (2)
-                   ! However (2) is used to have Imp states in 1:4**Norb,
-                   ! the size of RDM.
-                   ! This ensures that we could decompose the iImp from (2) into
-                   ! Iup .+. Idw
-                   !  reconstruct the exact iImp index as in (1). 
-                   iImp    = iImpUp  + iImpDw*(2**Norb)
-                   !>>ACTHUNG: modified map:
-                   iBath   = iBathUp + iBathDw*(2**(Norb*Nbath))!bathDw*(2**Ns)
-                   !<<+++++++
-                   call sp_insert_state(self%H(1)%sp,iImp,iBath,dim)
-                endif
+                if(nt_ /= self%Ntot)cycle
+                dim=dim+1
+                self%H(1)%map(dim) = iup + idw*2**Ns
+                if(.not.itrace_)cycle
+                iImpUp  = ibits(iup,0,Norb)
+                iImpDw  = ibits(idw,0,Norb)
+                iBathUp = ibits(iup,Norb,Norb*Nbath)
+                iBathDw = ibits(idw,Norb,Norb*Nbath)
+                iImp    = iImpUp  + iImpDw*(2**Norb)
+                iBath   = iBathUp + iBathDw*(2**Ns)
+                call sp_insert_state(self%H(1)%sp,iImp,iBath,dim)
              enddo
           enddo
        endif
@@ -473,8 +457,8 @@ contains
   !##################################################################
   !##################################################################
 
-  
-  
+
+
 
 
 
@@ -624,7 +608,7 @@ contains
 
 
 
-  
+
 
 
 

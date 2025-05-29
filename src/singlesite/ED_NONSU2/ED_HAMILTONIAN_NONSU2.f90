@@ -181,19 +181,15 @@ contains
     integer :: Dim
     !
     Dim  = getdim(isector)
-    !
+    MpiQ = Dim
+    MpiR = 0
+
 #ifdef _MPI
     if(MpiStatus)then
        MpiQ = Dim/MpiSize
        MpiR = 0
        if(MpiRank==(MpiSize-1))MpiR=mod(Dim,MpiSize)
-    else
-       MpiQ = Dim
-       MpiR = 0
     endif
-#else
-    MpiQ = Dim
-    MpiR = 0
 #endif
     !
     vecDim=MpiQ + MpiR

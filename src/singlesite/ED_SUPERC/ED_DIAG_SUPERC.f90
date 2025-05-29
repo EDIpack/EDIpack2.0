@@ -219,7 +219,7 @@ contains
 #ifdef _MPI
           if(MpiStatus)then
              call Bcast_MPI(MpiComm,eig_values)
-             vecDim = vecDim_Hv_sector_superc(isector,.true.)
+             vecDim = vecDim_Hv_sector_superc(isector)
              allocate(eig_basis(vecDim,Neigen)) ; eig_basis=zero
              call scatter_basis_MPI(MpiComm,eig_basis_tmp,eig_basis)
           else
