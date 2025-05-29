@@ -212,17 +212,11 @@ contains
     !
 #ifdef _MPI
     if(MpiStatus)then
-       ! if(ed_sparse_h .or. full_matrix_ )then
-       !    MpiQ = DimEl/MpiSize
-       !    if(MpiRank==(MpiSize-1))MpiR=mod(DimEl,MpiSize)
-       !    vecDim=(MpiQ + MpiR)*(nph+1)
-       ! else
        MpiQ = Dim/MpiSize
        if(MpiRank==(MpiSize-1))MpiR=mod(Dim,MpiSize)
-       vecDim=MpiQ + MpiR
- !      endif
     end if
 #endif
+    vecDim=MpiQ + MpiR
     !
   end function vecDim_Hv_sector_superc
 
