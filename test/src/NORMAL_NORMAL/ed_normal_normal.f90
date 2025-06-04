@@ -10,6 +10,7 @@ program ed_normal_normal
   integer                :: Nb,iorb,jorb,ispin,jspin
   complex(8),allocatable :: Smats(:,:,:,:,:)
   complex(8),allocatable :: Hloc(:,:,:,:)
+
   !variables for the model:
   real(8)                :: Delta
   character(len=16)      :: finput
@@ -48,6 +49,7 @@ program ed_normal_normal
   allocate(doubles(4))
   allocate(imp(2))
   allocate(Smom(Norb,Nmomenta))
+  allocate(rdm(4**Norb,4**Norb))
   !
   allocate(Wlist(Lmats))  
   Wlist = pi/beta*(2*arange(1,Lmats)-1)
@@ -94,6 +96,7 @@ contains
     call ed_get_doubles(doubles)
     call ed_get_imp_info(imp)
     call ed_get_evals(evals)
+    call ed_get_impurity_rdm(rdm)
     do i=1,Nmomenta
        do iorb=1,Norb
           call compute_momentum(Wlist,Smats(1,1,iorb,iorb,:),i,Smom(iorb,i))
@@ -103,7 +106,7 @@ contains
     if(dsave)then
        write(*,*)"Saving results to .check files and exit"
        call save_results()
-       stop
+       stop "Results saved to *.check files"
     endif
     call test_results()
   end subroutine run_test
@@ -122,6 +125,7 @@ contains
     call read_array("doubles.check",doubles)
     call read_array("imp.check",imp)
     call read_array("Sigma_momenta.check",Smom)
+    call read_array("rdm.check",rdm)
     if(allocated(densR))deallocate(densR)
     if(allocated(doccR))deallocate(doccR)
     if(allocated(energyR))deallocate(energyR)
@@ -129,6 +133,7 @@ contains
     if(allocated(impR))deallocate(impR)
     if(allocated(evalsR))deallocate(evalsR)
     if(allocated(SmomR))deallocate(SmomR)
+    if(allocated(rdmR))deallocate(rdmR)
     allocate(densR, source=dens)
     allocate(doccR, source=docc)
     allocate(energyR, source=energy)
@@ -136,6 +141,7 @@ contains
     allocate(impR, source=imp)
     allocate(evalsR,source=evals)
     allocate(SmomR, source=Smom)
+    allocate(rdmR, source=rdm)
   end subroutine read_results
 
 
@@ -150,6 +156,7 @@ contains
     call assert(imp,impR,"imp")
     call assert(evals,evalsR,"evals")
     call assert(Smom/SmomR,dble(ones(Norb,Nmomenta)),"Sigma_momenta 1:4",tol=1.0d-8)
+    call assert(rdm-rdmR,zeros(4**Norb,4**Norb),"RDM",tol=1.0d-8)
     call print_status()
     write(*,*)""
     write(*,*)""
@@ -166,7 +173,8 @@ contains
     call save_array("energy.check",energy)
     call save_array("doubles.check",doubles)
     call save_array("imp.check",imp)
-    call save_array("Sigma_momenta.check",Smom)
+    call save_array("Sigma_momenta.check",Smom)    
+    call save_array("rdm.check",rdm)
   end subroutine save_results
 
 

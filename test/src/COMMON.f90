@@ -24,7 +24,7 @@ MODULE COMMON
   real(8),allocatable    :: ASmomAB(:,:,:)
   real(8),allocatable    :: S11mom(:,:),S12mom(:,:)
   real(8),allocatable    :: SmomNN(:,:,:,:,:)
-
+  complex(8),allocatable :: rdm(:,:)
 
   real(8),allocatable    :: evalsR(:)
   real(8),allocatable    :: densR(:)
@@ -40,7 +40,8 @@ MODULE COMMON
   real(8),allocatable    :: ASmomABR(:,:,:)
   real(8),allocatable    :: S11momR(:,:),S12momR(:,:)
   real(8),allocatable    :: SmomNNR(:,:,:,:,:)
-
+  complex(8),allocatable :: rdmR(:,:)
+  
   integer                :: irank,comm,rank,size2,ierr
   logical                :: master
 

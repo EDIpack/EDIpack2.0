@@ -175,11 +175,10 @@ contains
 
 
   subroutine spin_symmetrize_bath_site(bath_,save)
-    real(8),dimension(:)   :: bath_
-    type(effective_bath)   :: dmft_bath
-    logical,optional       :: save
-    logical                :: save_
-    integer :: ibath
+    real(8),dimension(:) :: bath_
+    logical,optional     :: save
+    logical              :: save_
+    integer              :: ibath
     if(bath_type=="replica")stop "spin_symmetry_bath_site ERROR: can not be used with bath_type=replica"
     if(bath_type=="general")stop "spin_symmetry_bath_site ERROR: can not be used with bath_type=general"
     save_=.true.;if(present(save))save_=save
