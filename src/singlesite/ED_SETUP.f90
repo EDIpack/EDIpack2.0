@@ -405,6 +405,7 @@ contains
     Nlevels  = 0
     Nhel     = 0
     Nsectors = 0
+    Nnambu   = 1
     !
     !
     if(MpiMaster)write(LOGfile,"(A)")"Cleaning ED structure"
