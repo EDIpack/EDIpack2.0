@@ -38,6 +38,7 @@ MODULE ED_INPUT_VARS
   !Max number of phonons allowed (cut off)
   ! :Default Nph:`0`
   !
+  real(c_double),dimension(:),allocatable                            :: Uloc_ 
   real(c_double),dimension(5),bind(c, name="Uloc")                   :: Uloc              !
   !Values of the local interaction per orbital (max :code:`5` )
   ! :Default Uloc:`[2d0, 0d0, 0d0, 0d0, 0d0]`
@@ -571,10 +572,12 @@ contains
     !
     !
     !
-    !allocate(Uloc(Norb)) #TODO: put me back!
+    allocate(Uloc_(Norb)) !#TODO: put me back!
+    call parse_input_variable(uloc_,"ULOC",INPUTunit,default=(/( 2d0,i=1,size(Uloc) )/),comment="Values of the local interaction per orbital")
+    Uloc=0.d0
+    Uloc(1:Norb)=Uloc_
     !
-    !call parse_input_variable(uloc,"ULOC",INPUTunit,default=(/( 2d0,i=1,size(Uloc) )/),comment="Values of the local interaction per orbital")
-    call parse_input_variable(uloc,"ULOC",INPUTunit,default=[2d0,0d0,0d0,0d0,0d0],comment="Values of the local interaction per orbital (max 5)")
+    !call parse_input_variable(uloc,"ULOC",INPUTunit,default=[2d0,0d0,0d0,0d0,0d0],comment="Values of the local interaction per orbital (max 5)")
     call parse_input_variable(ust,"UST",INPUTunit,default=0.d0,comment="Value of the inter-orbital interaction term")
     call parse_input_variable(Jh,"JH",INPUTunit,default=0.d0,comment="Hunds coupling")
     call parse_input_variable(Jx,"JX",INPUTunit,default=0.d0,comment="S-E coupling")
@@ -810,6 +813,10 @@ contains
     call substring_delete(Hfile,".ed")
     call substring_delete(umatrix_file,".restart")
     call substring_delete(umatrix_file,".ed")
+    !
+    !
+    !final cleanups
+    deallocate(Uloc_)
   end subroutine ed_read_input
 
   subroutine ed_update_input(name,vals)
