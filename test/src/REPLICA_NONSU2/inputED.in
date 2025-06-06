@@ -5,8 +5,8 @@
  NSPIN=2                                       !Number of spin degeneracy (max 2)
  NPH=0                                         !Max number of phonons allowed (cut off)
  BATH_TYPE=replica                              !flag to set bath type: normal (1bath/imp), hybrid(1bath), replica(1replica/imp), general(replica++)
- ULOC=1d0,1d0,0.d0,0.d0,0.d0 !Values of the local interaction per orbital (max 5)
- UST=1d0                           !Value of the inter-orbital interaction term
+ ULOC=1d0,1d0                                 !Values of the local interaction per orbital (max 5)
+ UST=1d0                           	      !Value of the inter-orbital interaction term
  JH=1.000000000E-02                            !Hunds coupling
  JX=1.000000000E-02                            !S-E coupling
  JP=1.000000000E-02                            !P-H coupling

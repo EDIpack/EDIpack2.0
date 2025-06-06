@@ -32,33 +32,47 @@ while read DIR; do
 	    echo "TESTING $DIR"
 	    cd $DIR
 	    pwd
-	    for exe in *.x
-	    do
-		echo "Running $exe:"
-		if [ "$BUILD_TYPE" = "DEBUG" ]
-		then
-		    echo "./$exe ED_VERBOSE=3 LOGFILE=6"
-		    ./$exe ED_VERBOSE=1 LOGFILE=6
-		    echo ""
-		    echo ""
-		    sleep 1
-		else
-		    if [ -z ${WITH_MPI} ]
+	    if [ -f DONE.out ];then
+		echo "Test $DIR has already been passed. Skip"
+	    else
+		
+		for exe in *.x
+		do
+		    echo "Running $exe:"
+		    if [ "$BUILD_TYPE" = "DEBUG" ]
 		    then
 			echo "./$exe ED_VERBOSE=3 LOGFILE=6"
 			./$exe ED_VERBOSE=1 LOGFILE=6
 			echo ""
 			echo ""
-			sleep 1
+			echo "leaving $DIR..."
+			echo ""
+			echo ""
+			touch DONE.out			
 		    else
-			echo "mpiexec -np 2 ./$exe ED_VERBOSE=3 LOGFILE=6"
-			mpiexec -np 2 ./$exe ED_VERBOSE=1 LOGFILE=6 < /dev/null
-			echo ""
-			echo ""
-			sleep 1
+			if [ -z ${WITH_MPI} ]
+			then
+			    echo "./$exe ED_VERBOSE=3 LOGFILE=6"
+			    ./$exe ED_VERBOSE=1 LOGFILE=6
+			    echo ""
+			    echo ""
+			    echo "leaving $DIR..."
+			    echo ""
+			    echo ""
+			    touch DONE.out
+			else
+			    echo "mpiexec -np 2 ./$exe ED_VERBOSE=3 LOGFILE=6"
+			    mpiexec -np 2 ./$exe ED_VERBOSE=1 LOGFILE=6 < /dev/null
+			    echo ""
+			    echo ""
+			    echo "leaving $DIR..."
+			    echo ""
+			    echo ""
+			    touch DONE.out
+			fi
 		    fi
-		fi
-	    done
+		done
+	    fi
 	    cd $HERE
 	fi
     fi

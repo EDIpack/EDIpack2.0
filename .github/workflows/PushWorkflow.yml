@@ -29,10 +29,11 @@ jobs:
 # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@main
 
-# QcmPlab setup
-      - uses: QcmPlab/TestSetup@master
+# EDIpack setup
+      - uses: EDIpack/TestSetup@master
         with:
           pack-type: open
+
 
 
 

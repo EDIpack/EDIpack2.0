@@ -4,7 +4,7 @@
  NSPIN=1                                       !Number of spin degeneracy (max 2)
  NPH=0                                         !Max number of phonons allowed (cut off)
  BATH_TYPE=general                              !flag to set bath type: normal (1bath/imp), hybrid(1bath), replica(1replica/imp), general(replica++)
- ULOC=2.000000000,2.0                              !Values of the local interaction per orbital
+ ULOC=2.000000000,2.00000                      !Values of the local interaction per orbital
  UST=1.5d0                                      !Value of the inter-orbital interaction term
  JH=0.25d0                                       !Hunds coupling
  JX=0.25d0                                       !S-E coupling
@@ -16,14 +16,14 @@
  DELTASC=2.000000000E-02                       !Value of the SC symmetry breaking term.
  BETA=1000.000000000                           !Inverse temperature, at T=0 is used as a IR cut-off.
  XMU=0.d0                                      !Chemical potential. If HFMODE=T, xmu=0 indicates half-filling condition.
- G_PH=0.d0                                     !Electron-phonon coupling density constant
+ G_PH=0.d0,0.d0                                     !Electron-phonon coupling density constant
  W0_PH=0.d0                                    !Phonon frequency
  GPHFILE=NONE                                  !File of Phonon couplings. Put NONE to use only density couplings.
- SPIN_FIELD_X=0.d0                             !magnetic field per orbital coupling to X-spin component
- SPIN_FIELD_Y=0.d0                             !magnetic field per orbital coupling to Y-spin component
- SPIN_FIELD_Z=0.d0                             !magnetic field per orbital coupling to Z-spin component
+ SPIN_FIELD_X=0.d0,0d0                             !magnetic field per orbital coupling to X-spin component
+ SPIN_FIELD_Y=0.d0,0d0                             !magnetic field per orbital coupling to Y-spin component
+ SPIN_FIELD_Z=0.d0,0d0                             !magnetic field per orbital coupling to Z-spin component
  EXC_FIELD=0.d0,0.d0,0.d0,0.d0                 !external field coupling to exciton order parameters
- PAIR_FIELD=0.d0                               !pair field per orbital coupling to s-wave order parameter component
+ PAIR_FIELD=0.d0,0d0                               !pair field per orbital coupling to s-wave order parameter component
  ED_MODE=normal                                !Flag to set ED type: normal=normal, superc=superconductive, nonsu2=broken SU(2)
  ED_DIAG_TYPE=lanc                             !flag to select the diagonalization type: 'lanc' for Lanczos/Davidson, 'full' for Full diagonalization method
  ED_FINITE_TEMP=F                              !flag to select finite temperature method. note that if T then lanc_nstates_total must be > 1
