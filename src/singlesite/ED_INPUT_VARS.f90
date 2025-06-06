@@ -4,7 +4,7 @@ MODULE ED_INPUT_VARS
   !
   USE SF_VERSION
   USE SF_PARSE_INPUT
-  USE SF_IOTOOLS, only:str,free_unit
+  USE SF_IOTOOLS, only:str,free_unit,to_upper
   USE ED_VERSION
   use iso_c_binding
   implicit none
@@ -573,11 +573,9 @@ contains
     !
     !
     allocate(Uloc_(Norb)) !#TODO: put me back!
-    call parse_input_variable(uloc_,"ULOC",INPUTunit,default=(/( 2d0,i=1,size(Uloc) )/),comment="Values of the local interaction per orbital")
-    Uloc=0.d0
+    call parse_input_variable(uloc_,"ULOC",INPUTunit,default=(/( 2d0,i=1,Norb )/),comment="Values of the local interaction per orbital (Norb)")
+    Uloc=0.d0 
     Uloc(1:Norb)=Uloc_
-    !
-    !call parse_input_variable(uloc,"ULOC",INPUTunit,default=[2d0,0d0,0d0,0d0,0d0],comment="Values of the local interaction per orbital (max 5)")
     call parse_input_variable(ust,"UST",INPUTunit,default=0.d0,comment="Value of the inter-orbital interaction term")
     call parse_input_variable(Jh,"JH",INPUTunit,default=0.d0,comment="Hunds coupling")
     call parse_input_variable(Jx,"JX",INPUTunit,default=0.d0,comment="S-E coupling")
@@ -593,11 +591,10 @@ contains
     call parse_input_variable(beta,"BETA",INPUTunit,default=1000.d0,comment="Inverse temperature, at T=0 is used as a IR cut-off.")
     call parse_input_variable(xmu,"XMU",INPUTunit,default=0.d0,comment="Chemical potential. If HFMODE=T, xmu=0 indicates half-filling condition.")
 
-    if(allocated(g_ph))deallocate(g_ph)
+
     if(allocated(g_ph_diag))deallocate(g_ph_diag)
-    allocate(g_ph(Norb,Norb)) ! THIS SHOULD BE A MATRIX Norb*Norb
-    allocate(g_ph_diag(Norb)) ! THIS SHOULD BE A MATRIX Norb*Norb
-    call parse_input_variable(g_ph_diag,"G_PH",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="Electron-phonon coupling density constant")
+    allocate(g_ph_diag(Norb)) ! THIS the diagonal part of the g_ph matrix (see below)
+    call parse_input_variable(g_ph_diag,"G_PH",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="Electron-phonon coupling density constant: diagonal part (Norb) if GPHfile=None")
     call parse_input_variable(w0_ph,"W0_PH",INPUTunit,default=0.d0,comment="Phonon frequency")
     call parse_input_variable(A_ph,"A_PH",INPUTunit,default=0.d0,comment="Forcing field coupled to phonons displacement operator")
     call parse_input_variable(GPHfile,"GPHfile",INPUTunit,default="NONE",comment="File of Phonon couplings. Put NONE to use only density couplings.")
@@ -610,11 +607,11 @@ contains
     allocate(spin_field_y(Norb))
     allocate(spin_field_z(Norb))
     allocate(pair_field(Norb))
-    call parse_input_variable(spin_field_x,"SPIN_FIELD_X",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="magnetic field per orbital coupling to X-spin component")
-    call parse_input_variable(spin_field_y,"SPIN_FIELD_Y",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="magnetic field per orbital coupling to Y-spin component")
-    call parse_input_variable(spin_field_z,"SPIN_FIELD_Z",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="magnetic field per orbital coupling to Z-spin component")
-    call parse_input_variable(exc_field,"EXC_FIELD",INPUTunit,default=[0d0,0d0,0d0,0d0],comment="external field coupling to exciton order parameters")
-    call parse_input_variable(pair_field,"PAIR_FIELD",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="pair field per orbital coupling to s-wave order parameter component")
+    call parse_input_variable(spin_field_x,"SPIN_FIELD_X",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="magnetic field per orbital coupling to X-spin component (Norb)")
+    call parse_input_variable(spin_field_y,"SPIN_FIELD_Y",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="magnetic field per orbital coupling to Y-spin component (Norb)")
+    call parse_input_variable(spin_field_z,"SPIN_FIELD_Z",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="magnetic field per orbital coupling to Z-spin component (Norb)")
+    call parse_input_variable(pair_field,"PAIR_FIELD",INPUTunit,default=(/( 0d0,i=1,Norb )/),comment="pair field per orbital coupling to s-wave order parameter component (4)")
+    call parse_input_variable(exc_field,"EXC_FIELD",INPUTunit,default=[0d0,0d0,0d0,0d0],comment="external field coupling to exciton order parameters (Norb)")
     !
     !
     call parse_input_variable(chispin_flag,"CHISPIN_FLAG",INPUTunit,default=.false.,comment="Flag to activate spin susceptibility calculation.")
@@ -650,7 +647,7 @@ contains
     call parse_input_variable(ed_print_chidens,"ED_PRINT_CHIDENS",INPUTunit,default=.true.,comment="flag to print impurity dens susceptibility")
     call parse_input_variable(ed_print_chipair,"ED_PRINT_CHIPAIR",INPUTunit,default=.true.,comment="flag to print impurity pair susceptibility")
     call parse_input_variable(ed_print_chiexct,"ED_PRINT_CHIEXCT",INPUTunit,default=.true.,comment="flag to print impurity exct susceptibility")
-    call parse_input_variable(ed_all_G,"ED_ALL_G",INPUTunit,default=.true.,comment="flag to evaluate all the components of the impurity Green`s functions irrespective of the symmetries")
+    call parse_input_variable(ed_all_G,"ED_ALL_G",INPUTunit,default=.true.,comment="flag to evaluate all the components of the impurity Greens functions irrespective of the symmetries")
     call parse_input_variable(ed_verbose,"ED_VERBOSE",INPUTunit,default=3,comment="Verbosity level: 0=almost nothing --> 5:all. Really: all")
     call parse_input_variable(ed_hw_bath,"ed_hw_bath",INPUTunit,default=2d0,comment="half-bandwidth for the bath initialization: flat in -ed_hw_bath:ed_hw_bath")
     call parse_input_variable(ed_offset_bath,"ed_offset_bath",INPUTunit,default=1d-1,comment="offset for the initialization of diagonal terms in replica/general bath: -offset:offset")
@@ -713,13 +710,13 @@ contains
     call parse_input_variable(cg_minimize_hh,"CG_MINIMIZE_HH",INPUTunit,default=1d-4,comment="Unknown parameter used in the CG minimize procedure.")
     !
     if (cg_norm=='frobenius' .and. (bath_type/='replica' .or. bath_type/='general')) then
-          print*, "WARNING: The Frobenius norm is currently not implemented for normal and hybrid bath types."
-          print*, "         The elemental (usual element-wise chi^2) norm will be used instead."
+       print*, "WARNING: The Frobenius norm is currently not implemented for normal and hybrid bath types."
+       print*, "         The elemental (usual element-wise chi^2) norm will be used instead."
     endif
     if(cg_norm=='frobenius' .and. cg_pow/=2)then
-          print *, "WARNING: CG_POW must be 2 for a meaningful definition of the Frobenius norm."
-          print *, "         We'll still let you go ahead with the desired input, but please be "
-          print *, "         be aware that CG_POW is not doing what you would expect for a chi^q"
+       print *, "WARNING: CG_POW must be 2 for a meaningful definition of the Frobenius norm."
+       print *, "         We'll still let you go ahead with the desired input, but please be "
+       print *, "         be aware that CG_POW is not doing what you would expect for a chi^q"
     endif
     !
     call parse_input_variable(Jz_basis,"JZ_BASIS",INPUTunit,default=.false.,comment="Flag to enable the Jz basis")
@@ -737,9 +734,12 @@ contains
 
     if(nph>0)then
        !
+       if(allocated(g_ph))deallocate(g_ph)
+       allocate(g_ph(Norb,Norb)) ! THIS SHOULD BE A MATRIX Norb*Norb
+       !
        !Here the non-diagonal (non-density) phononic coupling are read
        g_ph=0.d0
-       if(trim(GPHfile).eq."NONE")then
+       if(to_upper(str(GPHfile))=="NONE")then
           do iorb=1,Norb
              g_ph(iorb,iorb)=g_ph_diag(iorb)
           enddo
