@@ -15,15 +15,15 @@
  DELTASC=2.000000000E-02                       !Value of the SC symmetry breaking term.
  BETA=1000.000000000                           !Inverse temperature, at T=0 is used as a IR cut-off.
  XMU=0.d0                                      !Chemical potential. If HFMODE=T, xmu=0 indicates half-filling condition.
- G_PH=0.d0,0.d0                                !Electron-phonon coupling density constant
+ G_PH=0.d0                                !Electron-phonon coupling density constant
  W0_PH=0.d0                                    !Phonon frequency
  A_PH=0.d0                                     !Forcing field coupled to phonons displacement operator
  GPHFILE=NONE                                  !File of Phonon couplings. Put NONE to use only density couplings.
- SPIN_FIELD_X=0.d0,0.d0                        !magnetic field per orbital coupling to X-spin component
- SPIN_FIELD_Y=0.d0,0.d0                        !magnetic field per orbital coupling to Y-spin component
- SPIN_FIELD_Z=0.d0,0.d0                        !magnetic field per orbital coupling to Z-spin component
+ SPIN_FIELD_X=0.d0                        !magnetic field per orbital coupling to X-spin component
+ SPIN_FIELD_Y=0.d0                        !magnetic field per orbital coupling to Y-spin component
+ SPIN_FIELD_Z=0.d0                        !magnetic field per orbital coupling to Z-spin component
  EXC_FIELD=0.d0,0.d0,0.d0,0.d0                 !external field coupling to exciton order parameters
- PAIR_FIELD=0.d0,0.d0                          !pair field per orbital coupling to s-wave order parameter component
+ PAIR_FIELD=0.d0                          !pair field per orbital coupling to s-wave order parameter component
  CHISPIN_FLAG=F                                !Flag to activate spin susceptibility calculation.
  CHIDENS_FLAG=F                                !Flag to activate density susceptibility calculation.
  CHIPAIR_FLAG=F                                !Flag to activate pair susceptibility calculation.
