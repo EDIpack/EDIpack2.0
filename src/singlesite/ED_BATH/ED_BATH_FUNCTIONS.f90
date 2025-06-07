@@ -167,6 +167,7 @@ contains
     !
     Delta=zero
     !
+    if(Nbath.eq.0)return
     !
     if(Nbath>0 .and. .not.dmft_bath%status)stop "delta_bath_array error: dmft_bath not allocated"
     !
@@ -206,6 +207,7 @@ contains
     !
     Fdelta=zero
     !
+    if(Nbath.eq.0)return
     !
     if(Nbath>0 .and. .not.dmft_bath%status)stop "fdelta_bath_array error: dmft_bath not allocated"
     !
