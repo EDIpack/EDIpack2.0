@@ -1,8 +1,3 @@
-#TO BE CHANGED BY USER:
-#$ DRIVER NAME without .f90 extension
-#$ COMPILER: suppprted compilers are ifort, gnu >v4.7 or use mpif90
-#$ PLATFORM: supported platform are intel, gnu
-#$ EXECUTABLE TARGET DIRECTORY (default if $HOME/.bin in the PATH)
 EXE=ed_replica_superc
 FC=mpif90
 PLAT=gnu
@@ -33,14 +28,17 @@ endif
 .SUFFIXES: .f90 .o
 
 all: FLAG:=${FFLAG} ${FPPFLAG}
-all:
+all: $(OBJS)
 	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check *.in *.restart $(TSTBIN)/
 
 debug: FLAG:=${DFLAG} ${FPPFLAG}
-debug:
+debug: $(OBJS)
 	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check *.in *.restart $(TSTBIN)/
+
+.f90.o:
+	$(FC) $(FFLAGS) -c $< ${GLOB_INC} -J../ -o$@
 
 clean: 
 	@echo "Cleaning bath:REPLICA mode:SUPERC"

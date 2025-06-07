@@ -637,29 +637,27 @@ contains
 #endif
       if(.not.allocated(impGmatrix(1,1,iorb,iorb)%state))return
       !
-      associate(G => auxG(1,:)) !just an alias
-        G = zero
-        Nstates = size(impGmatrix(1,1,iorb,iorb)%state)
-        do istate=1,Nstates
-           Nchannels = size(impGmatrix(1,1,iorb,iorb)%state(istate)%channel)     
-           do ic=1,Nchannels        
-              Nexcs  = size(impGmatrix(1,1,iorb,iorb)%state(istate)%channel(ic)%poles)
-              if(Nexcs==0)cycle
-              do iexc=1,Nexcs
-                 peso  = impGmatrix(1,1,iorb,iorb)%state(istate)%channel(ic)%weight(iexc)
-                 de    = impGmatrix(1,1,iorb,iorb)%state(istate)%channel(ic)%poles(iexc)
-                 G     = G + peso/(zeta-de)
-              enddo
-           enddo
-        enddo
-      end associate
+      auxG(1,:) = zero
+      Nstates = size(impGmatrix(1,1,iorb,iorb)%state)
+      do istate=1,Nstates
+         Nchannels = size(impGmatrix(1,1,iorb,iorb)%state(istate)%channel)     
+         do ic=1,Nchannels        
+            Nexcs  = size(impGmatrix(1,1,iorb,iorb)%state(istate)%channel(ic)%poles)
+            if(Nexcs==0)cycle
+            do iexc=1,Nexcs
+               peso  = impGmatrix(1,1,iorb,iorb)%state(istate)%channel(ic)%weight(iexc)
+               de    = impGmatrix(1,1,iorb,iorb)%state(istate)%channel(ic)%poles(iexc)
+               auxG(1,:)     = auxG(1,:) + peso/(zeta-de)
+            enddo
+         enddo
+      enddo
 
       return
     end subroutine get_superc_Gdiag
 
     subroutine get_superc_Gmix(iorb,jorb) !get auxG(3,:)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+      use ED_INPUT_VARS, only: Nspin,Norb
 #endif
       integer,intent(in) :: iorb,jorb
       integer            :: Nstates,istate
@@ -673,22 +671,20 @@ contains
 #endif
       if(.not.allocated(impGmatrix(1,1,iorb,jorb)%state)) return
       !
-      associate(G => auxG(3,:)) !just an alias
-        G = zero
-        Nstates = size(impGmatrix(1,1,iorb,jorb)%state)
-        do istate=1,Nstates
-           Nchannels = size(impGmatrix(1,1,iorb,jorb)%state(istate)%channel)     
-           do ic=1,Nchannels
-              Nexcs  = size(impGmatrix(1,1,iorb,jorb)%state(istate)%channel(ic)%poles)
-              if(Nexcs==0)cycle
-              do iexc=1,Nexcs
-                 peso = impGmatrix(1,1,iorb,jorb)%state(istate)%channel(ic)%weight(iexc)
-                 de   = impGmatrix(1,1,iorb,jorb)%state(istate)%channel(ic)%poles(iexc)
-                 G    = G + peso/(zeta-de)
-              enddo
-           enddo
-        enddo
-      end associate
+      auxG(3,:) = zero
+      Nstates = size(impGmatrix(1,1,iorb,jorb)%state)
+      do istate=1,Nstates
+         Nchannels = size(impGmatrix(1,1,iorb,jorb)%state(istate)%channel)     
+         do ic=1,Nchannels
+            Nexcs  = size(impGmatrix(1,1,iorb,jorb)%state(istate)%channel(ic)%poles)
+            if(Nexcs==0)cycle
+            do iexc=1,Nexcs
+               peso = impGmatrix(1,1,iorb,jorb)%state(istate)%channel(ic)%weight(iexc)
+               de   = impGmatrix(1,1,iorb,jorb)%state(istate)%channel(ic)%poles(iexc)
+               auxG(3,:)    = auxG(3,:) + peso/(zeta-de)
+            enddo
+         enddo
+      enddo
       return
     end subroutine get_superc_Gmix
   end function get_impG_superc
@@ -762,7 +758,7 @@ contains
     !
     subroutine get_superc_Gdiag(iorb) !get auxG(1:2)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+      use ED_INPUT_VARS, only: Nspin,Norb
 #endif
       integer,intent(in) :: iorb
       integer            :: Nstates,istate
@@ -780,21 +776,19 @@ contains
       if(.not.allocated(impGmatrix(2,2,iorb,iorb)%state))return
       !
       do is=1,2
-         associate(G => auxG(is,:)) !just an alias 
-           Nstates = size(impGmatrix(is,is,iorb,iorb)%state)
-           do istate=1,Nstates
-              Nchannels = size(impGmatrix(is,is,iorb,iorb)%state(istate)%channel)     
-              do ic=1,Nchannels        
-                 Nexcs  = size(impGmatrix(is,is,iorb,iorb)%state(istate)%channel(ic)%poles)
-                 if(Nexcs==0)cycle
-                 do iexc=1,Nexcs
-                    peso  = impGmatrix(is,is,iorb,iorb)%state(istate)%channel(ic)%weight(iexc)
-                    de    = impGmatrix(is,is,iorb,iorb)%state(istate)%channel(ic)%poles(iexc)
-                    G     = G + peso/(zeta-de)
-                 enddo
-              enddo
-           enddo
-         end associate
+         Nstates = size(impGmatrix(is,is,iorb,iorb)%state)
+         do istate=1,Nstates
+            Nchannels = size(impGmatrix(is,is,iorb,iorb)%state(istate)%channel)     
+            do ic=1,Nchannels        
+               Nexcs  = size(impGmatrix(is,is,iorb,iorb)%state(istate)%channel(ic)%poles)
+               if(Nexcs==0)cycle
+               do iexc=1,Nexcs
+                  peso  = impGmatrix(is,is,iorb,iorb)%state(istate)%channel(ic)%weight(iexc)
+                  de    = impGmatrix(is,is,iorb,iorb)%state(istate)%channel(ic)%poles(iexc)
+                  auxG(is,:)     = auxG(is,:) + peso/(zeta-de)
+               enddo
+            enddo
+         enddo
       enddo
       !
       return
@@ -802,7 +796,7 @@ contains
     !
     subroutine  get_superc_Fmix(iorb,jorb)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+      use ED_INPUT_VARS, only: Nspin,Norb
 #endif
       integer,intent(in) :: iorb,jorb
       integer            :: Nstates,istate
@@ -818,21 +812,19 @@ contains
 #endif
       if(.not.allocated(impGmatrix(1,1,iorb,jorb)%state)) return
       !
-      associate(G => auxG(4,:)) !just an alias 
-        Nstates = size(impGmatrix(1,2,iorb,jorb)%state)
-        do istate=1,Nstates
-           Nchannels = size(impGmatrix(1,2,iorb,jorb)%state(istate)%channel)     
-           do ic=1,Nchannels        
-              Nexcs  = size(impGmatrix(1,2,iorb,jorb)%state(istate)%channel(ic)%poles)
-              if(Nexcs==0)cycle
-              do iexc=1,Nexcs
-                 peso  = impGmatrix(1,2,iorb,jorb)%state(istate)%channel(ic)%weight(iexc)
-                 de    = impGmatrix(1,2,iorb,jorb)%state(istate)%channel(ic)%poles(iexc)
-                 G     = G + peso/(zeta-de)
-              enddo
-           enddo
-        enddo
-      end associate
+      Nstates = size(impGmatrix(1,2,iorb,jorb)%state)
+      do istate=1,Nstates
+         Nchannels = size(impGmatrix(1,2,iorb,jorb)%state(istate)%channel)     
+         do ic=1,Nchannels        
+            Nexcs  = size(impGmatrix(1,2,iorb,jorb)%state(istate)%channel(ic)%poles)
+            if(Nexcs==0)cycle
+            do iexc=1,Nexcs
+               peso  = impGmatrix(1,2,iorb,jorb)%state(istate)%channel(ic)%weight(iexc)
+               de    = impGmatrix(1,2,iorb,jorb)%state(istate)%channel(ic)%poles(iexc)
+               auxG(4,:)     = auxG(4,:) + peso/(zeta-de)
+            enddo
+         enddo
+      enddo
       return
     end subroutine get_superc_Fmix
     !

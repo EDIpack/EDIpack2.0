@@ -1,5 +1,5 @@
 MODULE ED_GF_NONSU2
-!:synopsis: Routines for Green's function calculation, :code:`NONSU2` case
+  !:synopsis: Routines for Green's function calculation, :code:`NONSU2` case
   USE SF_CONSTANTS, only:one,xi,zero,pi
   USE SF_TIMER  
   USE SF_IOTOOLS, only: str,reg,txtfy,to_lower
@@ -99,39 +99,39 @@ contains
     !
     !
     if(bath_type=="normal")then 
-      if(MPIMASTER)call stop_timer
-      return
+       if(MPIMASTER)call stop_timer
+       return
     else
-      !
-      !
-      !different orbital, same spin GF: G_{ab}^{ss}(z)
-      do ispin=1,Nspin
-         do iorb=1,Norb
-            do jorb=1,Norb
-               if(iorb==jorb)cycle
-               if(.not.Gbool(ispin,ispin,iorb,jorb))cycle
-               call allocate_GFmatrix(impGmatrix(ispin,ispin,iorb,jorb),Nstate=state_list%size)
-               call lanc_build_gf_nonsu2_mixOrb_mixSpin(iorb,jorb,ispin,ispin)
-            enddo
-         enddo
-      enddo
-      !
-      !
-      !different orbital, different spin GF: G_{ab}^{ss'}(z)
-      do ispin=1,Nspin
-         do jspin=1,Nspin
-            if(ispin==jspin)cycle
-            do iorb=1,Norb
-               do jorb=1,Norb
-                  if(iorb==jorb)cycle
-                  if(.not.Gbool(ispin,jspin,iorb,jorb))cycle
-                  call allocate_GFmatrix(impGmatrix(ispin,jspin,iorb,jorb),Nstate=state_list%size)
-                  call lanc_build_gf_nonsu2_mixOrb_mixSpin(iorb,jorb,ispin,jspin)
-               enddo
-            enddo
-         enddo
-      enddo
-      if(MPIMASTER)call stop_timer
+       !
+       !
+       !different orbital, same spin GF: G_{ab}^{ss}(z)
+       do ispin=1,Nspin
+          do iorb=1,Norb
+             do jorb=1,Norb
+                if(iorb==jorb)cycle
+                if(.not.Gbool(ispin,ispin,iorb,jorb))cycle
+                call allocate_GFmatrix(impGmatrix(ispin,ispin,iorb,jorb),Nstate=state_list%size)
+                call lanc_build_gf_nonsu2_mixOrb_mixSpin(iorb,jorb,ispin,ispin)
+             enddo
+          enddo
+       enddo
+       !
+       !
+       !different orbital, different spin GF: G_{ab}^{ss'}(z)
+       do ispin=1,Nspin
+          do jspin=1,Nspin
+             if(ispin==jspin)cycle
+             do iorb=1,Norb
+                do jorb=1,Norb
+                   if(iorb==jorb)cycle
+                   if(.not.Gbool(ispin,jspin,iorb,jorb))cycle
+                   call allocate_GFmatrix(impGmatrix(ispin,jspin,iorb,jorb),Nstate=state_list%size)
+                   call lanc_build_gf_nonsu2_mixOrb_mixSpin(iorb,jorb,ispin,jspin)
+                enddo
+             enddo
+          enddo
+       enddo
+       if(MPIMASTER)call stop_timer
     endif
     !
   end subroutine build_impG_nonsu2
@@ -411,22 +411,20 @@ contains
           enddo
        enddo
     enddo
-    !
-    do ispin=1,Nspin
-       do jspin=1,Nspin
-          if(ispin==jspin)cycle
-          do iorb=1,Norb
+
+    do iorb=1,Norb
+       do ispin=1,Nspin
+          do jspin=1,Nspin
+             if(ispin==jspin)cycle
              Gf(ispin,jspin,iorb,iorb,:) = 0.5d0*(Gf(ispin,jspin,iorb,iorb,:) &
-                  - (one-xi)*Gf(ispin,ispin,iorb,iorb,:) &
-                  - (one-xi)*Gf(jspin,jspin,iorb,iorb,:))
+                  - (one-xi)*(Gf(ispin,ispin,iorb,iorb,:) + Gf(jspin,jspin,iorb,iorb,:)) )
           enddo
        enddo
     enddo
     !
     select case(bath_type)
-    case ("normal");
+    case ("normal");return
     case default;
-       !
        !different orbital, same spin GF: G_{ab}^{ss}(z)
        do ispin=1,Nspin
           do iorb=1,Norb
@@ -481,7 +479,7 @@ contains
     !
     subroutine get_nonsu2_Gab(iorb,jorb,ispin,jspin)
 #if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
+      use ED_INPUT_VARS, only: Nspin,Norb
 #endif
       integer,intent(in)                 :: iorb,jorb,ispin,jspin
       integer                            :: Nstates,istate
@@ -497,23 +495,21 @@ contains
 #endif
       if(.not.allocated(impGmatrix(ispin,jspin,iorb,jorb)%state)) return
       !
-      associate(G => Gf(ispin,jspin,iorb,jorb,:)) !just an alias 
-        G= zero
-        Nstates = size(impGmatrix(ispin,jspin,iorb,jorb)%state)
-        do istate=1,Nstates
-           if(.not.allocated(impGmatrix(ispin,jspin,iorb,jorb)%state(istate)%channel))cycle
-           Nchannels = size(impGmatrix(ispin,jspin,iorb,jorb)%state(istate)%channel)
-           do ichan=1,Nchannels
-              Nexcs  = size(impGmatrix(ispin,jspin,iorb,jorb)%state(istate)%channel(ichan)%poles)
-              if(Nexcs==0)cycle
-              do iexc=1,Nexcs
-                 peso  = impGmatrix(ispin,jspin,iorb,jorb)%state(istate)%channel(ichan)%weight(iexc)
-                 de    = impGmatrix(ispin,jspin,iorb,jorb)%state(istate)%channel(ichan)%poles(iexc)
-                 G     = G + peso/(zeta-de)
-              enddo
-           enddo
-        enddo
-      end associate
+      Gf(ispin,jspin,iorb,jorb,:)= zero
+      Nstates = size(impGmatrix(ispin,jspin,iorb,jorb)%state)
+      do istate=1,Nstates
+         if(.not.allocated(impGmatrix(ispin,jspin,iorb,jorb)%state(istate)%channel))cycle
+         Nchannels = size(impGmatrix(ispin,jspin,iorb,jorb)%state(istate)%channel)
+         do ichan=1,Nchannels
+            Nexcs  = size(impGmatrix(ispin,jspin,iorb,jorb)%state(istate)%channel(ichan)%poles)
+            if(Nexcs==0)cycle
+            do iexc=1,Nexcs
+               peso  = impGmatrix(ispin,jspin,iorb,jorb)%state(istate)%channel(ichan)%weight(iexc)
+               de    = impGmatrix(ispin,jspin,iorb,jorb)%state(istate)%channel(ichan)%poles(iexc)
+               Gf(ispin,jspin,iorb,jorb,:)     = Gf(ispin,jspin,iorb,jorb,:) + peso/(zeta-de)
+            enddo
+         enddo
+      enddo
       return
     end subroutine get_nonsu2_Gab
     !
@@ -532,6 +528,7 @@ contains
     character(len=1)                                       :: axis_
     complex(8),dimension(Nspin,Nspin,Norb,Norb,size(zeta)) :: Sigma,invG0,invG
     complex(8),dimension(Nspin*Norb,Nspin*Norb)            :: iGzeta
+    integer :: io,jo,iorb,jorb,ispin,jspin
     !
 #ifdef _DEBUG
     if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_Sigma_nonsu2"
@@ -544,10 +541,10 @@ contains
     !
     !Get G^-1
     invG  = get_impG_nonsu2(zeta)
-    !
+
     !Get Sigma= G0^-1 - G^-1
     Sigma = zero
-    do i=1,size(zeta)     
+    do i=1,size(zeta)
        iGzeta =  nn2so_reshape(invG(:,:,:,:,i),Nspin,Norb)
        call inv(iGzeta)
        invG(:,:,:,:,i)=so2nn_reshape(iGzeta,Nspin,Norb)
