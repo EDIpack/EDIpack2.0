@@ -183,7 +183,7 @@ contains
       check   = check_bath_dimension(bath)
       if(.not.check)stop "ED_SOLVE_SINGLE Error: wrong bath dimensions"
     else
-      print*,"NBATH=0: Solving isolated impurity (no bath)"
+      write(LOGfile,"(A)")"NBATH=0: Solving isolated impurity (no bath)"
     endif
     !  
     if(MpiMaster.and.flag_mpi_)call save_input_file(str(ed_input_file))
