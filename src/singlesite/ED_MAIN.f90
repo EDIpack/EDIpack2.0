@@ -114,16 +114,14 @@ contains
       bath = 0d0
     endif
     !
-    if(Nbath>0)then
-      call allocate_dmft_bath()
-      call init_dmft_bath()
-      call get_dmft_bath(bath)
-    endif
+    call allocate_dmft_bath()
+    call init_dmft_bath()
+    call get_dmft_bath(bath)
     !
     if(isetup)then
        call setup_global
     endif
-    if(Nbath>0)call deallocate_dmft_bath()
+    call deallocate_dmft_bath()
     isetup=.false.
     !
     !DELETE THE MPI FRAMEWORK:
@@ -188,12 +186,10 @@ contains
     !  
     if(MpiMaster.and.flag_mpi_)call save_input_file(str(ed_input_file))
     !
-    if(Nbath>0)then
-      call allocate_dmft_bath()
-      call set_dmft_bath(bath)
-      call write_dmft_bath()
-      call save_dmft_bath(used=.true.)
-    endif
+    call allocate_dmft_bath()
+    call set_dmft_bath(bath)
+    call write_dmft_bath()
+    call save_dmft_bath(used=.true.)
     !
     call set_umatrix()
     !
@@ -254,7 +250,7 @@ subroutine ed_solve_single_nobath(flag_gf,flag_mpi)
     write(LOGfile,"(A)")"FINALIZE SOLVER "
     !
     !just in case deallocate some objects
-    if(Nbath>0) call deallocate_dmft_bath()
+    call deallocate_dmft_bath()
     call es_delete_espace(state_list)
     call deallocate_grids
     nullify(spHtimesV_cc)
