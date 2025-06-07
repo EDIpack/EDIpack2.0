@@ -84,9 +84,9 @@ contains
   !+-----------------------------------------------------------------------------+!
   ! PURPOSE: allocate and initialize one or multiple baths -+!
   subroutine ed_init_solver_single(bath)
-    real(8),dimension(:),intent(inout) :: bath !user bath input array
-    logical                            :: check
-    integer                            :: i
+    real(8),dimension(:),intent(inout),optional        :: bath !user bath input array
+    logical                                            :: check
+    integer                                            :: i
     !
     !SET THE MPI FRAMEWORK:
 #ifdef _MPI
@@ -103,19 +103,23 @@ contains
     !Init ED Structure & memory
     if(isetup)call init_ed_structure() 
     !
-    check = check_bath_dimension(bath)
-    if(.not.check)stop "init_ed_solver_single error: wrong bath dimensions"
+    if(Nbath>0)then
+      check = check_bath_dimension(bath)
+      if(.not.check)stop "init_ed_solver_single error: wrong bath dimensions"
+      !
+      bath = 0d0
+    endif
     !
-    bath = 0d0
-    !
-    call allocate_dmft_bath()
-    call init_dmft_bath()
-    call get_dmft_bath(bath)
+    if(Nbath>0)then
+      call allocate_dmft_bath()
+      call init_dmft_bath()
+      call get_dmft_bath(bath)
+    endif
     !
     if(isetup)then
        call setup_global
     endif
-    call deallocate_dmft_bath()
+    if(Nbath>0)call deallocate_dmft_bath()
     isetup=.false.
     !
     !DELETE THE MPI FRAMEWORK:
@@ -148,11 +152,11 @@ contains
   ! lattice site using ED. 
   !+-----------------------------------------------------------------------------+!
   subroutine ed_solve_single(bath,flag_gf,flag_mpi)
-    real(8),dimension(:),intent(in)     :: bath  !user bath input array
-    logical,optional                    :: flag_gf !flag to calculate ( :code:`.true.` ) or not ( :code:`.false.` ) Green's functions and susceptibilities. Default :code:`.true.` . 
-    logical,optional                    :: flag_mpi  !flag to solve the impurity problem parallely ( :code:`.true.` ) or not ( :code:`.false.` ). Default :code:`.true.` . 
-    logical                             :: flag_mpi_, flag_gf_
-    logical                             :: check,iflag
+    real(8),dimension(:),intent(in),optional     :: bath  !user bath input array
+    logical,optional                             :: flag_gf !flag to calculate ( :code:`.true.` ) or not ( :code:`.false.` ) Green's functions and susceptibilities. Default :code:`.true.` . 
+    logical,optional                             :: flag_mpi  !flag to solve the impurity problem parallely ( :code:`.true.` ) or not ( :code:`.false.` ). Default :code:`.true.` . 
+    logical                                      :: flag_mpi_, flag_gf_
+    logical                                      :: check,iflag
     !
     flag_mpi_=.true.;if(present(flag_mpi))flag_mpi_=flag_mpi
     flag_gf_=.true.;if(present(flag_gf))flag_gf_=flag_gf
@@ -163,15 +167,21 @@ contains
     !
     if(.not.allocated(impHloc))stop "ED_SOLVE ERROR: impHloc not allocated. Please call ed_set_Hloc first."
     !
-    check   = check_bath_dimension(bath)
-    if(.not.check)stop "ED_SOLVE_SINGLE Error: wrong bath dimensions"
+    if(Nbath>0)then
+      check   = check_bath_dimension(bath)
+      if(.not.check)stop "ED_SOLVE_SINGLE Error: wrong bath dimensions"
+    else
+      if(present(bath))print*,"**WARNING** Bath array provided, but Nbath is 0. Bath will be ignored"
+    endif
     !  
     if(MpiMaster.and.flag_mpi_)call save_input_file(str(ed_input_file))
     !
-    call allocate_dmft_bath()
-    call set_dmft_bath(bath)
-    call write_dmft_bath()
-    call save_dmft_bath(used=.true.)
+    if(Nbath>0)then
+      call allocate_dmft_bath()
+      call set_dmft_bath(bath)
+      call write_dmft_bath()
+      call save_dmft_bath(used=.true.)
+    endif
     !
     call set_umatrix()
     !
@@ -183,7 +193,12 @@ contains
     endif
     call observables_impurity()
     call local_energy_impurity()
-    call rdm_impurity()
+    !
+    if(Nbath>0)then
+      call rdm_impurity()
+    else
+      print*,"**WARNING** RDM calculation not available without a bath, for now."
+    endif
     !
     call deallocate_dmft_bath()
     call es_delete_espace(state_list)
@@ -217,7 +232,7 @@ contains
     write(LOGfile,"(A)")"FINALIZE SOLVER "
     !
     !just in case deallocate some objects
-    call deallocate_dmft_bath()
+    if(Nbath>0) call deallocate_dmft_bath()
     call es_delete_espace(state_list)
     call deallocate_grids
     nullify(spHtimesV_cc)
