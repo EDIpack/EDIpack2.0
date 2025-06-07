@@ -26,10 +26,12 @@ module ED_MAIN
      !
      !Initialize the Exact Diagonalization solver of `EDIpack`. This procedure reserves and allocates all the  
      !memory required by the solver, performs all the consistency check and initializes the bath instance guessing or reading from a file.      
-     !It requires as an input a double precision array of rank-1 [ :f:var:`nb` ].
-     !while :f:var:`nb` depends on the bath size and geometry and can be obtained from :f:func:`get_bath_dimension` .
+     !It requires as an input a double precision array of rank-1 [ :f:var:`nb` ]. 
+     !where :f:var:`nb` depends on the bath size and geometry and can be obtained from :f:func:`get_bath_dimension` .
+     !If the simulation is to be run without a bath, no input is required.
      !
      module procedure :: ed_init_solver_single
+     module procedure :: ed_init_solver_single_nobath
   end interface ed_init_solver
 
 
@@ -38,12 +40,13 @@ module ED_MAIN
      !
      !Launch the Exact Diagonalizaton solver for the single-site and multiple-site (R-DMFT) quantum impurity problem.
      !It requires as an input a double precision array of rank-1 [ :f:var:`nb` ]. 
-     !while :f:var:`nb` depends on the bath size and geometry and can be obtained from :f:func:`get_bath_dimension` .
+     !where :f:var:`nb` depends on the bath size and geometry and can be obtained from :f:func:`get_bath_dimension` .
+     !If the simulation is to be run without a bath, no input is required.
      !
      ! The solution is achieved in this sequence:
      !
      !  #. setup the MPI environment, if any 
-     !  #. Set the internal bath instance :f:var:`dmft_bath` copying from the user provided input :f:var:`bath`
+     !  #. Set the internal bath instance :f:var:`dmft_bath` copying from the user provided input :f:var:`bath` , if existing
      !  #. Get the low energy spectrum: call :f:func:`diagonalize_impurity`
      !  #. Get the impurity Green's functions: call :f:func:`buildgf_impurity` (if :f:var:`sflag` = :code:`.true.` )
      !  #. Get the impurity susceptibilities, if any: call :f:func:`buildchi_impurity` (if :f:var:`sflag` = :code:`.true.` )
@@ -53,6 +56,7 @@ module ED_MAIN
      !  #. Delete MPI environment and deallocate used structures :f:var:`state_list` and :f:var:`dmft_bath`
      !
      module procedure :: ed_solve_single
+     module procedure :: ed_solve_single_nobath
   end interface ed_solve
 
 
@@ -84,9 +88,9 @@ contains
   !+-----------------------------------------------------------------------------+!
   ! PURPOSE: allocate and initialize one or multiple baths -+!
   subroutine ed_init_solver_single(bath)
-    real(8),dimension(:),intent(inout),optional        :: bath !user bath input array
-    logical                                            :: check
-    integer                                            :: i
+    real(8),dimension(:),intent(inout)        :: bath !user bath input array
+    logical                                   :: check
+    integer                                   :: i
     !
     !SET THE MPI FRAMEWORK:
 #ifdef _MPI
@@ -128,6 +132,14 @@ contains
 #endif
     !
   end subroutine ed_init_solver_single
+  
+  subroutine ed_init_solver_single_nobath()
+    real(8),dimension(1)     :: bath_dummy
+    !
+    bath_dummy=zero
+    call ed_init_solver_single(bath_dummy)
+  end subroutine ed_init_solver_single_nobath
+
 
 
 
@@ -152,7 +164,7 @@ contains
   ! lattice site using ED. 
   !+-----------------------------------------------------------------------------+!
   subroutine ed_solve_single(bath,flag_gf,flag_mpi)
-    real(8),dimension(:),intent(in),optional     :: bath  !user bath input array
+    real(8),dimension(:),intent(in)              :: bath  !user bath input array
     logical,optional                             :: flag_gf !flag to calculate ( :code:`.true.` ) or not ( :code:`.false.` ) Green's functions and susceptibilities. Default :code:`.true.` . 
     logical,optional                             :: flag_mpi  !flag to solve the impurity problem parallely ( :code:`.true.` ) or not ( :code:`.false.` ). Default :code:`.true.` . 
     logical                                      :: flag_mpi_, flag_gf_
@@ -171,7 +183,7 @@ contains
       check   = check_bath_dimension(bath)
       if(.not.check)stop "ED_SOLVE_SINGLE Error: wrong bath dimensions"
     else
-      if(present(bath))print*,"**WARNING** Bath array provided, but Nbath is 0. Bath will be ignored"
+      print*,"NBATH=0: Solving isolated impurity (no bath)"
     endif
     !  
     if(MpiMaster.and.flag_mpi_)call save_input_file(str(ed_input_file))
@@ -213,6 +225,14 @@ contains
     write(Logfile,"(A)")""
   end subroutine ed_solve_single
 
+  subroutine ed_solve_single_nobath(flag_gf,flag_mpi)
+    real(8),dimension(1)           :: bath_dummy  !user bath input array
+    logical,optional               :: flag_gf !flag to calculate ( :code:`.true.` ) or not ( :code:`.false.` ) Green's functions and susceptibilities. Default :code:`.true.` . 
+    logical,optional               :: flag_mpi  !flag to solve the impurity problem parallely ( :code:`.true.` ) or not ( :code:`.false.` ). 
+    !
+    bath_dummy=zero
+    call ed_solve_single(bath_dummy,flag_gf,flag_mpi)
+  end subroutine ed_solve_single_nobath
 
 
   !+-----------------------------------------------------------------------------+!
