@@ -28,14 +28,17 @@ endif
 .SUFFIXES: .f90 .o
 
 all: FLAG:=${FFLAG} ${FPPFLAG}
-all:
+all: $(OBJS)
 	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check *.in *.restart $(TSTBIN)/
 
 debug: FLAG:=${DFLAG} ${FPPFLAG}
-debug:
+debug: $(OBJS)
 	$(FC) $(FLAG) $(OBJS) $(EXE).f90 -o $(TSTBIN)/$(EXE).x -I../ ${GLOB_INC} ${GLOB_LIB}
 	@cp *.check *.in *.restart $(TSTBIN)/
+
+.f90.o:
+	$(FC) $(FFLAGS) -c $< ${GLOB_INC} -J../ -o$@
 
 clean: 
 	@echo "Cleaning bath:HYBRID mode:NORMAL"

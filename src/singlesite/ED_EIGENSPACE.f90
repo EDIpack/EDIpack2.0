@@ -256,16 +256,18 @@ contains        !some routine to perform simple operation on the lists
     logical,intent(in),optional       :: verbose
     logical,intent(in),optional       :: twin     !The twin state lable [optional]
     logical                           :: twin_
+    logical                           :: verb_    
 #ifdef _DEBUG
     if(ed_verbose>4)write(Logfile,"(A)")"DEBUG es_add_state_d"
 #endif
     twin_=.false.;if(present(twin))twin_=twin
+    verb_=.false.;if(present(verbose))verb_=verbose
     if(present(size))then !if present size add respecting the size constraint.
        if(espace%size<size)then
           call es_insert_state_d(espace,e,vec,sector,twin_)
        else
           if(e < es_return_energy(espace))then
-             if(present(verbose).AND.(verbose.eqv..true.))print*,"found a new state:"
+             if(verb_)print*,"found a new state:"
              call es_pop_state(espace)
              call es_insert_state_d(espace,e,vec,sector,twin_)
           endif
@@ -284,16 +286,18 @@ contains        !some routine to perform simple operation on the lists
     logical,intent(in),optional       :: verbose
     logical,intent(in),optional       :: twin
     logical                           :: twin_
+    logical                           :: verb_
 #ifdef _DEBUG
     if(ed_verbose>4)write(Logfile,"(A)")"DEBUG es_add_state_c"
 #endif
     twin_=.false.;if(present(twin))twin_=twin
+    verb_=.false.;if(present(verbose))verb_=verbose
     if(present(size))then !if present size add respecting the size constraint.
        if(espace%size<size)then
           call es_insert_state_c(espace,e,vec,sector,twin_)
        else
           if(e < es_return_energy(espace))then
-             if(present(verbose).AND.(verbose.eqv..true.))print*,"found a new state:"
+             if(verb_)print*,"found a new state:"
              call es_pop_state(espace)
              call es_insert_state_c(espace,e,vec,sector,twin_)
           endif
