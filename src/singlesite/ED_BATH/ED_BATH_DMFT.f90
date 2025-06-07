@@ -513,6 +513,7 @@ contains
     if(ed_verbose>1)write(Logfile,"(A)")"DEBUG write_dmft_bath"
 #endif
     !
+    if(Nbath.eq.0)return
     !
     unit_=LOGfile;if(present(unit))unit_=unit
     !
