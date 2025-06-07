@@ -331,7 +331,7 @@ contains
     if(ed_verbose>1)write(Logfile,"(A)")"DEBUG read_dmft_bath"
 #endif
     !
-    
+    if(Nbath.eq.0)return      
     !
     used_   = .true.      ;if(present(used))used_=used
     hsuffix = ".restart"  ;if(used_)hsuffix=reg(".used") !default=used
