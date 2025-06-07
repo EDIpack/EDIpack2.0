@@ -686,7 +686,7 @@ contains
     if(ed_verbose>1)write(Logfile,"(A)")"DEBUG set_dmft_bath: dmft_bath <- user_bath"
 #endif
     !
-    
+    if(Nbath.eq.0)return
     !
     if(.not.dmft_bath%status)stop "set_dmft_bath error: bath not allocated"
     !
@@ -898,7 +898,7 @@ contains
     if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_dmft_bath: dmft_bath -> user_bath"
 #endif
     !
-    
+    if(Nbath.eq.0)return  
     !
     if(.not.dmft_bath%status)stop "get_dmft_bath error: bath not allocated"
     !
