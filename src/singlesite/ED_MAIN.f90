@@ -225,13 +225,15 @@ contains
     write(Logfile,"(A)")""
   end subroutine ed_solve_single
 
-  subroutine ed_solve_single_nobath(flag_gf,flag_mpi)
-    real(8),dimension(1)           :: bath_dummy  !user bath input array
-    logical,optional               :: flag_gf !flag to calculate ( :code:`.true.` ) or not ( :code:`.false.` ) Green's functions and susceptibilities. Default :code:`.true.` . 
-    logical,optional               :: flag_mpi  !flag to solve the impurity problem parallely ( :code:`.true.` ) or not ( :code:`.false.` ). 
-    !
+subroutine ed_solve_single_nobath(flag_gf,flag_mpi)
+    real(8),dimension(1) :: bath_dummy  !user bath input array
+    logical,optional     :: flag_gf     !flag to calculate ( :code:`.true.` ) or not ( :code:`.false.` ) Green's functions and susceptibilities. Default :code:`.true.` . 
+    logical,optional     :: flag_mpi    !flag to solve the impurity problem parallely ( :code:`.true.` ) or not ( :code:`.false.` ). 
+    logical              :: flag_gf_,flag_mpi_
+    flag_mpi_=.true.;if(present(flag_mpi))flag_mpi_=flag_mpi
+    flag_gf_ =.true.;if(present(flag_gf))flag_gf_=flag_gf
     bath_dummy=zero
-    call ed_solve_single(bath_dummy,flag_gf,flag_mpi)
+    call ed_solve_single(bath_dummy,flag_gf_,flag_mpi_)
   end subroutine ed_solve_single_nobath
 
 
