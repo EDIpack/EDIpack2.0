@@ -119,7 +119,7 @@ contains
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    integer                     :: iorb,jorb
+    integer                          :: iorb,jorb
     real(8),dimension(:),allocatable :: vI,vJ
     !
     !
@@ -203,23 +203,6 @@ contains
        !
        spinChiMatrix(iorb,jorb)%state(istate)%channel(1)%weight(j) = peso
        spinChiMatrix(iorb,jorb)%state(istate)%channel(1)%poles(j)  = de
-       !
-       ! ! the correct behavior for beta*dE << 1 is recovered only by assuming that v_n is still finite
-       ! ! beta*dE << v_n for v_n--> 0 slower. First limit beta*dE--> 0 and only then v_n -->0.
-       ! ! This ensures that the correct null contribution is obtained.
-       ! ! So we impose that: if (beta*dE is larger than a small qty) we sum up the contribution, else
-       ! ! we do not include the contribution (because we are in the situation described above).
-       ! ! For the real-axis case this problem is circumvented by the usual i*0+ = xi*eps
-       ! if(beta*dE > 1d-3)spinChi_iv(iorb,jorb,0)=spinChi_iv(iorb,jorb,0) + peso*2*(1d0-exp(-beta*dE))/dE 
-       ! do i=1,Lmats
-       !    spinChi_iv(iorb,jorb,i)=spinChi_iv(iorb,jorb,i) + peso*(1d0-exp(-beta*dE))*2d0*dE/(vm(i)**2+dE**2)
-       ! enddo
-       ! do i=0,Ltau
-       !    spinChi_tau(iorb,jorb,i)=spinChi_tau(iorb,jorb,i) + exp(-tau(i)*dE)*peso
-       ! enddo
-       ! do i=1,Lreal
-       !    spinChi_w(iorb,jorb,i)=spinChi_w(iorb,jorb,i) - peso*(1d0-exp(-beta*dE))*(1d0/(dcmplx(vr(i),eps) - dE) - 1d0/(dcmplx(vr(i),eps) + dE))
-       ! enddo
     enddo
   end subroutine add_to_lanczos_spinChi
 
