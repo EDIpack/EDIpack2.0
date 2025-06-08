@@ -360,7 +360,7 @@ contains
     allocate(spinChiMatrix(Norb,Norb))
     allocate(densChiMatrix(Norb,Norb))
     allocate(pairChiMatrix(Norb,Norb))
-    allocate(exctChiMatrix(0:2,Norb,Norb))    
+    allocate(exctChiMatrix(3,Norb,Norb))    
     !
     !allocate observables
     allocate(ed_dens(Norb),ed_docc(Norb),ed_dens_up(Norb),ed_dens_dw(Norb))

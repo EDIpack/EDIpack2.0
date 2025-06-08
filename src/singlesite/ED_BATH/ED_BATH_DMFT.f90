@@ -63,7 +63,7 @@ contains
     write(Logfile,"(A)")"DEBUG allocate_dmft_bath"
 #endif
     !
-    if(Nbath.eq.0)return
+    
     !
     if(dmft_bath%status)call deallocate_dmft_bath()
     !
@@ -144,7 +144,7 @@ contains
     write(Logfile,"(A)")"DEBUG deallocate_dmft_bath"
 #endif
     !
-    if(Nbath.eq.0)return
+    
     !
     if(.not.dmft_bath%status)return
     if(allocated(dmft_bath%e))   deallocate(dmft_bath%e)
@@ -201,7 +201,7 @@ contains
     write(Logfile,"(A)")"DEBUG init_dmft_bath"
 #endif
     !
-    if(Nbath.eq.0)return
+    if(Nbath.eq.0)return    
     !
     if(.not.dmft_bath%status)stop "ERROR init_dmft_bath error: bath not allocated"
     !
@@ -331,7 +331,7 @@ contains
     if(ed_verbose>1)write(Logfile,"(A)")"DEBUG read_dmft_bath"
 #endif
     !
-    if(Nbath.eq.0)return
+    if(Nbath.eq.0)return      
     !
     used_   = .true.      ;if(present(used))used_=used
     hsuffix = ".restart"  ;if(used_)hsuffix=reg(".used") !default=used
@@ -470,7 +470,7 @@ contains
     if(ed_verbose>1)write(Logfile,"(A)")"DEBUG save_dmft_bath"
 #endif
     !
-    if(Nbath.eq.0)return
+    if(Nbath.eq.0)return    
     !
     if(.not.dmft_bath%status)stop "save_dmft_bath error: bath is not allocated"
     !
@@ -898,7 +898,7 @@ contains
     if(ed_verbose>1)write(Logfile,"(A)")"DEBUG get_dmft_bath: dmft_bath -> user_bath"
 #endif
     !
-    if(Nbath.eq.0)return
+    if(Nbath.eq.0)return  
     !
     if(.not.dmft_bath%status)stop "get_dmft_bath error: bath not allocated"
     !

@@ -109,7 +109,7 @@ contains
        v_state  =  es_return_dvec(state_list,istate)
        !
        ksector = getCsector(ialfa,2,isector)
-       jsector = getCsector(ialfa,1,ksector)
+       if(ksector/=0)jsector = getCsector(ialfa,1,ksector)
        if(jsector/=0.AND.ksector/=0)then
           !C_dw|gs>  = |tmp>
           vtmp   = apply_op_C(v_state,iorb,2,isector,ksector)
@@ -118,6 +118,8 @@ contains
           call tridiag_Hv_sector_normal(jsector,vvinit,alfa_,beta_,norm2)
           call add_to_lanczos_pairChi(norm2,e_state,alfa_,beta_,iorb,iorb)
           deallocate(alfa_,beta_,vtmp,vvinit)
+        else
+          call allocate_GFmatrix(pairChiMatrix(iorb,iorb),istate,1,Nexc=0)
        endif
        if(allocated(v_state))deallocate(v_state)
     enddo
@@ -152,7 +154,7 @@ contains
        v_state  =  es_return_dvec(state_list,istate)
        ! --> Apply [C_b C_b + C_a C_a]|state>
        ksector = getCsector(1,2,isector)
-       jsector = getCsector(1,1,ksector)
+       if(ksector/=0)jsector = getCsector(1,1,ksector)
        if(jsector/=0.AND.ksector/=0)then
           !Apply C_a,up*C_a,dw:
           !C_a.dw|gs>  = |tmp>
@@ -167,6 +169,8 @@ contains
           call tridiag_Hv_sector_normal(jsector,va+vb,alfa_,beta_,norm2)
           call add_to_lanczos_pairChi(norm2,e_state,alfa_,beta_,iorb,jorb)
           deallocate(alfa_,beta_,vtmp,va,vb)
+        else
+          call allocate_GFmatrix(pairChiMatrix(iorb,jorb),istate,1,Nexc=0)
        endif
        if(allocated(v_state))deallocate(v_state)
     enddo

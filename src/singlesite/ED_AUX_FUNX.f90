@@ -460,7 +460,7 @@ contains
     !
     if(allocated(exctChimatrix))call deallocate_GFmatrix(exctChimatrix)
     if(allocated(exctChimatrix))deallocate(exctChimatrix)
-    allocate(exctChimatrix(0:2,Norb,Norb))
+    allocate(exctChimatrix(3,Norb,Norb))
     file_="exctchimatrix";if(present(file))file_=str(file)
     call read_GFmatrix(exctChimatrix,str(file_)//str(ed_file_suffix)//".restart")
   end subroutine read_exctChimatrix

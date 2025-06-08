@@ -378,7 +378,10 @@ contains
     real(8),optional,dimension(Nlat)      :: Jp_ii   !site-dependent values for :f:var:`jp` , overriding the ones in the input file. It has dimension [ :f:var:`nlat`].
     real(8),optional,dimension(Nlat)      :: Jx_ii   !site-dependent values for :f:var:`jx` , overriding the ones in the input file. It has dimension [ :f:var:`nlat`].
     logical,optional                      :: flag_gf   !flag to calculate ( :code:`.true.` ) or not ( :code:`.false.` ) Green's functions and susceptibilities. Default :code:`.true.` .   
-    
+    logical                               :: mpi_lanc_,flag_gf_
+
+    mpi_lanc_=.false.;if(present(mpi_lanc))mpi_lanc_=mpi_lanc
+    flag_gf_=.true.;if(present(flag_gf))flag_gf=flag_gf_    
     bath_dummy=zero
     call ed_solve_lattice(bath_dummy,mpi_lanc,Uloc_ii,Ust_ii,Jh_ii,Jp_ii,Jx_ii,flag_gf)
   end subroutine ed_solve_lattice_nobath
