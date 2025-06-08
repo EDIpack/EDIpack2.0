@@ -1,14 +1,13 @@
-name: CI EDIpack test workflow 
+name: CI EDIpack test workflow
 
 on:
   push:
     branches:
-      - master
+      - '**'
   pull_request:
     branches:
-      - master
+      - '**'
   workflow_dispatch:
-
 
 defaults:
   run:
@@ -34,20 +33,27 @@ jobs:
         with:
           pack-type: open
 
-
-
-
 #********* BUILD PART **********
 
 # Build SciFortran
       - name: Cloning SciFortran
         run: git clone https://github.com/scifortran/SciFortran.git scifor
+
       - name: Install SciFortran
         run: scifor/bin/ci_setup_scifor.sh
 
 # Build EDIpack
-      - name: Cloning EDIpack
-        run: git clone https://github.com/edipack/EDIpack.git edipack
+      - name: Cloning EDIpack (same branch as triggering one, fallback to master)
+        run: |
+          BRANCH="${GITHUB_REF_NAME}"
+          echo "Trying to clone EDIpack on branch: $BRANCH"
+          if git ls-remote --heads https://github.com/edipack/EDIpack.git "$BRANCH" | grep -q "$BRANCH"; then
+            git clone --branch "$BRANCH" --single-branch https://github.com/edipack/EDIpack.git edipack
+          else
+            echo "Branch '$BRANCH' not found in edipack repo, falling back to 'master'"
+            git clone --branch master --single-branch https://github.com/edipack/EDIpack.git edipack
+          fi
+
       - name: Install EDIpack
         run: |
           source ~/.scifor_config_user
