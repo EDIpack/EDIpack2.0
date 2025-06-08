@@ -45,7 +45,7 @@ jobs:
 # Build EDIpack
       - name: Cloning EDIpack (same branch as triggering one, fallback to master)
         run: |
-          BRANCH="${GITHUB_REF_NAME}"
+          BRANCH="${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}"
           echo "Trying to clone EDIpack on branch: $BRANCH"
           if git ls-remote --heads https://github.com/edipack/EDIpack.git "$BRANCH" | grep -q "$BRANCH"; then
             git clone --branch "$BRANCH" --single-branch https://github.com/edipack/EDIpack.git edipack
