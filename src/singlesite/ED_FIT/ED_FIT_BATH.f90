@@ -1,6 +1,6 @@
 MODULE ED_BATH_FIT
-!:synopsis: Routines for bath fitting
-!Contains routines that fit the Impurity model bath
+  !:synopsis: Routines for bath fitting
+  !Contains routines that fit the Impurity model bath
   USE SF_CONSTANTS
   USE SF_OPTIMIZE, only:fmin_cg,fmin_cgplus,fmin_cgminimize
   USE SF_LINALG,   only:eye,zeye,inv,inv_her,operator(.x.)
@@ -27,24 +27,24 @@ MODULE ED_BATH_FIT
   private
 
   interface ed_chi2_fitgf
-  !This subroutine realizes the :math:`\chi^2` fit of the Weiss field or hybridization function via
-  !an impurity model non-interacting Green's function. The bath levels (levels/internal structure
-  !and hybridization strength) are supplied by the user in the :f:var:`bath` array
-  !and are the parameters of the fit.
-  !The function(s) to fit can have different shapes:
-  !
-  !  * [:f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin`:math:`\cdot`:f:var:`norb`, :f:var:`lfit` ]  
-  !  * [:f:var:`nlat` :math:`\cdot` :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nlat` :math:`\cdot` :f:var:`nspin` 
-  !    :math:`\cdot` :f:var:`norb`, :f:var:`lfit`  ]  
-  !  * [:f:var:`nlat`, :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`lfit` ] 
-  !  * [:f:var:`nspin`, :f:var:`nspin`, :f:var:`norb`, :f:var:`norb`, :f:var:`lfit` ]
-  !  * [:f:var:`nlat`, :f:var:`nspin`, :f:var:`nspin`, :f:var:`norb`, :f:var:`norb`, :f:var:`lfit` ]
-  !
-  !where :f:var:`nlat` is the number of impurity sites in real-space DMFT. Accordingly, the bath array or arrays have rank 2 or 3.
-  !Some global variables directly influence the way the fit is performed and can be modified in the input file. See :f:mod:`ed_input_vars`
-  !for the description of :f:var:`lfit`, :f:var:`cg_method` , :f:var:`cg_grad`, :f:var:`cg_ftol`, :f:var:`cg_stop` , :f:var:`cg_niter` ,
-  !:f:var:`cg_weight` , :f:var:`cg_scheme` , :f:var:`cg_pow` , :f:var:`cg_minimize_ver` , :f:var:`cg_minimize_hh` .      
-  !
+     !This subroutine realizes the :math:`\chi^2` fit of the Weiss field or hybridization function via
+     !an impurity model non-interacting Green's function. The bath levels (levels/internal structure
+     !and hybridization strength) are supplied by the user in the :f:var:`bath` array
+     !and are the parameters of the fit.
+     !The function(s) to fit can have different shapes:
+     !
+     !  * [:f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin`:math:`\cdot`:f:var:`norb`, :f:var:`lfit` ]  
+     !  * [:f:var:`nlat` :math:`\cdot` :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nlat` :math:`\cdot` :f:var:`nspin` 
+     !    :math:`\cdot` :f:var:`norb`, :f:var:`lfit`  ]  
+     !  * [:f:var:`nlat`, :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`nspin` :math:`\cdot` :f:var:`norb`, :f:var:`lfit` ] 
+     !  * [:f:var:`nspin`, :f:var:`nspin`, :f:var:`norb`, :f:var:`norb`, :f:var:`lfit` ]
+     !  * [:f:var:`nlat`, :f:var:`nspin`, :f:var:`nspin`, :f:var:`norb`, :f:var:`norb`, :f:var:`lfit` ]
+     !
+     !where :f:var:`nlat` is the number of impurity sites in real-space DMFT. Accordingly, the bath array or arrays have rank 2 or 3.
+     !Some global variables directly influence the way the fit is performed and can be modified in the input file. See :f:mod:`ed_input_vars`
+     !for the description of :f:var:`lfit`, :f:var:`cg_method` , :f:var:`cg_grad`, :f:var:`cg_ftol`, :f:var:`cg_stop` , :f:var:`cg_niter` ,
+     !:f:var:`cg_weight` , :f:var:`cg_scheme` , :f:var:`cg_pow` , :f:var:`cg_minimize_ver` , :f:var:`cg_minimize_hh` .      
+     !
      module procedure chi2_fitgf_single_normal_n3
      module procedure chi2_fitgf_single_normal_n5
      module procedure chi2_fitgf_single_superc_n3
@@ -78,6 +78,11 @@ contains
 #ifdef _DEBUG
     write(Logfile,"(A)")"DEBUG chi2_fitgf_generic_normal_mpi: Start Chi**2 fit"
 #endif
+    !
+    if(Nbath.eq.0)then
+       write(LOGfile,"(A)")"Nbath is 0. No bath to fit"
+       return
+    endif
     !
     ispin_=1;if(present(ispin))ispin_=ispin
     fmpi_=.true.;if(present(fmpi))fmpi_=fmpi
@@ -177,6 +182,11 @@ contains
 #ifdef _DEBUG
     write(Logfile,"(A)")"DEBUG chi2_fitgf_generic_normal_mpi: Start Chi**2 fit"
 #endif
+    !
+    if(Nbath.eq.0)then
+       write(LOGfile,"(A)")"Nbath is 0. No bath to fit"
+       return
+    endif
     !
     ispin_=1;if(present(ispin))ispin_=ispin
     fmpi_=.true.;if(present(fmpi))fmpi_=fmpi
@@ -282,6 +292,10 @@ contains
     write(Logfile,"(A)")"DEBUG chi2_fitgf_generic_superc: Start Chi**2 fit"
 #endif
     !
+    if(Nbath.eq.0)then
+       write(LOGfile,"(A)")"Nbath is 0. No bath to fit"
+       return
+    endif
     !
     ispin_=1;if(present(ispin))ispin_=ispin
     fmpi_=.true.;if(present(fmpi))fmpi_=fmpi
@@ -380,6 +394,10 @@ contains
     write(Logfile,"(A)")"DEBUG chi2_fitgf_generic_superc: Start Chi**2 fit"
 #endif
     !
+    if(Nbath.eq.0)then
+       write(LOGfile,"(A)")"Nbath is 0. No bath to fit"
+       return
+    endif
     !
     ispin_=1;if(present(ispin))ispin_=ispin
     fmpi_=.true.;if(present(fmpi))fmpi_=fmpi

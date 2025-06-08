@@ -24,7 +24,7 @@ MODULE ED_CHI_EXCT
   public :: get_exctChi_normal
 
   integer                          :: istate,iorb,jorb,ispin,jspin
-  integer                          :: isector,jsector,ksector
+  integer                          :: isector,jsector,ksector,lsector
   real(8),allocatable              :: vvinit(:)
   real(8),allocatable              :: alfa_(:),beta_(:)
   integer                          :: ipos,jpos
@@ -58,11 +58,11 @@ contains
     !
     do iorb=1,Norb
        do jorb=iorb+1,Norb
-          call allocate_GFmatrix(exctChimatrix(0,iorb,jorb),Nstate=state_list%size)
-          call lanc_ed_build_exctChi_Singlet(iorb,jorb)
           call allocate_GFmatrix(exctChimatrix(1,iorb,jorb),Nstate=state_list%size)
-          call lanc_ed_build_exctChi_tripletXY(iorb,jorb)
+          call lanc_ed_build_exctChi_Singlet(iorb,jorb)
           call allocate_GFmatrix(exctChimatrix(2,iorb,jorb),Nstate=state_list%size)
+          call lanc_ed_build_exctChi_tripletXY(iorb,jorb)
+          call allocate_GFmatrix(exctChimatrix(3,iorb,jorb),Nstate=state_list%size)
           call lanc_ed_build_exctChi_tripletZ(iorb,jorb)
        end do
     end do
@@ -83,90 +83,42 @@ contains
 #if __INTEL_COMPILER
     use ED_INPUT_VARS, only: Nspin,Norb
 #endif
-    integer      :: iorb,jorb
-    type(sector) :: sectorI
+    integer                          :: iorb,jorb
+    type(sector)                     :: sectorI
     real(8),dimension(:),allocatable :: vup,vdw,vtmp
     !
     write(LOGfile,"(A)")"Get singlet Chi_exct_l"//reg(txtfy(iorb))//reg(txtfy(jorb))
     !
     do istate=1,state_list%size
-       call allocate_GFmatrix(exctChimatrix(0,iorb,jorb),istate,Nchan=1)
+       !
+       call allocate_GFmatrix(exctChimatrix(1,iorb,jorb),istate,Nchan=1)
        isector    =  es_return_sector(state_list,istate)
        e_state    =  es_return_energy(state_list,istate)
        v_state    =  es_return_dvec(state_list,istate)
        !
-       ksector = getCsector(1,2,isector)       
-       if(ksector/=0)then
+       ksector = getCsector(1,2,isector)
+       lsector = getCsector(1,1,isector)
+       if(ksector/=0 .AND. lsector/=0)then
           !C_b,dw|gs>=|tmp>
           vtmp = apply_op_C(v_state,jorb,2,isector,ksector)
           !C^+_a,dw|tmp>=|vvinit>
           vdw  = apply_op_CDG(vtmp,iorb,2,ksector,isector)
-       endif
-       ksector = getCsector(1,1,isector)
-       if(ksector/=0)then
+          !
           !C_b,up|gs>=|tmp>
-          vtmp = apply_op_C(v_state,jorb,1,isector,ksector)
+          vtmp = apply_op_C(v_state,jorb,1,isector,lsector)
           !C^+_a,up|tmp>=|vvinit>
-          vup  = apply_op_CDG(vtmp,iorb,1,ksector,isector)
+          vup  = apply_op_CDG(vtmp,iorb,1,lsector,isector)
+          !
+          call tridiag_Hv_sector_normal(isector,vup+vdw,alfa_,beta_,norm2)
+          call add_to_lanczos_exctChi(norm2,e_state,alfa_,beta_,iorb,jorb,1,1)
+          deallocate(alfa_,beta_,vup,vdw,vtmp)
+       else
+          call allocate_GFmatrix(exctChimatrix(1,iorb,jorb),istate,1,Nexc=0)
        endif
-       call tridiag_Hv_sector_normal(isector,vup+vdw,alfa_,beta_,norm2)
-       call add_to_lanczos_exctChi(norm2,e_state,alfa_,beta_,iorb,jorb,0,1)
-       deallocate(alfa_,beta_,vup,vdw)
        if(allocated(v_state))deallocate(v_state)
     enddo
     return
   end subroutine lanc_ed_build_exctChi_singlet
-
-
-
-
-
-
-
-  ! \chi_ab  = <Z_ab(\tau)Z_ab(0)>
-  !Z_ab = \sum_sp C^+_{as}.tau^z_{sp}.C_{bp}
-  subroutine lanc_ed_build_exctChi_tripletZ(iorb,jorb)
-#if __INTEL_COMPILER
-    use ED_INPUT_VARS, only: Nspin,Norb
-#endif
-    integer                          :: iorb,jorb
-    real(8),dimension(:),allocatable :: vup,vdw,vtmp
-    !
-    write(LOGfile,"(A)")"Get triplet Z Chi_exct_l"//reg(txtfy(iorb))//reg(txtfy(jorb))
-    !
-    !
-    do istate=1,state_list%size
-       call allocate_GFmatrix(exctChimatrix(2,iorb,jorb),istate,Nchan=1)
-       isector    =  es_return_sector(state_list,istate)
-       e_state    =  es_return_energy(state_list,istate)
-       v_state    =  es_return_dvec(state_list,istate)
-       !
-       !Z - Component:
-       !Z_{ab}= C^+_{a,up}C_{b,up} - C^+_{a,dw}C_{b,dw}
-       ksector = getCsector(1,2,isector)
-       if(ksector/=0)then
-          !C_b,dw  |gs> =|tmp>
-          vtmp = apply_op_C(v_state,jorb,2,isector,ksector)
-          !C^+_a,dw|tmp>=|vvinit>
-          vdw  = apply_op_CDG(vtmp,iorb,2,ksector,isector)
-       endif
-       ksector = getCsector(1,1,isector)
-       if(ksector/=0)then
-          !C_b,up  |gs> =|tmp>
-          vtmp = apply_op_C(v_state,jorb,1,isector,ksector)
-          !C^+_a,up|tmp>=|vvinit>
-          vup  = apply_op_CDG(vtmp,iorb,1,ksector,isector)
-       endif
-       call tridiag_Hv_sector_normal(isector,vup-vdw,alfa_,beta_,norm2)
-       call add_to_lanczos_exctChi(norm2,e_state,alfa_,beta_,iorb,jorb,2,1)
-       deallocate(alfa_,beta_,vup,vdw)
-       if(allocated(v_state))deallocate(v_state)
-    enddo
-    return
-  end subroutine lanc_ed_build_exctChi_tripletZ
-
-
-
 
 
   ! \chi_ab  = <O_ab(\tau)O_ab(0)>
@@ -201,7 +153,7 @@ contains
     write(LOGfile,"(A)")"Get triplet XY Chi_exct_l"//reg(txtfy(iorb))//reg(txtfy(jorb))
     !
     do istate=1,state_list%size
-       call allocate_GFmatrix(exctChimatrix(1,iorb,jorb),istate,Nchan=2)
+       call allocate_GFmatrix(exctChimatrix(2,iorb,jorb),istate,Nchan=2)
        isector    =  es_return_sector(state_list,istate)
        e_state    =  es_return_energy(state_list,istate)
        v_state    =  es_return_dvec(state_list,istate)
@@ -210,33 +162,33 @@ contains
        !X_{ab}= C^+_{a,up}C_{b,dw} + C^+_{a,dw}C_{b,up}
        !
        !C^+_{a,dw}C_{b,up}:
-       ksector = getCsector(1,1,isector)
-       if(ksector/=0)then
-          jsector = getCDGsector(1,2,ksector)
-          if(jsector/=0)then
-             !C_{b,up}|gs>   =|tmp>
-             vtmp   = apply_op_C(v_state,jorb,1,isector,ksector)
-             !C^+_{a,dw}|tmp>=|vvinit>
-             vvinit = apply_op_CDG(vtmp,iorb,2,ksector,jsector)
-             call tridiag_Hv_sector_normal(jsector,vvinit,alfa_,beta_,norm2)
-             call add_to_lanczos_exctChi(norm2,e_state,alfa_,beta_,iorb,jorb,1,1)
-             deallocate(alfa_,beta_,vtmp,vvinit)
-          endif
+       ksector = getCsector(1,1,isector);jsector=0
+       if(ksector/=0)jsector = getCDGsector(1,2,ksector)
+       if(jsector/=0.AND.ksector/=0)then
+          !C_{b,up}|gs>   =|tmp>
+          vtmp   = apply_op_C(v_state,jorb,1,isector,ksector)
+          !C^+_{a,dw}|tmp>=|vvinit>
+          vvinit = apply_op_CDG(vtmp,iorb,2,ksector,jsector)
+          call tridiag_Hv_sector_normal(jsector,vvinit,alfa_,beta_,norm2)
+          call add_to_lanczos_exctChi(norm2,e_state,alfa_,beta_,iorb,jorb,2,1)
+          deallocate(alfa_,beta_,vtmp,vvinit)
+       else
+          call allocate_GFmatrix(exctChiMatrix(2,iorb,jorb),istate,1,Nexc=0)
        endif
        !
        !C^+_{a,up}C_{b,dw}:
-       ksector = getCsector(1,2,isector)
-       if(ksector/=0)then
-          jsector = getCDGsector(1,1,ksector)
-          if(jsector/=0)then
-             !C_{b,dw}|gs>   =|tmp>
-             vtmp   = apply_op_C(v_state,jorb,2,isector,ksector)
-             !C^+_{a,up}|tmp>=|vvinit>
-             vvinit = apply_op_CDG(vtmp,iorb,1,ksector,jsector)
-             call tridiag_Hv_sector_normal(jsector,vvinit,alfa_,beta_,norm2)
-             call add_to_lanczos_exctChi(norm2,e_state,alfa_,beta_,iorb,jorb,1,2)
-             deallocate(alfa_,beta_,vtmp,vvinit)
-          endif
+       ksector = getCsector(1,2,isector);jsector=0
+       if(ksector/=0)jsector = getCDGsector(1,1,ksector)
+       if(jsector/=0.AND.ksector/=0)then
+          !C_{b,dw}|gs>   =|tmp>
+          vtmp   = apply_op_C(v_state,jorb,2,isector,ksector)
+          !C^+_{a,up}|tmp>=|vvinit>
+          vvinit = apply_op_CDG(vtmp,iorb,1,ksector,jsector)
+          call tridiag_Hv_sector_normal(jsector,vvinit,alfa_,beta_,norm2)
+          call add_to_lanczos_exctChi(norm2,e_state,alfa_,beta_,iorb,jorb,2,2)
+          deallocate(alfa_,beta_,vtmp,vvinit)
+       else
+          call allocate_GFmatrix(exctChiMatrix(2,iorb,jorb),istate,2,Nexc=0)
        endif
        if(allocated(v_state))deallocate(v_state)
        !
@@ -246,6 +198,49 @@ contains
 
 
 
+  ! \chi_ab  = <Z_ab(\tau)Z_ab(0)>
+  !Z_ab = \sum_sp C^+_{as}.tau^z_{sp}.C_{bp}
+  subroutine lanc_ed_build_exctChi_tripletZ(iorb,jorb)
+#if __INTEL_COMPILER
+    use ED_INPUT_VARS, only: Nspin,Norb
+#endif
+    integer                          :: iorb,jorb
+    real(8),dimension(:),allocatable :: vup,vdw,vtmp
+    !
+    write(LOGfile,"(A)")"Get triplet Z Chi_exct_l"//reg(txtfy(iorb))//reg(txtfy(jorb))
+    !
+    !
+    do istate=1,state_list%size
+       call allocate_GFmatrix(exctChimatrix(3,iorb,jorb),istate,Nchan=1)
+       isector    =  es_return_sector(state_list,istate)
+       e_state    =  es_return_energy(state_list,istate)
+       v_state    =  es_return_dvec(state_list,istate)
+       !
+       !Z - Component:
+       !Z_{ab}= C^+_{a,up}C_{b,up} - C^+_{a,dw}C_{b,dw}
+       ksector = getCsector(1,2,isector)
+       lsector = getCsector(1,1,isector)
+       if(ksector/=0 .AND. lsector/=0)then
+          !C_b,dw  |gs> =|tmp>
+          vtmp = apply_op_C(v_state,jorb,2,isector,ksector)
+          !C^+_a,dw|tmp>=|vvinit>
+          vdw  = apply_op_CDG(vtmp,iorb,2,ksector,isector)
+          !
+          !C_b,up  |gs> =|tmp>
+          vtmp = apply_op_C(v_state,jorb,1,isector,lsector)
+          !C^+_a,up|tmp>=|vvinit>
+          vup  = apply_op_CDG(vtmp,iorb,1,lsector,isector)
+          !
+          call tridiag_Hv_sector_normal(isector,vup-vdw,alfa_,beta_,norm2)
+          call add_to_lanczos_exctChi(norm2,e_state,alfa_,beta_,iorb,jorb,3,1)
+          deallocate(alfa_,beta_,vup,vdw,vtmp)
+       else
+          call allocate_GFmatrix(exctChiMatrix(3,iorb,jorb),istate,1,Nexc=0)
+       endif
+       if(allocated(v_state))deallocate(v_state)
+    enddo
+    return
+  end subroutine lanc_ed_build_exctChi_tripletZ
 
 
 
@@ -269,7 +264,10 @@ contains
          "DEBUG add_to_lanczos_exctChi: add-up to GF istate "//str(istate)
 #endif
     !
-    if(vnorm2==0)return
+    if(vnorm2==0d0)then
+       call allocate_GFmatrix(exctChiMatrix(indx,iorb,jorb),istate,ichan,Nexc=0)
+       return
+    endif
     !
     Egs = state_list%emin       !get the gs energy
     !
@@ -309,25 +307,6 @@ contains
        !
        exctChiMatrix(indx,iorb,jorb)%state(istate)%channel(ichan)%weight(j) = peso
        exctChiMatrix(indx,iorb,jorb)%state(istate)%channel(ichan)%poles(j)  = de
-       !
-       ! ! the correct behavior for beta*dE << 1 is recovered only by assuming that v_n is still finite
-       ! ! beta*dE << v_n for v_n--> 0 slower. First limit beta*dE--> 0 and only then v_n -->0.
-       ! ! This ensures that the correct null contribution is obtained.
-       ! ! So we impose that: if (beta*dE is larger than a small qty) we sum up the contribution, else
-       ! ! we do not include the contribution (because we are in the situation described above).
-       ! ! For the real-axis case this problem is circumvented by the usual i*0+ = xi*eps
-       ! if(beta*dE > 1d-3)exctChi_iv(indx,iorb,jorb,0)=exctChi_iv(indx,iorb,jorb,0) + peso*2*(1d0-exp(-beta*dE))/dE 
-       ! do i=1,Lmats
-       !    exctChi_iv(indx,iorb,jorb,i)=exctChi_iv(indx,iorb,jorb,i) + &
-       !         peso*(1d0-exp(-beta*dE))*2d0*dE/(vm(i)**2+dE**2)
-       ! enddo
-       ! do i=0,Ltau
-       !    exctChi_tau(indx,iorb,jorb,i)=exctChi_tau(indx,iorb,jorb,i) + exp(-tau(i)*dE)*peso
-       ! enddo
-       ! do i=1,Lreal
-       !    exctChi_w(indx,iorb,jorb,i)=exctChi_w(indx,iorb,jorb,i) - &
-       !         peso*(1d0-exp(-beta*dE))*(1d0/(dcmplx(vr(i),eps) - dE) - 1d0/(dcmplx(vr(i),eps) + dE))
-       ! enddo
     enddo
     !
   end subroutine add_to_lanczos_exctChi
@@ -351,7 +330,7 @@ contains
 #endif
     complex(8),dimension(:),intent(in)             :: zeta !Array of frequencies or imaginary times
     character(len=*),optional                      :: axis !Axis: can be :code:`m` for Matsubara, :code:`r` for real, :code:`t` for imaginary time
-    complex(8),dimension(0:2,Norb,Norb,size(zeta)) :: Chi  !Excitonic susceptibility matrix
+    complex(8),dimension(3,Norb,Norb,size(zeta))   :: Chi  !Excitonic susceptibility matrix. dim-1, 1= :math:`S`, 2= :math:`T^x`, 3= :math:`T^z`
     integer                                        :: iorb,jorb,i,indx
     character(len=1)                               :: axis_
     !
@@ -367,7 +346,7 @@ contains
     !
     do iorb=1,Norb
        do jorb=iorb+1,Norb
-          do indx=0,2
+          do indx=1,3
              call get_Chiab(indx,iorb,jorb)
              Chi(indx,iorb,jorb,:) = 0.5d0*(Chi(indx,iorb,jorb,:)-Chi(indx,iorb,iorb,:)-Chi(indx,jorb,jorb,:))
              Chi(indx,jorb,iorb,:) = Chi(indx,iorb,jorb,:)

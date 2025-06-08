@@ -12,14 +12,13 @@ susceptibility, defined as:
    Z}\sum_m e^{-\beta E_m} (\langle m | X^\dagger_{ab} [\omega-H]^{-1} X_{ab}  | m \rangle
    + \langle m | X_{ab} [\omega+H]^{-1} X^\dagger_{ab}  | m \rangle )
 
-where :math:`X_{ab}=S_{ab},T^x_{ab},T^y_{ab},T^z_{ab}` are, respectively, the singlet and
-triplet :math:`x,y,z`  exciton operators: 
+where :math:`X_{ab}=S_{ab},T^x_{ab},T^z_{ab}` are, respectively, the singlet and
+triplet :math:`x,z`  exciton operators: 
 
 .. math::
 
    S_{ab}     & = \sum_{rs} c^\dagger_{ar} \sigma^0_{rs} c_{bs}\\
    T^x_{ab} & = \sum_{rs} c^\dagger_{ar} \sigma^x_{rs} c_{bs}\\
-   T^y_{ab} & = \sum_{rs} c^\dagger_{ar} \sigma^y_{rs} c_{bs}\\
    T^z_{ab} & = \sum_{rs} c^\dagger_{ar} \sigma^z_{rs} c_{bs}
 
 
