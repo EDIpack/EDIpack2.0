@@ -1,5 +1,5 @@
 MODULE ED_RDM_NONSU2
-!:synopsis: Routines for Reduced Density Matrix calculation, :code:`NONSU2` case
+  !:synopsis: Routines for Reduced Density Matrix calculation, :code:`NONSU2` case
   USE SF_CONSTANTS, only:zero,pi,xi
   USE SF_IOTOOLS, only:free_unit,reg,txtfy
   USE SF_ARRAYS, only: arange
@@ -18,35 +18,33 @@ MODULE ED_RDM_NONSU2
   public                           :: imp_rdm_nonsu2
 
 
-  real(8)                          :: Egs ! Ground-state energy
-  real(8)                          :: Ei
-  integer                          :: iorb,jorb,iorb1,jorb1
-  integer                          :: r,m,k,k1,k2,k3,k4
-  integer                          :: iup,idw
-  integer                          :: jup,jdw
-  integer                          :: mup,mdw
-  integer                          :: iph,i_el,isectorDim
-  real(8)                          :: sgn,sgn1,sgn2,sg1,sg2,sg3,sg4
-  real(8)                          :: gs_weight
+  real(8)                             :: Egs ! Ground-state energy
+  integer                             :: iorb,jorb,iorb1,jorb1
+  integer                             :: r,m,k,k1,k2,k3,k4
+  integer                             :: iup,idw
+  integer                             :: jup,jdw
+  integer                             :: mup,mdw
+  integer                             :: iph,i_el,isectorDim
+  real(8)                             :: sgn,sgn1,sgn2,sg1,sg2,sg3,sg4
+  real(8)                             :: gs_weight
   !
-  real(8)                          :: peso
-  real(8)                          :: norm
+  real(8)                             :: peso
+  real(8)                             :: norm
   !
-  integer                          :: i,j,ii,jj,io,jo
-  integer                          :: isector,jsector
+  integer                             :: i,j,ii,jj,io,jo
+  integer                             :: isector,jsector
   !
-  complex(8),dimension(:),allocatable :: state_cvec
-  logical                          :: Jcondition
+  real(8)                             :: e_state
+  complex(8),dimension(:),allocatable :: v_state
+  logical                             :: Jcondition
   !
-  integer                          :: iImpUp,iImpDw,iImp
-  integer                          :: jImpUp,jImpDw,jImp
-  integer                          :: ib,iBath
-
-  integer                          :: LenBath
-  integer,allocatable              :: Bath(:)
-
-  type(sector)                     :: sectorI,sectorJ
-  character(len=128)               :: fmt
+  integer                             :: iImpUp,iImpDw,iImp
+  integer                             :: jImpUp,jImpDw,jImp
+  integer                             :: ib,iBath
+  integer                             :: LenBath
+  integer,allocatable                 :: Bath(:)
+  type(sector)                        :: sectorI,sectorJ
+  character(len=128)                  :: fmt
 
 contains 
 
@@ -77,17 +75,8 @@ contains
     integer                 :: IsgnUp,IsgnDw,JsgnUp,JsgnDw,nIdw,nJdw,nBup
     integer                 :: Isign,Jsign,signI,signJ,Sign
     real(8),dimension(Norb) :: nup,ndw
-
     !
-#ifdef _DEBUG
-    write(Logfile,"(A)")"DEBUG imp_rdm_nonsu2"
-#endif
     Egs     = state_list%emin
-    !
-#ifdef _DEBUG
-    if(ed_verbose>2)write(Logfile,"(A)")&
-         "DEBUG imp_rdm_nonsu2: get imp_rdm"
-#endif
     !
     !IMPURITY DENSITY MATRIX
 #ifdef _DEBUG
@@ -99,87 +88,109 @@ contains
     impurity_density_matrix=zero
 
     do istate=1,state_list%size
-#ifdef _DEBUG
-       if(ed_verbose>3)write(Logfile,"(A)")&
-            "DEBUG observables_nonsu2: get contribution from state:"//str(istate)
-#endif
-
+       !
        isector = es_return_sector(state_list,istate)
-       Ei      = es_return_energy(state_list,istate)
-#ifdef _MPI
-       if(MpiStatus)then
-          call es_return_cvector(MpiComm,state_list,istate,state_cvec) 
-       else
-          call es_return_cvector(state_list,istate,state_cvec) 
-       endif
-#else
-       call es_return_cvector(state_list,istate,state_cvec) 
-#endif
+       e_state =  es_return_energy(state_list,istate)
+       v_state =  es_return_cvec(state_list,istate)
        !
-       !
-       peso = 1.d0 ; if(finiteT)peso=exp(-beta*(Ei-Egs))
+       peso = 1.d0 ; if(finiteT)peso=exp(-beta*(e_state-Egs))
        peso = peso/zeta_function
        !
        if(MpiMaster)then
-          call build_sector(isector,sectorI,itrace=.true.)
-          !
-          do IimpUp=0,2**Norb-1
-             do IimpDw=0,2**Norb-1
-                do JimpUp=0,2**Norb-1
-                   do JimpDw=0,2**Norb-1
-                      !
-                      !Build indices of the RDM in 1:4**Norb
-                      iImp = iImpUp + iImpDw*2**Norb
-                      jImp = jImpUp + jImpDw*2**Norb
-                      call sp_return_intersection(sectorI%H(1)%sp,iImp,jImp,Bath,lenBath)
-                      if(lenBATH==0)cycle
-                      !
-                      !=== >>> TRACE over bath states <<< =======
-                      do ib=1,lenBath
-                         iBath = Bath(ib)
-                         !
+
+          select case(Norb)
+          case(0)
+             !
+             call build_sector(isector,sectorI)
+             do IimpUp=0,2**Norb-1
+                do IimpDw=0,2**Norb-1
+                   do JimpUp=0,2**Norb-1
+                      do JimpDw=0,2**Norb-1
                          !I: get the Fock state ii, search the corresponding sector i
-                         ii= iImpUp + iImpDw*2**Ns + 2**Norb*iBath
+                         ii= iImpUp + iImpDw*2**Ns
                          i = binary_search(sectorI%H(1)%map,ii)
                          !
                          !J: get the Fock state jj, search the corresponding sector j
-                         jj= jImpUp + jImpDw*2**Ns + 2**Norb*iBath
+                         jj= jImpUp + jImpDw*2**Ns
                          j = binary_search(sectorI%H(1)%map,jj)
                          !
                          !this is a safety measure which should never ever apply
                          if(i==0.OR.j==0)cycle
                          !
                          !Construct the sign of each components of RDM(io,jo)
-                         nBup  = popcnt(Ibits(ii,Norb,Norb*Nbath))
                          nIdw  = popcnt(Ibits(ii,Ns,Norb))
                          nJdw  = popcnt(Ibits(jj,Ns,Norb))
-                         signI = (-1)**(nIdw*nBup)
-                         signJ = (-1)**(nJdw*nBup)
+                         signI = (-1)**(nIdw)
+                         signJ = (-1)**(nJdw)
                          sign  = signI*signJ
                          !
                          !Build (i,j)_th contribution to the (io,jo)_th element of \rho_IMP
                          io = (iImpUp+1) + 2**Norb*iImpDw
                          jo = (jImpUp+1) + 2**Norb*jImpDw
                          impurity_density_matrix(io,jo) = impurity_density_matrix(io,jo) + &
-                              state_cvec(i)*conjg(state_cvec(j))*peso*sign
-                         !-----------------------------------------------------------------
+                              v_state(i)*conjg(v_state(j))*peso*sign
                       enddo
-                   enddo !=============================================================================
-                   !
+                   enddo
                 enddo
              enddo
+             call delete_sector(sectorI)
              !
-          enddo
-          !
-          call delete_sector(sectorI)
+          case default
+             !
+             call build_sector(isector,sectorI,itrace=.true.)
+             do IimpUp=0,2**Norb-1
+                do IimpDw=0,2**Norb-1
+                   do JimpUp=0,2**Norb-1
+                      do JimpDw=0,2**Norb-1
+                         !
+                         !Build indices of the RDM in 1:4**Norb
+                         iImp = iImpUp + iImpDw*2**Norb
+                         jImp = jImpUp + jImpDw*2**Norb
+                         call sp_return_intersection(sectorI%H(1)%sp,iImp,jImp,Bath,lenBath)
+                         if(lenBATH==0)cycle
+                         !
+                         !=== >>> TRACE over bath states <<< =======
+                         do ib=1,lenBath
+                            iBath = Bath(ib)
+                            !
+                            !I: get the Fock state ii, search the corresponding sector i
+                            ii= iImpUp + iImpDw*2**Ns + 2**Norb*iBath
+                            i = binary_search(sectorI%H(1)%map,ii)
+                            !
+                            !J: get the Fock state jj, search the corresponding sector j
+                            jj= jImpUp + jImpDw*2**Ns + 2**Norb*iBath
+                            j = binary_search(sectorI%H(1)%map,jj)
+                            !
+                            !this is a safety measure which should never ever apply
+                            if(i==0.OR.j==0)cycle
+                            !
+                            !Construct the sign of each components of RDM(io,jo)
+                            nBup  = popcnt(Ibits(ii,Norb,Norb*Nbath))
+                            nIdw  = popcnt(Ibits(ii,Ns,Norb))
+                            nJdw  = popcnt(Ibits(jj,Ns,Norb))
+                            signI = (-1)**(nIdw*nBup)
+                            signJ = (-1)**(nJdw*nBup)
+                            sign  = signI*signJ
+                            !
+                            !Build (i,j)_th contribution to the (io,jo)_th element of \rho_IMP
+                            io = (iImpUp+1) + 2**Norb*iImpDw
+                            jo = (jImpUp+1) + 2**Norb*jImpDw
+                            impurity_density_matrix(io,jo) = impurity_density_matrix(io,jo) + &
+                                 v_state(i)*conjg(v_state(j))*peso*sign
+                         enddo
+                      enddo
+                   enddo
+                enddo
+             enddo
+             call delete_sector(sectorI)
+             !
+          end select
+
        endif
        !
-       if(allocated(state_cvec))deallocate(state_cvec)
+       if(allocated(v_state))deallocate(v_state)
        !
     enddo
-#ifdef _DEBUG
-    if(ed_verbose>2)write(Logfile,"(A)")""
-#endif
     !Useful prints to test:
     if(MPIMASTER .and. ed_verbose>2)then
        if(Norb==1)then
