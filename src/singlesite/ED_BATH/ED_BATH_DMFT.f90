@@ -63,7 +63,8 @@ contains
     write(Logfile,"(A)")"DEBUG allocate_dmft_bath"
 #endif
     !
-    
+    !We don't check for Nbath>0 here: Fortran lets us allocate 0-dimensional arrays
+    !but not access them. This avoids us filling the H part with ifs
     !
     if(dmft_bath%status)call deallocate_dmft_bath()
     !
@@ -144,7 +145,8 @@ contains
     write(Logfile,"(A)")"DEBUG deallocate_dmft_bath"
 #endif
     !
-    
+    !We don't check for Nbath>0 here: Fortran lets us allocate 0-dimensional arrays
+    !but not access them. This avoids us filling the H part with ifs
     !
     if(.not.dmft_bath%status)return
     if(allocated(dmft_bath%e))   deallocate(dmft_bath%e)
