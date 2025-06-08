@@ -330,7 +330,7 @@ contains
 #endif
     complex(8),dimension(:),intent(in)             :: zeta !Array of frequencies or imaginary times
     character(len=*),optional                      :: axis !Axis: can be :code:`m` for Matsubara, :code:`r` for real, :code:`t` for imaginary time
-    complex(8),dimension(3,Norb,Norb,size(zeta))   :: Chi  !Excitonic susceptibility matrix
+    complex(8),dimension(3,Norb,Norb,size(zeta))   :: Chi  !Excitonic susceptibility matrix. dim-1, 1= :math:`S`, 2= :math:`T^x`, 3= :math:`T^z`
     integer                                        :: iorb,jorb,i,indx
     character(len=1)                               :: axis_
     !
