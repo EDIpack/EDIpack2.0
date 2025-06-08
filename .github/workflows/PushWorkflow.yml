@@ -3,10 +3,10 @@ name: CI EDIpack test workflow
 on:
   push:
     branches:
-      - '**'
+      - master
   pull_request:
     branches:
-      - '**'
+      - master
   workflow_dispatch:
 
 defaults:
