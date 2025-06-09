@@ -4,7 +4,7 @@ MODULE ED_INPUT_VARS
   !
   USE SF_VERSION
   USE SF_PARSE_INPUT
-  USE SF_IOTOOLS, only:str,free_unit,to_upper
+  USE SF_IOTOOLS, only:str,free_unit,to_upper,to_lower
   USE ED_VERSION
   use iso_c_binding
   implicit none
@@ -733,27 +733,27 @@ contains
     call parse_input_variable(LOGfile,"LOGFILE",INPUTunit,default=6,comment="LOG unit.")
 
     !Parameter checks:
-    select case (trim(bath_type))
+    select case (to_lower(trim(bath_type)))
       case("normal","hybrid","replica","general")
       case default ; STOP "ed_read_input: bath_type "//trim(bath_type)//" not valid"
     end select
     
-    select case (trim(ed_mode))
+    select case (to_lower(trim(ed_mode)))
       case("normal","superc","nonsu2")
       case default ; STOP "ed_read_input: ed_mode "//trim(ed_mode)//" not valid"
     end select
     
-    select case (trim(lanc_method))
+    select case (to_lower(trim(lanc_method)))
       case("arpack","lanczos","dvdson")
       case default ; STOP "ed_read_input: lanc_method "//trim(lanc_method)//" not valid"
     end select
 
-    select case (trim(cg_scheme))
+    select case (to_lower(trim(cg_scheme)))
       case("weiss","delta")
       case default ; STOP "ed_read_input: cg_scheme "//trim(cg_scheme)//" not valid"
     end select
     
-    select case (trim(cg_norm))
+    select case (to_lower(trim(cg_norm)))
       case("elemental","frobenius")
       case default ; STOP "ed_read_input: cg_norm "//trim(cg_norm)//" not valid"
     end select
