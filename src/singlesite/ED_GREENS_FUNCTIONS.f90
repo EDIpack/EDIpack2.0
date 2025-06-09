@@ -70,7 +70,8 @@ contains
     !
     write(LOGfile,"(A)")"Get impurity Greens functions:"
     select case(ed_mode)
-    case default  ;call build_impG_normal()
+    case default  ;STOP "buildGF_impurity error: ed_mode "//trim(ed_mode)//" not valid"
+    case("normal");call build_impG_normal()
     case("superc");call build_impG_superc()
     case("nonsu2");call build_impG_nonsu2()
     end select

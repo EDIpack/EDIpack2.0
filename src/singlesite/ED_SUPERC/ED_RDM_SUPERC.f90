@@ -97,7 +97,7 @@ contains
        !
        if(MpiMaster)then
 
-          select case(Norb)
+          select case(Nbath)
           case(0)
              call build_sector(isector,sectorI)
              do IimpUp=0,2**Norb-1

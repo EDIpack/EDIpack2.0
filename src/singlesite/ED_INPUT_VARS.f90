@@ -363,7 +363,7 @@ MODULE ED_INPUT_VARS
   ! provided by Lapack
   ! :Default lanc_dim_threshold:`1024`
   !
-  character(len=5)     :: cg_Scheme         !
+  character(len=6)     :: cg_Scheme         !
   !Which quantity to use in the bath fitting routine:
   ! * :code:`WEISS` : the lattice Weiss field Green's function :math:`\mathcal{G}_{0}(i\omega_{n})` is fitted
   ! * :code:`DELTA` : the lattice Hybridization function :math:`\Delta(i\omega_{n})` is fitted
@@ -433,7 +433,7 @@ MODULE ED_INPUT_VARS
   logical              :: finiteT           !
   !Flag to set finite-temperature calculation
   !
-  character(len=7)     :: bath_type         !
+  character(len=8)     :: bath_type         !
   !Flag to select the bath geometry 
   ! * :code:`normal`  : each impurity orbital has a set of bath levels in a star geometry
   ! * :code:`hybrid`  : all impurity orbitals communicate with the same set of bath levels in a star geometry
@@ -731,6 +731,34 @@ contains
     call parse_input_variable(umatrix_file,"umatrix_file",INPUTunit,default="umatrix",comment="File read the two-body operator list from.")
     call parse_input_variable(print_input_vars,"PRINT_INPUT_VARS",INPUTunit,default=.true.,comment="Flag to toggle console printing of input variables list")
     call parse_input_variable(LOGfile,"LOGFILE",INPUTunit,default=6,comment="LOG unit.")
+
+    !Parameter checks:
+    select case (trim(bath_type))
+      case("normal","hybrid","replica","general")
+      case default ; STOP "ed_read_input: bath_type "//trim(bath_type)//" not valid"
+    end select
+    
+    select case (trim(ed_mode))
+      case("normal","superc","nonsu2")
+      case default ; STOP "ed_read_input: ed_mode "//trim(ed_mode)//" not valid"
+    end select
+    
+    select case (trim(lanc_method))
+      case("arpack","lanczos","dvdson")
+      case default ; STOP "ed_read_input: lanc_method "//trim(lanc_method)//" not valid"
+    end select
+
+    select case (trim(cg_scheme))
+      case("weiss","delta")
+      case default ; STOP "ed_read_input: cg_scheme "//trim(cg_scheme)//" not valid"
+    end select
+    
+    select case (trim(cg_norm))
+      case("elemental","frobenius")
+      case default ; STOP "ed_read_input: cg_norm "//trim(cg_norm)//" not valid"
+    end select
+
+
 
     if(nph>0)then
        !

@@ -69,7 +69,8 @@ contains
     if(dmft_bath%status)call deallocate_dmft_bath()
     !
     select case(bath_type)
-    case default
+    case default ;STOP "allocate_dmft_bath error: bath_type "//trim(bath_type)//" not valid"
+    case('normal')
        !
        select case(ed_mode)
        case default                                 !normal [N,Sz]

@@ -28,7 +28,8 @@ contains
     !
     write(LOGfile,"(A)")"Diagonalize impurity problem:"
     select case(ed_mode)
-    case default  ;call diagonalize_impurity_normal()
+    case default  ;STOP "diagonalize_impurity error: ed_mode "//trim(ed_mode)//" not valid"
+    case("normal");call diagonalize_impurity_normal()
     case("superc");call diagonalize_impurity_superc()
     case("nonsu2");call diagonalize_impurity_nonsu2()
     end select
