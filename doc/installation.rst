@@ -60,20 +60,20 @@ and working.
    make -j
 
 
+..
+    Ninja
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Ninja
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    Using `ninja` if a fortran-capable version of `ninja
+    <https://ninja-build.org>`_ is available in your system (and CMake can
+    take advantage of it), you can use it to build the library at lightning, multi-threaded, speed. 
 
-Using `ninja` if a fortran-capable version of `ninja
-<https://ninja-build.org>`_ is available in your system (and CMake can
-take advantage of it), you can use it to build the library at lightning, multi-threaded, speed. 
-
-.. code-block:: bash
-		
-   mkdir build    
-   cd build  
-   cmake -GNinja ..  
-   ninja
+    .. code-block:: bash
+		    
+       mkdir build    
+       cd build  
+       cmake -GNinja ..  
+       ninja
 
 The `CMake` compilation can be customized using the following
 additional variables:   
@@ -148,17 +148,11 @@ step the following recap is printed:
 Installing
 ------------------------------
 
-System-wide installation is completed after the build step using either:
+System-wide installation is completed after the build step using
 
 .. code-block:: bash
 
    make install
-
-or
-
-.. code-block:: bash
-		
-   ninja install
 
   
 Please follow the instructions on the screen to complete installation on your environment.  
@@ -185,7 +179,7 @@ Uninstalling
 
 
 Although CMake does not officially provide uninstall procedures in the
-generated Make/Ninja files. Hence SciFortran supplies a homebrew
+generated makefiles. Hence SciFortran supplies a homebrew
 method to remove the generated files by calling (from the relevant
 build folder):
 
@@ -193,11 +187,6 @@ build folder):
 		
    make uninstall
 
-or
-
-.. code-block:: bash
-		
-   ninja uninstall
 
 
 

@@ -1515,8 +1515,6 @@ This function initializes the solver for an isolated impurity.
 Interfaces to :f:func:`f/ed_main/ed_init_solver`.
 Single-site DMFT variant.
 \endrst
-* @param bath: user-accessible bath array
-* @param dim_bath: dimensions of the bath array
 */ 
 void init_solver_site_nobath();
 
@@ -1538,8 +1536,7 @@ This function initializes the solver for an isolated impurity.
 Interfaces to :f:func:`f/ed_main/ed_init_solver`.
 Real-space DMFT variant.
 \endrst
-* @param bath: user-accessible bath array
-* @param dim_bath: dimensions of the bath array
+* @param Nlat: number of inequivalent sites
 */ 
 void init_solver_ineq_nobath(int Nlat);
 
@@ -1567,8 +1564,6 @@ an isolated impurity.
 Interfaces to :f:func:`f/ed_main/solve`.
 Single-site DMFT variant.
 \endrst
-* @param bath: user-accessible bath array
-* @param dim_bath: dimensions of the bath array
 * @param flag_gf: Green's function calculation flag (`1`=`True`, `0`=`False`)
 * @param flag_mpi: mpi setting flag (`1`=`True`, `0`=`False`)
 */ 
@@ -1601,8 +1596,7 @@ an isolated impuirty.
 Interfaces to :f:func:`f/e2i_main/solve`.
 Real-space DMFT variant.
 \endrst
-* @param bath: user-accessible bath array
-* @param dim_bath: dimensions of the bath array
+* @param Nlat: number of inequivalent sites
 * @param flag_gf: Green's function calculation flag (`1`=`True`, `0`=`False`)
 * @param mpi_lanc: parallelization setting flag (`1`=`True`, `0`=`False`)
 */                 
