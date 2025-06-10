@@ -41,7 +41,7 @@ MODULE ED_INPUT_VARS
   real(c_double),dimension(:),allocatable                            :: Uloc_ 
   real(c_double),dimension(5),bind(c, name="Uloc")                   :: Uloc              !
   !Values of the local interaction per orbital (max :code:`5` )
-  ! :Default Uloc:`[2d0, 0d0, 0d0, 0d0, 0d0]`
+  ! :Default Uloc:`(/( 2d0,i=1,Norb )/)`
   !
   real(c_double),bind(c, name="Ust")                                 :: Ust               !
   !Value of the inter-orbital interaction term
