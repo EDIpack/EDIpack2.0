@@ -351,12 +351,6 @@ contains
     endif
     !
     !
-    ! if(ed_mode=="superc")then
-    !    allocate(impGmatrix(2*Nspin,2*Nspin,Norb,Norb))
-    ! else
-    !    allocate(impGmatrix(Nspin,Nspin,Norb,Norb))
-    ! endif
-    !
     allocate(spinChiMatrix(Norb,Norb))
     allocate(densChiMatrix(Norb,Norb))
     allocate(pairChiMatrix(Norb,Norb))
@@ -410,17 +404,32 @@ contains
     !
     if(MpiMaster)write(LOGfile,"(A)")"Cleaning ED structure"
     !
-    call deallocate_GFmatrix(impGmatrix)
+    if(allocated(impGmatrix))then
+      call deallocate_GFmatrix(impGmatrix)
+      deallocate(impGmatrix)
+    endif
+    !
     call deallocate_GFmatrix(impDmatrix)
-    call deallocate_GFmatrix(spinChimatrix)
-    call deallocate_GFmatrix(densChimatrix)
-    call deallocate_GFmatrix(pairChimatrix)
-    call deallocate_GFmatrix(exctChimatrix)
-    if(allocated(impGmatrix))deallocate(impGmatrix)
-    if(allocated(spinChiMatrix))deallocate(spinChiMatrix)
-    if(allocated(densChiMatrix))deallocate(densChiMatrix)
-    if(allocated(pairChiMatrix))deallocate(pairChiMatrix)
-    if(allocated(exctChiMatrix))deallocate(exctChiMatrix)
+    !
+    if(allocated(spinChimatrix))then
+      call deallocate_GFmatrix(spinChimatrix)
+      deallocate(spinChiMatrix)
+    endif    
+    !
+    if(allocated(densChimatrix))then
+      call deallocate_GFmatrix(densChimatrix)
+      deallocate(densChiMatrix)
+    endif    
+    !
+    if(allocated(pairChimatrix))then
+      call deallocate_GFmatrix(pairChimatrix)
+      deallocate(pairChiMatrix)
+    endif  
+    !
+    if(allocated(exctChimatrix))then
+      call deallocate_GFmatrix(exctChimatrix)
+      deallocate(exctChiMatrix)
+    endif      
     !
     if(allocated(spH0ups))deallocate(spH0ups)
     if(allocated(spH0dws))deallocate(spH0dws)
