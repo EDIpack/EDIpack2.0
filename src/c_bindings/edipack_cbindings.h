@@ -1500,6 +1500,18 @@ void ed_get_exctchi(std::complex<double> *self,
 
 /*!
 \rst
+This function obtains the impurity reduced density matrix.
+Interfaces to :f:func:`f/ed_io/ed_get_impurity_rdm`.
+\endrst
+* @param rdm: impurity reduced density matrix
+* @param doprint: flag to print to file (`1`) or not (`0`) the RDM
+*/                      
+void ed_get_impurity_rdm(std::complex<double> *self, 
+                    int doprint
+                    );             
+
+/*!
+\rst
 This function initializes the solver.
 Interfaces to :f:func:`f/ed_main/ed_init_solver`.
 Single-site DMFT variant.

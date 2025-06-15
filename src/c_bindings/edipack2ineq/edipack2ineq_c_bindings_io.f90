@@ -467,3 +467,20 @@ subroutine get_exctChi_c(self,zeta,dim_zeta,zetaflag,axis,Nsites,latticeflag) bi
   endif
   !
 end subroutine get_exctChi_c
+
+!----------------!
+!       RDM      !
+!----------------!
+
+subroutine ed_get_impurity_rdm_c(rdm,doprint) bind(c,name='ed_get_impurity_rdm')
+  use, intrinsic :: iso_c_binding
+  complex(8),dimension(4**Norb,4**norb),intent(inout) :: rdm
+  integer(c_int),value                                :: doprint
+  !
+  if (doprint==0)then
+    call ed_get_impurity_rdm(rdm)
+  else
+    call ed_get_impurity_rdm(rdm,.true.)
+  endif
+  !
+end subroutine ed_get_impurity_rdm_c
